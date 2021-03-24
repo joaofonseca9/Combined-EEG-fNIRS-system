@@ -50,7 +50,7 @@ outlet = lsl_outlet(info);
 instructions = 'instructions';
 finger_test='finger_test';
 
-%Open Phsychtoolbox.
+%Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); %Links the key presses to the key board names
 KbQueueCreate;
@@ -61,6 +61,7 @@ KbQueueStart;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% AUDIO PREPARATION
+
 %LOAD METRONOME SOUNDS (PsychToolbox)
 audio_dir='.\Previous Experimental Scripts\Experiment_ME\metronomesounds';
 cd(audio_dir)
@@ -72,16 +73,12 @@ WAVMetronome8.wave = WAVMetronome8.wave';         WAVMetronome8.nrChan=2;
 %LOAD CUES
 
 % Get Cueing Files
-Cue1Hz       = 'Cue_075bps_350Hz.wav';
-[Cue1Hz]     = CreateWAVstruct(Cue1Hz);
-Cue1HzLength = length(Cue1Hz.wavedata)/Cue1Hz.fs;
-
-Cue3Hz       = 'Cue_3bps_350Hz.wav';
-[Cue3Hz]     = CreateWAVstruct(Cue3Hz);
-Cue3HzLength = length(Cue3Hz.wavedata)/Cue3Hz.fs;
+Cue1_5Hz       = 'Metronome120.wav';
+[Cue1_5Hz]     = CreateWAVstruct(Cue1_5Hz);
+Cue1_5HzLength = length(Cue1_5Hz.wavedata)/Cue1_5Hz.fs;
 
 
-% CREATE AND FILL AUDIO BUFFER
+%% CREATE AND FILL AUDIO BUFFER
 % Initialize Sounddriver
 % This routine loads the PsychPortAudio sound driver for high precision, low latency,
 % multichannel sound playback and recording
@@ -94,14 +91,15 @@ duration = 1;                       % number of repetitions of the wav-file
 PsychPortAudio('Verbosity',1);      % verbosity = "wordiness" -> 1= print errors
 
 % Get audio device
-h_device = PsychPortAudio ('GetDevices');
+PPA_device = PsychPortAudio ('GetDevices');
 
 % Open handle
-h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+PPA_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+PPA_cue1_5Hz = PsychPortAudio('Open', [], [], Priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
 
 % Fill buffer
-PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
-
+PsychPortAudio('FillBuffer', PPA_Metronome8, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', PPA_cue1Hz, Cue1Hz.wavedata);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SAVE FILES IN FOLDER
 
@@ -165,12 +163,6 @@ N_trials=20; % number of trials
 sequenceauto = sequenceA;
 sequenceautoprint = sequenceprintA;
 
-%Create a vector to represent the two different options of trial (1=cued
-%test, 2= uncued test). This order is every trial
-order_cue=[1,2];
-%Save the order of the automaticity test experiment
-save('order_autodual.mat', 'order_autodual');
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
@@ -210,7 +202,7 @@ allCoords = [xCoords; yCoords];
 lineWidthPix = 4;% Set the line width for the fixation cross
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%START TEST FOR AUTOMATICITY
+%% START TEST FOR AUTOMATICITY
 
 %Empty structure for key presses, -> use later again so it saves the key
 %presses within this structure -> save at the end
@@ -252,17 +244,30 @@ for j=1:N_trials
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    PsychPortAudio('Start', h_Metronome8, 1, [], []); % Play metronome sound file (8 seconds)
+    PsychPortAudio('Start', PPA_Metronome8, 1, [], []); % Play metronome sound file (8 seconds)
     WaitSecs(t1+randi(t2))
 
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
 %     trig.beep(440, 0.2, 'finger_auto_dual');
     onset=GetSecs;
+    
     %preallocate table with key presses
     keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
     m=1; %first key press
     KbQueueFlush; % clear all previous key presses from the list
+    
+    %Start the Cue
+    PsychPortAudio('Start', Cue1_5Hz, 1, [], []);
+%     outlet.push_sample(Marker_StartBlockCue1HzAddition);
+
+%     for ii = 1:60
+%         WaitSecs(1/0.75);
+%         outlet.push_sample(Marker_GoStimulusAddition);
+%     end
+
+%     outlet.push_sample(Marker_EndBlockCue1HzAddition);
+
     %Start loop for letter presenting during a trial
     for n=1:N_letters
         %Present random letter on the screen
@@ -333,6 +338,9 @@ for j=1:N_trials
     KbStrokeWait;
 end
 
+
+PsychPortAudio('Stop', Cue1_5Hz);
+
 %After all trials completed, the end of the finger tapping task is
 %reached
 Screen('TextSize',window,30);
@@ -364,17 +372,17 @@ for h = 1:N_trials
     
 end
 
-%Show dual task performance in command window (foot stomping)
-fprintf('Foot AutoDual \n')
-for g = 1:N_trials
-    fprintf('Trial %d: \n', g)
-    %Show if the answers for the number of G's presented were correct
-    if str2num(events_footautodual(g).stimuli.response{1})==length(strfind(events_footautodual(g).stimuli.value{1}, 'G'))
-        fprintf('G correct \n')
-    else
-        fprintf('G incorrect \n')
-    end
-end
+% %Show dual task performance in command window (foot stomping)
+% fprintf('Foot AutoDual \n')
+% for g = 1:N_trials
+%     fprintf('Trial %d: \n', g)
+%     %Show if the answers for the number of G's presented were correct
+%     if str2num(events_footautodual(g).stimuli.response{1})==length(strfind(events_footautodual(g).stimuli.value{1}, 'G'))
+%         fprintf('G correct \n')
+%     else
+%         fprintf('G incorrect \n')
+%     end
+% end
 
 % End of automaticity test is reached 
 Screen('TextSize',window,25);
@@ -403,4 +411,15 @@ delete(ses);
 delete(trigstr{1});
 delete(trigstr{2});
 delete(info);
+end
+
+% To Play Back Sound
+function [WAVstruct] = CreateWAVstruct(WAVfilename)
+% This function creates a struct with the information from the wav-files.
+
+    wav = WAVfilename;                                          
+    WAVstruct = struct('wavedata',[],'fs',[],'nrChan',[]);      
+    [WAVstruct.wavedata, WAVstruct.fs] = psychwavread(wav);     
+    WAVstruct.wavedata = WAVstruct.wavedata';                   
+    WAVstruct.nrChan = size(WAVstruct.wavedata,1);  
 end
