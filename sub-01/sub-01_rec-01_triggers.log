@@ -1,0 +1,206 @@
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653306 ms [60.048137 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.643952 ms [60.081884 Hz]. (50 valid samples taken, stddev=0.148006 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+{Unable to resolve the name trig.beep.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script.m', 223)" style="font-weight:bold">Exp_Script</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script.m',223,0)">line 223</a>)
+        trig.beep(440, 0.2, 'instructions');
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+uiopen('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Previous Experimental Scripts\Experiment_ME\cuegenerator.m',1)
+rand(1)
+
+ans =
+
+    0.8147
+
+rand(1)
+
+ans =
+
+    0.9058
+
+rand(1)
+
+ans =
+
+    0.1270
+
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653269 ms [60.048269 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.653026 ms [60.049147 Hz]. (50 valid samples taken, stddev=0.124301 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+Finger AutoDual 
+Trial 1: 
+{Reference to non-existent field 'stimuli'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 425)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',425,0)">line 425</a>)
+    if str2num(events_handautodual(h).stimuli.response{1})==length(strfind(events_handautodual(h).stimuli.value{1}, 'G'))
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',425,0)
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',425,0)
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+02
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-02 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653500 ms [60.047437 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.655184 ms [60.041366 Hz]. (50 valid samples taken, stddev=0.080052 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   3.5294e+03
+
+
+ans =
+
+   3.5869e+03
+
+
+ans =
+
+   3.6371e+03
+
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 8 times out of a total of 69 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+Error in function TextSize: 	Invalid Window (or Texture) Index provided: It doesn't correspond to an open window or texture.
+Did you close it accidentally via Screen('Close') or Screen('CloseAll') ?
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+oldTextSize=Screen('TextSize', windowPtr [,textSize]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('DrawFormattedText', 'C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m', 289)" style="font-weight:bold">DrawFormattedText</a> (<a href="matlab: opentoline('C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m',289,0)">line 289</a>)
+theight = Screen('TextSize', win) * vSpacing;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 320)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',320,0)">line 320</a>)
+    DrawFormattedText(window, 'Press any key to continue with the next trail. \n Note that you will first start with a fixation
+    cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
+} 
+lklhlhlkhkh2
+{Unrecognized function or variable 'lklhlhlkhkh2'.
+} 
+
+lklhkhjkjh1
+{Unrecognized function or variable 'lklhkhjkjh1'.
+} 
