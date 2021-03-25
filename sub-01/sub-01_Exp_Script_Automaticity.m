@@ -23,6 +23,8 @@
 %Before starting the automaticity test, clear the workspace.
 clear all
 
+%Synch test skip => comment when actually testing patient
+Screen('Preference', 'SkipSyncTests', 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
@@ -42,16 +44,20 @@ lib = lsl_loadlib();
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
 info = lsl_streaminfo(lib,'AutovsNAuto','Markers',1,0.0,'cf_string','sdfwerr32432');
-%
+
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
-%
-% Create marker id's
-instructions = 'instructions';
-finger_test='finger_test';
-foot_test='foot_test';
 
-%Open Phsychtoolbox.
+% MARKER SETUP
+% Block related
+instructions = 'instructions'; %NEVER USED (?)
+finger_test='finger_test';
+Marker_StartBlockCue1_5HzAddition       = 7000;         
+Marker_EndBlockCue1_5HzAddition         = 7001;
+% Sample Related
+Marker_GoStimulusAddition             = 7002;
+
+%Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); %Links the key presses to the key board names
 KbQueueCreate;
@@ -61,6 +67,8 @@ KbQueueStart;
 %Screen('Preference', 'SkipSyncTests', 1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% AUDIO PREPARATION
+
 %LOAD METRONOME SOUNDS (PsychToolbox)
 audio_dir='.\Previous Experimental Scripts\Experiment_ME\metronomesounds';
 cd(audio_dir)
@@ -69,7 +77,15 @@ cd(audio_dir)
 % change rows<>columns
 WAVMetronome8.wave = WAVMetronome8.wave';         WAVMetronome8.nrChan=2;
 
-% CREATE AND FILL AUDIO BUFFER
+%LOAD CUES
+
+% Get Cueing Files
+Cue1_5Hz       = 'Metronome120.wav';
+[Cue1_5Hz]     = CreateWAVstruct(Cue1_5Hz);
+Cue1_5HzLength = length(Cue1_5Hz.wavedata)/Cue1_5Hz.fs;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CREATE AND FILL AUDIO BUFFER
 % Initialize Sounddriver
 % This routine loads the PsychPortAudio sound driver for high precision, low latency,
 % multichannel sound playback and recording
@@ -82,16 +98,20 @@ duration = 1;                       % number of repetitions of the wav-file
 PsychPortAudio('Verbosity',1);      % verbosity = "wordiness" -> 1= print errors
 
 % Get audio device
-h_device = PsychPortAudio ('GetDevices');
+PPA_device = PsychPortAudio ('GetDevices');
 
 % Open handle
-h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+PPA_cue1Hz   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+PPA_cue1_5Hz = PsychPortAudio('Open', [], [], priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
 
 % Fill buffer
-PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', PPA_cue1Hz, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', PPA_cue1_5Hz, Cue1_5Hz.wavedata);
 
+%AudioFile
+file = [PPA_cue1Hz; PPA_cue1_5Hz];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%SAVE FILES IN FOLDER
+%% SAVE FILES IN FOLDER
 
 fprintf('Select the project directory \n')
 root_dir=uigetdir('C:\Users\mtabo\Documents\TryOutScript\', 'Select the project directory');
@@ -126,7 +146,7 @@ script_name=mfilename;
 copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%SET UP PARAMETERS
+%% SET UP PARAMETERS
 
 %The sequences used for this study (automatic and non-automatic sequences
 %randomized between participants)
@@ -144,24 +164,17 @@ t2 = 5;  %Random interval around the resting period time
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=20; % number of trials performed for each limb
+N_trials=20; % number of trials 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RANDOMIZATION
+%% RANDOMIZATION
 
 %Set the right sequence that was studied at home (= automatic)
 sequenceauto = sequenceA;
 sequenceautoprint = sequenceprintA;
 
-%Create a vector to represent the two different options (1=finger tapping
-%test, 2= foot stomping test). This order is randomized between
-%participants
-% order_autodual=[1,2];
-% %Save the order of the automaticity test experiment
-% save('order_autodual.mat', 'order_autodual');
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SCREEN PREPARATION
+%% SCREEN PREPARATION
 
 % Get the screen numbers.
 screens = Screen('Screens');
@@ -198,8 +211,8 @@ yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
 allCoords = [xCoords; yCoords];
 lineWidthPix = 4;% Set the line width for the fixation cross
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%START TEST FOR AUTOMATICITY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% START TEST FOR AUTOMATICITY
 
 %Empty structure for key presses, -> use later again so it saves the key
 %presses within this structure -> save at the end
@@ -215,14 +228,14 @@ KbStrokeWait; %wait for response to terminate instructions
 %Start the randomization loop
 % for i=order_autodual %Either [1,2] or [2,1] -> determines the order of the tasks
     
-% Finger tapping test -> 11 trials, dual task, in which a participant
+% Finger tapping test -> 20 trials, dual task, in which a participant
 % taps a prelearned sequence, while also letters are presented on the
 % screen in a randomized speed
 
 %Instruction automaticity task finger tapping
 % trig.beep(440, 0.2, 'instructions');
 Screen('TextSize',window,25);
-DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n We will perform 11 trails. \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n We will start with a fixation cross on the screen for 20 seconds. \n After that the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key to continue and start the test.', sequenceauto),'center','center', white);
+DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n We will perform',N_trials,' trails. \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n We will start with a fixation cross on the screen for 20 seconds. \n After that the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key to continue and start the test.', sequenceauto),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
@@ -241,25 +254,41 @@ for j=1:N_trials
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    PsychPortAudio('Start', h_Metronome8, 1, [], []); % Play metronome sound file (8 seconds)
+    PsychPortAudio('Start', PPA_cue1Hz, 1, [], []); % Play metronome sound file (8 seconds)
     WaitSecs(t1+randi(t2))
 
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
 %     trig.beep(440, 0.2, 'finger_auto_dual');
     onset=GetSecs;
+    
     %preallocate table with key presses
     keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
     m=1; %first key press
     KbQueueFlush; % clear all previous key presses from the list
-    %Start loop for letter presenting during a trial
+    
+    
+    %% CUEING
+    cued=round(rand); %Cue=1 (true) Uncued=0 (false)
+    if(cued) 
+        %Start the Cue
+        PsychPortAudio('Start', file(2), 1, [], []);
+        outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
+        
+        %Place the markers for each beep
+        for ii = 1:60
+            WaitSecs(1/1.5);
+            outlet.push_sample(Marker_GoStimulusAddition);
+        end
+    end
+    %% LETTER PRESENTATION
     for n=1:N_letters
         %Present random letter on the screen
         Screen('TextSize', window, 100);
         DrawFormattedText(window, value{1}(n),'center','center', white);
         vbl = Screen('Flip', window);
         time_letter=rand(1)+0.5; %Speed with which the letters are presented
-
+    
         %Meanwhile record key presses
         start_timer=GetSecs;
         while GetSecs-start_timer<time_letter
@@ -304,7 +333,12 @@ for j=1:N_trials
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
     WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
-
+    
+    if (cued)
+        %Stop cueing
+        PsychPortAudio('Stop', Cue1_5Hz);
+    end
+    
     %Ask how many G's were presented
     Screen('TextSize',window,30);
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
@@ -317,10 +351,14 @@ for j=1:N_trials
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
     KbStrokeWait;
-    DrawFormattedText(window, 'Press any key to continue with the next trail. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
+    DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
     vbl = Screen('Flip', window);
     KbStrokeWait;
+ 
 end
+
+
+
 
 %After all trials completed, the end of the finger tapping task is
 %reached
@@ -353,17 +391,17 @@ for h = 1:N_trials
     
 end
 
-%Show dual task performance in command window (foot stomping)
-fprintf('Foot AutoDual \n')
-for g = 1:N_trials
-    fprintf('Trial %d: \n', g)
-    %Show if the answers for the number of G's presented were correct
-    if str2num(events_footautodual(g).stimuli.response{1})==length(strfind(events_footautodual(g).stimuli.value{1}, 'G'))
-        fprintf('G correct \n')
-    else
-        fprintf('G incorrect \n')
-    end
-end
+% %Show dual task performance in command window (foot stomping)
+% fprintf('Foot AutoDual \n')
+% for g = 1:N_trials
+%     fprintf('Trial %d: \n', g)
+%     %Show if the answers for the number of G's presented were correct
+%     if str2num(events_footautodual(g).stimuli.response{1})==length(strfind(events_footautodual(g).stimuli.value{1}, 'G'))
+%         fprintf('G correct \n')
+%     else
+%         fprintf('G incorrect \n')
+%     end
+% end
 
 % End of automaticity test is reached 
 Screen('TextSize',window,25);
@@ -392,4 +430,15 @@ delete(ses);
 delete(trigstr{1});
 delete(trigstr{2});
 delete(info);
+end
+
+% To Play Back Sound
+function [WAVstruct] = CreateWAVstruct(WAVfilename)
+% This function creates a struct with the information from the wav-files.
+
+    wav = WAVfilename;                                          
+    WAVstruct = struct('wavedata',[],'fs',[],'nrChan',[]);      
+    [WAVstruct.wavedata, WAVstruct.fs] = psychwavread(wav);     
+    WAVstruct.wavedata = WAVstruct.wavedata';                   
+    WAVstruct.nrChan = size(WAVstruct.wavedata,1);  
 end

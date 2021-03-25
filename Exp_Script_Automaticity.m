@@ -23,6 +23,8 @@
 %Before starting the automaticity test, clear the workspace.
 clear all
 
+%Synch test skip => comment when actually testing patient
+Screen('Preference', 'SkipSyncTests', 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
@@ -42,13 +44,18 @@ lib = lsl_loadlib();
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
 info = lsl_streaminfo(lib,'AutovsNAuto','Markers',1,0.0,'cf_string','sdfwerr32432');
-%
+
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
-%
-% Create marker id's
-instructions = 'instructions';
+
+% MARKER SETUP
+% Block related
+instructions = 'instructions'; %NEVER USED (?)
 finger_test='finger_test';
+Marker_StartBlockCue1_5HzAddition       = 7000;         
+Marker_EndBlockCue1_5HzAddition         = 7001;
+% Sample Related
+Marker_GoStimulusAddition             = 7002;
 
 %Open Pshychtoolbox.
 PsychDefaultSetup(2);
@@ -77,7 +84,7 @@ Cue1_5Hz       = 'Metronome120.wav';
 [Cue1_5Hz]     = CreateWAVstruct(Cue1_5Hz);
 Cue1_5HzLength = length(Cue1_5Hz.wavedata)/Cue1_5Hz.fs;
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% CREATE AND FILL AUDIO BUFFER
 % Initialize Sounddriver
 % This routine loads the PsychPortAudio sound driver for high precision, low latency,
@@ -94,12 +101,15 @@ PsychPortAudio('Verbosity',1);      % verbosity = "wordiness" -> 1= print errors
 PPA_device = PsychPortAudio ('GetDevices');
 
 % Open handle
-PPA_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
-PPA_cue1_5Hz = PsychPortAudio('Open', [], [], Priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
+PPA_cue1Hz   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+PPA_cue1_5Hz = PsychPortAudio('Open', [], [], priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
 
 % Fill buffer
-PsychPortAudio('FillBuffer', PPA_Metronome8, WAVMetronome8.wave);
-PsychPortAudio('FillBuffer', PPA_cue1Hz, Cue1Hz.wavedata);
+PsychPortAudio('FillBuffer', PPA_cue1Hz, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', PPA_cue1_5Hz, Cue1_5Hz.wavedata);
+
+%AudioFile
+file = [PPA_cue1Hz; PPA_cue1_5Hz];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SAVE FILES IN FOLDER
 
@@ -201,7 +211,7 @@ yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
 allCoords = [xCoords; yCoords];
 lineWidthPix = 4;% Set the line width for the fixation cross
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% START TEST FOR AUTOMATICITY
 
 %Empty structure for key presses, -> use later again so it saves the key
@@ -244,7 +254,7 @@ for j=1:N_trials
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    PsychPortAudio('Start', PPA_Metronome8, 1, [], []); % Play metronome sound file (8 seconds)
+    PsychPortAudio('Start', PPA_cue1Hz, 1, [], []); % Play metronome sound file (8 seconds)
     WaitSecs(t1+randi(t2))
 
     %Presentation of random letters on the screen during the finger
@@ -257,25 +267,28 @@ for j=1:N_trials
     m=1; %first key press
     KbQueueFlush; % clear all previous key presses from the list
     
-    %Start the Cue
-    PsychPortAudio('Start', Cue1_5Hz, 1, [], []);
-%     outlet.push_sample(Marker_StartBlockCue1HzAddition);
-
-%     for ii = 1:60
-%         WaitSecs(1/0.75);
-%         outlet.push_sample(Marker_GoStimulusAddition);
-%     end
-
-%     outlet.push_sample(Marker_EndBlockCue1HzAddition);
-
-    %Start loop for letter presenting during a trial
+    
+    %% CUEING
+    cued=round(rand); %Cue=1 (true) Uncued=0 (false)
+    if(cued) 
+        %Start the Cue
+        PsychPortAudio('Start', file(2), 1, [], []);
+        outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
+        
+        %Place the markers for each beep
+        for ii = 1:60
+            WaitSecs(1/1.5);
+            outlet.push_sample(Marker_GoStimulusAddition);
+        end
+    end
+    %% LETTER PRESENTATION
     for n=1:N_letters
         %Present random letter on the screen
         Screen('TextSize', window, 100);
         DrawFormattedText(window, value{1}(n),'center','center', white);
         vbl = Screen('Flip', window);
         time_letter=rand(1)+0.5; %Speed with which the letters are presented
-
+    
         %Meanwhile record key presses
         start_timer=GetSecs;
         while GetSecs-start_timer<time_letter
@@ -320,7 +333,12 @@ for j=1:N_trials
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
     WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
-
+    
+    if (cued)
+        %Stop cueing
+        PsychPortAudio('Stop', Cue1_5Hz);
+    end
+    
     %Ask how many G's were presented
     Screen('TextSize',window,30);
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
@@ -336,10 +354,11 @@ for j=1:N_trials
     DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
     vbl = Screen('Flip', window);
     KbStrokeWait;
+ 
 end
 
 
-PsychPortAudio('Stop', Cue1_5Hz);
+
 
 %After all trials completed, the end of the finger tapping task is
 %reached
