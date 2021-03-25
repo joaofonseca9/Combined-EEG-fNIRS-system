@@ -254,9 +254,9 @@ for j=1:N_trials
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    PsychPortAudio('Start', PPA_cue1Hz, 1, [], []); % Play metronome sound file (8 seconds)
+    PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
     WaitSecs(t1+randi(t2))
-
+    
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
 %     trig.beep(440, 0.2, 'finger_auto_dual');
@@ -270,13 +270,13 @@ for j=1:N_trials
     
     %% CUEING
     cued=round(rand); %Cue=1 (true) Uncued=0 (false)
-    if(cued) 
+    if(cued==1) 
         %Start the Cue
         PsychPortAudio('Start', file(2), 1, [], []);
         outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
         
-        %Place the markers for each beep
-        for ii = 1:60
+%         %Place the markers for each beep
+        parfor ii = 1:60
             WaitSecs(1/1.5);
             outlet.push_sample(Marker_GoStimulusAddition);
         end
@@ -334,9 +334,9 @@ for j=1:N_trials
     Screen('Flip', window);
     WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
     
-    if (cued)
-        %Stop cueing
-        PsychPortAudio('Stop', Cue1_5Hz);
+    %Stop cueing
+    if (cued==1)
+        PsychPortAudio('Stop', file(2));
     end
     
     %Ask how many G's were presented
