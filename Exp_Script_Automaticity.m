@@ -282,16 +282,13 @@ for j=1:N_trials
         %Start the Cue
         PsychPortAudio('Start', file(2), 1, [], []);
         outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
-    end
-    
-%     %Place the markers for each beep
-%     while endOfTrial==0
-%         WaitSecs(1/1.5);
-%         outlet.push_sample(Marker_GoStimulusAddition);
-%         if endOfTrial==true
-%             break;
+        
+%         %Place the markers for each beep
+%         parfor ii=1:N_letters
+%             WaitSecs(1/1.5);
+%             outlet.push_sample(Marker_GoStimulusAddition);
 %         end
-%     end
+    end
     
     %% LETTER PRESENTATION
     for n=1:N_letters
