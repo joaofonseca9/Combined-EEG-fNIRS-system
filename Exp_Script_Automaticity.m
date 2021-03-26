@@ -26,6 +26,32 @@ clear all
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% SET UP PARAMETERS
+
+%The sequences used for this study (automatic and non-automatic sequences
+%randomized between participants)
+sequenceprintA = '4 3 4 1 4 1 2 4 3 2 1 2';
+sequenceprintB = '2 1 2 3 2 1 3 2 4 2 4 1';
+%Sequences used in order to be able to print in the command window if
+%sequences performed by the participant were right (see also end of script)
+sequenceA = {'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'};
+sequenceB = {'2','1','2', '3','2','1','3', '2', '4', '2', '4','1' };
+
+%Set the right sequence that was studied at home (= automatic)
+sequenceauto = sequenceA;
+sequenceautoprint = sequenceprintA;
+
+%Parameters for the resting period in between the trials
+t1 = 20; %Resting period in seconds
+t2 = 5;  %Random interval around the resting period time
+
+%Amount of letters presented during test for automaticity for one trial.
+%Should be adjusted when letter presenting speed is changed!
+N_letters=8; % 8 letters presented during a trial
+N_trials=2; % number of trials 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
 
@@ -43,7 +69,7 @@ lib = lsl_loadlib();
 % > fs = samplking rate (Hz) as advertized by data source
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
-info = lsl_streaminfo(lib,'AutovsNAuto','Markers',1,0.0,'cf_string','sdfwerr32432');
+info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'ReactionTime'); 
 
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
@@ -146,34 +172,6 @@ script_name=mfilename;
 copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% SET UP PARAMETERS
-
-%The sequences used for this study (automatic and non-automatic sequences
-%randomized between participants)
-sequenceA = '4 3 4 1 4 1 2 4 3 2 1 2';
-sequenceB = '2 1 2 3 2 1 3 2 4 2 4 1';
-%Sequences used in order to be able to print in the command window if
-%sequences performed by the participant were right (see also end of script)
-sequenceprintA = {'Return', '3', 'Return', '1' ,'Return' '1', '2','Return', '3','2','1','2'};
-sequenceprintB = {'2','1','2', '3','2','1','3', '2', 'Return', '2', 'Return','1' };
-
-%Parameters for the resting period in between the trials
-t1 = 20; %Resting period in seconds
-t2 = 5;  %Random interval around the resting period time
-
-%Amount of letters presented during test for automaticity for one trial.
-%Should be adjusted when letter presenting speed is changed!
-N_letters=8; % 8 letters presented during a trial
-N_trials=20; % number of trials 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% RANDOMIZATION
-
-%Set the right sequence that was studied at home (= automatic)
-sequenceauto = sequenceA;
-sequenceautoprint = sequenceprintA;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
 % Get the screen numbers.
@@ -221,13 +219,10 @@ events_handautodual=struct([]); % same for the presented letters of the hand + t
 
 %Instruction automaticity test
 Screen('TextSize',window,25);
-DrawFormattedText(window,'You will now start with the automaticity test. \n Detailed instructions will be given at the start of each task. \n Press any key to continue.','center', 'center', white);
+DrawFormattedText(window,'You will now start with the automaticity test in a dual task situation. \n Detailed instructions will be given at the start of each task. \n Press any key to continue.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
-%Start the randomization loop
-% for i=order_autodual %Either [1,2] or [2,1] -> determines the order of the tasks
-    
 % Finger tapping test -> 20 trials, dual task, in which a participant
 % taps a prelearned sequence, while also letters are presented on the
 % screen in a randomized speed
@@ -235,9 +230,21 @@ KbStrokeWait; %wait for response to terminate instructions
 %Instruction automaticity task finger tapping
 % trig.beep(440, 0.2, 'instructions');
 Screen('TextSize',window,25);
-DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n We will perform',N_trials,' trails. \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n We will start with a fixation cross on the screen for 20 seconds. \n After that the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key to continue and start the test.', sequenceauto),'center','center', white);
+DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n We will perform 20 trials. \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n We will start with a fixation cross on the screen for 20 seconds. \n After that the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.', sequenceautoprint),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
+
+%Demonstrate how cueing works
+Screen('TextSize',window,25);
+DrawFormattedText(window,'While you perform the finger tapping sequence and count the letters, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing.\n Press any key to start the test.','center', 'center', white);
+vbl = Screen('Flip', window);
+PsychPortAudio('Start', file(2), 1, [], []);
+WaitSecs(5);
+PsychPortAudio('Stop', file(2));
+KbStrokeWait; %wait for response to terminate instructions
+
+
+
 
 %Start loop for the trials
 for j=1:N_trials
@@ -246,7 +253,8 @@ for j=1:N_trials
     Letterlist='AGOL';
     letter_order=randi(length(Letterlist), 1, N_letters);
     value={Letterlist(letter_order)};
-
+    
+    endOfTrial=0; %helper variable to terminate cueing
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
     %sound
 %     trig.beep(440, 0.2, 'rest');
@@ -274,13 +282,17 @@ for j=1:N_trials
         %Start the Cue
         PsychPortAudio('Start', file(2), 1, [], []);
         outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
-        
-%         %Place the markers for each beep
-        parfor ii = 1:60
-            WaitSecs(1/1.5);
-            outlet.push_sample(Marker_GoStimulusAddition);
-        end
     end
+    
+%     %Place the markers for each beep
+%     while endOfTrial==0
+%         WaitSecs(1/1.5);
+%         outlet.push_sample(Marker_GoStimulusAddition);
+%         if endOfTrial==true
+%             break;
+%         end
+%     end
+    
     %% LETTER PRESENTATION
     for n=1:N_letters
         %Present random letter on the screen
@@ -305,7 +317,10 @@ for j=1:N_trials
                     end
                     for q=1:key_n
                         keypresses.onset(m)=timing(q); %store and record the timing
-                        keypresses.value(m)=keys(q);  %store and record the presses
+                        keyValue=keys(q);
+                        % Get the numeric value of the response (clicking '2' leads to '2@')
+                        keyValue=regexp(keyValue,'\d*','Match');
+                        keypresses.value(m)=keyValue{:};%store and record the presses
                         m=m+1;
                         if m>12
                             break
@@ -344,16 +359,22 @@ for j=1:N_trials
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
     vbl = Screen('Flip', window);
     [secs, keyCode, deltaSecs]=KbWait;
-    % save the response and the key presses
-    response={KbName(find(keyCode))};
+    % Save the response and the key presses
+    response={KbName(find(keyCode))}; 
+    % Get the numeric value of the response (clicking '2' leads to '2@')
+    response=regexp(response,'\d*','Match');
+    response=response{:};
     events_handautodual(j).stimuli=table(onset,duration, value, response);
     events_handautodual(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
     KbStrokeWait;
-    DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
-    vbl = Screen('Flip', window);
-    KbStrokeWait;
+    
+    if j<N_trials
+        DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
+        vbl = Screen('Flip', window);
+        KbStrokeWait;
+    end
  
 end
 
@@ -362,11 +383,11 @@ end
 
 %After all trials completed, the end of the finger tapping task is
 %reached
-Screen('TextSize',window,30);
-DrawFormattedText(window, 'This is the end of the automaticity test for the finger tapping task. \n You can take a rest if needed. \n When ready: press any key to end this session.' ,'center','center', white);
-vbl = Screen('Flip', window);
-save('events_handautodual.mat', 'events_handautodual'); % save the events
-KbStrokeWait; %wait for response to terminate instructions
+% Screen('TextSize',window,30);
+% DrawFormattedText(window, 'This is the end of the automaticity test for the finger tapping task. \n You can take a rest if needed. \n When ready: press any key to end this session.' ,'center','center', white);
+% vbl = Screen('Flip', window);
+% save('events_handautodual.mat', 'events_handautodual'); % save the events
+% KbStrokeWait; %wait for response to terminate instructions
 
 %Show dual task performance in command window (finger tapping)
 fprintf('Finger AutoDual \n')
@@ -383,25 +404,13 @@ for h = 1:N_trials
     delay=mean(diff(events_handautodual(h).responses.onset)-1/1.50);
     fprintf('the tempo was off with on average %f seconds \n', delay);
     %Show if the tapped sequence was correct
-    if all(strcmp(events_handautodual(h).responses.value,sequenceautoprint'))
+    if all(strcmp(events_handautodual(h).responses.value,sequenceauto'))
         fprintf('Seq correct \n')
     else
         fprintf('Seq incorrect \n')
     end
     
 end
-
-% %Show dual task performance in command window (foot stomping)
-% fprintf('Foot AutoDual \n')
-% for g = 1:N_trials
-%     fprintf('Trial %d: \n', g)
-%     %Show if the answers for the number of G's presented were correct
-%     if str2num(events_footautodual(g).stimuli.response{1})==length(strfind(events_footautodual(g).stimuli.value{1}, 'G'))
-%         fprintf('G correct \n')
-%     else
-%         fprintf('G incorrect \n')
-%     end
-% end
 
 % End of automaticity test is reached 
 Screen('TextSize',window,25);

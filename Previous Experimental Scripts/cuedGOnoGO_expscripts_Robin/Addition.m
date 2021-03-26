@@ -16,10 +16,10 @@ Marker_EndBlockCue3HzAddition         = 6003;
 Marker_GoStimulusAddition             = 6004;      
 
 % Test Marker
-Marker_TestTest                       = 5555;     
+Marker_TestTest                      = 5555;     
                                         
 
-%% General Screen Preparation
+% General Screen Preparation
 
 % Default Setup for Psychtoolbox
 PsychDefaultSetup(2);

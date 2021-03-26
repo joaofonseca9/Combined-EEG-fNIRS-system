@@ -244,7 +244,7 @@ PsychPortAudio('Stop', file(2));
 KbStrokeWait; %wait for response to terminate instructions
 
 
-endOfTrial=0; %helper variable to terminate cueing
+
 
 %Start loop for the trials
 for j=1:N_trials
@@ -253,7 +253,8 @@ for j=1:N_trials
     Letterlist='AGOL';
     letter_order=randi(length(Letterlist), 1, N_letters);
     value={Letterlist(letter_order)};
-
+    
+    endOfTrial=0; %helper variable to terminate cueing
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
     %sound
 %     trig.beep(440, 0.2, 'rest');
@@ -282,11 +283,15 @@ for j=1:N_trials
         PsychPortAudio('Start', file(2), 1, [], []);
         outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
     end
-%     %Place the markers for each beep
-%     while endOfTrial==0
-%         WaitSecs(1/1.5);
-%         outlet.push_sample(Marker_GoStimulusAddition);
-%     end
+    
+    %Place the markers for each beep
+    while endOfTrial==0
+        WaitSecs(1/1.5);
+        outlet.push_sample(Marker_GoStimulusAddition);
+        if endOfTrial==true
+            break;
+        end
+    end
     
     %% LETTER PRESENTATION
     for n=1:N_letters
