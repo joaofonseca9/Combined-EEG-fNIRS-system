@@ -57,7 +57,10 @@ N_trials=4; % number of trials
 
 % Create and load the lab streaming layer library
 
-addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+
+% addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 lib = lsl_loadlib(); version = lsl_library_version(lib);
 lib = lsl_loadlib();
 
