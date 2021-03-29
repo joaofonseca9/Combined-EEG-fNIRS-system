@@ -38,10 +38,6 @@ sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
 
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
-% % Set the right sequence that was studied at home (= automatic)
-% sequenceauto = sequenceA;
-% sequenceautoprint = sequenceprintA;
-
 %Randomize the first sequence to be tested
 %1=auto sequence, 2 non-auto sequence
 sequence_idx=randi([1,2]);
@@ -376,7 +372,9 @@ for ii=1:2
         DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait;
-
+        
+        %If it's in the last trial of the block (where we change the
+        %sequence), prompt user to continue to next trial
         if j<N_trials/2
             DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
             vbl = Screen('Flip', window);
@@ -395,16 +393,6 @@ for ii=1:2
         sequence_idx=1; %set the next sequence
     end
 end
-
-
-
-%After all trials completed, the end of the finger tapping task is
-%reached
-% Screen('TextSize',window,30);
-% DrawFormattedText(window, 'This is the end of the automaticity test for the finger tapping task. \n You can take a rest if needed. \n When ready: press any key to end this session.' ,'center','center', white);
-% vbl = Screen('Flip', window);
-% save('events_handautodual.mat', 'events_handautodual'); % save the events
-% KbStrokeWait; %wait for response to terminate instructions
 
 %Show dual task performance in command window (finger tapping)
 fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
