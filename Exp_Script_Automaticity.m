@@ -57,7 +57,7 @@ N_trials=4; % number of trials
 
 % Create and load the lab streaming layer library
 
-addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 lib = lsl_loadlib(); version = lsl_library_version(lib);
 lib = lsl_loadlib();
 
@@ -69,7 +69,7 @@ lib = lsl_loadlib();
 % > fs = samplking rate (Hz) as advertized by data source
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
-info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'ReactionTime'); 
+info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
 
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
@@ -128,15 +128,15 @@ PsychPortAudio('Verbosity',1);      % verbosity = "wordiness" -> 1= print errors
 PPA_device = PsychPortAudio ('GetDevices');
 
 % Open handle
-PPA_cue1Hz   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
 PPA_cue1_5Hz = PsychPortAudio('Open', [], [], priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
 
 % Fill buffer
-PsychPortAudio('FillBuffer', PPA_cue1Hz, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
 PsychPortAudio('FillBuffer', PPA_cue1_5Hz, Cue1_5Hz.wavedata);
 
 %AudioFile
-file = [PPA_cue1Hz; PPA_cue1_5Hz];
+file = [h_Metronome8; PPA_cue1_5Hz];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SAVE FILES IN FOLDER
 
@@ -291,9 +291,9 @@ for sequence_idx=order_sequence
             %Start the Cue
             PsychPortAudio('Start', file(2), 1, [], []);
             outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
-            events_handautodual(ii).trial(j).cue='cued';
+            events_handautodual(sequence_idx).trial(j).cue='cued';
         else
-            events_handautodual(ii).trial(j).cue='uncued';
+            events_handautodual(sequence_idx).trial(j).cue='uncued';
         end
 
         %% LETTER PRESENTATION
@@ -428,9 +428,9 @@ sca
 
 
 %Save Results and Sequence order
-str1=strconc('events_sub%d_rec%d',sub_ID,rec);
+str1=['events_sub',sub_ID,'_',rec];
 save(str1,'events_handautodual');
-str2=strconc('order_sub%d_rec%d',sub_ID,rec);
+str2=['order_sub',sub_ID,'_',rec];
 save(str2,'order_sequence');
 %% end the lsl session
 % trig.pulseIR(3, 0.2); % stop trigger for the nirs recording

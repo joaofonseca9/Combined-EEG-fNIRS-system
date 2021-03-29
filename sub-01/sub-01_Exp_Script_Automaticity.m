@@ -38,13 +38,9 @@ sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
 
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
-% % Set the right sequence that was studied at home (= automatic)
-% sequenceauto = sequenceA;
-% sequenceautoprint = sequenceprintA;
-
 %Randomize the first sequence to be tested
 %1=auto sequence, 2 non-auto sequence
-sequence_idx=randi([1,2]);
+order_sequence=randperm(2,2);
 
 %Parameters for the resting period in between the trials
 t1 = 20; %Resting period in seconds
@@ -244,7 +240,7 @@ PsychPortAudio('Stop', file(2));
 % taps a prelearned sequence, while also letters are presented on the
 % screen in a randomized speed
 
-for ii=1:2
+for sequence_idx=order_sequence
     %Instruction automaticity task finger tapping
     % trig.beep(440, 0.2, 'instructions');
     Screen('TextSize',window,25);
@@ -295,9 +291,9 @@ for ii=1:2
             %Start the Cue
             PsychPortAudio('Start', file(2), 1, [], []);
             outlet.push_sample(Marker_StartBlockCue1_5HzAddition);
-            events_handautodual(ii).trial(j).cue='cued';
+            events_handautodual(sequence_idx).trial(j).cue='cued';
         else
-            events_handautodual(ii).trial(j).cue='uncued';
+            events_handautodual(sequence_idx).trial(j).cue='uncued';
         end
 
         %% LETTER PRESENTATION
@@ -376,7 +372,9 @@ for ii=1:2
         DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait;
-
+        
+        %If it's in the last trial of the block (where we change the
+        %sequence), prompt user to continue to next trial
         if j<N_trials/2
             DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
             vbl = Screen('Flip', window);
@@ -389,47 +387,34 @@ for ii=1:2
     
     if sequence_idx==1
         outlet.push_sample(Marker_EndBlock_AutomaticSequence);
-        sequence_idx=2; %set the next sequence
     else
         outlet.push_sample(Marker_EndBlock_NonAutomaticSequence);
-        sequence_idx=1; %set the next sequence
     end
 end
 
-
-
-%After all trials completed, the end of the finger tapping task is
-%reached
-% Screen('TextSize',window,30);
-% DrawFormattedText(window, 'This is the end of the automaticity test for the finger tapping task. \n You can take a rest if needed. \n When ready: press any key to end this session.' ,'center','center', white);
-% vbl = Screen('Flip', window);
-% save('events_handautodual.mat', 'events_handautodual'); % save the events
-% KbStrokeWait; %wait for response to terminate instructions
-
 %Show dual task performance in command window (finger tapping)
 fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
-for s=1:2
-    fprintf('--- %s Sequence --- \n', events_handautodual(s).sequence_label)
+for sequence_idx=order_sequence
+    fprintf('--- %s Sequence --- \n', events_handautodual(sequence_idx).sequence_label)
     for h = 1:N_trials/2
         fprintf('Trial %d: \n', h)
         %Show if the answers for the number of G's presented were correct
-        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+        if str2num(events_handautodual(sequence_idx).trial(h).stimuli.response{1})==length(strfind(events_handautodual(sequence_idx).trial(h).stimuli.value{1}, 'G'))
             fprintf('G correct \n')
         else
             fprintf('G incorrect \n')
         end
         %Show if the tapping tempo was correct.
         margin=0.25; % margin of error: think about what is most convenient
-        delay=mean(diff(events_handautodual(s).trial(h).responses.onset)-1/1.50);
+        delay=mean(diff(events_handautodual(sequence_idx).trial(h).responses.onset)-1/1.50);
         fprintf('the tempo was off with on average %f seconds \n', delay);
         %Show if the tapped sequence was correct
-        correctSequence=sequences(s);
-        if all(strcmp(events_handautodual(s).trial(h).responses.value,correctSequence{:}'))
+        correctSequence=sequences(sequence_idx);
+        if all(strcmp(events_handautodual(sequence_idx).trial(h).responses.value,correctSequence{:}'))
             fprintf('Seq correct \n')
         else
             fprintf('Seq incorrect \n')
         end
-
     end
 end
 
@@ -441,6 +426,12 @@ vbl = Screen('Flip', window);
 KbStrokeWait;
 sca
 
+
+%Save Results and Sequence order
+str1=strconc('events_sub%d_rec%d',sub_ID,rec);
+save(str1,'events_handautodual');
+str2=strconc('order_sub%d_rec%d',sub_ID,rec);
+save(str2,'order_sequence');
 %% end the lsl session
 % trig.pulseIR(3, 0.2); % stop trigger for the nirs recording
 % delete(trig);
