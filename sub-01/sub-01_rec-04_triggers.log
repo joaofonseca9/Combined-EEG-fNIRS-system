@@ -236,3 +236,273 @@ Trial 2:
 G incorrect 
 the tempo was off with on average -0.205795 seconds 
 Seq incorrect 
+ReactionTimeTest
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653763 ms [60.046488 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.661696 ms [60.017900 Hz]. (50 valid samples taken, stddev=0.076944 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+PTB-INFO: New audio device -1 with handle 0 opened as PortAudio stream:
+PTB-INFO: For 2 channels Playback: Audio subsystem is MME, Audio device name is Altifalantes (Realtek High Defi
+PTB-INFO: Real samplerate 8192.000000 Hz. Input latency 0.000000 msecs, Output latency 191.406250 msecs.
+PTB-INFO: New audio device -1 with handle 1 opened as PortAudio stream:
+PTB-INFO: For 2 channels Playback: Audio subsystem is MME, Audio device name is Altifalantes (Realtek High Defi
+PTB-INFO: Real samplerate 8192.000000 Hz. Input latency 0.000000 msecs, Output latency 191.406250 msecs.
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 5 times out of a total of 60 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+Error in function TextSize: 	Invalid Window (or Texture) Index provided: It doesn't correspond to an open window or texture.
+Did you close it accidentally via Screen('Close') or Screen('CloseAll') ?
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+oldTextSize=Screen('TextSize', windowPtr [,textSize]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('DrawFormattedText', 'C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m', 289)" style="font-weight:bold">DrawFormattedText</a> (<a href="matlab: opentoline('C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m',289,0)">line 289</a>)
+theight = Screen('TextSize', win) * vSpacing;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ReactionTimeTest>PauseScreen', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Previous Experimental Scripts\cuedGOnoGO_expscripts_Robin\ReactionTimeTest.m', 461)" style="font-weight:bold">ReactionTimeTest>PauseScreen</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Previous Experimental Scripts\cuedGOnoGO_expscripts_Robin\ReactionTimeTest.m',461,0)">line 461</a>)
+    DrawFormattedText(Window, [TLine3, TLine5], 'Center', 'Center', Color);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ReactionTimeTest', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Previous Experimental Scripts\cuedGOnoGO_expscripts_Robin\ReactionTimeTest.m', 298)" style="font-weight:bold">ReactionTimeTest</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Previous Experimental Scripts\cuedGOnoGO_expscripts_Robin\ReactionTimeTest.m',298,0)">line 298</a>)
+        PauseScreen(Window, white, TLine4, TLine5, Xcenter, Ycenter, DotSize, DotColor, iBlock);
+} 
+order_sequence=[2,1]
+
+order_sequence =
+
+     2     1
+
+for order_sequence
+ for order_sequence
+                   ↑
+{Error: Invalid expression. Check for missing or extra characters.
+} 
+for ii=order_sequence
+print(ii)
+end
+{Error using checkArgsForHandleToPrint
+Handle input argument contains nonhandle values.
+
+Error in checkArgsForHandleToPrint
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('print>LocalCreatePrintJob', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\printing\print.m', 101)" style="font-weight:bold">print>LocalCreatePrintJob</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\printing\print.m',101,0)">line 101</a>)
+handles = checkArgsForHandleToPrint(0, varargin{:});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('print', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\printing\print.m', 38)" style="font-weight:bold">print</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\printing\print.m',38,0)">line 38</a>)
+[pj, inputargs] = LocalCreatePrintJob(varargin{:});
+} 
+for ii=order_sequence
+ii
+end
+
+ii =
+
+     2
+
+
+ii =
+
+     1
+
+x=1;
+ceil(x/2+1)
+
+ans =
+
+     2
+
+floor(x/2+1)
+
+ans =
+
+     1
+
+x=2(ceil
+ x=2(ceil
+    ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check for mismatched
+delimiters.
+} 
+x=2
+
+x =
+
+     2
+
+randi([1 2], 1, 2)
+
+ans =
+
+     1     1
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     2     1
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     2     1
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     2     1
+
+randperm(2,2)
+
+ans =
+
+     2     1
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+randperm(2,2)
+
+ans =
+
+     1     2
+
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+PTB-ERROR: Failed to open audio device -1. PortAudio reports this error: Device unavailable 
+PTB-ERROR: Could not open audio device, most likely because it is already in use by a previous call to
+PTB-ERROR: PsychPortAudio('Open', ...). You can open each audio device only once per session. If you need
+PTB-ERROR: multiple independent devices simulated on one physical audio device, look into use of audio
+PTB-ERROR: slave devices. See help for this by typing 'PsychPortAudio OpenSlave?'.
+Error in function Open: 	Usage error
+Audio device unavailable. Most likely tried to open device multiple times.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('PsychPortAudio')" style="font-weight:bold">PsychPortAudio</a>
+Usage:
+
+pahandle = PsychPortAudio('Open' [, deviceid][, mode][, reqlatencyclass][, freq][, channels][, buffersize][, suggestedLatency][,
+selectchannels][, specialFlags=0]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 131)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',131,0)">line 131</a>)
+PPA_cue1Hz   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+} 

@@ -40,7 +40,7 @@ sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 %Randomize the first sequence to be tested
 %1=auto sequence, 2 non-auto sequence
-sequence_idx=randi([1,2]);
+order_sequence=randperm(2,2);
 
 %Parameters for the resting period in between the trials
 t1 = 20; %Resting period in seconds
@@ -240,7 +240,7 @@ PsychPortAudio('Stop', file(2));
 % taps a prelearned sequence, while also letters are presented on the
 % screen in a randomized speed
 
-for ii=1:2
+for sequence_idx=order_sequence
     %Instruction automaticity task finger tapping
     % trig.beep(440, 0.2, 'instructions');
     Screen('TextSize',window,25);
@@ -387,16 +387,14 @@ for ii=1:2
     
     if sequence_idx==1
         outlet.push_sample(Marker_EndBlock_AutomaticSequence);
-        sequence_idx=2; %set the next sequence
     else
         outlet.push_sample(Marker_EndBlock_NonAutomaticSequence);
-        sequence_idx=1; %set the next sequence
     end
 end
 
 %Show dual task performance in command window (finger tapping)
 fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
-for s=1:2
+for sequence_idx=order_sequence
     fprintf('--- %s Sequence --- \n', events_handautodual(sequence_idx).sequence_label)
     for h = 1:N_trials/2
         fprintf('Trial %d: \n', h)
@@ -418,14 +416,6 @@ for s=1:2
             fprintf('Seq incorrect \n')
         end
     end
-    
-    %Change the sequence idx so we can show the results for both types of
-    %sequence, in the order they were realized in the trials
-    if sequence_idx==1
-        sequence_idx=2;
-    else
-        sequence_idx=1;
-    end
 end
 
 % End of automaticity test is reached 
@@ -436,6 +426,12 @@ vbl = Screen('Flip', window);
 KbStrokeWait;
 sca
 
+
+%Save Results and Sequence order
+str1=strconc('events_sub%d_rec%d',sub_ID,rec);
+save(str1,'events_handautodual');
+str2=strconc('order_sub%d_rec%d',sub_ID,rec);
+save(str2,'order_sequence');
 %% end the lsl session
 % trig.pulseIR(3, 0.2); % stop trigger for the nirs recording
 % delete(trig);
