@@ -31,10 +31,12 @@ Screen('Preference', 'SkipSyncTests', 1);
 
 %The sequences used for this study (automatic and non-automatic sequences
 %randomized between participants)
-sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+
 %Sequences used in order to be able to print in the command window if
-%sequences performed by the participant were right (see also end of script)
-sequences = {{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'},{'2','1','2', '3','2','1','3', '2', '4', '2', '4','1' }} ;
+%to generate a new sequence use randi([1 4], 1, 12)
+sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+
+sequences = {split(sequenceprint(1))',split(sequenceprint(2))'} ;
 
 % % Set the right sequence that was studied at home (= automatic)
 % sequenceauto = sequenceA;

@@ -1108,3 +1108,87 @@ WARNING: This session of your experiment was run by you with the setting Screen(
 WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
 WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
 WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+randi([1 4], 1, 12)
+
+ans =
+
+     1     3     1     2     3     4     1     4     4     2     2     2
+
+getnum
+{Unrecognized function or variable 'getnum'.
+} 
+help getnum
+
+getnum not found.
+
+Use the Help browser search field to <a href="matlab:docsearch getnum">search the documentation</a>, or
+type "<a href="matlab:help help">help help</a>" for help command options, such as help for methods.
+
+newStr = strtrim('4 3 4 1 4 1 2 4 3 2 1 2')
+
+newStr =
+
+    '4 3 4 1 4 1 2 4 3 2 1 2'
+
+newStr(2)
+
+ans =
+
+    ' '
+
+newStr(3)
+
+ans =
+
+    '3'
+
+newStr= newStr(find(~isspace(newStr))),
+
+newStr =
+
+    '434141243212'
+
+newCell=str2char(newStr)
+{Unrecognized function or variable 'str2char'.
+} 
+newStr=split(newStr)
+
+newStr =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'434141243212'}
+
+newStr=split('4 3 4 1 4 1 2 4 3 2 1 2')
+
+newStr =
+
+  12×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+    {'3'}
+    {'4'}
+    {'1'}
+    {'4'}
+    {'1'}
+    {'2'}
+    {'4'}
+    {'3'}
+    {'2'}
+    {'1'}
+    {'2'}
+
+{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'}
+
+ans =
+
+  1×12 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}    {'3'}    {'4'}    {'1'}    {'4'}    {'1'}    {'2'}    {'4'}    {'3'}    {'2'}    {'1'}    {'2'}
+
+
+sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+
+sequences = {split(sequenceprint(1))',split(sequenceprint(2))'} ;
+{Unrecognized function or variable 'sequenceprint'.
+} 
