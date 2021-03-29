@@ -36,7 +36,7 @@ Screen('Preference', 'SkipSyncTests', 1);
 %to generate a new sequence use randi([1 4], 1, 12)
 sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
 
-sequences = {split(sequenceprint(1))',split(sequenceprint(2))'} ;
+sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % % Set the right sequence that was studied at home (= automatic)
 % sequenceauto = sequenceA;
@@ -61,7 +61,7 @@ N_trials=4; % number of trials
 
 % Create and load the lab streaming layer library
 
-addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
 lib = lsl_loadlib(); version = lsl_library_version(lib);
 lib = lsl_loadlib();
 
