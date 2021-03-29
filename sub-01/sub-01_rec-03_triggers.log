@@ -54,3 +54,1142 @@ Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback
 Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 186)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',186,0)">line 186</a>)
 [window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
 } 
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654153 ms [60.045083 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.645536 ms [60.076167 Hz]. (50 valid samples taken, stddev=0.128444 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   4.0995e+05
+
+{Unrecognized function or variable 'sequence'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 388)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',388,0)">line 388</a>)
+    if sequence==1
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 6 times out of a total of 29 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',388,0)
+sequences = [{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'},{'2','1','2', '3','2','1','3', '2', '4', '2', '4','1' }] ;
+
+sequences = {{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'},{'2','1','2', '3','2','1','3', '2', '4', '2', '4','1' }} ;
+
+sequences(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sprintf(sequences(1))
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sprintf')" style="font-weight:bold">sprintf</a>
+Invalid format.
+} 
+sequencesprint = {['4 3 4 1 4 1 2 4 3 2 1 2'],['2 1 2 3 2 1 3 2 4 2 4 1']};
+sequencesprint(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4 3 4 1 4 1 2 4 3 2 1 2'}
+
+sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+sequencesprint(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4 3 4 1 4 1 2 4 3 2 1 2'}
+
+sprintf(sequencesprint(1))
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sprintf')" style="font-weight:bold">sprintf</a>
+Invalid format.
+} 
+[sequencesprint(sequence_idx)]
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4 3 4 1 4 1 2 4 3 2 1 2'}
+
+sequencesprint(sequence_idx)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4 3 4 1 4 1 2 4 3 2 1 2'}
+
+sequencesprint(sequence_idx){:}
+{Error: Indexing with parentheses '()' must appear as the last operation of a valid indexing expression.
+} 
+a=sequencesprint(sequence_idx);
+a{:}
+
+ans =
+
+    '4 3 4 1 4 1 2 4 3 2 1 2'
+
+sequencesprint(sequence_idx){:}
+{Error: Indexing with parentheses '()' must appear as the last operation of a valid indexing expression.
+} 
+char(sequencesprint(sequence_idx))
+
+ans =
+
+    '4 3 4 1 4 1 2 4 3 2 1 2'
+
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654041 ms [60.045488 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.648386 ms [60.065883 Hz]. (50 valid samples taken, stddev=0.107277 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   4.1103e+05
+
+
+ans =
+
+   4.1109e+05
+
+Finger AutoDual 
+Trial 1: 
+G correct 
+the tempo was off with on average -37373.063187 seconds 
+Seq incorrect 
+Trial 2: 
+{Index exceeds the number of array elements (1).
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 409)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',409,0)">line 409</a>)
+    if str2num(events_handautodual(h).stimuli.response{1})==length(strfind(events_handautodual(h).stimuli.value{1}, 'G'))
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 13 times out of a total of 52 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+N_trials/2
+
+ans =
+
+     1
+
+ceil(N_trials/2=
+ ceil(N_trials/2=
+                ↑
+{Error: Incorrect use of '=' operator. To assign a value to a variable, use '='. To compare values for equality, use '=='.
+} 
+ceil(N_trials/2)
+
+ans =
+
+     1
+
+events_handautodual=struct([]); % same for the presented letters of the hand + the answer
+events_handautodual(sequence_idx).sequence_label='Automatic';
+events_handautodual(sequence_idx).sequence_label='Non-automatic';
+events_handautodual=struct([]); % same for the presented letters of the hand + the answer
+events_handautodual(1).sequence_label='Automatic';
+events_handautodual(2).sequence_label='Non-automatic';
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653961 ms [60.045774 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.651840 ms [60.053424 Hz]. (50 valid samples taken, stddev=0.083780 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 2 times out of a total of 9 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Error in function TextSize: 	Invalid Window (or Texture) Index provided: It doesn't correspond to an open window or texture.
+Did you close it accidentally via Screen('Close') or Screen('CloseAll') ?
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+oldTextSize=Screen('TextSize', windowPtr [,textSize]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 274)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',274,0)">line 274</a>)
+        Screen('TextSize', window, 36);
+} 
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653833 ms [60.046238 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.652110 ms [60.052450 Hz]. (50 valid samples taken, stddev=0.121797 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   4.1322e+05
+
+
+ans =
+
+   4.1327e+05
+
+Finger AutoDual 
+Trial 1: 
+{Reference to non-existent field 'stimuli'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 411)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',411,0)">line 411</a>)
+    if str2num(events_handautodual(h).stimuli.response{1})==length(strfind(events_handautodual(h).stimuli.value{1}, 'G'))
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 6 times out of a total of 52 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654141 ms [60.045127 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.654416 ms [60.044135 Hz]. (50 valid samples taken, stddev=0.091543 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+
+--------------------------------------------------------------------------------
+             Access violation detected at 2021-03-29 11:04:24 +0200
+--------------------------------------------------------------------------------
+
+Configuration:
+  Crash Decoding           : Disabled - No sandbox or build area path
+  Crash Mode               : continue (default)
+  Default Encoding         : windows-1252
+  Deployed                 : false
+  Graphics Driver          : Unknown hardware 
+  Graphics card 1          : NVIDIA ( 0x10de ) NVIDIA GeForce 920M Version 25.21.14.2531 (2019-4-9)
+  Graphics card 2          : Intel Corporation ( 0x8086 ) Intel(R) HD Graphics 620 Version 27.20.100.8681 (2020-9-5)
+  Java Version             : Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+  MATLAB Architecture      : win64
+  MATLAB Entitlement ID    : 5533169
+  MATLAB Root              : C:\Program Files\MATLAB\R2020b
+  MATLAB Version           : 9.9.0.1524771 (R2020b) Update 2
+  OpenGL                   : hardware
+  Operating System         : Microsoft Windows 10 Home
+  Process ID               : 4860
+  Processor ID             : x86 Family 6 Model 142 Stepping 9, GenuineIntel
+  Session Key              : 94dc57e1-5f60-4863-aa4e-c27a79437d33
+  Window System            : Version 10.0 (Build 19042)
+
+Fault Count: 1
+
+
+Abnormal termination:
+Access violation
+
+Current Thread: 'MCR 0 interpreter thread' id 15792
+
+Register State (from fault):
+  RAX = 0000000000000000  RBX = 0000000000000300
+  RCX = 00007ffa18601064  RDX = 0000000000000000
+  RSP = 000000b246af6140  RBP = 0000000000000556
+  RSI = 00007ff9d79c2ba0  RDI = 00000261b6ebfc90
+ 
+   R8 = 000000b246af5fe8   R9 = 0000000000000001
+  R10 = 0000000000000000  R11 = 000000b246af60a0
+  R12 = 0000000000000400  R13 = 0000000000000000
+  R14 = 0000000000000000  R15 = 0000000000000000
+ 
+  RIP = 00007ff9d794ae05  EFL = 00010206
+ 
+   CS = 0033   FS = 0053   GS = 002b
+
+Stack Trace (from fault):
+[  0] 0x00007ff9d794ae05 C:\toolbox\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\Screen.mexw64+00437765 mexFunction+00372165
+[  1] 0x00007ff9d7944446 C:\toolbox\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\Screen.mexw64+00410694 mexFunction+00345094
+[  2] 0x00007ff9d7945d60 C:\toolbox\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\Screen.mexw64+00417120 mexFunction+00351520
+[  3] 0x00007ff9d7958264 C:\toolbox\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\Screen.mexw64+00492132 mexFunction+00426532
+[  4] 0x00007ff9d78f03e3 C:\toolbox\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\Screen.mexw64+00066531 mexFunction+00000931
+[  5] 0x00007ff9c1d0a289 C:\Program Files\MATLAB\R2020b\bin\win64\libmex.dll+00565897 mexfile::Inspector::needs_upgrade+00015977
+[  6] 0x00007ff9c1d0b67b C:\Program Files\MATLAB\R2020b\bin\win64\libmex.dll+00571003 MexRetrieveVersion+00003579
+[  7] 0x00007ff9c1d0b7ec C:\Program Files\MATLAB\R2020b\bin\win64\libmex.dll+00571372 MexRetrieveVersion+00003948
+[  8] 0x00007ff9c1d0b9b4 C:\Program Files\MATLAB\R2020b\bin\win64\libmex.dll+00571828 MexRetrieveVersion+00004404
+[  9] 0x00007ff9c1cec209 C:\Program Files\MATLAB\R2020b\bin\win64\libmex.dll+00442889 mexUnlock_800+00023993
+[ 10] 0x00007ff9c2af26c1                     bin\win64\pgo\m_dispatcher.dll+00665281 Mfh_file::dispatch_file_common+00000165
+[ 11] 0x00007ff9c2af1d62                     bin\win64\pgo\m_dispatcher.dll+00662882 Mfh_error::lookup+00006498
+[ 12] 0x00007ff9c2af2615                     bin\win64\pgo\m_dispatcher.dll+00665109 Mfh_file::dispatch+00000045
+[ 13] 0x00007ff9aa2a8208                            bin\win64\pgo\m_lxe.dll+00557576 CGGBuiltinImpl+00181784
+[ 14] 0x00007ff9aa28b484                            bin\win64\pgo\m_lxe.dll+00439428 CGGBuiltinImpl+00063636
+[ 15] 0x00007ff9aa3a7861                            bin\win64\pgo\m_lxe.dll+01603681 mwboost::serialization::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >+00649937
+[ 16] 0x00007ff9aa28f20d                            bin\win64\pgo\m_lxe.dll+00455181 CGGBuiltinImpl+00079389
+[ 17] 0x00007ff9aa28e4dd                            bin\win64\pgo\m_lxe.dll+00451805 CGGBuiltinImpl+00076013
+[ 18] 0x00007ff9aa27d187                            bin\win64\pgo\m_lxe.dll+00381319 CGGBuiltinImpl+00005527
+[ 19] 0x00007ff9aa27cd8f                            bin\win64\pgo\m_lxe.dll+00380303 CGGBuiltinImpl+00004511
+[ 20] 0x00007ff9aa288b2c                            bin\win64\pgo\m_lxe.dll+00428844 CGGBuiltinImpl+00053052
+[ 21] 0x00007ff9aa28d185                            bin\win64\pgo\m_lxe.dll+00446853 CGGBuiltinImpl+00071061
+[ 22] 0x00007ff9aa28c19c                            bin\win64\pgo\m_lxe.dll+00442780 CGGBuiltinImpl+00066988
+[ 23] 0x00007ff9aa442fdd                            bin\win64\pgo\m_lxe.dll+02240477 mwboost::archive::detail::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::MatlabIrTree>::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::MatlabIrTree>+00023157
+[ 24] 0x00007ff9aa28bff0                            bin\win64\pgo\m_lxe.dll+00442352 CGGBuiltinImpl+00066560
+[ 25] 0x00007ff9aa3e964d                            bin\win64\pgo\m_lxe.dll+01873485 mwboost::archive::detail::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>+00050949
+[ 26] 0x00007ff9c2af26c1                     bin\win64\pgo\m_dispatcher.dll+00665281 Mfh_file::dispatch_file_common+00000165
+[ 27] 0x00007ff9c2af1d62                     bin\win64\pgo\m_dispatcher.dll+00662882 Mfh_error::lookup+00006498
+[ 28] 0x00007ff9c2af2615                     bin\win64\pgo\m_dispatcher.dll+00665109 Mfh_file::dispatch+00000045
+[ 29] 0x00007ff9aa2a875f                            bin\win64\pgo\m_lxe.dll+00558943 CGGBuiltinImpl+00183151
+[ 30] 0x00007ff9aa2a7e37                            bin\win64\pgo\m_lxe.dll+00556599 CGGBuiltinImpl+00180807
+[ 31] 0x00007ff9aa28b484                            bin\win64\pgo\m_lxe.dll+00439428 CGGBuiltinImpl+00063636
+[ 32] 0x00007ff9aa3cbb61                            bin\win64\pgo\m_lxe.dll+01751905 MathWorks::lxe::ShutdownLxeEngine+00033653
+[ 33] 0x00007ff9aa28f20d                            bin\win64\pgo\m_lxe.dll+00455181 CGGBuiltinImpl+00079389
+[ 34] 0x00007ff9aa28e4dd                            bin\win64\pgo\m_lxe.dll+00451805 CGGBuiltinImpl+00076013
+[ 35] 0x00007ff9aa27d187                            bin\win64\pgo\m_lxe.dll+00381319 CGGBuiltinImpl+00005527
+[ 36] 0x00007ff9aa27cd8f                            bin\win64\pgo\m_lxe.dll+00380303 CGGBuiltinImpl+00004511
+[ 37] 0x00007ff9aa288b2c                            bin\win64\pgo\m_lxe.dll+00428844 CGGBuiltinImpl+00053052
+[ 38] 0x00007ff9aa28d185                            bin\win64\pgo\m_lxe.dll+00446853 CGGBuiltinImpl+00071061
+[ 39] 0x00007ff9aa28c19c                            bin\win64\pgo\m_lxe.dll+00442780 CGGBuiltinImpl+00066988
+[ 40] 0x00007ff9aa3a2c1f                            bin\win64\pgo\m_lxe.dll+01584159 mwboost::serialization::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >+00630415
+[ 41] 0x00007ff9aa3a2b07                            bin\win64\pgo\m_lxe.dll+01583879 mwboost::serialization::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >+00630135
+[ 42] 0x00007ff9aa3a2a16                            bin\win64\pgo\m_lxe.dll+01583638 mwboost::serialization::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >::singleton<mwboost::serialization::extended_type_info_typeid<MathWorks::lxe::PreLineExecutionEvent> >+00629894
+[ 43] 0x00007ff9aa3e2d7c                            bin\win64\pgo\m_lxe.dll+01846652 mwboost::archive::detail::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>+00024116
+[ 44] 0x00007ff9aa3e2d2a                            bin\win64\pgo\m_lxe.dll+01846570 mwboost::archive::detail::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>::oserializer<mwboost::archive::binaryTerm_oarchive,MathWorks::lxe::ClosedAbstractionFunctionDescriptorOwningIrTree>+00024034
+[ 45] 0x00007ff9abd769ba                            bin\win64\pgo\m_lxe.dll+28666298 MathWorks::lxe::profiler::IMexProfilingSupport::~IMexProfilingSupport+00058926
+[ 46] 0x00007ff9c279b609 C:\Program Files\MATLAB\R2020b\bin\win64\libmwbridge.dll+00177673 mnGetPrompt+00031273
+[ 47] 0x00007ff9c2ee11ff   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00463359 iqm::Iqm::instance+00001023
+[ 48] 0x00007ff9c2f538b7   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00932023 iqm::UserEvalPlugin::execute+00001351
+[ 49] 0x00007ff9c2f07a3f   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00621119 iqm::Iqm::setupIqmFcnPtrs+00113615
+[ 50] 0x00007ff9c2f131b0   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00668080 iqm::Iqm::setupIqmFcnPtrs+00160576
+[ 51] 0x00007ff9c2ed6fc3   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00421827 iqm::Iqm::create+00007235
+[ 52] 0x00007ff9c2787a3e C:\Program Files\MATLAB\R2020b\bin\win64\libmwbridge.dll+00096830 ioReadLine+00000478
+[ 53] 0x00007ff9c278781c C:\Program Files\MATLAB\R2020b\bin\win64\libmwbridge.dll+00096284 ioReadLine+00000188
+[ 54] 0x00007ff9c279ba50 C:\Program Files\MATLAB\R2020b\bin\win64\libmwbridge.dll+00178768 mnGetCommandLineBuffer+00000304
+[ 55] 0x00007ff9c279beda C:\Program Files\MATLAB\R2020b\bin\win64\libmwbridge.dll+00179930 mnParser+00000506
+[ 56] 0x00007ff9c2d162f4   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00549620 mcr_set_enableReadingFromStdin+00016084
+[ 57] 0x00007ff9c2cae7ad   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00124845 mcrFunctionSignature::set_signature+00103437
+[ 58] 0x00007ff9c2ccbaea   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00244458 mcrFunctionSignature::set_signature+00223050
+[ 59] 0x00007ff9c2f34504   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00804100 iqm::PackagedTaskPlugin::execute+00000084
+[ 60] 0x00007ff9c2d103ce   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00525262 services::lmgr::exception::LicensingStartupException::~LicensingStartupException+00009822
+[ 61] 0x00007ff9c2f07a3f   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00621119 iqm::Iqm::setupIqmFcnPtrs+00113615
+[ 62] 0x00007ff9c2ed7c42   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00425026 iqm::Iqm::create+00010434
+[ 63] 0x00007ff9c2ed7421   C:\Program Files\MATLAB\R2020b\bin\win64\iqm.dll+00422945 iqm::Iqm::create+00008353
+[ 64] 0x00007ff9c2ce60dc   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00352476 mcrInstantiationError::operator=+00011756
+[ 65] 0x00007ff9c2ce6a3c   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00354876 mcrInstantiationError::operator=+00014156
+[ 66] 0x00007ff9c2ce43cc   C:\Program Files\MATLAB\R2020b\bin\win64\mcr.dll+00345036 mcrInstantiationError::operator=+00004316
+[ 67] 0x00007ffa06eaa2a3 C:\Program Files\MATLAB\R2020b\bin\win64\mwboost_thread-vc141-mt-x64-1_70.dll+00041635 mwboost::thread::swap+00000083
+[ 68] 0x00007ffa18051bb2                   C:\Windows\System32\ucrtbase.dll+00138162 configthreadlocale+00000146
+[ 69] 0x00007ffa1a287034                   C:\Windows\System32\KERNEL32.DLL+00094260 BaseThreadInitThunk+00000020
+[ 70] 0x00007ffa1a622651                      C:\Windows\SYSTEM32\ntdll.dll+00337489 RtlUserThreadStart+00000033
+
+
+This error was detected while a MEX-file was running. If the MEX-file
+is not an official MathWorks function, please examine its source code
+for errors. Please consult the External Interfaces Guide for information
+on debugging MEX-files.
+** This crash report has been saved to disk as C:\Users\joaop\AppData\Local\Temp\matlab_crash_dump.4860-1 **
+
+
+
+MATLAB is exiting because of fatal error
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.682504 ms [59.943039 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.654868 ms [60.042505 Hz]. (50 valid samples taken, stddev=0.139895 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   4.1430e+05
+
+
+ans =
+
+   4.1435e+05
+
+Finger AutoDual 
+{Expected one output from a curly brace or dot indexing expression, but there were 2 results.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 407)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',407,0)">line 407</a>)
+    fprintf('%s: \n', events_handautodual.sequence_label(s))
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 6 times out of a total of 50 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',407,0)
+events_handautodual(s).sequence_label
+
+ans =
+
+    'Automatic'
+
+%Show dual task performance in command window (finger tapping)
+fprintf('Finger AutoDual \n')
+Finger AutoDual 
+for s=1:2
+    fprintf('%s: \n', events_handautodual(s).sequence_label)
+    for h = 1:N_trials/2
+        fprintf('Trial %d: \n', h)
+        %Show if the answers for the number of G's presented were correct
+        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
+        %Show if the tapping tempo was correct.
+        margin=0.25; % margin of error: think about what is most convenient
+        delay=mean(diff(events_handautodual(h).responses.onset)-1/1.50);
+        fprintf('the tempo was off with on average %f seconds \n', delay);
+        %Show if the tapped sequence was correct
+        if all(strcmp(events_handautodual(s).trial(h).responses.value,sequences(s)'))
+            fprintf('Seq correct \n')
+        else
+            fprintf('Seq incorrect \n')
+        end
+
+    end
+end
+Automatic: 
+Trial 1: 
+G correct 
+{Reference to non-existent field 'responses'.
+} 
+fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
+%%%%%%% Finger AutoDual %%%%%%% 
+for s=1:2
+    fprintf('--- %s Sequence --- \n', events_handautodual(s).sequence_label)
+    for h = 1:N_trials/2
+        fprintf('Trial %d: \n', h)
+        %Show if the answers for the number of G's presented were correct
+        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
+        %Show if the tapping tempo was correct.
+        margin=0.25; % margin of error: think about what is most convenient
+        delay=mean(diff(events_handautodual(s).trial(h).responses.onset)-1/1.50);
+        fprintf('the tempo was off with on average %f seconds \n', delay);
+        %Show if the tapped sequence was correct
+        if all(strcmp(events_handautodual(s).trial(h).responses.value,sequences(s)'))
+            fprintf('Seq correct \n')
+        else
+            fprintf('Seq incorrect \n')
+        end
+
+    end
+end
+--- Automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -0.087241 seconds 
+Seq incorrect 
+--- Non-automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -0.103518 seconds 
+Seq incorrect 
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653563 ms [60.047209 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.653488 ms [60.047481 Hz]. (50 valid samples taken, stddev=0.169218 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   4.1501e+05
+
+
+ans =
+
+   4.1506e+05
+
+
+ans =
+
+   4.1512e+05
+
+
+ans =
+
+   4.1518e+05
+
+%%%%%%% Finger AutoDual %%%%%%% 
+--- Automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -0.025925 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average -0.026797 seconds 
+Seq incorrect 
+--- Non-automatic Sequence --- 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -0.032455 seconds 
+Seq incorrect 
+Trial 2: 
+G correct 
+the tempo was off with on average -0.041396 seconds 
+Seq incorrect 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 12 times out of a total of 93 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+events_handautodual(2).trial(1).responses.value
+
+ans =
+
+  12×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'2'}
+    {'1'}
+    {'2'}
+    {'3'}
+    {'2'}
+    {'1'}
+    {'3'}
+    {'2'}
+    {'4'}
+    {'2'}
+    {'4'}
+    {'1'}
+
+sequences(2)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sequences(s)'
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sequences(s)'
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sequences(s)'
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sequences(s)'
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×12 cell}
+
+sequences(s){s}
+{Error: Indexing with parentheses '()' must appear as the last operation of a valid indexing expression.
+} 
+a=sequences(s);
+a{:}
+
+ans =
+
+  1×12 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'2'}    {'1'}    {'2'}    {'3'}    {'2'}    {'1'}    {'3'}    {'2'}    {'4'}    {'2'}    {'4'}    {'1'}
+
+%Show dual task performance in command window (finger tapping)
+fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
+%%%%%%% Finger AutoDual %%%%%%% 
+for s=1:2
+    fprintf('--- %s Sequence --- \n', events_handautodual(s).sequence_label)
+    for h = 1:N_trials/2
+        fprintf('Trial %d: \n', h)
+        %Show if the answers for the number of G's presented were correct
+        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
+        %Show if the tapping tempo was correct.
+        margin=0.25; % margin of error: think about what is most convenient
+        delay=mean(diff(events_handautodual(s).trial(h).responses.onset)-1/1.50);
+        fprintf('the tempo was off with on average %f seconds \n', delay);
+        %Show if the tapped sequence was correct
+        correctSequence=sequences(s);
+        if all(strcmp(events_handautodual(s).trial(h).responses.value,correctSequence{:}'))
+            fprintf('Seq correct \n')
+        else
+            fprintf('Seq incorrect \n')
+        end
+
+    end
+end
+--- Automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -0.025925 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average -0.026797 seconds 
+Seq incorrect 
+--- Non-automatic Sequence --- 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -0.032455 seconds 
+Seq correct 
+Trial 2: 
+G correct 
+the tempo was off with on average -0.041396 seconds 
+Seq correct 
+Exp_Script_Automaticity
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653500 ms [60.047437 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.652512 ms [60.051000 Hz]. (50 valid samples taken, stddev=0.219872 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   4.1623e+05
+
+
+ans =
+
+   4.1628e+05
+
+
+ans =
+
+   4.1632e+05
+
+
+ans =
+
+   4.1637e+05
+
+%%%%%%% Finger AutoDual %%%%%%% 
+--- Automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -37840.169666 seconds 
+Seq incorrect 
+Trial 2: 
+G correct 
+the tempo was off with on average -0.031702 seconds 
+Seq incorrect 
+--- Non-automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average -0.010682 seconds 
+Seq correct 
+Trial 2: 
+G correct 
+the tempo was off with on average -37852.679292 seconds 
+Seq incorrect 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 9 times out of a total of 93 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+randi([1 4], 1, 12)
+
+ans =
+
+     1     3     1     2     3     4     1     4     4     2     2     2
+
+getnum
+{Unrecognized function or variable 'getnum'.
+} 
+help getnum
+
+getnum not found.
+
+Use the Help browser search field to <a href="matlab:docsearch getnum">search the documentation</a>, or
+type "<a href="matlab:help help">help help</a>" for help command options, such as help for methods.
+
+newStr = strtrim('4 3 4 1 4 1 2 4 3 2 1 2')
+
+newStr =
+
+    '4 3 4 1 4 1 2 4 3 2 1 2'
+
+newStr(2)
+
+ans =
+
+    ' '
+
+newStr(3)
+
+ans =
+
+    '3'
+
+newStr= newStr(find(~isspace(newStr))),
+
+newStr =
+
+    '434141243212'
+
+newCell=str2char(newStr)
+{Unrecognized function or variable 'str2char'.
+} 
+newStr=split(newStr)
+
+newStr =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'434141243212'}
+
+newStr=split('4 3 4 1 4 1 2 4 3 2 1 2')
+
+newStr =
+
+  12×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+    {'3'}
+    {'4'}
+    {'1'}
+    {'4'}
+    {'1'}
+    {'2'}
+    {'4'}
+    {'3'}
+    {'2'}
+    {'1'}
+    {'2'}
+
+{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'}
+
+ans =
+
+  1×12 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}    {'3'}    {'4'}    {'1'}    {'4'}    {'1'}    {'2'}    {'4'}    {'3'}    {'2'}    {'1'}    {'2'}
+
+
+sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+
+sequences = {split(sequenceprint(1))',split(sequenceprint(2))'} ;
+{Unrecognized function or variable 'sequenceprint'.
+} 
+sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
