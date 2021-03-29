@@ -184,3 +184,55 @@ ans =
     {'4'}
     {'1'}
 
+%Show dual task performance in command window (finger tapping)
+fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
+%%%%%%% Finger AutoDual %%%%%%% 
+for s=1:2
+    fprintf('--- %s Sequence --- \n', events_handautodual(sequence_idx).sequence_label)
+    for h = 1:N_trials/2
+        fprintf('Trial %d: \n', h)
+        %Show if the answers for the number of G's presented were correct
+        if str2num(events_handautodual(sequence_idx).trial(h).stimuli.response{1})==length(strfind(events_handautodual(sequence_idx).trial(h).stimuli.value{1}, 'G'))
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
+        %Show if the tapping tempo was correct.
+        margin=0.25; % margin of error: think about what is most convenient
+        delay=mean(diff(events_handautodual(sequence_idx).trial(h).responses.onset)-1/1.50);
+        fprintf('the tempo was off with on average %f seconds \n', delay);
+        %Show if the tapped sequence was correct
+        correctSequence=sequences(sequence_idx);
+        if all(strcmp(events_handautodual(sequence_idx).trial(h).responses.value,correctSequence{:}'))
+            fprintf('Seq correct \n')
+        else
+            fprintf('Seq incorrect \n')
+        end
+    end
+    
+    %Change the sequence idx so we can show the results for both types of
+    %sequence, in the order they were realized in the trials
+    if sequence_idx==1
+        sequence_idx=2;
+    else
+        sequence_idx=1;
+    end
+end
+--- Non-automatic Sequence --- 
+Trial 1: 
+G correct 
+the tempo was off with on average 0.019639 seconds 
+Seq correct 
+Trial 2: 
+G incorrect 
+the tempo was off with on average -0.059217 seconds 
+Seq correct 
+--- Automatic Sequence --- 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -0.132084 seconds 
+Seq correct 
+Trial 2: 
+G incorrect 
+the tempo was off with on average -0.205795 seconds 
+Seq incorrect 

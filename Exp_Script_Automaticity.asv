@@ -31,15 +31,12 @@ Screen('Preference', 'SkipSyncTests', 1);
 
 %The sequences used for this study (automatic and non-automatic sequences
 %randomized between participants)
+
+%Sequences used in order to be able to print in the command window if
 %to generate a new sequence use randi([1 4], 1, 12)
 sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
-%Sequences used in order to be able to print in the command window if
-%sequences performed by the participant were right (see also end of script)
-sequences = {{'4', '3', '4', '1' ,'4' '1', '2','4', '3','2','1','2'},{'2','1','2', '3','2','1','3', '2', '4', '2', '4','1' }} ;
 
-% % Set the right sequence that was studied at home (= automatic)
-% sequenceauto = sequenceA;
-% sequenceautoprint = sequenceprintA;
+sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 %Randomize the first sequence to be tested
 %1=auto sequence, 2 non-auto sequence
@@ -375,7 +372,9 @@ for ii=1:2
         DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait;
-
+        
+        %If it's in the last trial of the block (where we change the
+        %sequence), prompt user to continue to next trial
         if j<N_trials/2
             DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
             vbl = Screen('Flip', window);
@@ -395,16 +394,6 @@ for ii=1:2
     end
 end
 
-
-
-%After all trials completed, the end of the finger tapping task is
-%reached
-% Screen('TextSize',window,30);
-% DrawFormattedText(window, 'This is the end of the automaticity test for the finger tapping task. \n You can take a rest if needed. \n When ready: press any key to end this session.' ,'center','center', white);
-% vbl = Screen('Flip', window);
-% save('events_handautodual.mat', 'events_handautodual'); % save the events
-% KbStrokeWait; %wait for response to terminate instructions
-
 %Show dual task performance in command window (finger tapping)
 fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
 for s=1:2
@@ -412,7 +401,7 @@ for s=1:2
     for h = 1:N_trials/2
         fprintf('Trial %d: \n', h)
         %Show if the answers for the number of G's presented were correct
-        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+        if str2num(events_handautodual(sequence_idx).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
             fprintf('G correct \n')
         else
             fprintf('G incorrect \n')

@@ -397,27 +397,34 @@ end
 %Show dual task performance in command window (finger tapping)
 fprintf('%%%%%%%%%%%%%% Finger AutoDual %%%%%%%%%%%%%% \n')
 for s=1:2
-    fprintf('--- %s Sequence --- \n', events_handautodual(s).sequence_label)
+    fprintf('--- %s Sequence --- \n', events_handautodual(sequence_idx).sequence_label)
     for h = 1:N_trials/2
         fprintf('Trial %d: \n', h)
         %Show if the answers for the number of G's presented were correct
-        if str2num(events_handautodual(s).trial(h).stimuli.response{1})==length(strfind(events_handautodual(s).trial(h).stimuli.value{1}, 'G'))
+        if str2num(events_handautodual(sequence_idx).trial(h).stimuli.response{1})==length(strfind(events_handautodual(sequence_idx).trial(h).stimuli.value{1}, 'G'))
             fprintf('G correct \n')
         else
             fprintf('G incorrect \n')
         end
         %Show if the tapping tempo was correct.
         margin=0.25; % margin of error: think about what is most convenient
-        delay=mean(diff(events_handautodual(s).trial(h).responses.onset)-1/1.50);
+        delay=mean(diff(events_handautodual(sequence_idx).trial(h).responses.onset)-1/1.50);
         fprintf('the tempo was off with on average %f seconds \n', delay);
         %Show if the tapped sequence was correct
-        correctSequence=sequences(s);
-        if all(strcmp(events_handautodual(s).trial(h).responses.value,correctSequence{:}'))
+        correctSequence=sequences(sequence_idx);
+        if all(strcmp(events_handautodual(sequence_idx).trial(h).responses.value,correctSequence{:}'))
             fprintf('Seq correct \n')
         else
             fprintf('Seq incorrect \n')
         end
-
+    end
+    
+    %Change the sequence idx so we can show the results for both types of
+    %sequence, in the order they were realized in the trials
+    if sequence_idx==1
+        sequence_idx=2;
+    else
+        sequence_idx=1;
     end
 end
 
