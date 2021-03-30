@@ -1326,3 +1326,45 @@ WARNING: This session of your experiment was run by you with the setting Screen(
 WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
 WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
 WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Exp_Script_AutoVSNonAuto
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+
+What is the number of the recording? 
+11
+
+ root_dir =   
+ sub = sub- 
+ rec = rec-11 
+Is the above information correct? (y/n) 
+23
+What is the subject ID (2 digit number) 
+23
+What is the number of the recording? 
+23
+
+ root_dir =   
+ sub = sub-23 
+ rec = rec-23 
+Is the above information correct? (y/n) 
+y
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mkdir')" style="font-weight:bold">mkdir</a>
+Invalid path. The path must not contain a null character.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_AutoVSNonAuto', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_AutoVSNonAuto.m', 180)" style="font-weight:bold">Exp_Script_AutoVSNonAuto</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_AutoVSNonAuto.m',180,0)">line 180</a>)
+    mkdir(sub_dir)
+} 
+Exp_Script_AutoVSNonAuto
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+06
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-06 
+Is the above information correct? (y/n) 
+y
