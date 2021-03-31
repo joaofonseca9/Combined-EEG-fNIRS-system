@@ -83,20 +83,20 @@ outlet = lsl_outlet(info);
 % Block related
 instructions = 'instructions'; %NEVER USED (?)
 finger_test='finger_test';
-Marker_StartBlock_Cue1_5Hz       = 7000;         
-Marker_EndBlock_Cue1_5Hz         = 7001;
+Marker_StartBlock_Cue       = 1700;         
+Marker_EndBlock_Cue         = 1701;
 
-Marker_StartBlock_AutomaticSequence     = 7002;
-Marker_StartBlock_NonAutomaticSequence  = 7003;
+Marker_StartBlock_AutomaticSequence     = 1702;
+Marker_StartBlock_NonAutomaticSequence  = 1703;
 
-Marker_StartBlock_AutomaticSequence_Dual     = 7004;
-Marker_StartBlock_NonAutomaticSequence_Dual  = 7005;
+Marker_StartBlock_AutomaticSequence_Dual     = 1704;
+Marker_StartBlock_NonAutomaticSequence_Dual  = 1705;
 
-Marker_EndBlock_AutomaticSequence       = 7012;
-Marker_EndBlock_NonAutomaticSequence       = 7013;
+Marker_EndBlock_AutomaticSequence       = 1712;
+Marker_EndBlock_NonAutomaticSequence       = 1713;
 
-Marker_EndBlock_AutomaticSequence_Dual      = 7014;
-Marker_EndBlock_NonAutomaticSequence_Dual      = 7015;
+Marker_EndBlock_AutomaticSequence_Dual      = 1714;
+Marker_EndBlock_NonAutomaticSequence_Dual      = 1715;
 
 Marker_CHECK = 1255;        % checkerboard flip
 Marker_start = 1555;        % start signal 
@@ -110,7 +110,7 @@ KbQueueStart;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LOAD METRONOME SOUNDS (PsychToolbox)
-audio_dir='.\Previous Experimental Scripts\Experiment_ME\metronomesounds';
+audio_dir='.\metronomesounds';
 cd(audio_dir)
 [WAVMetronome8.wave,WAVMetronome8.fs]       = audioread('Metronome8.wav');
 [WAVMetronome600.wave,WAVMetronome600.fs]       = audioread('Metronome600.wav');
@@ -122,9 +122,9 @@ WAVMetronome600.wave = WAVMetronome600.wave';         WAVMetronome600.nrChan=2;
 WAVMetronome300.wave = WAVMetronome300.wave';         WAVMetronome300.nrChan=2;
 
 % Get Cueing Files
-Cue1_5Hz       = 'Metronome120.wav';
-[Cue1_5Hz]     = CreateWAVstruct(Cue1_5Hz);
-Cue1_5HzLength = length(Cue1_5Hz.wavedata)/Cue1_5Hz.fs;
+Cue1_25Hz       = 'Metronome120.wav';
+[Cue1_25Hz]     = CreateWAVstruct(Cue1_25Hz);
+Cue1_25HzLength = length(Cue1_25Hz.wavedata)/Cue1_25Hz.fs;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% CREATE AND FILL AUDIO BUFFER
@@ -146,13 +146,13 @@ h_device = PsychPortAudio ('GetDevices');
 h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
 h_Metronome600   = PsychPortAudio('Open', [], [], priority, WAVMetronome600.fs, WAVMetronome600.nrChan);
 h_Metronome300   = PsychPortAudio('Open', [], [], priority, WAVMetronome300.fs, WAVMetronome300.nrChan);
-PPA_cue1_5Hz = PsychPortAudio('Open', [], [], priority, Cue1_5Hz.fs, Cue1_5Hz.nrChan);
+PPA_cue1_5Hz = PsychPortAudio('Open', [], [], priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 % Fill buffer
 PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
 PsychPortAudio('FillBuffer', h_Metronome600, WAVMetronome600.wave);
 PsychPortAudio('FillBuffer', h_Metronome300, WAVMetronome300.wave);
-PsychPortAudio('FillBuffer', PPA_cue1_5Hz, Cue1_5Hz.wavedata);
+PsychPortAudio('FillBuffer', PPA_cue1_5Hz, Cue1_25Hz.wavedata);
 
 %AudioFile
 file = [h_Metronome8; PPA_cue1_5Hz; h_Metronome300; h_Metronome600];
@@ -228,6 +228,23 @@ xCoords = [-fixCrossDimPix fixCrossDimPix 0 0]; % Set the coordinates (these are
 yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
 allCoords = [xCoords; yCoords];
 lineWidthPix = 4;% Set the line width for the fixation cross
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% WELCOME SCREEN
+%Instruction automaticity test
+Screen('TextSize',window,45);
+DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating!'center', 'center', white);
+vbl = Screen('Flip', window);
+WaitSecs(10);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Demonstrate how cueing works
+Screen('TextSize',window,25);
+DrawFormattedText(window,'While you perform the tasks, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing.','center', 'center', white);
+vbl = Screen('Flip', window);
+PsychPortAudio('Start', file(2), 1, [], []);
+WaitSecs(5);
+PsychPortAudio('Stop', file(2));
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% START TEST FOR AUTOMATICITY
@@ -245,32 +262,14 @@ vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 Screen('TextSize',window,25);
-DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
+DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
-%Demonstrate how cueing works
+
+%Show sequence
 Screen('TextSize',window,25);
-DrawFormattedText(window,'While you perform the finger tapping sequence and count the letters, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing.','center', 'center', white);
-vbl = Screen('Flip', window);
-PsychPortAudio('Start', file(2), 1, [], []);
-WaitSecs(5);
-PsychPortAudio('Stop', file(2));
-% Finger tapping test -> 20 trials, dual task, in which a participant
-% taps a prelearned sequence, while also letters are presented on the
-% screen in a randomized speed
-
-
-%Instruction automaticity task finger tapping
-% trig.beep(440, 0.2, 'instructions');
-Screen('TextSize',window,25);
-
-
-DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
-
-% DrawFormattedText(window, sprintf('You will now perform the sequence you learned today for the FINGER tapping task: \n %s \n\n  When ready: press any key.', char(sequencesprint(1))),'center','center', white);
-% outlet.push_sample(Marker_StartBlock_NonAutomaticSequence);
-
+DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
@@ -309,7 +308,7 @@ for j=1:N_trials
     if(cued==1) 
         %Start the Cue
         PsychPortAudio('Start', file(2), 1, [], []);
-        outlet.push_sample(Marker_StartBlock_Cue1_5Hz);
+        outlet.push_sample(Marker_StartBlock_Cue);
         events_handautodual(1).trial(j).cue='cued';
     else
         events_handautodual(1).trial(j).cue='uncued';
@@ -368,7 +367,7 @@ for j=1:N_trials
     %Stop cueing
     if (cued==1)
         PsychPortAudio('Stop', file(2));
-        outlet.push_sample(Marker_EndBlock_Cue1_5Hz);
+        outlet.push_sample(Marker_EndBlock_Cue);
     end
     
     %Present white fixation cross for some seconds to show that
@@ -455,7 +454,7 @@ events_handauto(2).sequence_label='Non-automatic';
 
 %Instruction experiment
 Screen('TextSize',window,25);
-DrawFormattedText(window,'You will now start with the experiment. \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n Note that for the non-automatic tasks you will also perform an automaticity test (dual task). \n This is the same test as you just did for the automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
+DrawFormattedText(window,'You will now start with the finger tapping task (single task). \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n Note that for the non-automatic tasks you will also perform an automaticity test (dual task) after the single task experiment. \n This is the same test as you just did for the automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
@@ -464,7 +463,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
     if sequence_idx==2
         %% Practice new sequence
         Screen('TextSize', window, 25);
-        DrawFormattedText(window, 'You will now perform the non-automaticity FINGER tapping task. \n For the next 5 minutes you can practice a new sequence for the finger tapping task, \n the same way you practiced at home. \n After that we will start with the finger tapping task. \n Press any key to see the new sequence and start practicing.', 'center', 'center', white);
+        DrawFormattedText(window, 'You will now perform the non-automatic finger tapping task. \n \n For the next 5 minutes you can practice a new sequence for the finger tapping task, \n the same way you practiced at home. \n After that we will start with the finger tapping task. \n Press any key to see the new sequence and start practicing.', 'center', 'center', white);
         vbl= Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
 
@@ -482,7 +481,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         KbStrokeWait; %wait for response to terminate instructions
 
         %% NON-AUTOMATICITY TASKS
-        DrawFormattedText(window, sprintf('You will now perform the pre-learned sequence for the FINGER tapping task: \n %s \n\n  In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen. \n \n When the red cross appears, please start tapping the sequence. \n When ready to start: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
+        DrawFormattedText(window, sprintf('As a reminder, the sequence you will perform is: \n %s \n\n  In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen. \n \n When the red cross appears, please start tapping the sequence. \n When ready to start: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
         outlet.push_sample(Marker_StartBlock_NonAutomaticSequence);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -514,7 +513,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             if(cued==1) 
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
-                outlet.push_sample(Marker_StartBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_StartBlock_Cue);
                 events_handauto(sequence_idx).trial(j).cue='cued';
             else
                 events_handauto(sequence_idx).trial(j).cue='uncued';
@@ -542,7 +541,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Stop cueing
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
-                outlet.push_sample(Marker_EndBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_EndBlock_Cue);
             end
 
             % Short white fix cross after trial
@@ -559,7 +558,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %If it's in the last trial of the block (where we change the
             %sequence), prompt user to continue to next trial
             if j<N_trials
-                DrawFormattedText(window, sprintf('Sequence:\n %s \n Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' , char(sequencesprint(sequence_idx))),'center','center', white);
+                DrawFormattedText(window, sprintf('Sequence:\n %s \n\n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as the red cross appears.\n \n Press any key to continue with the next trial.' , char(sequencesprint(sequence_idx))),'center','center', white);
                 vbl = Screen('Flip', window);
                 KbStrokeWait;
             end
@@ -573,12 +572,12 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         %% AUTOMATICITY for the Non-automatic sequence (dual-tasking)
         %Instruction automaticity test
         Screen('TextSize',window,25);
-        DrawFormattedText(window,sprintf('You will now start an the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned today.\n\n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',ceil(N_trials)),'center', 'center', white);
+        DrawFormattedText(window,sprintf('You will now start an automaticity test this new sequence, in a dual task situation,\n as you were for the prelearned sequence. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
         Screen('TextSize',window,25);
-        DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
+        DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
@@ -615,7 +614,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             if(cued==1) 
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
-                outlet.push_sample(Marker_StartBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_StartBlock_Cue);
                 events_handautodual(sequence_idx).trial(t).cue='cued';
             else
                 events_handautodual(sequence_idx).trial(t).cue='uncued';
@@ -674,7 +673,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %% Stop cueing
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
-                outlet.push_sample(Marker_EndBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_EndBlock_Cue);
             end
 
             %% Present white fixation cross for some seconds to show that
@@ -714,7 +713,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
     
     %% AUTOMATIC TASKS
     if sequence_idx==1
-        DrawFormattedText(window, sprintf('You will now perform the sequence you learned at home for the FINGER tapping task: \n %s \n\n In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen.\n \n When the red cross appears, please start tapping the sequence. \n When ready: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
+        DrawFormattedText(window, sprintf('You will now perform the sequence you learned at home for the finger tapping task: \n %s \n\n In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen.\n \n When the red cross appears, please start tapping the sequence. \n When ready: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
@@ -746,7 +745,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             if(cued==1) 
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
-                outlet.push_sample(Marker_StartBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_StartBlock_Cue);
                 events_handauto(sequence_idx).trial(j).cue='cued';
             else
                 events_handauto(sequence_idx).trial(j).cue='uncued';
@@ -772,7 +771,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %% Stop cueing
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
-                outlet.push_sample(Marker_EndBlock_Cue1_5Hz);
+                outlet.push_sample(Marker_EndBlock_Cue);
             end
             
             outlet.push_sample(Marker_EndBlock_AutomaticSequence);
@@ -806,7 +805,7 @@ end
                
 %% RESULTS    
 %% Show performance in dual tasking
-fprintf('%%%%%%%%%%%%%% Finger Automatic/Non-Automatic Sequence Dual Task %%%%%%%%%%%%%% \n')
+fprintf('%%%%%%%%%%%%%% finger Automatic/Non-Automatic Sequence Dual Task %%%%%%%%%%%%%% \n')
 sequence_idx=2;
 fprintf('--- %s Sequence --- \n', events_handautodual(sequence_idx).sequence_label)
 for h = 1:N_trials
@@ -832,7 +831,7 @@ end
 
 
 %% Show single task performance in command window (finger tapping)
-fprintf('%%%%%%%%%%%%%% Finger Automatic/Non-Automatic Single Task %%%%%%%%%%%%%% \n')
+fprintf('%%%%%%%%%%%%%% finger Automatic/Non-Automatic Single Task %%%%%%%%%%%%%% \n')
 for sequence_idx=order_sequence
     fprintf('--- %s Sequence --- \n', events_handauto(sequence_idx).sequence_label)
     for h = 1:N_trials
@@ -853,9 +852,9 @@ for sequence_idx=order_sequence
 end
 
 
-%% End of the experiment, thank the participant
+%% End of the automatic/non-automatic single task
 Screen('TextSize',window,30);
-DrawFormattedText(window,'We will now move on to the checkerboard task', 'center', 'center', white);
+DrawFormattedText(window,'This is the end of the fingertapping tasks. \n \n We will now move on to the checkerboard task. \n\n Press any key to continue', 'center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait;
 
@@ -953,15 +952,23 @@ SaveFrameLog = [];                          % save Screen presentation > (start=
 
 %% >> EXPERIMENT << %%
 %%%%%%%%%%%%%%%%%%%%%%
+%% Instructions
+Screen('TextSize',window,70);
+DrawFormattedText(window, 'The only thing you need to do for this task is look at the screen \n \n A red dot will indicate where you should look. \n \n Press any key to continue.','center','center', white);
+vbl = Screen('Flip', window); 
+KbStrokeWai
 
-%%%>> START SCREEN <<%%%
+
+
+%% %>> START SCREEN <<%%%
 % > grey screen with focus dot with text: 'Focus on red dot; press any key to START'
 % > after pressing any key, the text removes
 Screen('TextSize',window,70);
 DrawFormattedText(window, 'Focus on the red dot \n\n\n\n Press any key to START','center','center', white);
 vbl = Screen('Flip', window); 
 Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
-KbStrokeWait; outlet.push_sample(Marker_start); % wait for key press and send LSL-marker (start)
+KbStrokeWait; 
+outlet.push_sample(Marker_start); % wait for key press and send LSL-marker (start)
 
 % > after pressing any key, the text removes
 % > 10sec grey screen with focus dot before checkerboards are presented 
@@ -997,7 +1004,7 @@ end
 if flipNrCount == flipNr
     Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
     Screen('TextSize',window,70); % Stop screen
-    DrawFormattedText(window, 'End of experiment \n\n Press any key to EXIT','center','center', white);
+    DrawFormattedText(window, 'End of experiment. \n \n Thank you for participating! \n\n Press any key to EXIT','center','center', white);
     vbl = Screen('Flip', window); 
     outlet.push_sample(Marker_stop); 
 end
