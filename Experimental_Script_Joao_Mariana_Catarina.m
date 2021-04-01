@@ -232,7 +232,7 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %% WELCOME SCREEN
 %Instruction automaticity test
 Screen('TextSize',window,45);
-DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating!'center', 'center', white);
+DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating!', 'center', white);
 vbl = Screen('Flip', window);
 WaitSecs(10);
 
