@@ -931,7 +931,10 @@ Texture(2)  = Screen('MakeTexture', window, 1-GridChecks);
 dotColor = [1 0 0];                 % Set the color of our dot to full red (RBG)
 dotSizePix = 20;                    % Dot size in pixels
 
-
+% Draw the dot to the screen. 
+% > Screen('DrawDots', windowPtr, xy [,size] [,color] [,center] [,dot_type]);
+% > dot_type: round dots (1,2,3) > 2 tries to use high-quality anti-aliasing
+Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
 
 %% GENERAL VARIABLES
 
@@ -956,17 +959,17 @@ SaveFrameLog = [];                          % save Screen presentation > (start=
 %% >> EXPERIMENT << %%
 %%%%%%%%%%%%%%%%%%%%%%
 %% Instructions
-Screen('TextSize',window,36);
+Screen('TextSize',window,70);
 DrawFormattedText(window, 'The only thing you need to do for this task is look at the screen \n \n A red dot will indicate where you should look. \n \n Press any key to continue.','center','center', white);
 vbl = Screen('Flip', window); 
-KbStrokeWait
+KbStrokeWai
 
 
 
 %% %>> START SCREEN <<%%%
 % > grey screen with focus dot with text: 'Focus on red dot; press any key to START'
 % > after pressing any key, the text removes
-Screen('TextSize',window,36);
+Screen('TextSize',window,70);
 DrawFormattedText(window, 'Focus on the red dot \n\n\n\n Press any key to START','center','center', white);
 vbl = Screen('Flip', window); 
 Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
@@ -1006,7 +1009,7 @@ end
 % > grey screen with focus dot with text: End of experiment; Press any key to EXIT'
 if flipNrCount == flipNr
     Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
-    Screen('TextSize',window,36); % Stop screen
+    Screen('TextSize',window,70); % Stop screen
     DrawFormattedText(window, 'End of experiment. \n \n Thank you for participating! \n\n Press any key to EXIT','center','center', white);
     vbl = Screen('Flip', window); 
     outlet.push_sample(Marker_stop); 
