@@ -50,6 +50,28 @@ N_letters=8; % 8 letters presented during a trial
 N_trials=2; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PSEUDORANDOMIZATION
+
+%Randomize the first sequence to be tested
+%1=auto sequence, 2 non-auto sequence
+order_sequence=randperm(2,2);
+
+%Pseudorandomize which trials are cued and uncued (must be 50/50 split)
+events_autosingle=randCuedTrials(N_trials);
+events_nonautosingle=randCuedTrials(N_trials);
+events_nonautodual=randCuedTrials(N_trials);
+
+%Save the order of the experiment
+str=['order',sub,'_',rec];
+save(str,'order_sequence');
+
+%% Save the randomizations
+
+str=['events_handautodual',sub,'_',rec];
+save(str,'events_handautodual');
+str=['events_handauto',sub,'_',rec];
+save(str,'events_handauto');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
 
@@ -188,32 +210,6 @@ script=mfilename('fullpath');
 script_name=mfilename;
 copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% PSEUDORANDOMIZATION
-
-%Randomize the first sequence to be tested
-%1=auto sequence, 2 non-auto sequence
-order_sequence=randperm(2,2);
-
-%Pseudorandomize which trials are cued and uncued (must be 50/50 split)
-events_autosingle=randCuedTrials(N_trials);
-events_nonautosingle=randCuedTrials(N_trials);
-events_nonautodual=randCuedTrials(N_trials);
-
-%Save the order of the experiment
-str=['order',sub,'_',rec];
-save(str,'order_sequence');
-
-%% Save the randomizations
-
-str=['events_autosingle_',sub,'_',rec];
-save(str,'events_autosingle');
-
-str=['events_nonautosingle_',sub,'_',rec];
-save(str,'events_nonautosingle');
-
-str=['events_nonautodual_',sub,'_',rec];
-save(str,'events_nonautodual');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
@@ -680,15 +676,19 @@ DrawFormattedText(window,'This is the end of the fingertapping tasks. \n \n We w
 vbl = Screen('Flip', window);
 KbStrokeWait;
 
-%% Save results - overwrite the structs, now with the results 
+%Save the order of the experiment
+str=['order',sub,'_',rec];
+save(str,'order_sequence');
 
-str=['events_autosingle_',sub,'_',rec];
+%% Save results
+
+str=['events_autosingle',sub,'_',rec];
 save(str,'events_autosingle');
 
-str=['events_nonautosingle_',sub,'_',rec];
+str=['events_nonautosingle',sub,'_',rec];
 save(str,'events_nonautosingle');
 
-str=['events_nonautodual_',sub,'_',rec];
+str=['events_nonautodual',sub,'_',rec];
 save(str,'events_nonautodual');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
