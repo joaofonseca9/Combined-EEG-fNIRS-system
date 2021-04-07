@@ -6419,3 +6419,302 @@ WARNING: This session of your experiment was run by you with the setting Screen(
 WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
 WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
 WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Experimental_Script_Joao_Mariana_Catarina
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653282 ms [60.048225 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.656310 ms [60.037307 Hz]. (50 valid samples taken, stddev=0.074496 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   7.5967e+05
+
+
+ans =
+
+   7.5970e+05
+
+
+ans =
+
+   7.5970e+05
+
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Experimental_Script_Joao_Mariana_Catarina', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Experimental_Script_Joao_Mariana_Catarina.m', 339)" style="font-weight:bold">Experimental_Script_Joao_Mariana_Catarina</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Experimental_Script_Joao_Mariana_Catarina.m',339,0)">line 339</a>)
+                    keyValue=regexp(key,'\d*','Match');
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 4 times out of a total of 12 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Experimental_Script_Joao_Mariana_Catarina
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+01
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-01 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.652488 ms [60.051088 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.650958 ms [60.056605 Hz]. (50 valid samples taken, stddev=0.162633 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   7.5986e+05
+
+
+ans =
+
+   7.5993e+05
+
+
+ans =
+
+   7.5993e+05
+
+
+ans =
+
+   7.5994e+05
+
+
+ans =
+
+   7.5995e+05
+
+
+ans =
+
+   7.5997e+05
+
+
+ans =
+
+   7.5997e+05
+
+
+ans =
+
+   7.5998e+05
+
+
+ans =
+
+   7.5998e+05
+
+
+ans =
+
+   7.6001e+05
+
+
+ans =
+
+   7.6006e+05
+
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Experimental_Script_Joao_Mariana_Catarina', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Experimental_Script_Joao_Mariana_Catarina.m', 505)" style="font-weight:bold">Experimental_Script_Joao_Mariana_Catarina</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Experimental_Script_Joao_Mariana_Catarina.m',505,0)">line 505</a>)
+            response=regexp(response,'\d*','Match');
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 14 times out of a total of 59 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Experimental_Script_Joao_Mariana_Catarina.m',505,0)
+help try
+ <strong>try</strong>  Begin <strong>try</strong> block.
+    The general form of a <strong>try</strong> statement is:
+  
+       <strong>try</strong>
+          statement, ..., statement, 
+       CATCH ME
+          statement, ..., statement 
+       END
+ 
+    Normally, only the statements between the <strong>try</strong> and CATCH are executed.
+    However, if an error occurs while executing any of the statements, the
+    error is captured into an object, ME, of class MException, and the 
+    statements between the CATCH and END are executed. If an error occurs 
+    within the CATCH statements, execution stops, unless caught by another 
+    <strong>try</strong>...CATCH block. The ME argument is optional. 
+ 
+    See also <a href="matlab:help catch">catch</a>, <a href="matlab:help MException">MException</a>, <a href="matlab:help rethrow">rethrow</a>, <a href="matlab:help eval">eval</a>, <a href="matlab:help evalin">evalin</a>, <a href="matlab:help end">end</a>.
+
+    <a href="matlab:doc try">Documentation for try</a>
+
+try
+response=regexp('AAA','\d*','Match');
+catch
+response=[]
+end
+uiopen('C:\Users\joaop\AppData\Local\Packages\microsoft.windowscommunicationsapps_8wekyb3d8bbwe\LocalState\Files\S0\4\Attachments\ReactionTimeTest_DEF_V3[2489].m',1)
+uiopen('C:\Users\joaop\AppData\Local\Packages\microsoft.windowscommunicationsapps_8wekyb3d8bbwe\LocalState\Files\S0\4\Attachments\ReactionTimeTest_DEF_V3[2489].m',1)
+help timing
+timing is a variable of type double.
+
+help sort
+ <strong>sort</strong>   Sort in ascending or descending order.
+    B = <strong>sort</strong>(A) sorts in ascending order.
+    The sorted output B has the same type and size as A:
+    - For vectors, <strong>sort</strong>(A) sorts the elements of A in ascending order.
+    - For matrices, <strong>sort</strong>(A) sorts each column of A in ascending order.
+    - For N-D arrays, <strong>sort</strong>(A) sorts along the first non-singleton dimension.
+ 
+    B = <strong>sort</strong>(A,DIM) also specifies a dimension DIM to sort along.
+ 
+    B = <strong>sort</strong>(A,DIRECTION) and B = <strong>sort</strong>(A,DIM,DIRECTION) also specify the
+    sort direction. DIRECTION must be:
+        'ascend'  - (default) Sorts in ascending order.
+        'descend' - Sorts in descending order.
+ 
+    B = <strong>sort</strong>(A,...,'MissingPlacement',M) also specifies where to place the
+    missing elements (NaN/NaT/<undefined>/<missing>) of A. M must be:
+        'auto'  - (default) Places missing elements last for ascending sort
+                  and first for descending sort.
+        'first' - Places missing elements first.
+        'last'  - Places missing elements last.
+ 
+    B = <strong>sort</strong>(A,...,'ComparisonMethod',C) specifies how to sort complex
+    numbers. The comparison method C must be:
+        'auto' - (default) Sorts real numbers according to 'real', and
+                 complex numbers according to 'abs'.
+        'real' - Sorts according to REAL(A). Elements with equal real parts
+                 are then sorted by IMAG(A).
+        'abs'  - Sorts according to ABS(A). Elements with equal magnitudes
+                 are then sorted by ANGLE(A).
+ 
+    [B,I] = <strong>sort</strong>(A,...) also returns a sort index I which specifies how the
+    elements of A were rearranged to obtain the sorted output B:
+    - If A is a vector, then B = A(I).  
+    - If A is an m-by-n matrix and DIM = 1, then
+        for j = 1:n, B(:,j) = A(I(:,j),j); end
+ 
+    The sort ordering is stable. Namely, when more than one element has the
+    same value, the order of the equal elements is preserved in the sorted
+    output B and the indices I relating to equal elements are ascending.
+ 
+    Examples:
+      % Sort a vector in ascending order
+        sort([0 3 1 0 2 0 1 6])
+      % Sort each column or row of a matrix
+        A = [3 7 5; 0 4 2]
+        B1 = sort(A,1)  % sort each column
+        B2 = sort(A,2)  % sort each row
+      % Sort complex numbers according to their real part
+        A = [1+1j ;  1-1j ;  -2-2j ;  0 ;  -2+2j]
+        B = sort(A,'ComparisonMethod','real')
+ 
+    See also <a href="matlab:help issorted">issorted</a>, <a href="matlab:help sortrows">sortrows</a>, <a href="matlab:help min">min</a>, <a href="matlab:help max">max</a>, <a href="matlab:help mink">mink</a>, <a href="matlab:help maxk">maxk</a>.
+
+    <a href="matlab:doc sort">Documentation for sort</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('sort')">Other functions named sort</a>
+

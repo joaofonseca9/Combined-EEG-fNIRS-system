@@ -336,7 +336,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 if any(keyCode)
                     key={KbName(find(keyCode))};
                     % Get the numeric value of the response (clicking '2' leads to '2@')
-                    keyValue=regexp(key,'\d*','Match');
+                    try
+                        % Get the numeric value of the response (clicking '2' leads to '2@')
+                        keyValue=regexp(keyValue,'\d*','Match');
+                    catch ME
+                        %if an error is spotted, like missclick, make that response
+                        %an empty cell
+                        keyValue=[];
+                    end
                     keypresses.onset(m)=secs;
                     keypresses.value(m)=keyValue{:};%store and record the presses;
                     m=m+1;
@@ -455,7 +462,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                                 keypresses.onset(m)=timing(q); %store and record the timing
                                 keyValue=keys(q);
                                 % Get the numeric value of the response (clicking '2' leads to '2@')
-                                keyValue=regexp(keyValue,'\d*','Match');
+                                try
+                                    % Get the numeric value of the response (clicking '2' leads to '2@')
+                                    keyValue=regexp(keyValue,'\d*','Match');
+                                catch ME
+                                    %if an error is spotted, like missclick, make that response
+                                    %an empty cell
+                                    keyValue=[];
+                                end
                                 keypresses.value(m)=keyValue{:};%store and record the presses
                                 m=m+1;
                                 if m>12
@@ -502,8 +516,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             % Save the response and the key presses
             response={KbName(find(keyCode))}; 
             % Get the numeric value of the response (clicking '2' leads to '2@')
-            response=regexp(response,'\d*','Match');
-            response=response{:};
+            try
+                response=regexp(response,'\d*','Match');
+                response=response{:};
+            catch ME
+                %if an error is spotted, like missclick, make that response
+                %an empty cell
+                response=[];
+            end
             events_nonautodual.trial(t).stimuli=table(onset,duration, value, response);
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
@@ -694,6 +714,12 @@ save(str,'events_nonautodual');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% CHECKERBOARD TASK
 
+%% Instructions
+Screen('TextSize',window,36);
+DrawFormattedText(window, 'Welcome to the checkerboard task. \n \n The only thing you need to do for this task is look at the screen \n \n A red dot will indicate where you should look. \n \n Press any key to continue.','center','center', white);
+vbl = Screen('Flip', window); 
+KbStrokeWait
+
 %% GENERATE CHECKERBOARD 
 
 XYChecks = [24 18];                                             % nr of checks 4:3
@@ -747,6 +773,10 @@ Texture(2)  = Screen('MakeTexture', window, 1-GridChecks);
 dotColor = [1 0 0];                 % Set the color of our dot to full red (RBG)
 dotSizePix = 20;                    % Dot size in pixels
 
+% Draw the dot to the screen. 
+% > Screen('DrawDots', windowPtr, xy [,size] [,color] [,center] [,dot_type]);
+% > dot_type: round dots (1,2,3) > 2 tries to use high-quality anti-aliasing
+Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
 
 
 %% GENERAL VARIABLES
@@ -771,18 +801,12 @@ SaveFrameLog = [];                          % save Screen presentation > (start=
 
 %% >> EXPERIMENT << %%
 %%%%%%%%%%%%%%%%%%%%%%
-%% Instructions
-Screen('TextSize',window,36);
-DrawFormattedText(window, 'The only thing you need to do for this task is look at the screen \n \n A red dot will indicate where you should look. \n \n Press any key to continue.','center','center', white);
-vbl = Screen('Flip', window); 
-KbStrokeWait
-
 
 
 %% %>> START SCREEN <<%%%
 % > grey screen with focus dot with text: 'Focus on red dot; press any key to START'
 % > after pressing any key, the text removes
-Screen('TextSize',window,36);
+Screen('TextSize',window,70);
 DrawFormattedText(window, 'Focus on the red dot \n\n\n\n Press any key to START','center','center', white);
 vbl = Screen('Flip', window); 
 Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
