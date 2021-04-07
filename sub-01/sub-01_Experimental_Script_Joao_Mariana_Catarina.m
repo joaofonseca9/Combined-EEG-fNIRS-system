@@ -336,7 +336,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 if any(keyCode)
                     key={KbName(find(keyCode))};
                     % Get the numeric value of the response (clicking '2' leads to '2@')
-                    keyValue=regexp(key,'\d*','Match');
+                    try
+                        % Get the numeric value of the response (clicking '2' leads to '2@')
+                        keyValue=regexp(key,'\d*','Match');
+                    catch ME
+                        %if an error is spotted, like missclick, make that response
+                        %an empty cell
+                        keyValue=[];
+                    end
                     keypresses.onset(m)=secs;
                     keypresses.value(m)=keyValue{:};%store and record the presses;
                     m=m+1;
@@ -455,7 +462,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                                 keypresses.onset(m)=timing(q); %store and record the timing
                                 keyValue=keys(q);
                                 % Get the numeric value of the response (clicking '2' leads to '2@')
-                                keyValue=regexp(keyValue,'\d*','Match');
+                                try
+                                    % Get the numeric value of the response (clicking '2' leads to '2@')
+                                    keyValue=regexp(key,'\d*','Match');
+                                catch ME
+                                    %if an error is spotted, like missclick, make that response
+                                    %an empty cell
+                                    keyValue=[];
+                                end
                                 keypresses.value(m)=keyValue{:};%store and record the presses
                                 m=m+1;
                                 if m>12
@@ -502,8 +516,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             % Save the response and the key presses
             response={KbName(find(keyCode))}; 
             % Get the numeric value of the response (clicking '2' leads to '2@')
-            response=regexp(response,'\d*','Match');
-            response=response{:};
+            try
+                response=regexp(response,'\d*','Match');
+                response=response{:};
+            catch ME
+                %if an error is spotted, like missclick, make that response
+                %an empty cell
+                response=[];
+            end
             events_nonautodual.trial(t).stimuli=table(onset,duration, value, response);
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);

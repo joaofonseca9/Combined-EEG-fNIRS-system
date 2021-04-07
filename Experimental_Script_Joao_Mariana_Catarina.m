@@ -338,7 +338,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                     % Get the numeric value of the response (clicking '2' leads to '2@')
                     try
                         % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(keyValue,'\d*','Match');
+                        keyValue=regexp(key,'\d*','Match');
                     catch ME
                         %if an error is spotted, like missclick, make that response
                         %an empty cell
@@ -464,7 +464,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                                 % Get the numeric value of the response (clicking '2' leads to '2@')
                                 try
                                     % Get the numeric value of the response (clicking '2' leads to '2@')
-                                    keyValue=regexp(keyValue,'\d*','Match');
+                                    keyValue=regexp(key,'\d*','Match');
                                 catch ME
                                     %if an error is spotted, like missclick, make that response
                                     %an empty cell
@@ -845,7 +845,7 @@ end
 %%%>> END SCREEN <<%%%
 % > grey screen with focus dot with text: End of experiment; Press any key to EXIT'
 if flipNrCount == flipNr
-    Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
+%     Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
     Screen('TextSize',window,36); % Stop screen
     DrawFormattedText(window, 'End of experiment. \n \n Thank you for participating! \n\n Press any key to EXIT','center','center', white);
     vbl = Screen('Flip', window); 

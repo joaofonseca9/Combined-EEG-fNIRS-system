@@ -330,7 +330,7 @@ for j=1:N_trials
                        
                         try
                             % Get the numeric value of the response (clicking '2' leads to '2@')
-                            keyValue=regexp(keyValue,'\d*','Match');
+                            keyValue=regexp(key,'\d*','Match');
                         catch ME
                             %if an error is spotted, like missclick, make that response
                             %an empty cell
