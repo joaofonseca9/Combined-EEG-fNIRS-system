@@ -1,24 +1,18 @@
 %% CREATE MOVIE FILE FOR DUAL TASKING
-%Please define filepath before
-%It will save a .mov file of the presentation as well as a .txt with the
-%number
+%The movie will be called
 
 %Number of trials per block
-N_trials=2;
+N_trials=20;
 %Number of letter counting trials = 2 * N_trials (2 blocks of dual tasking)
 N=N_trials*2; 
 filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentation';
 
 %Create N letter presentations
 for ii=1:N
-    filename=['LetterPresentation_', num2str(ii,'%d'),'.mov'];
-    letters=letterPresentation (filepath,filename);
-    
-    % Save letter order
-    str=['LetterPresentation_', num2str(ii,'%d')];
-    save(str,'letters');
+    filename=['LetterPresentation_', string(ii)];
+    letterPresentation (filepath,filename);
 end
-function letters=letterPresentation (filepath,filename)
+function letterPresentation (filepath,filename)
 cd(filepath);
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
@@ -67,9 +61,7 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %Participant has to count the times that G was presented.
 Letterlist='AGOL';
 letter_order=randi(length(Letterlist), 1, N_letters);
-letters={Letterlist(letter_order)};
-
-
+value={Letterlist(letter_order)};
 
 %% LETTER PRESENTATION
 % onset=zeros(1,N_letters);
@@ -92,7 +84,7 @@ for n=1:N_letters
     
     %Present random letter on the screen
     Screen('TextSize', window, 100);
-    DrawFormattedText(window, letters{1}(n),'center','center', white); 
+    DrawFormattedText(window, value{1}(n),'center','center', white); 
     onset(n)=GetSecs;
     vbl = Screen('Flip', window);
     Screen('AddFrameToMovie',window,windowRect,'frontBuffer',moviePtr,frame_letter);
