@@ -218,6 +218,10 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
 
+%% Save the randomizations
+
+str=['events_autodual_',sub,'_',rec];
+save(str,'events_autodual');
 
 %% WELCOME SCREEN
 %Instruction automaticity test
@@ -285,16 +289,16 @@ for j=1:N_trials
     end
     
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
-    
-    %Presentation of random letters on the screen during the finger
-    %tapping test + recording of the key presses
-    outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
-    onset=GetSecs;
 
     %preallocate table with key presses
     keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
     m=1; %first key press
     KbQueueFlush; % clear all previous key presses from the list
+    
+    %Presentation of random letters on the screen during the finger
+    %tapping test + recording of the key presses
+    outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
+    onset=GetSecs;
 
 
 
@@ -323,8 +327,15 @@ for j=1:N_trials
                     for q=1:key_n
                         keypresses.onset(m)=timing(q); %store and record the timing
                         keyValue=keys(q);
-                        % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(keyValue,'\d*','Match');
+                       
+                        try
+                            % Get the numeric value of the response (clicking '2' leads to '2@')
+                            keyValue=regexp(keyValue,'\d*','Match');
+                        catch ME
+                            %if an error is spotted, like missclick, make that response
+                            %an empty cell
+                            keyValue=[];
+                        end
                         keypresses.value(m)=keyValue{:};%store and record the presses
                         m=m+1;
                         if m>12
@@ -424,8 +435,8 @@ KbStrokeWait;
 sca
 
 %% Save Results
-str1=['events_autodual_sub',sub_ID,'_',rec];
-save(str1,'events_autodual');
+str=['events_autodual_',sub,'_',rec];
+save(str,'events_autodual');
 
 %% HELPER FUNCTIONS
 function events=randCuedTrials(n)
