@@ -74,7 +74,7 @@ letters={Letterlist(letter_order)};
 %% LETTER PRESENTATION
 % onset=zeros(1,N_letters);
 framerate=30;
-moviePtr = Screen('CreateMovie', window, filename,screenXpixels, screenYpixels, framerate, ':CodecSettings=AddAudioTrack=2@48000 Videoquality=0.5 Profile=2');
+moviePtr = Screen('CreateMovie', window, filename,[], [], framerate);
 
 %We want a frequency of 1.25 Hz for the letter presentation.
 %‘frameDuration’ which defaults
@@ -106,50 +106,6 @@ end
 
 
 Screen('FinalizeMovie', moviePtr);
-Screen('CloseMovie');
 
-% %% Try to play movie
-% 
-% Screen('TextSize', window, 100);
-% DrawFormattedText(window, 'Playing movie in 2 seconds','center','center', white); 
-% %     onset(n)=GetSecs;
-% vbl = Screen('Flip', window);
-% WaitSecs (2); 
-% 
-% % Settings to open&play movie
-% % moviefile=[pwd filesep moviename];
-% % [moviePtr, movieduration, fps, imgw, imgh, ~, ~, hdrStaticMetaData] = Screen('OpenMovie', window, moviename);
-% % moviePtr = Screen('OpenMovie', window, [pwd filesep moviefile]);
-% Screen('PlayMovie', moviePtr, 1);
-% 
-% while ~KbCheck
-%     % Wait for next movie frame, retrieve texture handle to it
-%     tex = Screen('GetMovieImage', window, moviePtr);
-% 
-%     % Valid texture returned? A negative value means end of movie reached:
-%     if tex<=0
-%         % We're done, break out of loop:
-%         break;
-%     end
-% 
-%     % Draw the new texture immediately to screen:
-%     Screen('DrawTexture', window, tex);
-% 
-%     % Update display:
-%     Screen('Flip', window);
-% 
-%     % Release texture:
-%     Screen('Close', tex);
-% end
-% 
-% % Stop playback:
-% Screen('PlayMovie', movie, 0);
-% 
-% % Close movie:
-% Screen('CloseMovie', movie);
-% 
-% sca;
-
-% 
 sca;
 end
