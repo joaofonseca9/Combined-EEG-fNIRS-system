@@ -3457,3 +3457,718 @@ ans =
 
     {'alt'}    {'LeftAlt'}
 
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653896 ms [60.046010 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.644162 ms [60.081126 Hz]. (50 valid samples taken, stddev=0.129843 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+  659.8258
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 317)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',317,0)">line 317</a>)
+Conversion to cell from char is not possible.
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 3 times out of a total of 284 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',317,0)
+KbName(find(keyCode))
+
+ans =
+
+    '1!'
+
+keypresses.value(m)={KbName(find(keyCode))};
+test
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cd')" style="font-weight:bold">cd</a>
+Cannot CD to C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\sub-02\.\metronomesounds (Name is nonexistent or not a directory).
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 101)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',101,0)">line 101</a>)
+cd(audio_dir)
+} 
+test
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653449 ms [60.047621 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.652892 ms [60.049630 Hz]. (50 valid samples taken, stddev=0.091953 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+  974.8013
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Unrecognized function or variable 'value'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 389)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',389,0)">line 389</a>)
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response);
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 3 times out of a total of 286 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+422
+
+ans =
+
+   422
+
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',389,0)
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',389,0)
+test
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cd')" style="font-weight:bold">cd</a>
+Cannot CD to C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\sub-02\.\metronomesounds (Name is nonexistent or not a directory).
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 101)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',101,0)">line 101</a>)
+cd(audio_dir)
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',101,0)
+test
+[Warning: Name is nonexistent or not a directory: C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\sub-02\.\metronomesounds] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m',109,0)">line 109</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m',86,0)">line 86</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 101)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',101,0)">line 101</a>)] 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('audioread>readaudio', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\audiovideo\audioread.m', 130)" style="font-weight:bold">audioread>readaudio</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\audiovideo\audioread.m',130,0)">line 130</a>)
+The filename specified was not found in the MATLAB path.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('audioread', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\audiovideo\audioread.m', 123)" style="font-weight:bold">audioread</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\audiovideo\audioread.m',123,0)">line 123</a>)
+[y, Fs] = readaudio (filename, range, datatype);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 102)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',102,0)">line 102</a>)
+[WAVMetronome8.wave,WAVMetronome8.fs]       = audioread('Metronome8.wav');
+} 
+addpath(audio_dir)
+[Warning: Name is nonexistent or not a directory: C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\sub-02\.\metronomesounds] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m',109,0)">line 109</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m',86,0)">line 86</a>)] 
+fullfilepath('.\metronomesounds');
+{Unrecognized function or variable 'fullfilepath'.
+} 
+fullfile
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('fullfile', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\iofun\fullfile.m', 43)" style="font-weight:bold">fullfile</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\iofun\fullfile.m',43,0)">line 43</a>)
+Not enough input arguments.
+} 
+audio_dir=fullfile('.\metronomesounds');
+help fullfile
+ <strong>fullfile</strong> Build full file name from parts.
+    F = fullfile(FOLDERNAME1, FOLDERNAME2, ..., FILENAME) builds a full
+    file specification F from the folders and file name specified. Input
+    arguments FOLDERNAME1, FOLDERNAME2, etc. and FILENAME can be strings,
+    character vectors, or cell arrays of character vectors. Non-scalar
+    strings and cell arrays of character vectors must all be the same size.
+ 
+    If any input is a string array, F is a string array. Otherwise, if any
+    input is a cell array, F is a cell array.  Otherwise, F is a character
+    array.
+ 
+    The output of <strong>fullfile</strong> is conceptually equivalent to character vector
+    horzcat operation:
+ 
+       F = [FOLDERNAME1 filesep FOLDERNAME2 filesep ... filesep FILENAME]
+ 
+    except that care is taken to handle the cases when the folders begin or
+    end with a file separator.
+ 
+    <strong>fullfile</strong> collapses inner repeated file separators unless they appear at 
+    the beginning of the full file specification. <strong>fullfile</strong> also collapses 
+    relative folders indicated by the dot symbol, unless they appear at 
+    the end of the full file specification. Relative folders indicated 
+    by the double-dot symbol are not collapsed.
+ 
+    To split a full file name into folder parts, use split(f, filesep).
+ 
+    Examples
+      % To build platform dependent paths to files:
+         fullfile(matlabroot,'toolbox','matlab','general','Contents.m')
+ 
+      % To build platform dependent paths to a folder:
+         fullfile(matlabroot,'toolbox','matlab',filesep)
+ 
+      % To build a collection of platform dependent paths to files:
+         fullfile(toolboxdir('matlab'),'iofun',{'filesep.m';'fullfile.m'})
+ 
+    See also <a href="matlab:help filesep">filesep</a>, <a href="matlab:help pathsep">pathsep</a>, <a href="matlab:help fileparts">fileparts</a>, <a href="matlab:help genpath">genpath</a>, <a href="matlab:help path">path</a>, <a href="matlab:help split">split</a>.
+
+    <a href="matlab:doc fullfile">Documentation for fullfile</a>
+
+%% LOAD METRONOME SOUNDS (PsychToolbox)
+audio_dir=fullfile(pwd, 'metronomesounds');
+test
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cd')" style="font-weight:bold">cd</a>
+Cannot CD to C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\sub-02\metronomesounds (Name is nonexistent or not a directory).
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 103)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',103,0)">line 103</a>)
+cd(audio_dir)
+} 
+test
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('catdirs', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\private\catdirs.m', 25)" style="font-weight:bold">catdirs</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\private\catdirs.m',25,0)">line 25</a>)
+All arguments must be character vectors.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m', 64)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m',64,0)">line 64</a>)
+p = catdirs(mfilename, varargin{1:n});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 153)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',153,0)">line 153</a>)
+addpath(root_dir);
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',103,0)
+test
+[Warning: Name is nonexistent or not a directory: C:\Users\joaop\OneDrive - Universidade do
+Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\metronomesounds\metronomesounds] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\path.m',109,0)">line 109</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', 'C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2020b\toolbox\matlab\general\addpath.m',86,0)">line 86</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 103)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',103,0)">line 103</a>)] 
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653592 ms [60.047106 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.648710 ms [60.064714 Hz]. (50 valid samples taken, stddev=0.081995 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+PTB-ERROR: Statechange failed with GST_STATE_CHANGE_FAILURE!
+PTB-ERROR: Could not open movie file [C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\metronomesounds\LetterPresentationLetterPresentation_1.mov] for playback! No such moviefile with the given absolute path and filename.
+PTB-ERROR: Please note that you *must* provide an absolute path and filename for your movie file, filename alone won't work.
+PTB-ERROR: The specific file URI of the missing movie was: file:///C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\metronomesounds\LetterPresentationLetterPresentation_1.mov.
+PTB-ERROR: GStreamer movie playback engine reports this error:
+           Error from element source: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.
+           Additional debug info: ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPlayBin:ptbmovieplaybackpipeline/GstURIDecodeBin:uridecodebin4/GstFileSrc:source:
+Failed to start.
+
+PTB-ERROR: Could not open movie file [C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\metronomesounds\LetterPresentationLetterPresentation_1.mov] for playback! No such moviefile with the given absolute path and filename.
+PTB-ERROR: Please note that you *must* provide an absolute path and filename for your movie file, filename alone won't work.
+PTB-ERROR: The specific file URI of the missing movie was: file:///C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\metronomesounds\LetterPresentationLetterPresentation_1.mov.
+PTB-ERROR: GStreamer movie playback engine reports this error:
+           Error from element source: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.
+           Additional debug info: ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPlayBin:ptbmovieplaybackpipeline/GstURIDecodeBin:uridecodebin4/GstFileSrc:source:
+Failed to start.
+
+Error in function OpenMovie: 	Usage error
+In OpenMovie: Opening the movie failed I. Reason given above.
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+[ moviePtr [duration] [fps] [width] [height] [count] [aspectRatio] [hdrStaticMetaData]]=Screen('OpenMovie', windowPtr,
+moviefile [, async=0] [, preloadSecs=1] [, specialFlags1=0][, pixelFormat=4][, maxNumberThreads=-1][, movieOptions]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 229)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',229,0)">line 229</a>)
+    [id,duration]=Screen('OpenMovie', window, moviename);
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',229,0)
+test
+{Unrecognized function or variable 'root_dir'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 101)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',101,0)">line 101</a>)
+audio_dir=fullfile(root_dir, 'metronomesounds');
+} 
+test
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653416 ms [60.047739 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.659620 ms [60.025379 Hz]. (50 valid samples taken, stddev=0.067659 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+PTB-ERROR: Statechange failed with GST_STATE_CHANGE_FAILURE!
+PTB-ERROR: Could not open movie file [C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentationLetterPresentation_1.mov] for playback! No such moviefile with the given absolute path and filename.
+PTB-ERROR: Please note that you *must* provide an absolute path and filename for your movie file, filename alone won't work.
+PTB-ERROR: The specific file URI of the missing movie was: file:///C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentationLetterPresentation_1.mov.
+PTB-ERROR: GStreamer movie playback engine reports this error:
+           Error from element source: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.
+           Additional debug info: ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPlayBin:ptbmovieplaybackpipeline/GstURIDecodeBin:uridecodebin5/GstFileSrc:source:
+Failed to start.
+
+PTB-ERROR: Could not open movie file [C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentationLetterPresentation_1.mov] for playback! No such moviefile with the given absolute path and filename.
+PTB-ERROR: Please note that you *must* provide an absolute path and filename for your movie file, filename alone won't work.
+PTB-ERROR: The specific file URI of the missing movie was: file:///C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentationLetterPresentation_1.mov.
+PTB-ERROR: GStreamer movie playback engine reports this error:
+           Error from element source: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.
+           Additional debug info: ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPlayBin:ptbmovieplaybackpipeline/GstURIDecodeBin:uridecodebin5/GstFileSrc:source:
+Failed to start.
+
+Error in function OpenMovie: 	Usage error
+In OpenMovie: Opening the movie failed I. Reason given above.
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+[ moviePtr [duration] [fps] [width] [height] [count] [aspectRatio] [hdrStaticMetaData]]=Screen('OpenMovie', windowPtr,
+moviefile [, async=0] [, preloadSecs=1] [, specialFlags1=0][, pixelFormat=4][, maxNumberThreads=-1][, movieOptions]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 231)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',231,0)">line 231</a>)
+    [id,duration]=Screen('OpenMovie', window, moviename);
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',231,0)
+test
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654555 ms [60.043633 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.656408 ms [60.036954 Hz]. (50 valid samples taken, stddev=0.417422 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   1.9160e+03
+
+PTB-INFO: Movie playback had to drop 9 frames of movie 0 to keep playback in sync.
+
+ans =
+
+   1.9678e+03
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 1 to keep playback in sync.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 391)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',391,0)">line 391</a>)
+    response=regexp(response,'\d*','Match');
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 75 times out of a total of 552 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+test
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653690 ms [60.046753 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.654818 ms [60.042686 Hz]. (50 valid samples taken, stddev=0.078357 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   2.2608e+03
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',318,1)">318 </a>    start_timer=GetSecs;
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 3 times out of a total of 284 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653433 ms [60.047680 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.653806 ms [60.046334 Hz]. (50 valid samples taken, stddev=0.065529 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   2.7991e+03
+
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653651 ms [60.046893 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.654350 ms [60.044373 Hz]. (50 valid samples taken, stddev=0.117000 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   3.2655e+03
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+
+ans =
+
+   3.3488e+03
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 1 to keep playback in sync.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('test', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m', 391)" style="font-weight:bold">test</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\test.m',391,0)">line 391</a>)
+    response=regexp(response,'\d*','Match');
+} 

@@ -14,6 +14,9 @@ clear all
 
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% SET UP PARAMETERS
@@ -92,13 +95,46 @@ PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); %Links the key presses to the key board names
 KbQueueCreate;
 KbQueueStart; 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SAVE FILES IN FOLDER
+
+fprintf('Select the project directory \n')
+root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system', 'Select the project directory');
+addpath(root_dir);
+complete=0;
+while complete==0
+    sub_ID=input('What is the subject ID (2 digit number) \n', 's');
+    sub=sprintf('sub-%s', sub_ID);
+        rec_n=input('What is the number of the recording? \n');
+        rec=sprintf('rec-%.2d', rec_n);
+
+    inf=fprintf('\n root_dir = %s \n sub = %s \n rec = %s \n', root_dir, sub, rec);
+    correct=input('Is the above information correct? (y/n) \n', 's');
+    if strcmp(correct, 'y')
+        complete=1;
+    else
+        continue
+    end
+end
+
+% go to subject folder
+sub_dir=fullfile(root_dir, sub);
+if ~exist(sub_dir)
+    mkdir(sub_dir)
+end
+cd(sub_dir)
+
+logname=sprintf('%s_%s_triggers.log', sub, rec); diary(logname);
+% save current script in subject directory
+script=mfilename('fullpath');
+script_name=mfilename;
+copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LOAD METRONOME SOUNDS (PsychToolbox)
-audio_dir='.\metronomesounds';
-videodir=[pwd filesep 'LetterPresentation' filesep];
-
-cd(audio_dir)
+audio_dir=fullfile(root_dir, 'metronomesounds');
+addpath(audio_dir)
 [WAVMetronome8.wave,WAVMetronome8.fs]       = audioread('Metronome8.wav');
 [WAVMetronome600.wave,WAVMetronome600.fs]       = audioread('Metronome600.wav');
 [WAVMetronome300.wave,WAVMetronome300.fs]       = audioread('Metronome300.wav');
@@ -144,41 +180,6 @@ PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 %AudioFile
 file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% SAVE FILES IN FOLDER
-
-fprintf('Select the project directory \n')
-root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system', 'Select the project directory');
-addpath(root_dir);
-complete=0;
-while complete==0
-    sub_ID=input('What is the subject ID (2 digit number) \n', 's');
-    sub=sprintf('sub-%s', sub_ID);
-        rec_n=input('What is the number of the recording? \n');
-        rec=sprintf('rec-%.2d', rec_n);
-
-    inf=fprintf('\n root_dir = %s \n sub = %s \n rec = %s \n', root_dir, sub, rec);
-    correct=input('Is the above information correct? (y/n) \n', 's');
-    if strcmp(correct, 'y')
-        complete=1;
-    else
-        continue
-    end
-end
-
-% go to subject folder
-sub_dir=fullfile(root_dir, sub);
-if ~exist(sub_dir)
-    mkdir(sub_dir)
-end
-cd(sub_dir)
-
-logname=sprintf('%s_%s_triggers.log', sub, rec); diary(logname);
-% save current script in subject directory
-script=mfilename('fullpath');
-script_name=mfilename;
-copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
 % Get the screen numbers.
@@ -218,23 +219,18 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% VIDEO PREPARATION
 
+
+videodir=fullfile(root_dir,'LetterPresentation');
+
 % playMovie([],window);
 % moviePtr=zeros(1,N_trials);
 for ii=1:N_trials
-<<<<<<< Updated upstream
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
-    moviename=[videodir videofilename];
+    moviename=fullfile(videodir, videofilename);
 %     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
     [id,duration]=Screen('OpenMovie', window, moviename);
     moviePtr.id(ii)=id;
     moviePtr.duration(ii)=duration;
-=======
-    videofilename=['LetterPresentation',num2str(ii,'%d'),'.mov'];
-    moviename=[videodir videofilename];
-%     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
-    tmp=Screen('OpenMovie', window, moviename);
-    moviePtr(ii)=tmp;
->>>>>>> Stashed changes
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
@@ -308,7 +304,6 @@ for j=1:N_trials
     %preallocate table with key presses
     keypresses=table('Size', [12, 2], 'VariableNames', {'onset', 'value'}, 'VariableTypes', {'double', 'cell'});
     m=1; %first key press
-    KbQueueFlush; % clear all previous key presses from the list
     
     %% START VIDEO PRESENTATION
     %Presentation of random letters on the screen during the finger
@@ -320,10 +315,10 @@ for j=1:N_trials
     %% Record key presses
     start_timer=GetSecs;
     %Only register keypresses while video is playing and only register 12
-    while GetSecs-start_timer<moviePtr.duration(j) && m<12
-        [secs, keyCode] = KbWait;
+    while GetSecs-start_timer<moviePtr.duration(j) && m<13
+        [secs, keyCode] = KbStrokeWait;
         keypresses.onset(m)=secs;
-        keypresses.value(m)=KbName(find(keyCode));
+        keypresses.value(m)={KbName(find(keyCode))};
         m=m+1;
     end
     
@@ -395,7 +390,7 @@ for j=1:N_trials
     % Get the numeric value of the response (clicking '2' leads to '2@')
     response=regexp(response,'\d*','Match');
     response=response{:};
-    events_autodual.trial(j).stimuli=table(onset,duration, value, response);
+    events_autodual.trial(j).stimuli=table(onset,duration, response, response);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
