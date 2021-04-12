@@ -221,12 +221,20 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 % playMovie([],window);
 % moviePtr=zeros(1,N_trials);
 for ii=1:N_trials
+<<<<<<< Updated upstream
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=[videodir videofilename];
 %     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
     [id,duration]=Screen('OpenMovie', window, moviename);
     moviePtr.id(ii)=id;
     moviePtr.duration(ii)=duration;
+=======
+    videofilename=['LetterPresentation',num2str(ii,'%d'),'.mov'];
+    moviename=[videodir videofilename];
+%     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
+    tmp=Screen('OpenMovie', window, moviename);
+    moviePtr(ii)=tmp;
+>>>>>>> Stashed changes
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
