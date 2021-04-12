@@ -148,7 +148,7 @@ file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
 
 fprintf('Select the project directory \n')
 root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system', 'Select the project directory');
-
+addpath(root_dir);
 complete=0;
 while complete==0
     sub_ID=input('What is the subject ID (2 digit number) \n', 's');
@@ -218,11 +218,15 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% VIDEO PREPARATION
 
-moviePtr=zeros(1,N_trials);
+% playMovie([],window);
+% moviePtr=zeros(1,N_trials);
 for ii=1:N_trials
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
-    tmp=Screen('OpenMovie', window, [videodir videofilename]);
-    moviePtr{ii}=tmp;
+    moviename=[videodir videofilename];
+%     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
+    [id,duration]=Screen('OpenMovie', window, moviename);
+    moviePtr.id(ii)=id;
+    moviePtr.duration(ii)=duration;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
@@ -268,7 +272,6 @@ Screen('TextSize',window,25);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
-
 %% Start loop for the trials
 for j=1:N_trials
     
@@ -278,13 +281,6 @@ for j=1:N_trials
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    
-    %% START VIDEO PRESENTATION
-    %Presentation of random letters on the screen during the finger
-    %tapping test + recording of the key presses
-    outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
-    onset=GetSecs;
-    Screen('PlayMovie', moviePtr{j});
     
     %% CUEING
     %If it is an uncued trial, play a metronome sound for 8 seconds and use
@@ -302,48 +298,64 @@ for j=1:N_trials
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
 
     %preallocate table with key presses
-    keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
+    keypresses=table('Size', [12, 2], 'VariableNames', {'onset', 'value'}, 'VariableTypes', {'double', 'cell'});
     m=1; %first key press
     KbQueueFlush; % clear all previous key presses from the list
     
-
+    %% START VIDEO PRESENTATION
+    %Presentation of random letters on the screen during the finger
+    %tapping test + recording of the key presses
+    outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
+    onset=GetSecs;
+    playMovie(moviePtr.id(j),window);
+    
     %% Record key presses
     start_timer=GetSecs;
-    while GetSecs-start_timer<time_letter
-        [ pressed, firstPress, ~, lastPress, ~]=KbQueueCheck;
-        if m<13 && pressed %not more than 12 keys can be saved
-            if isempty(find(firstPress~=lastPress)) % no key was pressed twice
-                keys=KbName(find(firstPress)); % find the pressed keys
-                [timing, idx]=sort(firstPress(find(firstPress))); % get timing of key presses in ascending order
-                if length(idx)>1
-                    keys=keys(idx); % sort the pressed keys in ascending order
-                else
-                    keys={keys};
-                    key_n=length(keys); % number of pressed keys
-                end
-                for q=1:key_n
-                    keypresses.onset(m)=timing(q); %store and record the timing
-                    keyValue=keys(q);
-
-                    try
-                        % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(keyValue,'\d*','Match');
-                    catch ME
-                        %if an error is spotted, like missclick, make that response
-                        %an empty cell
-                        keyValue=[];
-                    end
-                    keypresses.value(m)=keyValue{:};%store and record the presses
-                    m=m+1;
-                    if m>12
-                        break
-                    end
-                end
-            else
-                error('key was pressed twice')
-            end
-        end
+    %Only register keypresses while video is playing and only register 12
+    while GetSecs-start_timer<moviePtr.duration(j) && m<12
+        [secs, keyCode] = KbWait;
+        keypresses.onset(m)=secs;
+        keypresses.value(m)=KbName(find(keyCode));
+        m=m+1;
     end
+    
+%     %% Record key presses
+%     start_timer=GetSecs;
+%     while GetSecs-start_timer<time_letter
+%         [ pressed, firstPress, ~, lastPress, ~]=KbQueueCheck;
+%         if m<13 && pressed %not more than 12 keys can be saved
+%             if isempty(find(firstPress~=lastPress)) % no key was pressed twice
+%                 keys=KbName(find(firstPress)); % find the pressed keys
+%                 [timing, idx]=sort(firstPress(find(firstPress))); % get timing of key presses in ascending order
+%                 if length(idx)>1
+%                     keys=keys(idx); % sort the pressed keys in ascending order
+%                 else
+%                     keys={keys};
+%                     key_n=length(keys); % number of pressed keys
+%                 end
+%                 for q=1:key_n
+%                     keypresses.onset(m)=timing(q); %store and record the timing
+%                     keyValue=keys(q);
+% 
+%                     try
+%                         % Get the numeric value of the response (clicking '2' leads to '2@')
+%                         keyValue=regexp(keyValue,'\d*','Match');
+%                     catch ME
+%                         %if an error is spotted, like missclick, make that response
+%                         %an empty cell
+%                         keyValue=[];
+%                     end
+%                     keypresses.value(m)=keyValue{:};%store and record the presses
+%                     m=m+1;
+%                     if m>12
+%                         break
+%                     end
+%                 end
+%             else
+%                 error('key was pressed twice')
+%             end
+%         end
+%     end
     
     
     %Push end of trial Marker
