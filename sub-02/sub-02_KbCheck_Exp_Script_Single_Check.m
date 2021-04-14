@@ -47,7 +47,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % number of trials per block
+N_trials=1; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -112,7 +112,7 @@ KbQueueStart;
 
 fprintf('Select the project directory \n')
 root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system', 'Select the project directory');
-
+addpath(root_dir);
 complete=0;
 while complete==0
     sub_ID=input('What is the subject ID (2 digit number) \n', 's');
@@ -455,7 +455,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %tapping test + recording of the key presses
             outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
             onset=GetSecs;
-            keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress);
+            %2*t because if we have 20 letter presentations, the first 10
+            %are for the auto dual task and the second 10 are for this one
+            keypresses=playMovie(moviePtr.id(2*t),window, outlet, Marker_Keypress);
 
             
            
