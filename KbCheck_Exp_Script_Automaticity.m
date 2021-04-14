@@ -74,6 +74,8 @@ outlet = lsl_outlet(info);
 Marker_StartBlock_Cue       = 1700;         
 Marker_EndBlock_Cue         = 1701;
 
+Marker_Keypress = 1799;
+    
 Marker_StartBlock_AutomaticSequence     = 1702;
 Marker_StartBlock_NonAutomaticSequence  = 1703;
 
@@ -218,8 +220,6 @@ allCoords = [xCoords; yCoords];
 lineWidthPix = 4;% Set the line width for the fixation cross
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% VIDEO PREPARATION
-
-
 videodir=fullfile(root_dir,'LetterPresentation');
 
 % playMovie([],window);
@@ -301,66 +301,14 @@ for j=1:N_trials
     
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
 
-    %preallocate table with key presses
-    keypresses=table('Size', [12, 2], 'VariableNames', {'onset', 'value'}, 'VariableTypes', {'double', 'cell'});
-    m=1; %first key press
     
     %% START VIDEO PRESENTATION
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
     outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
     onset=GetSecs;
-    playMovie(moviePtr.id(j),window);
-    
-    %% Record key presses
-    start_timer=GetSecs;
-    %Only register keypresses while video is playing and only register 12
-    while GetSecs-start_timer<moviePtr.duration(j) && m<13
-        [secs, keyCode] = KbStrokeWait;
-        keypresses.onset(m)=secs;
-        keypresses.value(m)={KbName(find(keyCode))};
-        m=m+1;
-    end
-    
-%     %% Record key presses
-%     start_timer=GetSecs;
-%     while GetSecs-start_timer<time_letter
-%         [ pressed, firstPress, ~, lastPress, ~]=KbQueueCheck;
-%         if m<13 && pressed %not more than 12 keys can be saved
-%             if isempty(find(firstPress~=lastPress)) % no key was pressed twice
-%                 keys=KbName(find(firstPress)); % find the pressed keys
-%                 [timing, idx]=sort(firstPress(find(firstPress))); % get timing of key presses in ascending order
-%                 if length(idx)>1
-%                     keys=keys(idx); % sort the pressed keys in ascending order
-%                 else
-%                     keys={keys};
-%                     key_n=length(keys); % number of pressed keys
-%                 end
-%                 for q=1:key_n
-%                     keypresses.onset(m)=timing(q); %store and record the timing
-%                     keyValue=keys(q);
-% 
-%                     try
-%                         % Get the numeric value of the response (clicking '2' leads to '2@')
-%                         keyValue=regexp(keyValue,'\d*','Match');
-%                     catch ME
-%                         %if an error is spotted, like missclick, make that response
-%                         %an empty cell
-%                         keyValue=[];
-%                     end
-%                     keypresses.value(m)=keyValue{:};%store and record the presses
-%                     m=m+1;
-%                     if m>12
-%                         break
-%                     end
-%                 end
-%             else
-%                 error('key was pressed twice')
-%             end
-%         end
-%     end
-    
-    
+    keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress);
+        
     %Push end of trial Marker
     outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual);
     
@@ -385,12 +333,34 @@ for j=1:N_trials
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
     vbl = Screen('Flip', window);
     [secs, keyCode, deltaSecs]=KbWait;
+    
     % Save the response and the key presses
     response={KbName(find(keyCode))}; 
+    
+    %Get letter list
+    load(fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mat']));
+    value=letters;
+    
+    
     % Get the numeric value of the response (clicking '2' leads to '2@')
-    response=regexp(response,'\d*','Match');
-    response=response{:};
-    events_autodual.trial(j).stimuli=table(onset,duration, response, response);
+    try
+        response=regexp(response,'\d*','Match');
+        response=response{:};
+    catch
+        response=[];
+    end
+    
+    %Get the numeric value of the responses to keypressing as well
+    for h=1:length(keypresses.value)
+        try
+            keyValue=regexp(keypresses.value(h),'\d*','Match'); 
+            keypresses.value(h)=keyValue{:};
+        catch %if regexp returns an error, the keypress does not have a numeric value
+            keypresses.value(h)={[]};
+        end
+        
+    end
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
@@ -412,7 +382,8 @@ fprintf('%%%%%%%%%%%%%% Automatic Sequence Dual Task %%%%%%%%%%%%%% \n')
 for h = 1:N_trials
     fprintf('Trial %d: \n', h)
     %Show if the answers for the number of G's presented were correct
-    if str2num(events_autodual.trial(h).stimuli.response{1})==length(strfind(events_autodual.trial(h).stimuli.value{1}, 'G'))
+    numberOfG=strfind(events_autodual.trial(h).stimuli.value, 'G');
+    if str2num(events_autodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
         fprintf('G correct \n')
     else
         fprintf('G incorrect \n')

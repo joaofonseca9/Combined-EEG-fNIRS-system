@@ -1,4 +1,4 @@
-function DetectionRTInVideoDemo(moviename, timeOfEvent, trials)
+function playVideo_checkKey(moviename, timeOfEvent, win)
 %
 % DetectionRTInVideoDemo(moviename, timeOfEvent, trials)
 %
@@ -36,77 +36,12 @@ function DetectionRTInVideoDemo(moviename, timeOfEvent, trials)
 % to play sound in sync with video.
 %
 
-% History:
-% 12/19/05  mk  Wrote it.
-% 02/03/06  mk  Adapted for use on Windows.
-% 03/11/12  mk  Cleanup.
-% 06/17/13  mk  Cleanup.
-
-if nargin < 1
-    % Default movie is our own disc collision movie:
-    moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
-end;
-
-if nargin < 2
-    timeOfEvent = 1.16;
-end;
-
-if nargin < 3
-    trials = 10;
-end;
-
-fprintf('Loading probe movie %s ...\n', moviename);
-fprintf('Time locked probe event will happen at time %f secs after start of movie.\n', timeOfEvent);
-fprintf('Will run %i trials or until ESCape key is pressed.\n', trials);
-
 % Switch KbName into unified mode: It will use the names of the OS-X
 % platform on all platforms in order to make this script portable:
 KbName('UnifyKeyNames');
 
-% Query keycodes for ESCAPE key and Space key:
-esc=KbName('ESCAPE');
-space=KbName('space');
 
-try
-    % Child protection: Make sure we run on the OSX / OpenGL Psychtoolbox.
-    % Abort if we don't:
-    AssertOpenGL;
-    
-    % Background color will be a grey one:
-    background=[128, 128, 128];
-    
-    % Open onscreen window. We use the display with the highest number on
-    % multi-display setups:
-    screen=max(Screen('Screens'));
-    
-    % This will open a screen with background color 'background':
-    win = Screen('OpenWindow', screen, background);
-    
-    % Hide the mouse cursor:
-    HideCursor;
-    
-    % Show instructions...
-    tsize=30;
-    Screen('TextSize', win, tsize);
-    [x, y]=Screen('DrawText', win, 'Collision detection fake experiment.',40, 100); %#ok<*ASGLU>
-    [x, y]=Screen('DrawText', win, 'Press ESC-ape key to abort anytime.', 40, y + 10 + tsize);
-    [x, y]=Screen('DrawText', win, 'Press SPACE key when you see the discs colliding', 40, y + 10 + tsize);
-    Screen('DrawText', win, 'Press any key to start the experiment...', 40, y + 10 + tsize);
-    
-    % Flip to show the grey screen:
-    Screen('Flip',win);
-    
-    % Wait for keypress + release...
-    KbStrokeWait;
-    
-    % Show cleared screen...
-    Screen('Flip',win);
-    
-    % Wait a second...
-    WaitSecs(1);
-    
-    % Main trial loop: Do 'trials' trials...
-    for i=1:trials
+try       
         % Open the moviefile and query some infos like duration, framerate,
         % width and height of video frames. We could also query the total count of frames in
         % the movie, but computing 'framecount' takes long, so avoid to query
@@ -127,12 +62,10 @@ try
         % keypress to indicate s(he) detected the event in the vido, or
         % until the end of the movie is reached.
         movietexture=0;     % Texture handle for the current movie frame.
-        reactiontime=-1;    % Variable to store reaction time.
         lastpts=0;          % Presentation timestamp of last frame.
-        onsettime=-1;       % Realtime at which the event was shown to the subject.
-        rejecttrial=0;      % Flag which is set to 1 to reject an invalid trial.
         m=1;
-        while(movietexture>=0 && reactiontime==-1)
+        while(movietexture>=0)
+            
             % Check if a new movie video frame is ready for visual
             % presentation: This call polls for arrival of a new frame. If
             % a new frame is ready, it converts the video frame into a
@@ -175,117 +108,25 @@ try
                     % the exact time when the event was presented to the
                     % subject. Define it as onsettime:
                     onsettime = vbl;
-                    
-                    % Compare current pts to last one to see if the movie
-                    % decoder skipped a frame at this crucial point in
-                    % time. That would invalidate this trial.
-                    if (pts - lastpts > 1.5*(1/fps))
-                        % Difference to last frame is more than 1.5 times
-                        % the expected difference under assumption 'no
-                        % skip'. We skipped in the wrong moment!
-                        rejecttrial=1;
-                    end;
-                end;
-                
-                % Keep track of the frames pts in order to check for skipped frames:
-                lastpts=pts;
-                
+                end
+                               
                 % Delete the texture. We don't need it anymore:
                 Screen('Close', movietexture);
                 movietexture=0;
-            end;
+            end
             
             % Done with drawing. Check the keyboard for subjects response:
             [keyIsDown, secs, keyCode]=KbCheck;
-            if keyIsDown==1
-                keypresses.onset(m)=GetSecs;
-                keys=KbName(find(keyCode)); % find the pressed keys
-                [timing, idx]=sort(keyCode(find(keyCode))); % get timing of key presses in ascending order
-                    if length(idx)>1
-                        keys=keys(idx); % sort the pressed keys in ascending order
-                    else
-                        keys={keys};
-                        key_n=length(keys); % number of pressed keys
-                    end
-                    for q=1:key_n
-                        keypresses.onset(m)=timing(q); %store and record the timing
-                        keyValue=keys(q);
-                       
-                        try
-                            % Get the numeric value of the response (clicking '2' leads to '2@')
-                            keyValue=regexp(keyValue,'\d*','Match');
-                        catch 
-                            %if an error is spotted, like missclick, make that response
-                            %an empty cell
-                            keyValue=[];
-                        end
-                        keypresses.value(m)=keyValue{:};%store and record the presses
-                        m=m+1;
-                        if m>12
-                            break
-                        end
-                    end
+            if (keyIsDown==1)
+                keypresses.onset(m)=secs;
+                keypresses.value(m)={KbName(find(keyCode))};
+                m=m+1;      
             end
-                
-        end; % ...of display loop...
+        end % ...of display loop...
         
-        % Stop movie playback, in case it isn't already stopped. We do this
-        % by selection of a playback rate of zero: This will also return
-        % the number of frames that had to be dropped to keep audio, video
-        % and realtime in sync.
-        droppedcount = Screen('PlayMovie', movie, 0, 0, 0);
-        if (droppedcount > 0.2*framecount)
-            % Over 20% of all frames skipped?!? Playback problems! We
-            % reject this trial...
-            rejecttrial=4;
-        end;
-        
-        % Close the moviefile.
-        Screen('CloseMovie', movie);
-        
-        % Check if aborted.
-        if (rejecttrial==-1)
-            % Break out of trial loop
-            break;
-        end;
-        
-        if (reactiontime==-1 && rejecttrial==0)
-            rejecttrial=3;
-        end;
-        
-        % Print out trials result if it was a valid trial:
-        if (rejecttrial==0)
-            fprintf('Trial %i valid: Reaction time was %f msecs.\n', i, 1000 * reactiontime);
-        end;
-        
-        if (rejecttrial==1)
-            fprintf('Trial %i rejected due to skip in video playback at time of event.\n', i);
-        end;
-        
-        if (rejecttrial==2)
-            fprintf('Trial %i rejected. False detection by subject.\n', i);
-        end;
-        
-        if (rejecttrial==3)
-            fprintf('Trial %i rejected. No detection by subject. Asleep?!?\n', i);
-        end;
-        
-        if (rejecttrial==4)
-            fprintf('Trial %i rejected. Way too many skips in movie playback!!!\n', i);
-        end;
-        
-        % Wait for subject to release keys:
-        KbReleaseWait;
-        
-    end; % Trial done. Next trial...
-    
-    % Done with the experiment. Close onscreen window and finish.
-    ShowCursor;
-    sca;
-    fprintf('Done. Bye!\n');
     return;
 catch %#ok<CTCH>
     % Error handling: Close all windows and movies, release all ressources.
     sca;
     psychrethrow(psychlasterror);
-end;
+end

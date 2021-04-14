@@ -1,4 +1,4 @@
-function playMovie(movie, win)
+function keypresses=playMovie(movie, win, outlet, marker)
 % Most simplistic demo on how to play a movie.
 %
 % SimpleMovieDemo(moviename [, windowrect=[]]);
@@ -17,14 +17,20 @@ function playMovie(movie, win)
 % 02/05/2009  Created. (MK)
 % 06/17/2013  Cleaned up. (MK)
 
+%preallocate table with key presses
+keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
+m=1; %first key press
+KbQueueFlush; % clear all previous key presses from the list
+keyReleased=1;
+reg=1;
 try
     % Start playback engine:
     Screen('PlayMovie', movie, 1);
-    
     % Playback loop: Runs until end of movie or keypress:
     while 1==1
         % Wait for next movie frame, retrieve texture handle to it
         tex = Screen('GetMovieImage', win, movie);
+        
         
         % Valid texture returned? A negative value means end of movie reached:
         if tex<=0
@@ -34,12 +40,33 @@ try
         
         % Draw the new texture immediately to screen:
         Screen('DrawTexture', win, tex);
+%         frame_time=frame_idx-time_idx;
         
+        [keyIsDown, secs, keyCode] = KbCheck;
+        if keyIsDown==1 && keyReleased==1 && m<13  %only register the keypress once (wait for release of key to register again)
+            keypresses.onset(m)=secs;
+            keypresses.value(m)={KbName(find(keyCode))};
+            outlet.push_sample(marker);
+            keyReleased=0;
+            m=m+1;
+        elseif keyIsDown==0
+            keyReleased=1;
+        end
+%         if m<13 %only record key every 6 frames and only 12 max
+%             if keyIsDown==1
+%                 keypresses.onset(m)=secs;
+%                 keypresses.value(m)={KbName(find(keyCode))};
+%                 outlet.push_sample(marker);
+%                 m=m+1; 
+%             end
+%         end
         % Update display:
         Screen('Flip', win);
         
         % Release texture:
         Screen('Close', tex);
+        
+        
     end
     
     % Stop playback:

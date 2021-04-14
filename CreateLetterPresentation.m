@@ -87,8 +87,8 @@ moviePtr = Screen('CreateMovie', window, filename,[], [], framerate);
 % frameduration= time_letter/framerate;
 for n=1:N_letters
     %Defining number of frames per letter and cross
-    frame_letter=round((rand(1)+0.5)*framerate); %Speed with which the letters are presented
-    frame_cross=round(0.2*framerate);
+    frame_letter=round((rand(1)+0.55)*framerate); %Speed with which the letters are presented
+    frame_cross=round(0.25*framerate);
     
     %Present random letter on the screen
     Screen('TextSize', window, 100);

@@ -290,10 +290,6 @@ for j=1:N_trials
     
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
 
-    %preallocate table with key presses
-    keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
-    m=1; %first key press
-    KbQueueFlush; % clear all previous key presses from the list
     
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
