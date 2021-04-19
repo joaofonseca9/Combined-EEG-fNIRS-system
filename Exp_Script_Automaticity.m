@@ -179,6 +179,10 @@ PsychPortAudio('FillBuffer', h_Metronome600, WAVMetronome600.wave);
 PsychPortAudio('FillBuffer', h_Metronome300, WAVMetronome300.wave);
 PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 
+
+% Set Handle For Audio Capture (delay check)
+CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, 4*Cue1_25Hz.fs, Cue1_25Hz.nrChan);
+
 %AudioFile
 file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -290,13 +294,19 @@ for j=1:N_trials
     %If it is an uncued trial, play a metronome sound for 8 seconds and use
     %the rest of the rest time for baseline. If it is cued, just start the
     %cueing and stop it at the end of the trial
+    PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
     cued=events_autodual.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
     if cued==0 %uncued trial
         PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
     else %
         %Start the Cue
+        startrecord=GetSecs;
+        PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
+        WaitSecs(1)
+        
+        outlet.push_sample(Marker_StartBlock_Cue);
+        startmoment = GetSecs;
         PsychPortAudio('Start', file(2), 1, [], []);
-        outlet.push_sample(Marker_StartBlock_Cue);  
     end
     
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
@@ -314,6 +324,8 @@ for j=1:N_trials
     
     %Stop cueing
     if (cued==1)
+        audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
+        stoprecord = GetSecs;
         PsychPortAudio('Stop', file(2));
         outlet.push_sample(Marker_EndBlock_Cue);
     end
@@ -347,7 +359,7 @@ for j=1:N_trials
         response=regexp(response,'\d*','Match');
         response=response{:};
     catch
-        response=[];
+        response={[]};
     end
     
     %Get the numeric value of the responses to keypressing as well
@@ -414,6 +426,8 @@ sca
 str=['events_autodual_',sub,'_',rec];
 save(str,'events_autodual');
 
+
+save('cueRecording.mat','startmoment','startrecord','stoprecord','audio1');
 %% HELPER FUNCTIONS
 function events=randCuedTrials(n)
     %Generate a vector where half is 0's and half is 1's
