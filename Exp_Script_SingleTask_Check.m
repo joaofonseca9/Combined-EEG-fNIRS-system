@@ -445,21 +445,19 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
 
             WaitSecs(t1+randi(t2)) %time that the white cross is shown
 
+            %% START VIDEO PRESENTATION
             %Presentation of random letters on the screen during the finger
             %tapping test + recording of the key presses
             outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Dual);
             onset=GetSecs;
-
-            %% START VIDEO PRESENTATION
-            %Presentation of random letters on the screen during the finger
-            %tapping test + recording of the key presses
-            outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
-            onset=GetSecs;
             %2*t because if we have 20 letter presentations, the first 10
             %are for the auto dual task and the second 10 are for this one
             keypresses=playMovie(moviePtr.id(2*t),window, outlet, Marker_Keypress);
-
             
+            %Convert fingertapping responses to numerical values
+            keypresses = convertKeypresses(keypresses);
+            
+            %keypresses=convertKeypresses_DEV(keypresses)
            
             %% Set marker of end of dual task with non auto sequence
             
@@ -504,7 +502,6 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 catch %if regexp returns an error, the keypress does not have a numeric value
                     keypresses.value(h)={[]};
                 end
-
             end
             events_nonautodual.trial(t).stimuli=table(onset,duration, value, response);
             events_nonautodual.trial(t).responses=keypresses;
@@ -864,3 +861,44 @@ function events=randCuedTrials(n)
     end
 end
 
+%Convert keypresses of the experimental laptop to the expected numerical
+%values
+function keypresses = convertKeypresses(keypresses)
+%Get the numeric value of the responses to keypressing as well
+    for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+        if isempty(keyValue)
+            continue;
+        else
+           switch keyValue
+            case '4'
+                keypresses.value(h)={'1'};
+            case '5'
+                keypresses.value(h)={'2'};
+            case '6'
+                keypresses.value(h)={'3'};
+            case 'BackSpace'  
+                keypresses.value(h)={'4'};
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                keypresses.value(h)={[]};
+           end
+        end
+    end
+end
+
+
+%FOR DEVELOPMENTAL USE ONLY
+%Created because for the PC where the code was created, pressing the
+%numerical keys 1,2,3,4 gave the following responses 1!, 2", 3#, 4$, so we
+%had to extract the numerical values
+%Get the numeric value of the responses to keypressing as well
+function keypresses=convertKeypresses_DEV(keypresses)
+    for h=1:length(keypresses.value)
+        try
+            keyValue=regexp(keypresses.value(h),'\d*','Match'); 
+            keypresses.value(h)=keyValue{:};
+        catch %if regexp returns an error, the keypress does not have a numeric value
+            keypresses.value(h)={[]};
+        end
+    end
+end

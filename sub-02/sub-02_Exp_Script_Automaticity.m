@@ -294,12 +294,12 @@ for j=1:N_trials
     %If it is an uncued trial, play a metronome sound for 8 seconds and use
     %the rest of the rest time for baseline. If it is cued, just start the
     %cueing and stop it at the end of the trial
-    PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
     cued=events_autodual.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
     if cued==0 %uncued trial
         PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
     else %
         %Start the Cue
+        PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
         startrecord=GetSecs;
         PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
         WaitSecs(1)
@@ -362,16 +362,10 @@ for j=1:N_trials
         response={[]};
     end
     
-    %Get the numeric value of the responses to keypressing as well
-    for h=1:length(keypresses.value)
-        try
-            keyValue=regexp(keypresses.value(h),'\d*','Match'); 
-            keypresses.value(h)=keyValue{:};
-        catch %if regexp returns an error, the keypress does not have a numeric value
-            keypresses.value(h)={[]};
-        end
-        
-    end
+    %Convert fingertapping responses to numerical values
+    keypresses = convertKeypresses(keypresses);
+    %keypresses=convertKeypresses_DEV(keypresses)
+    
     events_autodual.trial(j).stimuli=table(onset,duration, value, response);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
@@ -448,4 +442,46 @@ function [WAVstruct] = CreateWAVstruct(WAVfilename)
     [WAVstruct.wavedata, WAVstruct.fs] = psychwavread(wav);     
     WAVstruct.wavedata = WAVstruct.wavedata';                   
     WAVstruct.nrChan = size(WAVstruct.wavedata,1);  
+end
+
+
+%Convert keypresses of the experimental laptop to the expected numerical
+%values
+function keypresses = convertKeypresses(keypresses)
+%Get the numeric value of the responses to keypressing as well
+    for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+        if isempty(keyValue)
+            continue;
+        else
+           switch keyValue
+            case '4'
+                keypresses.value(h)={'1'};
+            case '5'
+                keypresses.value(h)={'2'};
+            case '6'
+                keypresses.value(h)={'3'};
+            case 'BackSpace'  
+                keypresses.value(h)={'4'};
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                keypresses.value(h)={[]};
+           end
+        end
+    end
+end
+
+%FOR DEVELOPMENTAL USE ONLY
+%Created because for the PC where the code was created, pressing the
+%numerical keys 1,2,3,4 gave the following responses 1!, 2", 3#, 4$, so we
+%had to extract the numerical values
+%Get the numeric value of the responses to keypressing as well
+function keypresses=convertKeypresses_DEV(keypresses)
+    for h=1:length(keypresses.value)
+        try
+            keyValue=regexp(keypresses.value(h),'\d*','Match'); 
+            keypresses.value(h)=keyValue{:};
+        catch %if regexp returns an error, the keypress does not have a numeric value
+            keypresses.value(h)={[]};
+        end
+    end
 end

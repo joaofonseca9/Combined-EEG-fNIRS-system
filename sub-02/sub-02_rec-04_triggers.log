@@ -1,0 +1,1945 @@
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653216 ms [60.048460 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.658510 ms [60.029378 Hz]. (50 valid samples taken, stddev=0.238463 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   5.3742e+05
+
+PTB-INFO: Movie playback had to drop 13 frames of movie 0 to keep playback in sync.
+{Operator '==' is not supported for operands of type 'cell'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 453)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',453,0)">line 453</a>)
+            if keyValue{:}=='backspace'
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses)
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 100 times out of a total of 319 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654578 ms [60.043552 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.653866 ms [60.046118 Hz]. (50 valid samples taken, stddev=0.233194 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   5.3767e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Operator '==' is not supported for operands of type 'cell'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 453)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',453,0)">line 453</a>)
+            if keypresses.value(h)=='backspace'
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses)
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 2 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+keypresses.value(h)
+{Unrecognized function or variable 'h'.
+} 
+keypresses.value(2)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'6'}
+
+keypresses.value(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'BackSpace'}
+
+keypresses.value(1)=='BackSpace'
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keyValue= keypresses.value(1);
+keyValue{:}='BackSpace'
+
+keyValue =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'BackSpace'}
+
+keyValue= keypresses.value(1);
+keyValue{:}=='BackSpace'
+
+ans =
+
+  1×9 <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a> array
+
+   1   1   1   1   1   1   1   1   1
+
+keypresses(find(keypresses.value==6))=3;
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keypresses(find(keypresses.value{:}==6))=3;
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('eq')" style="font-weight:bold"> == </a>
+Too many input arguments.
+} 
+keypresses.value{:}
+
+ans =
+
+    'BackSpace'
+
+
+ans =
+
+    '6'
+
+
+ans =
+
+    'BackSpace'
+
+
+ans =
+
+    '4'
+
+
+ans =
+
+    'BackSpace'
+
+
+ans =
+
+    '4'
+
+
+ans =
+
+    '5'
+
+
+ans =
+
+    'BackSpace'
+
+
+ans =
+
+    '6'
+
+
+ans =
+
+    '5'
+
+
+ans =
+
+    '4'
+
+
+ans =
+
+    '5'
+
+{keypresses.value{:}}
+
+ans =
+
+  1×12 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+  Columns 1 through 9
+
+    {'BackSpace'}    {'6'}    {'BackSpace'}    {'4'}    {'BackSpace'}    {'4'}    {'5'}    {'BackSpace'}    {'6'}
+
+  Columns 10 through 12
+
+    {'5'}    {'4'}    {'5'}
+
+{keypresses.value{:}}==6
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keypresses.value
+
+ans =
+
+  12×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'BackSpace'}
+    {'6'        }
+    {'BackSpace'}
+    {'4'        }
+    {'BackSpace'}
+    {'4'        }
+    {'5'        }
+    {'BackSpace'}
+    {'6'        }
+    {'5'        }
+    {'4'        }
+    {'5'        }
+
+keypresses.value=={6}
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keyValue{:}
+
+ans =
+
+    'BackSpace'
+
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653580 ms [60.047150 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.652008 ms [60.052818 Hz]. (50 valid samples taken, stddev=0.099133 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.3851e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Operator '==' is not supported for operands of type 'cell'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 463)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',463,0)">line 463</a>)
+            if keyValue{:}=='BackSpace'
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses)
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 2 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',463,0)
+keyValue=keypresses.value(2);
+keyValue{1,1}
+
+ans =
+
+    'BackSpace'
+
+keyValue=keypresses.value(3);
+keyValue{1,1}
+
+ans =
+
+    '6'
+
+keyValue{:}
+
+ans =
+
+    '6'
+
+keyValue=keypresses.value(2);
+keyValue{:}
+
+ans =
+
+    'BackSpace'
+
+ k=keyValue{:};
+if k=='BackSpace'
+a=1
+end
+
+a =
+
+     1
+
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.652986 ms [60.049292 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.651808 ms [60.053539 Hz]. (50 valid samples taken, stddev=0.079455 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.3876e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Operator '==' is not supported for operands of type 'cell'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 464)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',464,0)">line 464</a>)
+            if k=='BackSpace'
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses)
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 3 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+keyValue=keypresses.value(1);
+keyValue{:}=='BackSpace'
+
+ans =
+
+  1×9 <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a> array
+
+   1   1   1   1   1   1   1   1   1
+
+keyValue=keypresses.value(1);
+ if keyValue{:}=='BackSpace'
+end
+keyValue{:}=='BackSpace'
+
+ans =
+
+  1×9 <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a> array
+
+   1   1   1   1   1   1   1   1   1
+
+    for h=1:length(keypresses.value)
+        keyValue=keypresses.value(h);
+        try
+            keyValue=regexp(keyValue,'\d*','Match'); 
+            switch keyValue{:}
+                case 4
+                    keypresses.value(h)=1;
+                case 5
+                    keypresses.value(h)=2;
+                case 6
+                    keypresses.value(h)=3;
+                otherwise %the subject clicked another button besides the ones he was supposed to
+                    keypresses.value(h)={[]};
+            end
+        catch %if regexp returns an error, the keypress does not have a numeric value
+            if keyValue{:}=='BackSpace'
+                keypresses.value(h)=4;
+            else
+                keypresses.value(h)={[]};
+            end
+        end
+        
+    end
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keyValue{:}=='BackSpace'
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keyValue=keypresses.value(h);
+keyValue=regexp(keyValue,'\d*','Match'); 
+keyValue=regexp(keyValue,'\d*','Match'); 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+} 
+keyValue=regexp(keyValue,'\d*','Match'); 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+} 
+help continue
+ <strong>continue</strong> Pass control to the next iteration of FOR or WHILE loop.
+    <strong>continue</strong> passes control to the next iteration of FOR or WHILE loop
+    in which it appears, skipping any remaining statements in the body
+    of the FOR or WHILE loop.
+ 
+    In nested loops, <strong>continue</strong> passes control to the next iteration of
+    FOR or WHILE loop enclosing it.
+ 
+    See also <a href="matlab:help for">for</a>, <a href="matlab:help while">while</a>, <a href="matlab:help break">break</a>, <a href="matlab:help return">return</a>.
+
+    <a href="matlab:doc continue">Documentation for continue</a>
+
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653339 ms [60.048019 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.652090 ms [60.052522 Hz]. (50 valid samples taken, stddev=0.192013 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.3954e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 453)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',453,0)">line 453</a>)
+Conversion to cell from double is not possible.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses)
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 59 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',453,0)
+keypresses.value(1)='4';
+{Conversion to cell from char is not possible.
+} 
+keypresses.value(1)={4};
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654078 ms [60.045355 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.666120 ms [60.001968 Hz]. (50 valid samples taken, stddev=0.285923 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   5.3978e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+
+keypresses =
+
+  12×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+
+      <strong>onset</strong>       <strong>duration</strong>       <strong>value</strong>    
+    <strong>__________</strong>    <strong>________</strong>    <strong>____________</strong>
+
+    5.3978e+05       0        {[       4]}
+    5.3978e+05       0        {0×0 double}
+    5.3978e+05       0        {[       4]}
+    5.3978e+05       0        {0×0 double}
+    5.3978e+05       0        {[       4]}
+    5.3978e+05       0        {0×0 double}
+    5.3978e+05       0        {0×0 double}
+    5.3978e+05       0        {[       4]}
+    5.3978e+05       0        {0×0 double}
+    5.3978e+05       0        {0×0 double}
+    5.3979e+05       0        {0×0 double}
+    5.3979e+05       0        {0×0 double}
+
+
+ans =
+
+   5.3980e+05
+
+
+ans =
+
+   5.3982e+05
+
+PTB-INFO: Movie playback had to drop 11 frames of movie 1 to keep playback in sync.
+
+keypresses =
+
+  12×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+
+      <strong>onset</strong>       <strong>duration</strong>       <strong>value</strong>    
+    <strong>__________</strong>    <strong>________</strong>    <strong>____________</strong>
+
+    5.3982e+05       0        {[       4]}
+    5.3982e+05       0        {0×0 double}
+    5.3982e+05       0        {[       4]}
+    5.3982e+05       0        {0×0 double}
+    5.3982e+05       0        {[       4]}
+    5.3982e+05       0        {0×0 double}
+    5.3982e+05       0        {0×0 double}
+    5.3982e+05       0        {[       4]}
+    5.3982e+05       0        {0×0 double}
+    5.3983e+05       0        {0×0 double}
+    5.3983e+05       0        {0×0 double}
+    5.3983e+05       0        {0×0 double}
+
+%%%%%%% Automatic Sequence Dual Task %%%%%%% 
+Trial 1: 
+G incorrect 
+the tempo was off with on average 0.124206 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average 0.106026 seconds 
+Seq incorrect 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 34 times out of a total of 635 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+load('events_autodual_sub-02_rec-01.mat')
+events_autodual.trial(1).responses.value(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans{:}
+
+ans =
+
+    '4'
+
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653959 ms [60.045782 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.657846 ms [60.031771 Hz]. (50 valid samples taken, stddev=0.156784 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.4011e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+
+keypresses =
+
+  12×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+
+      <strong>onset</strong>       <strong>duration</strong>       <strong>value</strong>    
+    <strong>__________</strong>    <strong>________</strong>    <strong>____________</strong>
+
+    5.4012e+05       0        {'4'       }
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {'4'       }
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {'4'       }
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {'4'       }
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {0×0 double}
+    5.4012e+05       0        {0×0 double}
+
+
+ans =
+
+   5.4014e+05
+
+
+ans =
+
+   5.4016e+05
+
+PTB-INFO: Movie playback had to drop 11 frames of movie 1 to keep playback in sync.
+
+keypresses =
+
+  12×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+
+      <strong>onset</strong>       <strong>duration</strong>       <strong>value</strong>    
+    <strong>__________</strong>    <strong>________</strong>    <strong>____________</strong>
+
+    5.4016e+05       0        {'4'       }
+    5.4016e+05       0        {0×0 double}
+    5.4016e+05       0        {'4'       }
+    5.4016e+05       0        {0×0 double}
+    5.4016e+05       0        {'4'       }
+    5.4016e+05       0        {0×0 double}
+    5.4016e+05       0        {0×0 double}
+    5.4017e+05       0        {'4'       }
+    5.4017e+05       0        {0×0 double}
+    5.4017e+05       0        {0×0 double}
+    5.4017e+05       0        {0×0 double}
+    5.4017e+05       0        {0×0 double}
+
+%%%%%%% Automatic Sequence Dual Task %%%%%%% 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -0.103015 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average 0.066688 seconds 
+Seq incorrect 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 69 times out of a total of 635 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+
+465452
+
+ans =
+
+      465452
+
+
+events_autodual.trial(1).responses.value(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans{:}=='4'
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   1
+
+ans{:}=='3'
+{Brace indexing is not supported for variables of this type.
+} 
+events_autodual.trial(1).responses.value(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans{:}=='3'
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   0
+
+events_autodual.trial(1).responses.value(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+switch ans{:}
+                    case '4'
+                        keypresses.value(12)={'1'};
+                    case '5'
+                        keypresses.value(12)={'2'};
+                    case '6'
+                        keypresses.value(12)={'3'};
+                    otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                        keypresses.value(12)={[]};
+                end
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653914 ms [60.045944 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.656596 ms [60.036276 Hz]. (50 valid samples taken, stddev=0.204673 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+WARNING: Couldn't compute a reliable estimate of monitor refresh interval! Trouble with VBL syncing?!?
+
+
+----- ! PTB - ERROR: SYNCHRONIZATION FAILURE ! -----
+
+One or more internal checks (see Warnings above) indicate that synchronization
+of Psychtoolbox to the vertical retrace (VBL) is not working on your setup.
+
+This will seriously impair proper stimulus presentation and stimulus presentation timing!
+Please read 'help SyncTrouble' for information about how to solve or work-around the problem.
+You can force Psychtoolbox to continue, despite the severe problems, by adding the command
+Screen('Preference', 'SkipSyncTests', 1); at the top of your script, if you really know what you are doing.
+
+
+
+ans =
+
+   5.4047e+05
+
+
+ans =
+
+   5.4049e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',460,1)">460 </a>                switch keyValue{:}
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 51 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+keyValue{:}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'6'}
+
+if system_dependent('IsDebugMode')==1, dbcont; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+keyValue{:}=='4'
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+if system_dependent('IsDebugMode')==1, dbcont; end
+keyValue=regexp(keyValue,'\d*','Match'); 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('regexp')" style="font-weight:bold">regexp</a>
+All cells must be char row vectors.
+} 
+if system_dependent('IsDebugMode')==1, dbcont; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+keyValue{:}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'5'}
+
+
+if system_dependent('IsDebugMode')==1, dbcont; end
+switch keyValue{:}
+                    case {'4'}
+                        aaaa=1
+                    case {'5'}
+                        keypresses.value(h)={'2'};
+                    case {'6'}
+                        keypresses.value(h)={'3'};
+                    otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                        keypresses.value(h)={[]};
+                end
+{SWITCH expression must be a scalar or a character vector.
+} 
+keyValue{:}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+switch keyValue{:}
+                    case '4'
+aaa=1
+end
+{SWITCH expression must be a scalar or a character vector.
+} 
+keyValue{:}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+keyValue{:}=='4'
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+keyValue{:} == 'BackSpace'
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+{keyValue{:}}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {1×1 cell}
+
+keyValue{:}
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans(1)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+ans(:)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'4'}
+
+cell2char(ans)
+{Unrecognized function or variable 'cell2char'.
+} 
+cell2mat(ans)
+
+ans =
+
+    '4'
+
+if system_dependent('IsDebugMode')==1, dbcont; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+
+keypresses =
+
+  12×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+
+      <strong>onset</strong>       <strong>duration</strong>       <strong>value</strong>    
+    <strong>__________</strong>    <strong>________</strong>    <strong>____________</strong>
+
+    5.4049e+05       0        {'4'       }
+    5.4049e+05       0        {0×0 double}
+    5.4049e+05       0        {'4'       }
+    5.4049e+05       0        {0×0 double}
+     5.405e+05       0        {'4'       }
+     5.405e+05       0        {0×0 double}
+     5.405e+05       0        {0×0 double}
+     5.405e+05       0        {'4'       }
+     5.405e+05       0        {0×0 double}
+     5.405e+05       0        {0×0 double}
+     5.405e+05       0        {0×0 double}
+     5.405e+05       0        {0×0 double}
+
+Error in function TextSize: 	Invalid Window (or Texture) Index provided: It doesn't correspond to an open window or texture.
+Did you close it accidentally via Screen('Close') or Screen('CloseAll') ?
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Screen')" style="font-weight:bold">Screen</a>
+Usage:
+
+oldTextSize=Screen('TextSize', windowPtr [,textSize]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('DrawFormattedText', 'C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m', 289)" style="font-weight:bold">DrawFormattedText</a> (<a href="matlab: opentoline('C:\toolbox\Psychtoolbox\PsychBasic\DrawFormattedText.m',289,0)">line 289</a>)
+theight = Screen('TextSize', win) * vSpacing;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 370)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',370,0)">line 370</a>)
+    DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
+} 
+keypresses.value{4} = '5';
+keypresses.value{6} = '6';
+keypresses.value{7} = '6';
+keypresses.value{9} = '6';
+keypresses.value{10} = '6';
+keypresses.value{11} = '6';
+keypresses.value{12} = '6';
+for h=1:length(keypresses.value)   
+        %First check if it is Backspace
+        if keypresses.value(h) == 'BackSpace'
+            keypresses.value(h)={'4'};
+        else %If not, try to get the numerical value of the press (some keyboards return '4$', '3#', so we need to extract the number
+            try
+                switch keypresses.value(h)
+                    case '4'
+                        keypresses.value(h)={'1'};
+                    case '5'
+                        keypresses.value(h)={'2'};
+                    case '6'
+                        keypresses.value(h)={'3'};
+                    otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                        keypresses.value(h)={[]};
+                end
+            catch %if regexp returns an error, the keypress does not have a numeric value
+                keypresses.value(h)={[]};
+            end
+        end
+    end
+{Operator '==' is not supported for operands of type 'cell'.
+} 
+for h=1:length(keypresses.value)
+        keyValue=keypresses.value(h);
+        
+        %First check if it is Backspace
+        if keyValue{:} == 'BackSpace'
+            keypresses.value(h)={'4'};
+        else %If not, try to get the numerical value of the press (some keyboards return '4$', '3#', so we need to extract the number
+            try
+                switch keypresses.value(h)
+                    case '4'
+                        keypresses.value(h)={'1'};
+                    case '5'
+                        keypresses.value(h)={'2'};
+                    case '6'
+                        keypresses.value(h)={'3'};
+                    otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                        keypresses.value(h)={[]};
+                end
+            catch %if regexp returns an error, the keypress does not have a numeric value
+                keypresses.value(h)={[]};
+            end
+        end
+    end
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('eq')" style="font-weight:bold"> == </a>
+Matrix dimensions must agree.
+} 
+keyValue{:} == 'BackSpace'
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('eq')" style="font-weight:bold"> == </a>
+Matrix dimensions must agree.
+} 
+keyValue=keypresses.value(h);
+keyValue{:} == 'BackSpace'
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('eq')" style="font-weight:bold"> == </a>
+Matrix dimensions must agree.
+} 
+keypresses.value(h)='BackSpace'
+{Conversion to cell from char is not possible.
+} 
+keypresses.value(h)={'BackSpace'};
+keyValue=keypresses.value(h);
+        keyValue=cell2mat(keyValue);
+keyValue == 'BackSpace'
+
+ans =
+
+  1×9 <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a> array
+
+   1   1   1   1   1   1   1   1   1
+
+keypresses.value{1} = 'BackSpace';
+for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+       switch keyValue
+        case '4'
+            keypresses.value(h)={'1'};
+        case '5'
+            keypresses.value(h)={'2'};
+        case '6'
+            keypresses.value(h)={'3'};
+        case 'BackSpace'  
+            keypresses.value(h)={'4'};
+        otherwise %the subject clicked another numerical button besides the ones he was supposed to
+            keypresses.value(h)={[]};
+       end
+    end
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.665537 ms [60.004068 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.653568 ms [60.047192 Hz]. (50 valid samples taken, stddev=0.160191 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.4205e+05
+
+
+ans =
+
+   5.4207e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+{SWITCH expression must be a scalar or a character vector.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity>convertKeypresses', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 454)" style="font-weight:bold">Exp_Script_Automaticity>convertKeypresses</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',454,0)">line 454</a>)
+       switch keyValue
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 366)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',366,0)">line 366</a>)
+    keypresses = convertKeypresses(keypresses);
+} 
+PTB-INFO: Enforcing script abortion and restoring desktop by executing Screen('CloseAll') now!
+PTB-INFO: Please ignore the false error message (INTERNAL PSYCHTOOLBOX ERROR) caused by this...
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 3 times out of a total of 322 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',454,0)
+ keyValue=cell2mat(keypresses.value(1))
+
+keyValue =
+
+    '4'
+
+for h=1:length(keypresses.value)
+        keyValue=keypresses.value(h);
+       switch keyValue
+        case '4'
+            keypresses.value(h)={'1'};
+        case '5'
+            keypresses.value(h)={'2'};
+        case '6'
+            keypresses.value(h)={'3'};
+        case 'BackSpace'  
+            keypresses.value(h)={'4'};
+        otherwise %the subject clicked another numerical button besides the ones he was supposed to
+            keypresses.value(h)={[]};
+       end
+    end
+{SWITCH expression must be a scalar or a character vector.
+} 
+for h=1:length(keypresses.value)
+        keyValue=keypresses.value(h);
+       switch keyValue{:}
+        case '4'
+            keypresses.value(h)={'1'};
+        case '5'
+            keypresses.value(h)={'2'};
+        case '6'
+            keypresses.value(h)={'3'};
+        case 'BackSpace'  
+            keypresses.value(h)={'4'};
+        otherwise %the subject clicked another numerical button besides the ones he was supposed to
+            keypresses.value(h)={[]};
+       end
+    end
+{SWITCH expression must be a scalar or a character vector.
+} 
+'4'
+
+ans =
+
+    '4'
+
+keyValue=cell2mat(keypresses.value(h));
+keypresses.value(h)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {0×0 double}
+
+cell2mat(keypresses.value(h))
+
+ans =
+
+     []
+
+keypresses.value(h)
+
+ans =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {0×0 double}
+
+ans{:}
+
+ans =
+
+     []
+
+for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+        if keyValue==[]
+            continue;
+        else
+           switch keyValue
+            case '4'
+                keypresses.value(h)={'1'};
+            case '5'
+                keypresses.value(h)={'2'};
+            case '6'
+                keypresses.value(h)={'3'};
+            case 'BackSpace'  
+                keypresses.value(h)={'4'};
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                keypresses.value(h)={[]};
+           end
+        end
+    end
+{SWITCH expression must be a scalar or a character vector.
+} 
+isempty(keyValue)
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   1
+
+for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+        if isempty(keyValue)
+            continue;
+        else
+           switch keyValue
+            case '4'
+                keypresses.value(h)={'1'};
+            case '5'
+                keypresses.value(h)={'2'};
+            case '6'
+                keypresses.value(h)={'3'};
+            case 'BackSpace'  
+                keypresses.value(h)={'4'};
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                keypresses.value(h)={[]};
+           end
+        end
+    end
+keypresses.value{2} = '5';
+for h=1:length(keypresses.value)
+        keyValue=cell2mat(keypresses.value(h));
+        if isempty(keyValue)
+            continue;
+        else
+           switch keyValue
+            case '4'
+                keypresses.value(h)={'1'};
+            case '5'
+                keypresses.value(h)={'2'};
+            case '6'
+                keypresses.value(h)={'3'};
+            case 'BackSpace'  
+                keypresses.value(h)={'4'};
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
+                keypresses.value(h)={[]};
+           end
+        end
+    end
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.653669 ms [60.046827 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.656170 ms [60.037812 Hz]. (50 valid samples taken, stddev=0.158811 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.4258e+05
+
+
+ans =
+
+   5.4260e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+Error in function GetAudioData: 	Usage error
+Tried to resize internal buffer while recording engine is running! You must stop recording before resizing the buffer!
+
+
+PTB-INFO: There are still 1 movies open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a single movie, but a large number of open
+PTB-INFO: movies can be an indication that you forgot to dispose no longer needed movie objects
+PTB-INFO: via a proper call to Screen('CloseMovie', moviePtr); , e.g., at the end of each trial. These
+PTB-INFO: stale movies linger around and can consume significant memory and cpu ressources, causing
+PTB-INFO: degraded performance, timing trouble and ultimately out of memory or out of ressource
+PTB-INFO: conditions or even crashes of Matlab/Octave (in rare cases). Please check your code.
+
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 4 times out of a total of 324 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('PsychPortAudio')" style="font-weight:bold">PsychPortAudio</a>
+Usage:
+
+[audiodata absrecposition overflow cstarttime] = PsychPortAudio('GetAudioData', pahandle [, amountToAllocateSecs][,
+minimumAmountToReturnSecs][, maximumAmountToReturnSecs][, singleType=0]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Exp_Script_Automaticity', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m', 297)" style="font-weight:bold">Exp_Script_Automaticity</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',297,0)">line 297</a>)
+    PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\Exp_Script_Automaticity.m',297,0)
+Exp_Script_Automaticity
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+04
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-04 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.655816 ms [60.039087 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.656970 ms [60.034928 Hz]. (50 valid samples taken, stddev=0.155375 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   5.4288e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+
+ans =
+
+   5.4290e+05
+
+
+ans =
+
+   5.4292e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 1 to keep playback in sync.
+%%%%%%% Automatic Sequence Dual Task %%%%%%% 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -49353.173655 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average 0.099988 seconds 
+Seq correct 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 73 times out of a total of 636 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+latencyCheck
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 9)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',9,0)">line 9</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+latencyCheck
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 9)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',9,0)">line 9</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 17)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',17,0)">line 17</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+WASAPI
+{Unrecognized function or variable 'WASAPI'.
+} 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 17)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',17,0)">line 17</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 9)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',9,0)">line 9</a>)
+] 
+TestPrecision
+{Error: <a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',5,1)">File: TestPrecision.m Line: 5 Column: 1</a>
+Invalid text character. Check for unsupported symbol, invisible character, or pasting of non-ASCII characters.
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',5,1)
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',5,1)
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',5,1)
+TestPrecision
+{Error: <a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',4,1)">File: TestPrecision.m Line: 4 Column: 1</a>
+Invalid text character. Check for unsupported symbol, invisible character, or pasting of non-ASCII characters.
+} 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 8)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',8,0)">line 8</a>)
+] 
+{Matrix dimensions must agree.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 32)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)">line 32</a>)
+difference = (locs - locs2)/fs;
+} 

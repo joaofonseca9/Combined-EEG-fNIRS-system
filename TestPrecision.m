@@ -1,7 +1,6 @@
 clc; close all; clear all;
 
 load("cueRecording.mat");
-
 fs = 48000;
 % fs = 4*2^13;
 
@@ -14,7 +13,7 @@ t = (0:length(audio)-1)./fs;
 cueonset = 0.022*fs;
 % cueonset = 1;
 cues = zeros(size(t));
-cues(:,cueonset:(fs)/1.25:end) = 1;
+cues(:,cueonset:(fs)/0.75:end) = 1;
 
 figure
 plot(t,audio)
@@ -30,14 +29,14 @@ plot(t,audio)
 % pks(end) = []; locs(end) = [];
 pks2(1) = []; locs2(1) = [];
 
-% difference = (locs - locs2)/fs;
-% distance = diff(locs/fs);
-% 
-% mudif = mean(difference)
-% mudis = mean(distance)
-% 
-% sigdif = std(difference)
-% sigdis = std(distance)
+difference = (locs - locs2)/fs;
+distance = diff(locs/fs);
+
+mudif = mean(difference)
+mudis = mean(distance)
+
+sigdif = std(difference)
+sigdis = std(distance)
 
 figure
 hold on

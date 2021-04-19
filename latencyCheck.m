@@ -1,48 +1,41 @@
 %% PLOTTING RECORDED CUES AND CHECKING LATENCY
-
+clear
 %Get sound data
-load('cueRecJoao.mat');
-load('startmoment.mat');
+load('cueRecording.mat');
 
-load('stoprecord.mat');
+fs=48000;
+onset = (startmoment-startrecord)*fs;
+audio=audio1;
+audio = audio(1,onset:end);
+audio = -audio;
 
-load('startrecord.mat');
-
-file=file.Cue1_25Hz;
-fs=file.fs;
-
-sound=file.wavedata;
-sound = sound(1,onset:end);
-sound = -sound;
-
-time=(0:length(sound)-1)./fs;
+time=(0:length(audio)-1)./fs;
 
 %Generate cue signal
 freq=1.25;
-cues=zeros(size(sound));
-cues(round((startmoment-startrecord)*fs):2*round(fs*1/freq):end) = max(max(sound))/2;
+cues=zeros(size(audio));
+cues(round((startmoment-startrecord)*fs):round(fs*1/freq):end) = max(max(audio))/2;
 
-theoreticalcuestart=zeros(size(sound));
-theoreticalcuestart(round((startmoment-startrecord)*fs))=max(max(sound))/2;
+theoreticalcuestart=zeros(size(audio));
+theoreticalcuestart(round((startmoment-startrecord)*fs))=max(max(audio))/2;
 
-recordstart=zeros(size(sound));
-recordstart(1)=max(max(sound))/2;
+recordstart=zeros(size(audio));
+recordstart(1)=max(max(audio))/2;
 
-recordstop=zeros(size(sound));
-recordstop(round((stoprecord-startrecord)*fs))=max(max(sound))/2;
+recordstop=zeros(size(audio));
+recordstop(round((stoprecord-startrecord)*fs))=max(max(audio))/2;
 
-stop=round((stoprecord-startrecord)*fs);
 %Plotting
 
-a=plot(time(1:stop), sound(1:stop),'b');
+a=plot(time, audio,'b');
 hold on
-b=plot(time(1:stop), cues(1:stop),'r');
+b=plot(time, cues,'r');
 hold on
 
-c=plot(time(1:stop),theoreticalcuestart(1:stop),'g');
+c=plot(time(1:stoprecord),theoreticalcuestart(1:stoprecord),'g');
 hold on
-d=plot(time(1:stop),recordstart(1:stop),'c');
+d=plot(time(1:stoprecord),recordstart(1:stoprecord),'c');
 hold on
-e=plot(time(1:stop),recordstop(1:stop),'y');
+e=plot(time(1:stoprecord),recordstop(1:stoprecord),'y');
 legend([a(1), b(1),c(1),d(1),e(1)], 'Sound Recording', 'Theoretical cues','Theoretical cues Start', 'Start Record', 'Stop Record')
 hold off
