@@ -13,15 +13,15 @@ N=N_trials*2;
 %Create N letter presentations
 for ii=1:N
     filename=['LetterPresentation_', num2str(ii,'%d'),'.mov'];
-    [letters,isLetterFrame]=letterPresentation (filepath,filename);
+    [letters,letter_timestamps]=letterPresentation (filepath,filename);
     
     % Save letter order
     str=['LetterPresentation_', num2str(ii,'%d')];
     save(str,'letters');
-    str=['LetterPresentation_isLetterFrame_', num2str(ii,'%d')];
-    save(str,'isLetterFrame');
+    str=['LetterPresentation_TimeStamps_', num2str(ii,'%d')];
+    save(str,'letter_timestamps');
 end
-function [letters,isLetterFrame]=letterPresentation (filepath,filename)
+function [letters,frame_cross]=letterPresentation (filepath,filename)
 cd(filepath);
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
@@ -121,9 +121,9 @@ sca;
 isLetterFrame=zeros(1,sum(frame_letter)+sum(frame_cross));
 tmp=1;
 for k=1:length(frame_letter)
-    isLetterFrame(tmp)=1; %mark only the first frame of the letter to 1
-    isLetterFrame(tmp+frame_letter(k):tmp+frame_letter(k)+frame_cross(k)-1)=0;
-    tmp=tmp+frame_letter(k)+frame_cross(k);
+    isLetterFrame(tmp:tmp+frame_letter(k)-1)=1;
+    isLetterFrame(frame_letter(k)+1:frame_letter(k)+frame_cross(k))=0;
+    tmp=frame_letter(k)+frame_cross(k)-1;
 end
 
 end

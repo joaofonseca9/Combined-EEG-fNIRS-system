@@ -1,4 +1,4 @@
-function keypresses=playMovie(movie, win, outlet, marker, isLetterFrame)
+function keypresses=playMovie(movie, win, outlet, marker)
 % Most simplistic demo on how to play a movie.
 %
 % SimpleMovieDemo(moviename [, windowrect=[]]);
@@ -17,15 +17,13 @@ function keypresses=playMovie(movie, win, outlet, marker, isLetterFrame)
 % 02/05/2009  Created. (MK)
 % 06/17/2013  Cleaned up. (MK)
 Marker_StartMovie = 1798;
-Marker_StopMovie = 1799;
-Marker_Letter = 1797;
-
+Marker_EndMovie = 1799;
 %preallocate table with key presses
 keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
 m=1; %first key press
 KbQueueFlush; % clear all previous key presses from the list
 keyReleased=1;
-n=1;
+reg=1;
 try
     % Start playback engine:
     Screen('PlayMovie', movie, 1);
@@ -33,11 +31,8 @@ try
     % Playback loop: Runs until end of movie or keypress:
     while 1==1
         % Wait for next movie frame, retrieve texture handle to it
-        [tex] = Screen('GetMovieImage', win, movie);
-        if(isLetterFrame(n)==1)
-            outlet.push_sample(Marker_Letter);
-        end
-        n=n+1;
+        [tex, timeindex] = Screen('GetMovieImage', win, movie);
+        
         
         % Valid texture returned? A negative value means end of movie reached:
         if tex<=0

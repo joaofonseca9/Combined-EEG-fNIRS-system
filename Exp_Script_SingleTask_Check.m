@@ -278,7 +278,7 @@ events_handauto(1).sequence_label='Automatic';
 events_handauto(2).sequence_label='Non-automatic';
 
 %Instruction experiment
-Screen('TextSize',window,25);
+Screen('TextSize',window,36);
 DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n \n Note that for the non-automatic tasks you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
@@ -287,7 +287,7 @@ KbStrokeWait; %wait for response to terminate instructions
 for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order of the tasks
     if sequence_idx==2
         %% Practice new sequence
-        Screen('TextSize', window, 25);
+        Screen('TextSize', window, 36);
         DrawFormattedText(window, 'You will now perform the non-automatic finger tapping task. \n \n For the next 5 minutes you can practice a new sequence for the finger tapping task, \n the same way you practiced at home. \n After that we will start with the finger tapping task. \n Press any key to see the new sequence and start practicing.', 'center', 'center', white);
         vbl= Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -299,7 +299,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         %PsychPortAudio('Start', h_Metronome300, 1, [], []); %Play metronome sound file (5 minutes)
         WaitSecs(3);
 
-        Screen('TextSize', window, 25);
+        Screen('TextSize', window, 36);
         DrawFormattedText(window, 'The time to practice the new sequence is over. \n Press any key to continue to the finger tapping experiment.', 'center', 'center', white);
         vbl= Screen('Flip', window);
         WaitSecs(5)
@@ -402,14 +402,14 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             events_nonautosingle.trial(j).responses=keypresses;
         end
         
-        %% AUTOMATICITY for the Non-automatic sequence (dual-tasking)
+        %% AUTOMATICITY TEST for the Non-automatic sequence (dual-tasking)
         %Instruction automaticity test
-        Screen('TextSize',window,25);
+        Screen('TextSize',window,36);
         DrawFormattedText(window,sprintf('You will now start an automaticity test for this new sequence, in a dual task situation,\n  like you did for the sequence you learned at home. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
-        Screen('TextSize',window,25);
+        Screen('TextSize',window,36);
         DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -417,8 +417,10 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         for t=1:N_trials
             %Presentation of the letters on the screen (dual task). -> is random.
             %Participant has to count the times that G was presented.
-            %Get letter list
+            
+            %Get letter list and letter frame stamps
             load(fullfile(videodir,['LetterPresentation_',num2str(N_trials+t,'%d'),'.mat']));
+            load(fullfile(videodir,['LetterPresentation_isLetterFrame_',num2str(N_trials+t,'%d'),'.mat']));
             value=letters;
 
             %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
@@ -477,12 +479,13 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             Screen('Flip', window);
             WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
             %% Ask how many G's were presented
-            Screen('TextSize',window,30);
+            Screen('TextSize',window,36);
             DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
             vbl = Screen('Flip', window);
             [secs, keyCode, deltaSecs]=KbWait;
             % Save the response and the key presses
             response={KbName(find(keyCode))}; 
+            
             % Get the numeric value of the response (clicking '2' leads to '2@')
             try
                 response=regexp(response,'\d*','Match');
@@ -492,16 +495,12 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 %an empty cell
                 response={[]};
             end
-            %Get the numeric value of the responses to keypressing as well
-            for h=1:length(keypresses.value)
-                try
-                    keyValue=regexp(keypresses.value(h),'\d*','Match'); 
-                    keypresses.value(h)=keyValue{:};
-                catch %if regexp returns an error, the keypress does not have a numeric value
-                    keypresses.value(h)={[]};
-                end
-            end
-            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response);
+            
+            %Convert fingertapping responses to numerical values
+%     keypresses = convertKeypresses(keypresses);
+            keypresses=convertKeypresses_DEV(keypresses);
+            letter_video={fullfile(videodir,['LetterPresentation_',num2str(t,'%d'),'.mov'])};
+            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, letter_video);
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
             vbl = Screen('Flip', window);
@@ -617,8 +616,12 @@ for h = 1:N_trials
     fprintf('Trial %d: \n', h)
     %Show if the answers for the number of G's presented were correct
     numberOfG=strfind(events_nonautodual.trial(h).stimuli.value, 'G');
-    if str2num(events_nonautodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
-        fprintf('G correct \n')
+     if ~isempty(events_autodual.trial(h).stimuli.response{1})
+        if str2num(events_autodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
     else
         fprintf('G incorrect \n')
     end
@@ -673,7 +676,7 @@ for h = 1:N_trials
 end
 
 %% End of the automatic/non-automatic single task
-Screen('TextSize',window,30);
+Screen('TextSize',window,36);
 DrawFormattedText(window,'This is the end of the fingertapping tasks. \n \n We will now move on to the checkerboard task. \n\n Press any key to continue', 'center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait;

@@ -41,7 +41,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=5; % number of trials per block
+N_trials=1; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -229,8 +229,7 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %% VIDEO PREPARATION
 videodir=fullfile(root_dir,'LetterPresentation');
 
-% playMovie([],window);
-% moviePtr=zeros(1,N_trials);
+
 for ii=1:N_trials
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=fullfile(videodir, videofilename);
@@ -244,6 +243,8 @@ end
 %Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
 
+%In case of a restart, if we want to reload the previous randomization:
+% load('events_autodual.mat');
 %% Save the randomizations
 
 str=['events_autodual_',sub,'_',rec];
@@ -295,7 +296,9 @@ KbStrokeWait; %wait for response to terminate instructions
 %% START TEST FOR AUTOMATICITY
 % Start loop for the trials
 for j=1:N_trials
-    
+    %Get letter video and letter frame stamps
+    letter_video={fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mov'])};
+    load(fullfile(videodir,['LetterPresentation_isLetterFrame_',num2str(j,'%d'),'.mat']));
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
     %sound
     Screen('TextSize', window, 36);
@@ -330,7 +333,7 @@ for j=1:N_trials
     %tapping test + recording of the key presses
     outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
     onset=GetSecs;
-    keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress);
+    keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress, isLetterFrame);
         
     %Push end of trial Marker
     outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual);
@@ -377,9 +380,9 @@ for j=1:N_trials
     
     %Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
-    keypresses=convertKeypresses_DEV(keypresses)
+    keypresses=convertKeypresses_DEV(keypresses);
     
-    events_autodual.trial(j).stimuli=table(onset,duration, value, response);
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response, letter_video);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
@@ -422,7 +425,7 @@ end
 
 
 %% End of automaticity test is reached 
-Screen('TextSize',window,25);
+Screen('TextSize',window,36);
 DrawFormattedText(window,'You have completed the automaticity test. \n We will continue with the rest of the experiment. \n Press any key to end this session.','center', 'center', white);
 vbl = Screen('Flip', window);
 %Press key to end the session and return to the 'normal' screen.
@@ -434,7 +437,7 @@ str=['events_autodual_',sub,'_',rec];
 save(str,'events_autodual');
 
 
-save('cueRecording_Automaticity.mat','startmoment','startTime','startrecord','stoprecord','audio1');
+% save('cueRecording_Automaticity.mat','startmoment','startTime','startrecord','stoprecord','audio1');
 %% HELPER FUNCTIONS
 function events=randCuedTrials(n)
     %Generate a vector where half is 0's and half is 1's
