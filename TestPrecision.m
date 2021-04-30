@@ -1,6 +1,6 @@
 clc; close all; clear all;
 
-load("cueRecording.mat");
+load("cueRecording_Automaticity.mat");
 fs = 48000;
 % fs = 4*2^13;
 
@@ -13,7 +13,7 @@ t = (0:length(audio)-1)./fs;
 cueonset = 0.022*fs;
 % cueonset = 1;
 cues = zeros(size(t));
-cues(:,cueonset:(fs)/0.75:end) = 1;
+cues(:,cueonset:(fs)/1.25:end) = 1;
 
 figure
 plot(t,audio)
@@ -27,7 +27,7 @@ plot(t,audio)
 [pks2,locs2] = findpeaks(cues);
 
 % pks(end) = []; locs(end) = [];
-pks2(1) = []; locs2(1) = [];
+% pks2(1) = []; locs2(1) = [];
 
 difference = (locs - locs2)/fs;
 distance = diff(locs/fs);

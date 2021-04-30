@@ -1,7 +1,13 @@
-- GENERATE NEW SEQUENCES
+- GENERATE NEW SEQUENCES (replace on both scripts)
 - GENERATE NEW LETTER PRESENTATIONS
 - SKYPSYNCTESTS TO 0
 - COMMENT RECORDING PART
 - CHANGE CONVERTKEYPRESSES FROM CONVERTKEYPRESSES _DEV TO CONVERTKEYPRESSES 
+- CHANGE TRAINING TIME OF NON AUTOMATIC TO 5 MINUTES
+- CHANGE N_TRIALS
+
+In case of a restart, if we want to keep the previous cued/uncued order, go to Pseudorandomization sectio, comment the 
+randCuedTrials function call and uncomment the load(events_autodual)
+In the single task file, do the same and also load ordersub...
 
  

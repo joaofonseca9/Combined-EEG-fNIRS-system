@@ -25,8 +25,11 @@ Screen('Preference', 'SkipSyncTests', 1);
 %randomized between participants)
 
 %Sequences used in order to be able to print in the command window if
-%to generate a new sequence use randi([1 4], 1, 12)
-sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+%to generate a new sequence use:
+%newseq1=randi([1 4], 1, 12)
+%newseq2=randi([1 4], 1, 12)
+%sequencesprint={ num2str(reshape(newseq1', 1, [])), num2str(reshape(newseq2', 1, []))
+sequencesprint = {('4  4  1  4  3  1  2  3  4  4  1  4'),('4  2  4  1  2  4  4  4  3  1  4  4')};
 
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
@@ -38,7 +41,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % number of trials per block
+N_trials=5; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -180,8 +183,8 @@ PsychPortAudio('FillBuffer', h_Metronome300, WAVMetronome300.wave);
 PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 
 
-% Set Handle For Audio Capture (delay check)
-CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, 4*Cue1_25Hz.fs, Cue1_25Hz.nrChan);
+% % Set Handle For Audio Capture (delay check)
+% CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 %AudioFile
 file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
@@ -241,6 +244,8 @@ end
 %Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
 
+%In case of a restart, if we want to reload the previous randomization:
+% load('events_autodual.mat');
 %% Save the randomizations
 
 str=['events_autodual_',sub,'_',rec];
@@ -249,38 +254,48 @@ save(str,'events_autodual');
 %% WELCOME SCREEN
 %Instruction automaticity test
 Screen('TextSize',window,45);
-DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating!','center', 'center', white);
+DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating! \n \n Press any key to continue','center', 'center', white);
 vbl = Screen('Flip', window);
-WaitSecs(10);
+KbStrokeWait;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Demonstrate how cueing works
+%% Instruction automaticity test
+
+%Page 1
 Screen('TextSize',window,25);
-DrawFormattedText(window,'While you perform the tasks, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing.','center', 'center', white);
+DrawFormattedText(window,sprintf('You will start with the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned at home. \n\n After the actual experiment, you will also be tested on the sequence you learned today. \n\n For each, you will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
+vbl = Screen('Flip', window);
+KbStrokeWait; %wait for response to terminate instructions
+
+
+%Page 2
+Screen('TextSize',window,25);
+DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n \n Press any key for the next instructions.'),'center','center', white);
+vbl = Screen('Flip', window);
+KbStrokeWait; %wait for response to terminate instructions
+
+%Page 3
+Screen('TextSize',window,25);
+DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). Press any key to continue.'),'center','center', white);
+vbl = Screen('Flip', window);
+KbStrokeWait; %wait for response to terminate instructions
+
+%Page 4 - Demonstrate how cueing works
+Screen('TextSize',window,25);
+DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
 vbl = Screen('Flip', window);
 PsychPortAudio('Start', file(2), 1, [], []);
-WaitSecs(5);
+WaitSecs(8);
 PsychPortAudio('Stop', file(2));
 
-%% START TEST FOR AUTOMATICITY
-%Instruction automaticity test
-Screen('TextSize',window,25);
-DrawFormattedText(window,sprintf('You will now start with the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned at home. \n\n After the actual experiment, you will also be tested on the sequence you learned today. \n\n For each, you will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
-vbl = Screen('Flip', window);
-KbStrokeWait; %wait for response to terminate instructions
-
-Screen('TextSize',window,25);
-DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
-vbl = Screen('Flip', window);
-KbStrokeWait; %wait for response to terminate instructions
-
-
-%Show sequence
+%Page 5 - Show sequence
 Screen('TextSize',window,25);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
-%% Start loop for the trials
+
+%% START TEST FOR AUTOMATICITY
+% Start loop for the trials
 for j=1:N_trials
     
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
@@ -299,14 +314,14 @@ for j=1:N_trials
         PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
     else %
         %Start the Cue
-        PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
-        startrecord=GetSecs;
-        PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
-        WaitSecs(1)
+%         PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
+%         startrecord=GetSecs;
+%         PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
+%         WaitSecs(1)
         
         outlet.push_sample(Marker_StartBlock_Cue);
-        startmoment = GetSecs;
-        PsychPortAudio('Start', file(2), 1, [], []);
+%         startmoment = GetSecs;
+        startTime=PsychPortAudio('Start', file(2), 1, [], []);
     end
     
     WaitSecs(t1+randi(t2)) %time that the white cross is shown
@@ -321,11 +336,12 @@ for j=1:N_trials
         
     %Push end of trial Marker
     outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual);
+    Screen('CloseMovie', moviePtr.id(j))
     
     %Stop cueing
     if (cued==1)
-        audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
-        stoprecord = GetSecs;
+%         audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
+%         stoprecord = GetSecs;
         PsychPortAudio('Stop', file(2));
         outlet.push_sample(Marker_EndBlock_Cue);
     end
@@ -363,8 +379,8 @@ for j=1:N_trials
     end
     
     %Convert fingertapping responses to numerical values
-    keypresses = convertKeypresses(keypresses);
-    %keypresses=convertKeypresses_DEV(keypresses)
+%     keypresses = convertKeypresses(keypresses);
+    keypresses=convertKeypresses_DEV(keypresses)
     
     events_autodual.trial(j).stimuli=table(onset,duration, value, response);
     events_autodual.trial(j).responses=keypresses;
@@ -421,7 +437,7 @@ str=['events_autodual_',sub,'_',rec];
 save(str,'events_autodual');
 
 
-save('cueRecording.mat','startmoment','startrecord','stoprecord','audio1');
+% save('cueRecording_Automaticity.mat','startmoment','startTime','startrecord','stoprecord','audio1');
 %% HELPER FUNCTIONS
 function events=randCuedTrials(n)
     %Generate a vector where half is 0's and half is 1's

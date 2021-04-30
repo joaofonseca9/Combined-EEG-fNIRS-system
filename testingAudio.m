@@ -47,7 +47,7 @@ WAVMetronome600.wave = WAVMetronome600.wave';         WAVMetronome600.nrChan=2;
 WAVMetronome300.wave = WAVMetronome300.wave';         WAVMetronome300.nrChan=2;
 
 % Get Cueing Files
-Cue1_25Hz       = 'Metronome120.wav';
+Cue1_25Hz       = 'Metronome8.wav';
 [Cue1_25Hz]     = CreateWAVstruct(Cue1_25Hz);
 Cue1_25HzLength = length(Cue1_25Hz.wavedata)/Cue1_25Hz.fs;
 
@@ -81,19 +81,24 @@ PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 
 
 % Set Handle For Audio Capture (delay check)
-CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, 4*Cue1_25Hz.fs, Cue1_25Hz.nrChan);
+CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 %AudioFile
 file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
 startrecord=GetSecs;
 PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
 WaitSecs(1)
 
 startmoment = GetSecs;
-PsychPortAudio('Start', file(1), 1, [], []);
+PsychPortAudio('Start', file(2), 1, [], []);
+WaitSecs(8)
 
+PsychPortAudio('Stop', file(2));
+
+audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
+stoprecord = GetSecs;
 
 
 save('cueRecording.mat','startmoment','startrecord','stoprecord','audio1');

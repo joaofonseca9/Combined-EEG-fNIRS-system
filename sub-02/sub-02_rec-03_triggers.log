@@ -40206,3 +40206,175 @@ What is the number of the recording?
  rec = rec-04 
 Is the above information correct? (y/n) 
 y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+
+
+PTB-INFO: This is Psychtoolbox-3 for Microsoft Windows, under Matlab 64-Bit (Version 3.0.17 - Build date: Feb  4 2021).
+PTB-INFO: OS support status: Windows 10 (Version 10.0) supported and tested to some limited degree.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-INFO: For information about paid priority support, community membership and commercial services, please type
+PTB-INFO: 'PsychPaidSupportAndServices'.
+
+PTB-INFO: The detected endline of the vertical blank interval is equal or lower than the startline. This indicates
+PTB-INFO: that i couldn't detect the duration of the vertical blank interval and won't be able to correct timestamps
+PTB-INFO: for it. This will introduce a very small and constant offset (typically << 1 msec). Read 'help BeampositionQueries'
+PTB-INFO: for how to correct this, should you really require that last few microseconds of precision.
+PTB-INFO: Btw. this can also mean that your systems beamposition queries are slightly broken. It may help timing precision to
+PTB-INFO: enable the beamposition workaround, as explained in 'help ConserveVRAMSettings', section 'kPsychUseBeampositionQueryWorkaround'.
+
+
+PTB-INFO: OpenGL-Renderer is NVIDIA Corporation :: GeForce 920M/PCIe/SSE2 :: 4.6.0 NVIDIA 425.31
+PTB-INFO: VBL startline = 768 , VBL Endline = 768
+PTB-INFO: Measured monitor refresh interval from beamposition = 16.654569 ms [60.043582 Hz].
+PTB-INFO: Will use beamposition query for accurate Flip time stamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.642838 ms [60.085906 Hz]. (50 valid samples taken, stddev=0.112003 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: ==============================================================================================================================
+PTB-INFO: WINDOWS DWM DESKTOP COMPOSITOR IS ACTIVE. On this Windows-10 or later system, Psychtoolbox can no longer reliably detect if
+PTB-INFO: this will cause trouble for timing and integrity of visual stimuli or not. You might be just fine, or you could be in trouble.
+PTB-INFO: Use external measurement equipment and independent procedures to verify reliability of timing if you care about proper timing.
+PTB-INFO: ==============================================================================================================================
+
+ans =
+
+   6.1002e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 0 to keep playback in sync.
+
+ans =
+
+   6.1004e+05
+
+
+ans =
+
+   6.1007e+05
+
+PTB-INFO: Movie playback had to drop 10 frames of movie 1 to keep playback in sync.
+%%%%%%% Automatic Sequence Dual Task %%%%%%% 
+Trial 1: 
+G incorrect 
+the tempo was off with on average -0.666667 seconds 
+Seq incorrect 
+Trial 2: 
+G incorrect 
+the tempo was off with on average -0.666667 seconds 
+Seq incorrect 
+
+
+INFO: PTB's Screen('Flip', 10) command seems to have missed the requested stimulus presentation deadline
+INFO: a total of 29 times out of a total of 636 flips during this session.
+
+INFO: This number is fairly accurate (and indicative of real timing problems in your own code or your system)
+INFO: if you provided requested stimulus onset times with the 'when' argument of Screen('Flip', window [, when]);
+INFO: If you called Screen('Flip', window); without the 'when' argument, this count is more of a ''mild'' indicator
+INFO: of timing behaviour than a hard reliable measurement. Large numbers may indicate problems and should at least
+INFO: deserve your closer attention. Cfe. 'help SyncTrouble', the FAQ section at www.psychtoolbox.org and the
+INFO: examples in the PDF presentation in PsychDocumentation/Psychtoolbox3-Slides.pdf for more info and timing tips.
+
+
+
+WARNING: This session of your experiment was run by you with the setting Screen('Preference', 'SkipSyncTests', 1).
+WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
+WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
+WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+latencyCheck
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 9)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',9,0)">line 9</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 35)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',35,0)">line 35</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 37)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',37,0)">line 37</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 39)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',39,0)">line 39</a>)
+] 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 8)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',8,0)">line 8</a>)
+] 
+{Matrix dimensions must agree.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 32)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)">line 32</a>)
+difference = (locs - locs2)/fs;
+} 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 8)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',8,0)">line 8</a>)
+] 
+{Matrix dimensions must agree.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 32)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)">line 32</a>)
+difference = (locs - locs2)/fs;
+} 
+TestPrecision
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 8)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',8,0)">line 8</a>)
+] 
+{Matrix dimensions must agree.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 32)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)">line 32</a>)
+difference = (locs - locs2)/fs;
+} 
+latencyCheck
+[Warning: Integer operands are required for colon operator when used as index.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 9)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',9,0)">line 9</a>)
+] 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('plot')" style="font-weight:bold">plot</a>
+Vectors must be the same length.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('latencyCheck', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m', 30)" style="font-weight:bold">latencyCheck</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\latencyCheck.m',30,0)">line 30</a>)
+a=plot(time, audio,'b');
+} 
+testingAudio
+Select the project directory 
+What is the subject ID (2 digit number) 
+02
+What is the number of the recording? 
+03
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-02 
+ rec = rec-03 
+Is the above information correct? (y/n) 
+y
+PTB-INFO: Using modified PortAudio V19.6.0-devel, revision unknown
+Error in function Start: 	Usage error
+Sound inputbuffer not prepared/allocated for capture?!?
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('PsychPortAudio')" style="font-weight:bold">PsychPortAudio</a>
+Usage:
+
+startTime = PsychPortAudio('Start', pahandle [, repetitions=1] [, when=0] [, waitForStart=0] [, stopTime=inf] [,
+resume=0]);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('testingAudio', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\testingAudio.m', 91)" style="font-weight:bold">testingAudio</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\testingAudio.m',91,0)">line 91</a>)
+PsychPortAudio('Start',CAP_cue1_25Hz,1, [], []);
+} 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\testingAudio.m',91,0)
+testingAudio
+Select the project directory 
+What is the subject ID (2 digit number) 
+03
+What is the number of the recording? 
+01
+
+ root_dir = C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system 
+ sub = sub-03 
+ rec = rec-01 
+Is the above information correct? (y/n) 
+y

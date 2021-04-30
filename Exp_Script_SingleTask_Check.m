@@ -34,7 +34,7 @@ Screen('Preference', 'SkipSyncTests', 1);
 
 %Sequences used in order to be able to print in the command window if
 %to generate a new sequence use randi([1 4], 1, 12)
-sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+sequencesprint = {('4  4  1  4  3  1  2  3  4  4  1  4'),('4  2  4  1  2  4  4  4  3  1  4  4')};
 
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
@@ -47,8 +47,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=1; % number of trials per block
-
+N_trials=5; % number of trials per block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
@@ -236,10 +235,9 @@ videodir=fullfile(root_dir,'LetterPresentation');
 
 % playMovie([],window);
 % moviePtr=zeros(1,N_trials);
-for ii=N_trials:2*N_trials
+for ii=N_trials+1:2*N_trials
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=fullfile(videodir, videofilename);
-%     moviename = [ PsychtoolboxRoot 'PsychDemos/MovieDemos/DualDiscs.mov' ];
     [id,duration]=Screen('OpenMovie', window, moviename);
     moviePtr.id(ii)=id;
     moviePtr.duration(ii)=duration;
@@ -281,7 +279,7 @@ events_handauto(2).sequence_label='Non-automatic';
 
 %Instruction experiment
 Screen('TextSize',window,25);
-DrawFormattedText(window,'You will now start with the finger tapping task (single task). \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n Note that for the non-automatic tasks you will also perform an automaticity test (dual task) after the single task experiment. \n This is the same test as you just did for the automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
+DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n \n Note that for the non-automatic tasks you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
@@ -308,7 +306,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         KbStrokeWait; %wait for response to terminate instructions
 
         %% NON-AUTOMATICITY TASKS
-        DrawFormattedText(window, sprintf('As a reminder, the sequence you will perform is: \n %s \n\n  In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen. \n \n When the red cross appears, please start tapping the sequence. \n When ready to start: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
+        DrawFormattedText(window, sprintf('As a reminder, the sequence you will perform is: \n %s \n\n  In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound for a few seconds \n or for the entire rest period. \n Tap the sequence according to this interval sound. \n \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen. \n \n When the red cross appears, please start tapping the sequence. \n When ready to start: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
         outlet.push_sample(Marker_StartBlock_NonAutomaticSequence);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -407,7 +405,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         %% AUTOMATICITY for the Non-automatic sequence (dual-tasking)
         %Instruction automaticity test
         Screen('TextSize',window,25);
-        DrawFormattedText(window,sprintf('You will now start an automaticity test this new sequence, in a dual task situation,\n as you were for the prelearned sequence. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
+        DrawFormattedText(window,sprintf('You will now start an automaticity test for this new sequence, in a dual task situation,\n  like you did for the sequence you learned at home. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
@@ -420,7 +418,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Presentation of the letters on the screen (dual task). -> is random.
             %Participant has to count the times that G was presented.
             %Get letter list
-            load(fullfile(videodir,['LetterPresentation_',num2str(t,'%d'),'.mat']));
+            load(fullfile(videodir,['LetterPresentation_',num2str(N_trials+t,'%d'),'.mat']));
             value=letters;
 
             %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
@@ -434,7 +432,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %If it is an uncued trial, play a metronome sound for 8 seconds and use
             %the rest of the rest time for baseline. If it is cued, just start the
             %cueing and stop it at the end of the trial
-            cued=events_nonautodual.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
+            cued=events_nonautodual.trial(t).cue; %Cue=1 (true) Uncued=0 (false)
             if cued==0
                 PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
             else
@@ -450,9 +448,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %tapping test + recording of the key presses
             outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Dual);
             onset=GetSecs;
-            %2*t because if we have 20 letter presentations, the first 10
+            %N_trials+t because if we have 20 letter presentations, the first 10
             %are for the auto dual task and the second 10 are for this one
-            keypresses=playMovie(moviePtr.id(2*t),window, outlet, Marker_Keypress);
+            keypresses=playMovie(moviePtr.id(N_trials+t),window, outlet, Marker_Keypress);
             
             %Convert fingertapping responses to numerical values
             keypresses = convertKeypresses(keypresses);
@@ -492,7 +490,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             catch ME
                 %if an error is spotted, like missclick, make that response
                 %an empty cell
-                response=[];
+                response={[]};
             end
             %Get the numeric value of the responses to keypressing as well
             for h=1:length(keypresses.value)
@@ -521,7 +519,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
     
     %% AUTOMATIC TASKS
     if sequence_idx==1
-        DrawFormattedText(window, sprintf('You will now perform the sequence you learned at home for the finger tapping task: \n %s \n\n In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound, tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen.\n \n When the red cross appears, please start tapping the sequence. \n When ready: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
+        DrawFormattedText(window, sprintf('You will now perform the sequence you learned at home for the finger tapping task: \n %s \n\n In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound during the first few seconds \n or during the entire rest period. \n Tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen.\n \n When the red cross appears, please start tapping the sequence. \n When ready: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         

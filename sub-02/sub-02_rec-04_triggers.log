@@ -1943,3 +1943,4 @@ TestPrecision
 Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('TestPrecision', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m', 32)" style="font-weight:bold">TestPrecision</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)">line 32</a>)
 difference = (locs - locs2)/fs;
 } 
+opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\TestPrecision.m',32,0)

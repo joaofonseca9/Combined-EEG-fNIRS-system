@@ -4,7 +4,7 @@
 %number
 
 %Number of trials per block
-N_trials=2;
+N_trials=5;
 %Number of letter counting trials = 2 * N_trials (2 blocks of dual tasking)
 N=N_trials*2; 
 filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system\LetterPresentation';
