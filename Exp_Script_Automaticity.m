@@ -6,16 +6,15 @@
 %% Settings:
 
 % Clear the workspace and the screen
-%sca; close all; clear all; clc
-
-
-%Before starting the automaticity test, clear the workspace.
-clear all
+clear all;
 
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
 
-
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -41,18 +40,13 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=1; % number of trials per block
+N_trials=2; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
 
 % Create and load the lab streaming layer library
-
-
-addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 lib = lsl_loadlib(); version = lsl_library_version(lib);
 lib = lsl_loadlib();
 
@@ -64,38 +58,53 @@ lib = lsl_loadlib();
 % > fs = samplking rate (Hz) as advertized by data source
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
-info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
+info    = lsl_streaminfo(lib, 'MJC_Automaticity', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
 
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
 
+%% ASK TO START LABRECORDER
+done=0;
+while (done==0)
+    correct=input('Please start up LabRecorder. After that, press Y to continue. \n', 's');
+    if strcmpi(correct, 'y')
+        done=1;
+    end
+end
 %% MARKER SETUP
 % Block related
-% instructions = 'instructions'; %NEVER USED (?)
-% finger_test='finger_test';
 
 Marker_StartBlock_Cue       = 1700;         
 Marker_EndBlock_Cue         = 1701;
 
-Marker_Keypress = 1799;
+Marker_Keypress = 1777;
     
-Marker_StartBlock_AutomaticSequence     = 1702;
-Marker_StartBlock_NonAutomaticSequence  = 1703;
+Marker_StartBlock_AutomaticSequence_Cued            = 1702;
+Marker_StartBlock_AutomaticSequence_Uncued          = 1703;
+Marker_StartBlock_NonAutomaticSequence_Cued         = 1704;
+Marker_StartBlock_NonAutomaticSequence_Uncued       = 1705;
 
-Marker_StartBlock_AutomaticSequence_Dual     = 1704;
-Marker_StartBlock_NonAutomaticSequence_Dual  = 1705;
+Marker_StartBlock_AutomaticSequence_Dual_Cued       = 1706;
+Marker_StartBlock_AutomaticSequence_Dual_Uncued     = 1707;
+Marker_StartBlock_NonAutomaticSequence_Dual_Cued    = 1708;
+Marker_StartBlock_NonAutomaticSequence_Dual_Uncued  = 1709;
 
-Marker_EndBlock_AutomaticSequence       = 1712;
-Marker_EndBlock_NonAutomaticSequence       = 1713;
+Marker_EndBlock_AutomaticSequence_Cued              = 1710;
+Marker_EndBlock_AutomaticSequence_Uncued            = 1711;
+Marker_EndBlock_NonAutomaticSequence_Cued           = 1712;
+Marker_EndBlock_NonAutomaticSequence_Uncued         = 1713;
 
-Marker_EndBlock_AutomaticSequence_Dual      = 1714;
-Marker_EndBlock_NonAutomaticSequence_Dual      = 1715;
+Marker_EndBlock_AutomaticSequence_Dual_Cued         = 1715;
+Marker_EndBlock_AutomaticSequence_Dual_Uncued       = 1716;
+Marker_EndBlock_NonAutomaticSequence_Dual_Cued      = 1717;
+Marker_EndBlock_NonAutomaticSequence_Dual_Uncued    = 1718;
 
 Marker_CHECK = 1255;        % checkerboard flip
 Marker_start = 1555;        % start signal 
 Marker_stop = 1500;         % stop signal 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Open Pshychtoolbox.
+%% Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); %Links the key presses to the key board names
 KbQueueCreate;
@@ -314,7 +323,12 @@ for j=1:N_trials
     %cueing and stop it at the end of the trial
     cued=events_autodual.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
     if cued==0 %uncued trial
+        outlet.push_sample(Marker_StartBlock_Cue);
         PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
+        WaitSecs(8);
+        outlet.push_sample(Marker_EndBlock_Cue);
+        WaitSecs(t1-8+randi(t2)) %time that the white cross is shown
+        outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual_Uncued);
     else %
         %Start the Cue
 %         PsychPortAudio('GetAudioData',CAP_cue1_25Hz,120,[],[],[]);
@@ -325,40 +339,41 @@ for j=1:N_trials
         outlet.push_sample(Marker_StartBlock_Cue);
 %         startmoment = GetSecs;
         startTime=PsychPortAudio('Start', file(2), 1, [], []);
+        WaitSecs(t1+randi(t2)) %time that the white cross is shown
+        outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual_Cued);
     end
     
-    WaitSecs(t1+randi(t2)) %time that the white cross is shown
+    
 
     
     %% START VIDEO PRESENTATION
     %Presentation of random letters on the screen during the finger
     %tapping test + recording of the key presses
-    outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
     onset=GetSecs;
     keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress, isLetterFrame);
-        
-    %Push end of trial Marker
-    outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual);
-    
-    %Stop cueing
+
+    %% Stop cueing & push end trial markers
     if (cued==1)
 %         audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
 %         stoprecord = GetSecs;
         PsychPortAudio('Stop', file(2));
         outlet.push_sample(Marker_EndBlock_Cue);
+        outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Cued);
+    else
+        outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Uncued);
     end
     
-    %Present white fixation cross for some seconds to show that
+    %% Present white fixation cross for some seconds to show that
     %trial is over
     duration=GetSecs-onset;
     Screen('TextSize', window, 36);
     Screen('DrawLines', window, allCoords,...
         lineWidthPix, white, [xCenter yCenter], 2);
     Screen('Flip', window);
-    WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
+    WaitSecs((8-5).*rand(1) + 5); % 5 seconds, so the nirs signal has time to go back to baseline
 
     
-    %Ask how many G's were presented
+    %% Ask how many G's were presented
     Screen('TextSize',window,30);
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
     vbl = Screen('Flip', window);
@@ -376,11 +391,10 @@ for j=1:N_trials
         response={[]};
     end
     
-    %Convert fingertapping responses to numerical values
+    %% Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
     keypresses=convertKeypresses_DEV(keypresses);
-    letter_video={fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mov'])};
-    events_autodual.trial(j).stimuli=table(onset,duration, value, response, letter_video);
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response, {moviename});
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);

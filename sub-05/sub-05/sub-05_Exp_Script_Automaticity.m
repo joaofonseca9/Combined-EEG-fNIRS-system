@@ -41,7 +41,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=5; % number of trials per block
+N_trials=1; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -64,7 +64,7 @@ lib = lsl_loadlib();
 % > fs = samplking rate (Hz) as advertized by data source
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
-info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
+info    = lsl_streaminfo(lib, 'MJC_Automaticity', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
 
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
@@ -229,8 +229,7 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %% VIDEO PREPARATION
 videodir=fullfile(root_dir,'LetterPresentation');
 
-% playMovie([],window);
-% moviePtr=zeros(1,N_trials);
+
 for ii=1:N_trials
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=fullfile(videodir, videofilename);
@@ -297,6 +296,10 @@ KbStrokeWait; %wait for response to terminate instructions
 %% START TEST FOR AUTOMATICITY
 % Start loop for the trials
 for j=1:N_trials
+    %Get letter list and letter frame stamp
+    load(fullfile(videodir,['LetterPresentation_isLetterFrame_',num2str(j,'%d'),'.mat']));
+    load(fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mat']));
+    value=letters;
     
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
     %sound
@@ -332,7 +335,7 @@ for j=1:N_trials
     %tapping test + recording of the key presses
     outlet.push_sample(Marker_StartBlock_AutomaticSequence_Dual);
     onset=GetSecs;
-    keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress);
+    keypresses=playMovie(moviePtr.id(j),window, outlet, Marker_Keypress, isLetterFrame);
         
     %Push end of trial Marker
     outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual);
@@ -363,11 +366,7 @@ for j=1:N_trials
     
     % Save the response and the key presses
     response={KbName(find(keyCode))}; 
-    
-    %Get letter list
-    load(fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mat']));
-    value=letters;
-    
+
     
     % Get the numeric value of the response (clicking '2' leads to '2@')
     try
@@ -379,9 +378,9 @@ for j=1:N_trials
     
     %Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
-    keypresses=convertKeypresses_DEV(keypresses)
-    
-    events_autodual.trial(j).stimuli=table(onset,duration, value, response, fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mov']));
+    keypresses=convertKeypresses_DEV(keypresses);
+    letter_video={fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mov'])};
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response, letter_video);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
     vbl = Screen('Flip', window);
@@ -404,8 +403,13 @@ for h = 1:N_trials
     fprintf('Trial %d: \n', h)
     %Show if the answers for the number of G's presented were correct
     numberOfG=strfind(events_autodual.trial(h).stimuli.value, 'G');
-    if str2num(events_autodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
-        fprintf('G correct \n')
+    
+    if ~isempty(events_autodual.trial(h).stimuli.response{1})
+        if str2num(events_autodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
+            fprintf('G correct \n')
+        else
+            fprintf('G incorrect \n')
+        end
     else
         fprintf('G incorrect \n')
     end

@@ -26,6 +26,10 @@ clear all
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
 
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SET UP PARAMETERS
 
@@ -47,17 +51,12 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=5; % number of trials per block
+N_trials=1; % number of trials per block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
 
 % Create and load the lab streaming layer library
-
-
-addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 lib = lsl_loadlib(); version = lsl_library_version(lib);
 lib = lsl_loadlib();
 
@@ -74,43 +73,57 @@ info    = lsl_streaminfo(lib, 'Dual Task', 'Markers', 1, 0.0, 'cf_int32', 'Autom
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
 
+%% ASK TO START LABRECORDER
+done=0;
+while (done==0)
+    correct=input('Please start up LabRecorder. After that, press Y to continue. \n', 's');
+    if strcmpi(correct, 'y')
+        done=1;
+    end
+end
 %% MARKER SETUP
 % Block related
-% instructions = 'instructions'; %NEVER USED (?)
-% finger_test='finger_test';
 
 Marker_StartBlock_Cue       = 1700;         
 Marker_EndBlock_Cue         = 1701;
 
-Marker_StartBlock_AutomaticSequence     = 1702;
-Marker_StartBlock_NonAutomaticSequence  = 1703;
+Marker_Keypress = 1777;
+    
+Marker_StartBlock_AutomaticSequence_Cued            = 1702;
+Marker_StartBlock_AutomaticSequence_Uncued          = 1703;
+Marker_StartBlock_NonAutomaticSequence_Cued         = 1704;
+Marker_StartBlock_NonAutomaticSequence_Uncued       = 1705;
 
-Marker_Keypress = 1799;
+Marker_StartBlock_AutomaticSequence_Dual_Cued       = 1706;
+Marker_StartBlock_AutomaticSequence_Dual_Uncued     = 1707;
+Marker_StartBlock_NonAutomaticSequence_Dual_Cued    = 1708;
+Marker_StartBlock_NonAutomaticSequence_Dual_Uncued  = 1709;
 
-Marker_StartBlock_AutomaticSequence_Dual     = 1704;
-Marker_StartBlock_NonAutomaticSequence_Dual  = 1705;
+Marker_EndBlock_AutomaticSequence_Cued              = 1710;
+Marker_EndBlock_AutomaticSequence_Uncued            = 1711;
+Marker_EndBlock_NonAutomaticSequence_Cued           = 1712;
+Marker_EndBlock_NonAutomaticSequence_Uncued         = 1713;
 
-Marker_EndBlock_AutomaticSequence       = 1712;
-Marker_EndBlock_NonAutomaticSequence       = 1713;
-
-Marker_EndBlock_AutomaticSequence_Dual      = 1714;
-Marker_EndBlock_NonAutomaticSequence_Dual      = 1715;
+Marker_EndBlock_AutomaticSequence_Dual_Cued         = 1715;
+Marker_EndBlock_AutomaticSequence_Dual_Uncued       = 1716;
+Marker_EndBlock_NonAutomaticSequence_Dual_Cued      = 1717;
+Marker_EndBlock_NonAutomaticSequence_Dual_Uncued    = 1718;
 
 Marker_CHECK = 1255;        % checkerboard flip
 Marker_start = 1555;        % start signal 
 Marker_stop = 1500;         % stop signal 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Open Pshychtoolbox.
+%% Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); %Links the key presses to the key board names
 KbQueueCreate;
 KbQueueStart; 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SAVE FILES IN FOLDER
 
 fprintf('Select the project directory \n')
-root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Combined-EEG-fNIRS-system', 'Select the project directory');
+root_dir=uigetdir('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system', 'Select the project directory');
 addpath(root_dir);
 complete=0;
 while complete==0
@@ -121,7 +134,7 @@ while complete==0
 
     inf=fprintf('\n root_dir = %s \n sub = %s \n rec = %s \n', root_dir, sub, rec);
     correct=input('Is the above information correct? (y/n) \n', 's');
-    if strcmp(correct, 'y')
+    if strcmpi(correct, 'y')
         complete=1;
     else
         continue
@@ -232,9 +245,6 @@ lineWidthPix = 4;% Set the line width for the fixation cross
 %% VIDEO PREPARATION
 
 videodir=fullfile(root_dir,'LetterPresentation');
-
-% playMovie([],window);
-% moviePtr=zeros(1,N_trials);
 for ii=N_trials+1:2*N_trials
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=fullfile(videodir, videofilename);
@@ -242,6 +252,7 @@ for ii=N_trials+1:2*N_trials
     moviePtr.id(ii)=id;
     moviePtr.duration(ii)=duration;
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
 
@@ -271,14 +282,8 @@ save(str,'events_nonautodual');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% START OF THE EXPERIMENT
 
-%Empty structure for key presses -> use later again so it saves the key
-%presses within this structure -> save at the end
-events_handauto=struct([]); 
-events_handauto(1).sequence_label='Automatic';
-events_handauto(2).sequence_label='Non-automatic';
-
 %Instruction experiment
-Screen('TextSize',window,36);
+Screen('TextSize',window,25);
 DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n \n Note that for the non-automatic tasks you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
@@ -287,7 +292,7 @@ KbStrokeWait; %wait for response to terminate instructions
 for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order of the tasks
     if sequence_idx==2
         %% Practice new sequence
-        Screen('TextSize', window, 36);
+        Screen('TextSize', window, 25);
         DrawFormattedText(window, 'You will now perform the non-automatic finger tapping task. \n \n For the next 5 minutes you can practice a new sequence for the finger tapping task, \n the same way you practiced at home. \n After that we will start with the finger tapping task. \n Press any key to see the new sequence and start practicing.', 'center', 'center', white);
         vbl= Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -299,15 +304,13 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         %PsychPortAudio('Start', h_Metronome300, 1, [], []); %Play metronome sound file (5 minutes)
         WaitSecs(3);
 
-        Screen('TextSize', window, 36);
+        Screen('TextSize', window, 25);
         DrawFormattedText(window, 'The time to practice the new sequence is over. \n Press any key to continue to the finger tapping experiment.', 'center', 'center', white);
         vbl= Screen('Flip', window);
-        WaitSecs(5)
         KbStrokeWait; %wait for response to terminate instructions
 
         %% NON-AUTOMATICITY TASKS
         DrawFormattedText(window, sprintf('As a reminder, the sequence you will perform is: \n %s \n\n  In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound for a few seconds \n or for the entire rest period. \n Tap the sequence according to this interval sound. \n \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen. \n \n When the red cross appears, please start tapping the sequence. \n When ready to start: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
-        outlet.push_sample(Marker_StartBlock_NonAutomaticSequence);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
@@ -317,7 +320,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Rest period between each sequence 20-25 seconds
 
             % Fixation cross during rest
-            Screen('TextSize', window, 36);        
+            Screen('TextSize', window, 25);        
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window);
@@ -327,19 +330,23 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %cueing and stop it at the end of the trial
             cued=events_nonautosingle.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
             if cued==0
+                outlet.push_sample(Marker_StartBlock_Cue);
                 PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
+                WaitSecs(8);
+                outlet.push_sample(Marker_EndBlock_Cue);
+                WaitSecs(t1-8+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Uncued);
             else
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
                 outlet.push_sample(Marker_StartBlock_Cue);
+                WaitSecs(t1+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Cued);
             end
 
-            WaitSecs(t1+randi(t2)) %time that the white cross is shown
-
             %% Red fixation cross during finger tapping trial
-            outlet.push_sample(Marker_StartBlock_NonAutomaticSequence);
             onset=GetSecs;
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, [1 0 0], [xCenter yCenter], 2);
             Screen('Flip', window)
@@ -371,20 +378,22 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             end
             end
             
-            %% Stop cueing
+            %% Stop cueing & push end trial markers
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
                 outlet.push_sample(Marker_EndBlock_Cue);
+                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Cued);
+            else
+                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Uncued);
             end
 
             %% Short white fix cross after trial
-            outlet.push_sample(Marker_EndBlock_NonAutomaticSequence);
             duration=GetSecs-onset;
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window)
-            WaitSecs (5)
+            WaitSecs((8-5).*rand(1) + 5)
 
             
             %% Show sequence before new trial starts
@@ -404,12 +413,12 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         
         %% AUTOMATICITY TEST for the Non-automatic sequence (dual-tasking)
         %Instruction automaticity test
-        Screen('TextSize',window,36);
+        Screen('TextSize',window,25);
         DrawFormattedText(window,sprintf('You will now start an automaticity test for this new sequence, in a dual task situation,\n  like you did for the sequence you learned at home. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
-        Screen('TextSize',window,36);
+        Screen('TextSize',window,25);
         DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (A,G,O,L). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
@@ -426,7 +435,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
             %sound
         %     trig.beep(440, 0.2, 'rest');
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
                 lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window);
@@ -436,50 +445,57 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %cueing and stop it at the end of the trial
             cued=events_nonautodual.trial(t).cue; %Cue=1 (true) Uncued=0 (false)
             if cued==0
+                outlet.push_sample(Marker_StartBlock_Cue);
                 PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
+                WaitSecs(8);
+                outlet.push_sample(Marker_EndBlock_Cue);
+                WaitSecs(t1-8+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Dual_Uncued);
             else
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
                 outlet.push_sample(Marker_StartBlock_Cue);  
+                WaitSecs(t1+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Dual_Cued);
             end
 
-            WaitSecs(t1+randi(t2)) %time that the white cross is shown
+            
 
             %% START VIDEO PRESENTATION
             %Presentation of random letters on the screen during the finger
-            %tapping test + recording of the key presses
-            outlet.push_sample(Marker_StartBlock_NonAutomaticSequence_Dual);
+            %tapping test + recording of the key presses 
             onset=GetSecs;
             %N_trials+t because if we have 20 letter presentations, the first 10
             %are for the auto dual task and the second 10 are for this one
-            keypresses=playMovie(moviePtr.id(N_trials+t),window, outlet, Marker_Keypress);
             
-            %Convert fingertapping responses to numerical values
-            keypresses = convertKeypresses(keypresses);
-            
-            %keypresses=convertKeypresses_DEV(keypresses)
-           
-            %% Set marker of end of dual task with non auto sequence
-            
-            outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual);
-            
-            %% Stop cueing
+            keypresses=playMovie(moviePtr.id(N_trials+t),window, outlet, Marker_Keypress, isLetterFrame);
+            %% Stop cueing & Set marker of end of dual task with non auto sequence
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
                 outlet.push_sample(Marker_EndBlock_Cue);
+                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Cued);
+            else
+                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Uncued);
             end
+            
+            %% Convert fingertapping responses to numerical values
+            keypresses = convertKeypresses(keypresses);
+            
+            %keypresses=convertKeypresses_DEV(keypresses)
+
+            
 
             %% Present white fixation cross for some seconds to show that
             %trial is over
             duration=GetSecs-onset;
         %     trig.beep(440, 0.2, 'rest');
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
                 lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window);
-            WaitSecs(5); % 5 seconds, so the nirs signal has time to go back to baseline
+            WaitSecs((8-5).*rand(1) + 5); % 5-8 seconds, so the nirs signal has time to go back to baseline
             %% Ask how many G's were presented
-            Screen('TextSize',window,36);
+            Screen('TextSize',window,25);
             DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
             vbl = Screen('Flip', window);
             [secs, keyCode, deltaSecs]=KbWait;
@@ -499,8 +515,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
             keypresses=convertKeypresses_DEV(keypresses);
-            letter_video={fullfile(videodir,['LetterPresentation_',num2str(t,'%d'),'.mov'])};
-            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, letter_video);
+            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, {moviename});
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
             vbl = Screen('Flip', window);
@@ -528,7 +543,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Rest period between each sequence 20-25 seconds
 
             % Fixation cross during rest
-            Screen('TextSize', window, 36);        
+            Screen('TextSize', window, 25);        
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window);
@@ -538,19 +553,23 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %cueing and stop it at the end of the trial
             cued=events_autosingle.trial(j).cue; %Cue=1 (true) Uncued=0 (false)
             if cued==0
+                outlet.push_sample(Marker_StartBlock_Cue);
                 PsychPortAudio('Start', file(1), 1, [], []); % Play metronome sound file (8 seconds)
+                WaitSecs(8);
+                outlet.push_sample(Marker_EndBlock_Cue);
+                WaitSecs(t1-8+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_AutomaticSequence_Uncued);
             else
                 %Start the Cue
                 PsychPortAudio('Start', file(2), 1, [], []);
                 outlet.push_sample(Marker_StartBlock_Cue);
+                WaitSecs(t1+randi(t2)) %time that the white cross is shown
+                outlet.push_sample(Marker_StartBlock_AutomaticSequence_Cued);
             end
 
-            WaitSecs(t1+randi(t2)) %time that the white cross is shown
-
             %Red fixation cross during finger tapping trial
-            outlet.push_sample(Marker_StartBlock_AutomaticSequence);
             onset=GetSecs;
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, [1 0 0], [xCenter yCenter], 2);
             Screen('Flip', window)
@@ -573,21 +592,24 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             end
             end
             
-            outlet.push_sample(Marker_EndBlock_AutomaticSequence);
+            
             
             %% Stop cueing
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
                 outlet.push_sample(Marker_EndBlock_Cue);
+                outlet.push_sample(Marker_EndBlock_AutomaticSequence_Cued);
+            else
+                outlet.push_sample(Marker_EndBlock_AutomaticSequence_Uncued);
             end
 
             %% Short white fix cross after trial
             duration=GetSecs-onset;
-            Screen('TextSize', window, 36);
+            Screen('TextSize', window, 25);
             Screen('DrawLines', window, allCoords,...
             lineWidthPix, white, [xCenter yCenter], 2);
             Screen('Flip', window)
-            WaitSecs (5)
+            WaitSecs((8-5).*rand(1) + 5)
 
             
 
@@ -616,8 +638,8 @@ for h = 1:N_trials
     fprintf('Trial %d: \n', h)
     %Show if the answers for the number of G's presented were correct
     numberOfG=strfind(events_nonautodual.trial(h).stimuli.value, 'G');
-     if ~isempty(events_autodual.trial(h).stimuli.response{1})
-        if str2num(events_autodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
+     if ~isempty(events_nonautodual.trial(h).stimuli.response{1})
+        if str2num(events_nonautodual.trial(h).stimuli.response{1})==length(numberOfG{1,1})
             fprintf('G correct \n')
         else
             fprintf('G incorrect \n')
@@ -676,7 +698,7 @@ for h = 1:N_trials
 end
 
 %% End of the automatic/non-automatic single task
-Screen('TextSize',window,36);
+Screen('TextSize',window,25);
 DrawFormattedText(window,'This is the end of the fingertapping tasks. \n \n We will now move on to the checkerboard task. \n\n Press any key to continue', 'center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait;
@@ -696,7 +718,7 @@ save(str,'events_nonautodual');
 %% CHECKERBOARD TASK
 
 %% Instructions
-Screen('TextSize',window,36);
+Screen('TextSize',window,25);
 DrawFormattedText(window, 'Welcome to the checkerboard task. \n \n The only thing you need to do for this task is look at the screen \n \n A red dot will indicate where you should look. \n \n Press any key to continue.','center','center', white);
 vbl = Screen('Flip', window); 
 KbStrokeWait
@@ -827,7 +849,7 @@ end
 % > grey screen with focus dot with text: End of experiment; Press any key to EXIT'
 if flipNrCount == flipNr
 %     Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
-    Screen('TextSize',window,36); % Stop screen
+    Screen('TextSize',window,25); % Stop screen
     DrawFormattedText(window, 'End of experiment. \n \n Thank you for participating! \n\n Press any key to EXIT','center','center', white);
     vbl = Screen('Flip', window); 
     outlet.push_sample(Marker_stop); 
