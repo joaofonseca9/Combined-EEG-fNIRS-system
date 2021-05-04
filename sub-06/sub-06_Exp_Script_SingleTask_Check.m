@@ -360,7 +360,6 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             if m<13
                 [secs, keyCode, deltaSecs] = KbWait([],2);
                 if any(keyCode)
-                    outlet.push_sample(Marker_Keypress);
                     key={KbName(find(keyCode))};
                     % Get the numeric value of the response (clicking '2' leads to '2@')
                     try
@@ -587,19 +586,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             if m<13
                 [secs, keyCode, deltaSecs] = KbWait([],2);
                 if any(keyCode)
-                    outlet.push_sample(Marker_Keypress);
                     key={KbName(find(keyCode))};
-                    % Get the numeric value of the response (clicking '2' leads to '2@')
-                    try
-                        % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(key,'\d*','Match');
-                    catch ME
-                        %if an error is spotted, like missclick, make that response
-                        %an empty cell
-                        keyValue=[];
-                    end
                     keypresses.onset(m)=secs;
-                    keypresses.value(m)=keyValue{:};%store and record the presses;
+                    keypresses.value(m)=key;
                     m=m+1;
                 elseif KbName('ESCAPE')
                 elseif GetSecs-start_timer >= t3
@@ -607,6 +596,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 end
             end
             end
+            
+            
+            
             %% Stop cueing
             if (cued==1)
                 PsychPortAudio('Stop', file(2));

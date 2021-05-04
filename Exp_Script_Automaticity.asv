@@ -313,9 +313,6 @@ for j=1:N_trials
     load(fullfile(videodir,['LetterPresentation_',num2str(j,'%d'),'.mat']));
     value=letters;
     
-    %preallocate table with key presses for speed 
-    keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
-    
     %Always start with a 20-25 seconds fixation cross with 8 seconds of metronome
     %sound
     Screen('TextSize', window, 36);

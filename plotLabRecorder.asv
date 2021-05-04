@@ -1,8 +1,8 @@
 clear all; %#ok<CLALL>
-[baseName, folder] = uigetfile();
-fullFileName = fullfile(folder, baseName);
+% [baseName, folder] = uigetfile();
+% fullFileName = fullfile(folder, baseName);
 addpath('C:\Users\joaop\Downloads\xdf-Matlab-master');
-% fullFileName='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\sub-P006\ses-S001\eeg\sub-P006_ses-S001_task-Default_run-001_eeg.xdf';
+fullFileName='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\sub-P006\ses-S001\eeg\sub-P006_ses-S001_task-Default_run-001_eeg.xdf';
 data=load_xdf(fullFileName);
 time=data{1}.time_stamps;
 load('markers.mat')
@@ -34,19 +34,16 @@ end
 axis([0 max(data{1}.time_stamps)-min(data{1}.time_stamps) 0.99985 1.0001])
 
 
-%% Movie delay
-% start_movie=data{1}.time_series==1798;
-% start_auto_dual_no_cue=data{1}.time_series==1707;
-% start_auto_dual_cue=data{1}.time_series==1706;
-% 
-% start_movie=data{1}.time_stamps(start_movie);
-% start_auto_dual_no_cue=data{1}.time_stamps(start_auto_dual_no_cue);
-% start_auto_dual_cue=data{1}.time_stamps(start_auto_dual_cue);
-% 
-% first_movie_delay=start_movie(1)-start_auto_dual_no_cue
-% second_movie_delay=start_movie(2)-start_auto_dual_cue
+%Movie delay
+start_movie=data{1}.time_series==1798;
+start_auto_dual_no_cue=data{1}.time_series==1707;
+start_auto_dual_cuedata{1}.time_series==1706;
 
-%%
+start_movie=data{1}.time_stamps(start_movie);
+start_auto_dual_no_cue=data{1}.time_stamps(start_auto_dual_no_cue);
+start_auto_dual_cuedata=data{1}.time_stamps(start_auto_dual_cuedata);
+
+first_movie_delay=diff(start_auto_dustart_movie(1)
 % legend('StartBlock_Metronome = 1698' , ...
 % 'EndBlock_Metronome   = 1699' , ...
 % 'StartBlock_Cue       = 1700' , ...         

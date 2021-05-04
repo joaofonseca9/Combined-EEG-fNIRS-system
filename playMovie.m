@@ -1,4 +1,4 @@
-function keypresses=playMovie(movie, win, outlet, marker, isLetterFrame)
+function keypresses=playMovie(movie, win, outlet, marker, isLetterFrame,keypresses)
 % Most simplistic demo on how to play a movie.
 %
 % SimpleMovieDemo(moviename [, windowrect=[]]);
@@ -21,8 +21,7 @@ Marker_StartMovie = 1798;
 Marker_StopMovie = 1799;
 Marker_Letter = 1797;
 
-%preallocate table with key presses
-keypresses=table('Size', [12, 3], 'VariableNames', {'onset', 'duration', 'value'}, 'VariableTypes', {'double', 'double', 'cell'});
+
 m=1; %first key press
 KbQueueFlush; % clear all previous key presses from the list
 keyReleased=1;
