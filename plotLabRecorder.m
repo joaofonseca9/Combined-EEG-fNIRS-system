@@ -27,8 +27,8 @@ for m=markers.id
             xline(time, 'Color',colors(n,:))
         end
     end
-    text(time,y,markers.labels(n))
-    
+    h=text(time,y,markers.labels(n));
+    set(h,'Rotation',90);
     hold on
 end
 axis([0 max(data{1}.time_stamps)-min(data{1}.time_stamps) 0.99985 1.0001])

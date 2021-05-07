@@ -15,7 +15,7 @@
 
 % Clear the workspace and the screen
 %sca; close all; clear all; clc
-
+Screen('Preference', 'SkipSyncTests', 1);
 %% SELECT SETTINGS
 
 % screen laptop [cm]

@@ -6,7 +6,7 @@
 %% Settings:
 
 % Clear the workspace and the screen
-clear all;
+clear;
 
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
@@ -266,7 +266,7 @@ save(str,'events_autodual');
 %Instruction automaticity test
 Screen('TextSize',window,45);
 DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating! \n \n Press any key to continue','center', 'center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 KbStrokeWait;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -275,34 +275,34 @@ KbStrokeWait;
 %Page 1
 Screen('TextSize',window,25);
 DrawFormattedText(window,sprintf('You will start with the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned at home. \n\n After the actual experiment, you will also be tested on the sequence you learned today. \n\n For each, you will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 
 %Page 2
 Screen('TextSize',window,25);
 DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (C,G, Q, O). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n \n Press any key for the next instructions.'),'center','center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 %Page 3
 Screen('TextSize',window,25);
 DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). Press any key to continue.'),'center','center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 %Page 4 - Demonstrate how cueing works
 Screen('TextSize',window,25);
 DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
-vbl = Screen('Flip', window);
-PsychPortAudio('Start', file(2), 1, [], []);
+ Screen('Flip', window);
+delayaudioPTB=PsychPortAudio('Start', file(2), 1, [], [])
 WaitSecs(8);
 PsychPortAudio('Stop', file(2));
 
 %Page 5 - Show sequence
 Screen('TextSize',window,25);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 %% START TEST FOR AUTOMATICITY
@@ -383,7 +383,7 @@ for j=1:N_trials
     %% Ask how many G's were presented
     Screen('TextSize',window,30);
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
-    vbl = Screen('Flip', window);
+     Screen('Flip', window);
     [secs, keyCode, deltaSecs]=KbWait;
     
     % Save the response and the key presses
@@ -401,17 +401,18 @@ for j=1:N_trials
     %% Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
     keypresses=convertKeypresses_DEV(keypresses);
-    events_autodual.trial(j).stimuli=table(onset,duration, value, response, {moviename});
+    moviename={moviename};
+    events_autodual.trial(j).stimuli=table(onset,duration, value, response, moviename);
     events_autodual.trial(j).responses=keypresses;
     DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
-    vbl = Screen('Flip', window);
+     Screen('Flip', window);
     KbStrokeWait;
 
     %If it's in the last trial of the block (where we change the
     %sequence), prompt user to continue to next trial
     if j<N_trials/2
         DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
-        vbl = Screen('Flip', window);
+         Screen('Flip', window);
         KbStrokeWait;
     end
 
@@ -451,7 +452,7 @@ end
 %% End of automaticity test is reached 
 Screen('TextSize',window,36);
 DrawFormattedText(window,'You have completed the automaticity test. \n We will continue with the rest of the experiment. \n Press any key to end this session.','center', 'center', white);
-vbl = Screen('Flip', window);
+ Screen('Flip', window);
 %Press key to end the session and return to the 'normal' screen.
 KbStrokeWait;
 sca

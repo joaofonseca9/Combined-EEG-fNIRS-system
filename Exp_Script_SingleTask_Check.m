@@ -51,7 +51,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=1; % number of trials per block
+N_trials=2; % number of trials per block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
 % LSL outlet sending events
@@ -361,18 +361,8 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 [secs, keyCode, deltaSecs] = KbWait([],2);
                 if any(keyCode)
                     outlet.push_sample(Marker_Keypress);
-                    key={KbName(find(keyCode))};
-                    % Get the numeric value of the response (clicking '2' leads to '2@')
-                    try
-                        % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(key,'\d*','Match');
-                    catch ME
-                        %if an error is spotted, like missclick, make that response
-                        %an empty cell
-                        keyValue=[];
-                    end
+                    keypresses.value(m)={KbName(find(keyCode))};
                     keypresses.onset(m)=secs;
-                    keypresses.value(m)=keyValue{:};%store and record the presses;
                     m=m+1;
                 elseif KbName('ESCAPE')
                 elseif GetSecs-start_timer >= t3
@@ -410,6 +400,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
 
             % save the response and the key presses
             value={'red X'};
+            %% Convert fingertapping responses to numerical values
+    %       keypresses = convertKeypresses(keypresses);
+            keypresses=convertKeypresses_DEV(keypresses);
             events_nonautosingle.trial(j).stimuli=table(onset,duration, value);
             events_nonautosingle.trial(j).responses=keypresses;
         end
@@ -483,14 +476,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             else
                 outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Uncued);
             end
-            
-            %% Convert fingertapping responses to numerical values
-            keypresses = convertKeypresses(keypresses);
-            
-            %keypresses=convertKeypresses_DEV(keypresses)
-
-            
-
+           
             %% Present white fixation cross for some seconds to show that
             %trial is over
             duration=GetSecs-onset;
@@ -518,10 +504,11 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 response={[]};
             end
             
-            %Convert fingertapping responses to numerical values
+            %% Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
             keypresses=convertKeypresses_DEV(keypresses);
-            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, {moviename});
+            moviename={moviename};
+            events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, moviename);
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
             vbl = Screen('Flip', window);
@@ -588,18 +575,8 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 [secs, keyCode, deltaSecs] = KbWait([],2);
                 if any(keyCode)
                     outlet.push_sample(Marker_Keypress);
-                    key={KbName(find(keyCode))};
-                    % Get the numeric value of the response (clicking '2' leads to '2@')
-                    try
-                        % Get the numeric value of the response (clicking '2' leads to '2@')
-                        keyValue=regexp(key,'\d*','Match');
-                    catch ME
-                        %if an error is spotted, like missclick, make that response
-                        %an empty cell
-                        keyValue=[];
-                    end
+                    keypresses.value(m)={KbName(find(keyCode))};
                     keypresses.onset(m)=secs;
-                    keypresses.value(m)=keyValue{:};%store and record the presses;
                     m=m+1;
                 elseif KbName('ESCAPE')
                 elseif GetSecs-start_timer >= t3
@@ -635,7 +612,9 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
                 KbStrokeWait;
             end
 
-            % save the response and the key presses
+         %% Convert fingertapping responses to numerical values and save results
+        %   keypresses = convertKeypresses(keypresses);
+            keypresses=convertKeypresses_DEV(keypresses);
             value={'red X'};
             events_autosingle.trial(j).stimuli=table(onset,duration, value);
             events_autosingle.trial(j).responses=keypresses;

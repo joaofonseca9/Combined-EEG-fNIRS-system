@@ -59,16 +59,16 @@ ifi = Screen('GetFlipInterval', window);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 
 % preparations for the fixation cross so we only need to do this once
-fixCrossDimPix = 40; % Here we set the size of the arms of our fixation cross
+fixCrossDimPix = 50; % Here we set the size of the arms of our fixation cross
 xCoords = [-fixCrossDimPix fixCrossDimPix 0 0]; % Set the coordinates (these are all relative to zero we will let the drawing routine center the cross in the center of our monitor for us)
 yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
 allCoords = [xCoords; yCoords];
-lineWidthPix = 4;% Set the line width for the fixation cross
+lineWidthPix = 10;% Set the line width for the fixation cross
 
 
 %% Presentation of the letters on the screen (dual task). -> is random.
 %Participant has to count the times that G was presented.
-Letterlist='CGOQ';
+Letterlist='DGOQ';
 letter_order=randi(length(Letterlist), 1, N_letters);
 letters={Letterlist(letter_order)};
 
