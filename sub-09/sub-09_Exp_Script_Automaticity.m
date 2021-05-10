@@ -73,6 +73,7 @@ while (done==0)
 end
 %% MARKER SETUP
 % Block related
+Marker_Test= 1600;
 
 Marker_StartBlock_Metronome = 1698;
 Marker_EndBlock_Metronome   = 1699;
@@ -263,16 +264,19 @@ save(str,'events_autodual');
 %In case of a restart, if we want to reload the previous randomization:
 % load(['events_autodual_',sub,'_',rec,'.mat']);
 %% WELCOME SCREEN
+HideCursor;
 %Instruction automaticity test
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window, 'Welcome to the experiment! \n \n If you have any questions please ask now. \n \n Thank you for participating! \n \n Press any key to continue','center', 'center', white);
- Screen('Flip', window);
+Screen('Flip', window);
 KbStrokeWait;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Instruction automaticity test
 
 %Page 1
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,sprintf('You will start with the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned at home. \n\n After the actual experiment, you will also be tested on the sequence you learned today. \n\n For each, you will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
  Screen('Flip', window);
@@ -280,18 +284,21 @@ KbStrokeWait; %wait for response to terminate instructions
 
 
 %Page 2
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
-DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (C,G, Q, O). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n \n Press any key for the next instructions.'),'center','center', white);
+DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (D, G, Q, O). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n \n Press any key for the next instructions.'),'center','center', white);
  Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 %Page 3
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
-DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). Press any key to continue.'),'center','center', white);
+DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n Press any key to continue.'),'center','center', white);
  Screen('Flip', window);
 KbStrokeWait; %wait for response to terminate instructions
 
 %Page 4 - Demonstrate how cueing works
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
  Screen('Flip', window);
@@ -300,6 +307,7 @@ WaitSecs(8);
 PsychPortAudio('Stop', file(2));
 
 %Page 5 - Show sequence
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
  Screen('Flip', window);

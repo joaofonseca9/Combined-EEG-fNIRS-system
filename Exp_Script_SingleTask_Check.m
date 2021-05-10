@@ -21,11 +21,11 @@
 
 
 %Before starting the automaticity test, clear the workspace.
-clear all
+clear;
 
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
-
+HideCursor;
 root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
 addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
@@ -83,6 +83,7 @@ while (done==0)
 end
 %% MARKER SETUP
 % Block related
+Marker_Test= 1600;
 Marker_StartBlock_Metronome = 1698;
 Marker_EndBlock_Metronome   = 1699;
 
@@ -290,8 +291,9 @@ save(str,'events_nonautodual');
 % load(['order',sub,'_',rec,'.mat']);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% START OF THE EXPERIMENT
-
+HideCursor;
 %Instruction experiment
+outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the automatic tasks, performing the at home studied sequence, \n or with the non-automatic tasks, the new sequence you learned today. \n \n Note that for the non-automatic tasks you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n You can take a break in between tasks. \n This will be indicated in the on-screen instructions. \n\n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
@@ -301,12 +303,14 @@ KbStrokeWait; %wait for response to terminate instructions
 for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order of the tasks
     if sequence_idx==2
         %% Practice new sequence
+        outlet.push_sample(Marker_Test);
         Screen('TextSize', window, 30);
         DrawFormattedText(window, 'You will now perform the non-automatic finger tapping task. \n \n For the next 5 minutes you can practice a new sequence for the finger tapping task, \n the same way you practiced at home. \n After that we will start with the finger tapping task. \n Press any key to see the new sequence and start practicing.', 'center', 'center', white);
         vbl= Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
 
         %Presenting the new (non-automatic) sequence on the screen
+        outlet.push_sample(Marker_Test);
         Screen('TextSize', window, 50);
         DrawFormattedText(window, sprintf('%s', char(sequencesprint(sequence_idx))), 'center', 'center', white); % is this the same for each participant?
         vbl= Screen('Flip', window);
@@ -416,11 +420,13 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         
         %% AUTOMATICITY TEST for the Non-automatic sequence (dual-tasking)
         %Instruction automaticity test
+        outlet.push_sample(Marker_Test);
         Screen('TextSize',window,30);
         DrawFormattedText(window,sprintf('You will now start an automaticity test for this new sequence, in a dual task situation,\n  like you did for the sequence you learned at home. \n \n You will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
         
+        outlet.push_sample(Marker_Test);
         Screen('TextSize',window,30);
         DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (D, G, Q, O). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n After each time you tapped the full sequence, you should tell us how many times G was presented. \n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n\n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible except for the right hand. \n Keep your eyes open (also during the rest periods). \n\n In between the trials you will see a fixation cross for 20 seconds. \n During the first few seconds you will hear a metronome sound. \n Tap the sequence on this rhythm, which is the same as you studied at home. \n\n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n When ready: press any key.'),'center','center', white);
         vbl = Screen('Flip', window);
@@ -537,6 +543,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
     
     %% AUTOMATIC TASKS
     if sequence_idx==1
+        outlet.push_sample(Marker_Test);
         DrawFormattedText(window, sprintf('You will now perform the sequence you learned at home for the finger tapping task: \n %s \n\n In between each trial there is a rest period of 20 seconds. \n During this rest you will hear a metronome sound during the first few seconds \n or during the entire rest period. \n Tap the sequence according to this interval sound. \n Trials and rest periods are indicated with red(= trial) and white(= rest) fixation crosses showing on the screen.\n \n When the red cross appears, please start tapping the sequence. \n When ready: press any key.', char(sequencesprint(sequence_idx))),'center','center', white);
         vbl = Screen('Flip', window);
         KbStrokeWait; %wait for response to terminate instructions
