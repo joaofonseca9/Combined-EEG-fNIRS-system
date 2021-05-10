@@ -522,3 +522,14 @@ WARNING: This session of your experiment was run by you with the setting Screen(
 WARNING: This means that some internal self-tests and calibrations were skipped. Your stimulus presentation timing
 WARNING: may have been wrong. This is fine for development and debugging of your experiment, but for running the real
 WARNING: study, please make sure to set Screen('Preference', 'SkipSyncTests', 0) for maximum accuracy and reliability.
+uiopen('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Old scripts\KbQueue Scripts\Exp_Script_Automaticity.m',1)
+plotLabRecorder
+[Warning: Nominal sampling rate of stream MJC_Automaticity is 0. Calculated effective sampling rate might not be
+meaningful, relying on this rate is not recommended.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('load_xdf', 'C:\Users\joaop\Downloads\xdf-Matlab-master\load_xdf.m', 398)" style="font-weight:bold">load_xdf</a> (<a href="matlab: opentoline('C:\Users\joaop\Downloads\xdf-Matlab-master\load_xdf.m',398,0)">line 398</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('plotLabRecorder', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\plotLabRecorder.m', 6)" style="font-weight:bold">plotLabRecorder</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\plotLabRecorder.m',6,0)">line 6</a>)] 
+plotLabRecorder
+[Warning: Nominal sampling rate of stream MJC_Automaticity is 0. Calculated effective sampling rate might not be
+meaningful, relying on this rate is not recommended.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('load_xdf', 'C:\Users\joaop\Downloads\xdf-Matlab-master\load_xdf.m', 398)" style="font-weight:bold">load_xdf</a> (<a href="matlab: opentoline('C:\Users\joaop\Downloads\xdf-Matlab-master\load_xdf.m',398,0)">line 398</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('plotLabRecorder', 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\plotLabRecorder.m', 6)" style="font-weight:bold">plotLabRecorder</a> (<a href="matlab: opentoline('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\plotLabRecorder.m',6,0)">line 6</a>)] 
