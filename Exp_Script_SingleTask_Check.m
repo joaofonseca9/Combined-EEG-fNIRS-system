@@ -25,7 +25,7 @@ clear;
 
 %Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
-HideCursor;
+
 root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
 addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
@@ -68,10 +68,16 @@ lib = lsl_loadlib();
 % > fs = samplking rate (Hz) as advertized by data source
 % > channelformat = cf_float32, cf__double64, cf_string, cf_int32, cf_int16
 % > sourceid = unique identifier for source or device, if available
-info    = lsl_streaminfo(lib, 'MJC_Single', 'Markers', 1, 0.0, 'cf_int32', 'SingleTask'); 
+% info    = lsl_streaminfo(lib, 'MJC_Single', 'Markers', 1, 0.0, 'cf_int32', 'SingleTask'); 
+% 
+% % Open an outlet for the data to run through.
+% outlet = lsl_outlet(info);
+
+info    = lsl_streaminfo(lib, 'MJC_Automaticity', 'Markers', 1, 0.0, 'cf_int32', 'Automaticity_DualTask'); 
 
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
+
 
 %% ASK TO START LABRECORDER
 done=0;
@@ -157,6 +163,7 @@ script=mfilename('fullpath');
 script_name=mfilename;
 copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, script_name)))
 
+HideCursor;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LOAD METRONOME SOUNDS (PsychToolbox)
 audio_dir=fullfile(root_dir, 'metronomesounds');
@@ -248,12 +255,16 @@ lineWidthPix = 10;% Set the line width for the fixation cross
 %% VIDEO PREPARATION
 
 videodir=fullfile(root_dir,'LetterPresentation');
-for ii=N_trials+1:2*N_trials
+load('movie_id_single.mat');
+iter=1;
+for ii=movie_id_single
     videofilename=['LetterPresentation_',num2str(ii,'%d'),'.mov'];
     moviename=fullfile(videodir, videofilename);
     [id,duration]=Screen('OpenMovie', window, moviename);
-    moviePtr.id(ii)=id;
-    moviePtr.duration(ii)=duration;
+    moviePtr.id(iter)=id;
+    moviePtr.duration(iter)=duration;
+    moviePtr.moviename(iter)={moviename};
+    iter=iter+1;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -437,8 +448,8 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Participant has to count the times that G was presented.
             
             %Get letter list and letter frame stamps
-            load(fullfile(videodir,['LetterPresentation_',num2str(N_trials+t,'%d'),'.mat']));
-            load(fullfile(videodir,['LetterPresentation_isLetterFrame_',num2str(N_trials+t,'%d'),'.mat']));
+            load(fullfile(videodir,['LetterPresentation_',num2str(movie_id_single(t),'%d'),'.mat']));
+            load(fullfile(videodir,['LetterPresentation_isLetterFrame_',num2str(movie_id_single(t),'%d'),'.mat']));
             value=letters;
             
             %preallocate table with key presses for speed 
@@ -477,10 +488,8 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %Presentation of random letters on the screen during the finger
             %tapping test + recording of the key presses 
             onset=GetSecs;
-            %N_trials+t because if we have 20 letter presentations, the first 10
-            %are for the auto dual task and the second 10 are for this one
             
-            keypresses=playMovie(moviePtr.id(N_trials+t),window, outlet, Marker_Keypress, isLetterFrame, keypresses);
+            keypresses=playMovie(moviePtr.id(t),window, outlet, Marker_Keypress, isLetterFrame, keypresses);
             %% Stop cueing & Set marker of end of dual task with non auto sequence
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
@@ -524,7 +533,7 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
             %% Convert fingertapping responses to numerical values
 %     keypresses = convertKeypresses(keypresses);
             keypresses=convertKeypresses_DEV(keypresses);
-            moviename={moviename};
+            moviename=moviePtr.moviename(t);
             events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, moviename);
             events_nonautodual.trial(t).responses=keypresses;
             DrawFormattedText(window, ['Your answer: ' response{1} '\n Press any key to continue.'],'center','center', white);
