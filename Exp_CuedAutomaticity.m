@@ -40,7 +40,7 @@ t3 = 10; %Duration of a trial (tapping the sequence 1 time)
 %Amount of letters presented during test for automaticity for one trial.
 %Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % number of trials per block
+N_trials=1; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -154,12 +154,10 @@ copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, scri
 audio_dir=fullfile(root_dir, 'metronomesounds');
 addpath(audio_dir)
 [WAVMetronome8.wave,WAVMetronome8.fs]       = audioread('Metronome8.wav');
-[WAVMetronome600.wave,WAVMetronome600.fs]       = audioread('Metronome600.wav');
 [WAVMetronome300.wave,WAVMetronome300.fs]       = audioread('Metronome300.wav');
 
 % change rows<>columns
 WAVMetronome8.wave = WAVMetronome8.wave';         WAVMetronome8.nrChan=2;
-WAVMetronome600.wave = WAVMetronome600.wave';         WAVMetronome600.nrChan=2;
 WAVMetronome300.wave = WAVMetronome300.wave';         WAVMetronome300.nrChan=2;
 
 % Get Cueing Files
@@ -185,13 +183,11 @@ h_device = PsychPortAudio ('GetDevices');
 
 % Open handle
 h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
-h_Metronome600   = PsychPortAudio('Open', [], [], priority, WAVMetronome600.fs, WAVMetronome600.nrChan);
 h_Metronome300   = PsychPortAudio('Open', [], [], priority, WAVMetronome300.fs, WAVMetronome300.nrChan);
 PPA_cue1_25Hz = PsychPortAudio('Open', [], [], priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 % Fill buffer
 PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
-PsychPortAudio('FillBuffer', h_Metronome600, WAVMetronome600.wave);
 PsychPortAudio('FillBuffer', h_Metronome300, WAVMetronome300.wave);
 PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 
@@ -200,7 +196,7 @@ PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 % CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 %AudioFile
-file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
+file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
@@ -534,11 +530,11 @@ for sequence_idx=order_sequence %Either [1,2] or [2,1] -> determines the order o
         Screen('TextSize', window, 50);
         DrawFormattedText(window, sprintf('%s', char(sequencesprint(sequence_idx))), 'center', 'center', white); % is this the same for each participant?
         vbl= Screen('Flip', window);
-        PsychPortAudio('Start', file(2)); %Play metronome sound file (2 minutes)
         WaitSecs(3); %120 
-        PsychPortAudio('Stop', file(2)); %Play metronome sound file (5 minutes)
+        PsychPortAudio('Start', file(2)); %Play metronome sound file (2 minutes)
         WaitSecs(3) %180
-
+        PsychPortAudio('Stop', file(2));
+   
         Screen('TextSize', window, 30);
         DrawFormattedText(window, 'The time to practice the new sequence is over. \n Press any key to continue to the finger tapping experiment.', 'center', 'center', white);
         vbl= Screen('Flip', window);
