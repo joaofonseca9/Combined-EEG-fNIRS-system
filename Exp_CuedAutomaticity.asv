@@ -41,7 +41,7 @@ t3 = 10; % Duration of a trial (tapping the sequence 1 time)
 % Amount of letters presented during test for automaticity for one trial.
 % Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % Number of trials per block
+N_trials=2; % number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -104,9 +104,9 @@ Marker_EndBlock_AutomaticSequence_Dual_Uncued       = 1715;
 Marker_EndBlock_NonAutomaticSequence_Dual_Cued      = 1716;
 Marker_EndBlock_NonAutomaticSequence_Dual_Uncued    = 1717;
 
-Marker_CHECK = 1255;        % Checkerboard flip
-Marker_start = 1555;        % Start signal 
-Marker_stop = 1500;         % Stop signal 
+Marker_CHECK = 1255;        % checkerboard flip
+Marker_start = 1555;        % start signal 
+Marker_stop = 1500;         % stop signal 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Open Pshychtoolbox.
@@ -156,10 +156,12 @@ copyfile(sprintf('%s.m', script), fullfile(sub_dir, sprintf('%s_%s.m', sub, scri
 audio_dir=fullfile(root_dir, 'metronomesounds');
 addpath(audio_dir)
 [WAVMetronome8.wave,WAVMetronome8.fs]       = audioread('Metronome8.wav');
+[WAVMetronome600.wave,WAVMetronome600.fs]       = audioread('Metronome600.wav');
 [WAVMetronome300.wave,WAVMetronome300.fs]       = audioread('Metronome300.wav');
 
 % Change rows<>columns
 WAVMetronome8.wave = WAVMetronome8.wave';         WAVMetronome8.nrChan=2;
+WAVMetronome600.wave = WAVMetronome600.wave';         WAVMetronome600.nrChan=2;
 WAVMetronome300.wave = WAVMetronome300.wave';         WAVMetronome300.nrChan=2;
 
 % Get Cueing Files
@@ -177,19 +179,21 @@ Cue1_25HzLength = length(Cue1_25Hz.wavedata)/Cue1_25Hz.fs;
 InitializePsychSound(1);
 
 priority = 0;                       % 0 = better quality, increased latency; 1 = minimum latency
-duration = 1;                       % Number of repetitions of the wav-file
-PsychPortAudio('Verbosity',1);      % Verbosity = "wordiness" -> 1= print errors
+duration = 1;                       % number of repetitions of the wav-file
+PsychPortAudio('Verbosity',1);      % verbosity = "wordiness" -> 1= print errors
 
 % Get audio device
 h_device = PsychPortAudio ('GetDevices');
 
 % Open handle
 h_Metronome8   = PsychPortAudio('Open', [], [], priority, WAVMetronome8.fs, WAVMetronome8.nrChan);
+h_Metronome600   = PsychPortAudio('Open', [], [], priority, WAVMetronome600.fs, WAVMetronome600.nrChan);
 h_Metronome300   = PsychPortAudio('Open', [], [], priority, WAVMetronome300.fs, WAVMetronome300.nrChan);
 PPA_cue1_25Hz = PsychPortAudio('Open', [], [], priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
 % Fill buffer
 PsychPortAudio('FillBuffer', h_Metronome8, WAVMetronome8.wave);
+PsychPortAudio('FillBuffer', h_Metronome600, WAVMetronome600.wave);
 PsychPortAudio('FillBuffer', h_Metronome300, WAVMetronome300.wave);
 PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 
@@ -197,8 +201,8 @@ PsychPortAudio('FillBuffer', PPA_cue1_25Hz, Cue1_25Hz.wavedata);
 % % Set Handle For Audio Capture (delay check)
 % CAP_cue1_25Hz = PsychPortAudio('Open', [], 2, priority, Cue1_25Hz.fs, Cue1_25Hz.nrChan);
 
-%AudioFile
-file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300];
+% AudioFile
+file = [h_Metronome8; PPA_cue1_25Hz; h_Metronome300; h_Metronome600];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SCREEN PREPARATION
 
@@ -235,7 +239,7 @@ fixCrossDimPix = 50; % Here we set the size of the arms of our fixation cross
 xCoords = [-fixCrossDimPix fixCrossDimPix 0 0]; % Set the coordinates (these are all relative to zero we will let the drawing routine center the cross in the center of our monitor for us)
 yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
 allCoords = [xCoords; yCoords];
-lineWidthPix = 10; % Set the line width for the fixation cross
+lineWidthPix = 10;% Set the line width for the fixation cross
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% VIDEO PREPARATION
 % Movie ID's to load
@@ -268,11 +272,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
 
-% Randomize the first sequence to be tested
-% 1=auto sequence, 2 non-auto sequence
+%Randomize the first sequence to be tested
+%1=auto sequence, 2 non-auto sequence
 order_sequence=randperm(2,2);
 
-% Pseudorandomize which trials are cued and uncued (must be 50/50 split)
+%Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
 events_autosingle=randCuedTrials(N_trials);
 events_nonautosingle=randCuedTrials(N_trials);
@@ -283,7 +287,7 @@ events_nonautodual=randCuedTrials(N_trials);
 str=['results_',sub,'_',rec];
 save(str,'events_autodual','events_autosingle','events_nonautosingle','events_nonautodual');
 
-% In case of a restart, if we want to reload the previous randomization:
+%In case of a restart, if we want to reload the previous randomization:
 % load(['results_',sub,'_',rec,'.mat']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -308,24 +312,24 @@ outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,sprintf('You will start with the automaticity test in a dual task situation. \n \n You will be tested on the sequence you learned at home. \n\n After the actual experiment, you will also be tested on the sequence you will learn today. \n\n For each, you will be tested %d times. \n\n Detailed instructions will be given at the start of each task. \n Press any key to continue.',N_trials),'center', 'center', white);
  Screen('Flip', window);
-KbStrokeWait; % Wait for response to terminate instructions
+KbStrokeWait; %wait for response to terminate instructions
 
 
-% Page 2
+%Page 2
 outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('While you perform the task, letters will be shown on the screen (D, G, Q, O). \n The goal is to perform the sequence tapping while counting how many times G is presented. \n\n After each time you tapped the full sequence, you should tell us how many times G was presented. \n\n For answering this question, \n keep in mind that when the answer is 4 you press 4 and not Return (Enter) on the keyboard. \n \n Press any key for the next instructions.'),'center','center', white);
  Screen('Flip', window);
-KbStrokeWait; % Wait for response to terminate instructions
+KbStrokeWait; %wait for response to terminate instructions
 
-% Page 3
+%Page 3
 outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n Press any key to continue.'),'center','center', white);
  Screen('Flip', window);
-KbStrokeWait; % Wait for response to terminate instructions
+KbStrokeWait; %wait for response to terminate instructions
 
-% Page 4 - Demonstrate how cueing works
+%Page 4 - Demonstrate how cueing works
 outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
@@ -334,12 +338,12 @@ PsychPortAudio('Start', file(2), 1, [], []);
 WaitSecs(8);
 PsychPortAudio('Stop', file(2));
 
-% Page 5 - Show sequence
+%Page 5 - Show sequence
 outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
  Screen('Flip', window);
-KbStrokeWait; % Wait for response to terminate instructions
+KbStrokeWait; %wait for response to terminate instructions
 
 %% START TEST FOR AUTOMATICITY
 % Start loop for the trials
@@ -447,7 +451,7 @@ for j=1:N_trials
      Screen('Flip', window);
     KbStrokeWait;
 
-    % If it's in the last trial of the block (where we change the
+    %If it's in the last trial of the block (where we change the
     % sequence), prompt user to continue to next trial
     if j<N_trials/2
         DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
@@ -510,7 +514,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 HideCursor;
 %% Instructions
-% Page 1
+%Page 1
 outlet.push_sample(Marker_Test);
 Screen('TextSize',window,30);
 DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the the sequence you studied at home, \n or with a new sequence you will learn today for 5 minutes. \n \n Note that for this new sequence you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n \n Press any key to continue and see with which test you start.','center', 'center', white);
@@ -532,12 +536,11 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
         Screen('TextSize', window, 50);
         DrawFormattedText(window, sprintf('%s', char(sequencesprint(sequence_idx))), 'center', 'center', white); % is this the same for each participant?
         vbl= Screen('Flip', window);
-        
-        WaitSecs(3); %120 
-        PsychPortAudio('Start', file(2)); %Play metronome sound file (2 minutes)
-        WaitSecs(3) %180
-        PsychPortAudio('Stop', file(2));
-        
+        PsychPortAudio('Start', file(2)); % Play metronome sound file (2 minutes)
+        WaitSecs(3); % 120 
+        PsychPortAudio('Stop', file(2)); % Play metronome sound file (3 minutes)
+        WaitSecs(3) % 180
+
         Screen('TextSize', window, 30);
         DrawFormattedText(window, 'The time to practice the new sequence is over. \n Press any key to continue to the finger tapping experiment.', 'center', 'center', white);
         vbl= Screen('Flip', window);
@@ -883,10 +886,10 @@ for h = 1:N_trials
         fprintf('G incorrect \n')
     end
     % Show if the tapping tempo was correct.
-    margin=0.25; % Margin of error: think about what is most convenient
+    margin=0.25; % margin of error: think about what is most convenient
     delay=mean(diff(events_nonautodual.trial(h).responses.onset)-1/1.50);
     fprintf('the tempo was off with on average %f seconds \n', delay);
-    % Show if the tapped sequence was correct
+    %Show if the tapped sequence was correct
     correctSequence=sequences(sequence_idx);
     if all(strcmp(events_nonautodual.trial(h).responses.value,correctSequence{:}'))
         fprintf('Seq correct \n')
@@ -902,7 +905,7 @@ fprintf('--- Automatic Sequence --- \n')
 for h = 1:N_trials
   %% Show tempo  
   fprintf('Trial %d: \n', h)
-  margin=0.25; % Margin of error: think about what is most convenient
+  margin=0.25; % margin of error: think about what is most convenient
   delay=mean(diff((events_autosingle.trial(h).responses.onset))-1/1.50);
   fprintf('the tempo was off with on average %f seconds \n', delay);
 
@@ -919,7 +922,7 @@ fprintf('--- Non Automatic Sequence --- \n')
 for h = 1:N_trials
   %% Show tempo  
   fprintf('Trial %d: \n', h)
-  margin=0.25; % Margin of error: think about what is most convenient
+  margin=0.25; % margin of error: think about what is most convenient
   delay=mean(diff((events_nonautosingle.trial(h).responses.onset))-1/1.50);
   fprintf('the tempo was off with on average %f seconds \n', delay);
 
@@ -954,13 +957,13 @@ KbStrokeWait
 
 %% GENERATE CHECKERBOARD 
 
-XYChecks = [24 18];                                             % Nr of checks 4:3
-nrChecks = XYChecks(1)*XYChecks(2);                             % Total number of checks
-dim = screenYpixels/XYChecks(2);                                      % Dimension of a check [nr of pixels]
+XYChecks = [24 18];                                             % nr of checks 4:3
+nrChecks = XYChecks(1)*XYChecks(2);                             % total number of checks
+dim = screenYpixels/XYChecks(2);                                      % dimension of a check [nr of pixels]
 if dim*XYChecks(1)>screenXpixels
     error('ERROR: dimensions of checks are not correct');
 end
-baseRect = [0 0 dim*XYChecks(1) dim*XYChecks(2)];               % Rect of dim*nrXpixels by dim pixels*nrYpixels
+baseRect = [0 0 dim*XYChecks(1) dim*XYChecks(2)];               % rect of dim*nrXpixels by dim pixels*nrYpixels
 [Xpos,Ypos] = meshgrid(0:1:XYChecks(1)-1, 0:1:XYChecks(2)-1);   % Make coordinates for our grid of squares
 
 % Reshape the matrices of coordinates into a vector (reshape) & 
@@ -970,9 +973,9 @@ Ygrid = reshape(Ypos, 1, nrChecks) .*dim;
 
 % Visual angle
 % > visual angle (V) = 2*arctan(size on screen (S) / 2* distance to screen(D))
-Vangle = 1;                                                     % Visual angle [degree]
-dist = 65;                                                      % Distance to screen [cm]
-Lcheck = (2*dist)*tand(Vangle/2);                               % Length of check on screen [cm]
+Vangle = 1;                                                     % visual angle [degree]
+dist = 65;                                                      % distance to screen [cm]
+Lcheck = (2*dist)*tand(Vangle/2);                               % length of check on screen [cm]
 
 % Set the colors of each of our squares
 % > 1= white; 0=black
@@ -985,7 +988,7 @@ for iNrChecks = 1:XYChecks(2)
 end
 checkColor = reshape(checkColor, 1, nrChecks);
 
-% Pixelnumbers for the checks 
+% pixelnumbers for the checks 
 % > [(xpos;ypos;length;heigth) x nrChecks] 
 checks = [Xgrid ; Ygrid ; Xgrid+dim ; Ygrid+dim];
 
@@ -1001,7 +1004,7 @@ end
 Texture(1)  = Screen('MakeTexture', window, GridChecks);
 Texture(2)  = Screen('MakeTexture', window, 1-GridChecks);
 
-% Create red focus dot
+% create red focus dot
 dotColor = [1 0 0];                 % Set the color of our dot to full red (RBG)
 dotSizePix = 20;                    % Dot size in pixels
 
@@ -1013,23 +1016,23 @@ Screen('DrawDots', window, [xCenter yCenter], dotSizePix, dotColor, [], 2);
 
 %% GENERAL VARIABLES
 
-% Experimental variables
+% experimental variables
 % > 'start' = time between keypress to start and first checkerboard presentation; 
 % > grey screen with focus dot will be presented
-startTime = 10;                             % Time between pressing start and first checkerboard presentation (=grey screen) [sec]
-startFrame = round(startTime / ifi);        % Time between pressing start and first checkerboard presentation [nrSamples]
-startFrameCount = 0;                        % Counter for nr of start frames
+startTime = 10;                             % time between pressing start and first checkerboard presentation (=grey screen) [sec]
+startFrame = round(startTime / ifi);        % time between pressing start and first checkerboard presentation [nrSamples]
+startFrameCount = 0;                        % counter for nr of start frames
 
 % > 'flip' = flipping the contrast of the checkerboard presentations
-flipTime = 0.45;                            % Duration of checkerboard presentation, before flipping [s]
-flipFrame = round(flipTime / ifi);          % Duration of checkerboard presentation, before flipping [nrSamples]
-flipNr = 300;                          % Total nr of flips made (300)
-flipNrCount = 0;                            % Counter for nr of flips made
-flipFrameCount = 0;                         % Counting the number of frames                         
-flipFrameWait = 0;                          % Time to wait in frames for a flip
+flipTime = 0.45;                            % duration of checkerboard presentation, before flipping [s]
+flipFrame = round(flipTime / ifi);          % duration of checkerboard presentation, before flipping [nrSamples]
+flipNr = 300;                          % total nr of flips made (300)
+flipNrCount = 0;                            % counter for nr of flips made
+flipFrameCount = 0;                         % counting the number of frames                         
+flipFrameWait = 0;                          % time to wait in frames for a flip
 
-textureCue = [1 2];                         % Cue that determines which texture (checkerboard) will be shown
-SaveFrameLog = [];                          % Save Screen presentation > (start=0; checkerboard = 1/2)
+textureCue = [1 2];                         % cue that determines which texture (checkerboard) will be shown
+SaveFrameLog = [];                          % save Screen presentation > (start=0; checkerboard = 1/2)
 
 %% >> EXPERIMENT << %%
 %%%%%%%%%%%%%%%%%%%%%%
@@ -1047,15 +1050,15 @@ outlet.push_sample(Marker_start); % wait for key press and send LSL-marker (star
 % > 10sec grey screen with focus dot before checkerboards are presented 
 while startFrameCount ~= startFrame
     vb1 = Screen('Flip', window);                   % Sync us to the vertical retrace
-    startFrameCount = startFrameCount + 1;          % Increment of counter
-    SaveFrameLog = [SaveFrameLog; 0];               % Save screenpresentation (startstimuli=0) for each frame
+    startFrameCount = startFrameCount + 1;          % increment of counter
+    SaveFrameLog = [SaveFrameLog; 0];               % save screenpresentation (startstimuli=0) for each frame
 end
 
 %%%>> CHECKERBOARD <<%%%
 if startFrameCount == startFrameCount
     while flipNrCount ~= flipNr
-        flipFrameCount = flipFrameCount + 1;            % Increment of counter
-        SaveFrameLog = [SaveFrameLog; textureCue(1)];   % Save screenpresentation (checkerboard 1/2) for each frame
+        flipFrameCount = flipFrameCount + 1;            % increment of counter
+        SaveFrameLog = [SaveFrameLog; textureCue(1)];   % save screenpresentation (checkerboard 1/2) for each frame
 
         % Draw our texture to the screen
         Screen('DrawTexture', window, Texture(textureCue(1)));
@@ -1064,10 +1067,10 @@ if startFrameCount == startFrameCount
               
         % Reverse texture cue to show inverse checkerboard if the time is up
         if flipFrameCount == flipFrame
-            outlet.push_sample(Marker_CHECK);           % Send LSL-marker (checkerboard flip)
-            textureCue = fliplr(textureCue);            % Flip index of texture
-            flipNrCount = flipNrCount + 1;              % Increment counter
-            flipFrameCount = 0;                         % Set frame counter on zero
+            outlet.push_sample(Marker_CHECK);           % send LSL-marker (checkerboard flip)
+            textureCue = fliplr(textureCue);            % flip index of texture
+            flipNrCount = flipNrCount + 1;              % increment counter
+            flipFrameCount = 0;                         % set frame counter on zero
         end
     end
 end
@@ -1081,16 +1084,16 @@ if flipNrCount == flipNr
     vbl = Screen('Flip', window); 
     outlet.push_sample(Marker_stop); 
 end
-KbStrokeWait; % Wait for keypress
-sca; % Close screen
+KbStrokeWait; % wait for keypress
+sca; % close screen
 
 close all;
 clear all;
 
 %% HELPER FUNCTIONS
 function events=randCuedTrials(n)
-    % Generate a vector where half is 0's and half is 1's
-    % 1=cued, 0=uncued
+    %Generate a vector where half is 0's and half is 1's
+    %1=cued, 0=uncued
     isCued = zeros(n, 1);
     isCued(randperm(numel(isCued), round(n/2))) = 1;
     for j=1:n
@@ -1110,10 +1113,10 @@ function [WAVstruct] = CreateWAVstruct(WAVfilename)
 end
 
 
-% Convert keypresses of the experimental laptop to the expected numerical
-% values
+%Convert keypresses of the experimental laptop to the expected numerical
+%values
 function keypresses = convertKeypresses(keypresses)
-% Get the numeric value of the responses to keypressing as well
+%Get the numeric value of the responses to keypressing as well
     for h=1:length(keypresses.value)
         keyValue=cell2mat(keypresses.value(h));
         if isempty(keyValue)
@@ -1128,24 +1131,24 @@ function keypresses = convertKeypresses(keypresses)
                 keypresses.value(h)={'3'};
             case 'BackSpace'  
                 keypresses.value(h)={'4'};
-            otherwise % The subject clicked another numerical button besides the ones he was supposed to
+            otherwise %the subject clicked another numerical button besides the ones he was supposed to
                 keypresses.value(h)={[]};
            end
         end
     end
 end
 
-% FOR DEVELOPMENTAL USE ONLY
-% Created because for the PC where the code was created, pressing the
-% numerical keys 1,2,3,4 gave the following responses 1!, 2", 3#, 4$, so we
-% had to extract the numerical values
-% Get the numeric value of the responses to keypressing as well
+%FOR DEVELOPMENTAL USE ONLY
+%Created because for the PC where the code was created, pressing the
+%numerical keys 1,2,3,4 gave the following responses 1!, 2", 3#, 4$, so we
+%had to extract the numerical values
+%Get the numeric value of the responses to keypressing as well
 function keypresses=convertKeypresses_DEV(keypresses)
     for h=1:length(keypresses.value)
         try
             keyValue=regexp(keypresses.value(h),'\d*','Match'); 
             keypresses.value(h)=keyValue{:};
-        catch % If regexp returns an error, the keypress does not have a numeric value
+        catch %if regexp returns an error, the keypress does not have a numeric value
             keypresses.value(h)={[]};
         end
     end
