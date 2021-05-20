@@ -3,7 +3,7 @@
 % sequence (sequenceauto) has become an automatic movement for a finger
 % tapping and a foot stomping task.
 
-%% Settings:
+%% SETTINGS:
 
 % Clear the workspace and the screen
 clear;
@@ -13,6 +13,7 @@ Screen('Preference', 'SkipSyncTests', 1);
 
 % root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
 root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
+% root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system';
 % addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
 addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
@@ -935,7 +936,7 @@ end
 
 
 %% Save results - overwrite the structs, now with the results 
-str=['results_',sub,'_',rec];
+str=['results_sub-',sub,'_rec-',rec];
 save(str,'events_autodual','events_autosingle','events_nonautosingle','events_nonautodual');
 
 % save('cueRecording_Automaticity.mat','startmoment','startTime','startrecord','stoprecord','audio1');
