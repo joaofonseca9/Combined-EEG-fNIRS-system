@@ -15,7 +15,7 @@ rec='02';
 mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
 % mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
 
-codepath='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis';
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
 
 %% Select Data Folder (if pilots, select pilots folder)
 sub_path    = fullfile(mainpath_in,'incoming',['sub-',sub]);
@@ -159,8 +159,6 @@ marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCu
 EEG_task=extractTaskData_EEG(EEG,marker_table, results);
 
 %% Filter EEG - 50 Hz noise and harmonics
-
-cd(codepath);
 
 % Determine the power spectrum of the raw data.
 raw_data = EEG.data;
