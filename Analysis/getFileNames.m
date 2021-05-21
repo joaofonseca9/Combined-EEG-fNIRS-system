@@ -4,8 +4,6 @@
 %
 % From the main path, the subject id and the number of the recording, get
 % all the necessary paths to save the different steps of preprocessing.
-%
-% Mariana Xavier, April 2021
 
 function [file] = getFileNames(mainpath, ID, rec)
 
