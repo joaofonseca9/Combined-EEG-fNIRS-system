@@ -66,7 +66,7 @@ else %if data has been loaded and the datasets created, load the structs
     load(['sub-',sub,'_rec-',rec,'_nirseeg.mat']);    %Avoids call to ft_preprocessing
     load(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']);%Avoids call to ft_readevents
     
-    [ALLEEG,EEG,~]  = pop_loadset(['sub-',sub,'_rec-',rec,'eeg.set']);
+    [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
 %% Read stimuli results
@@ -154,7 +154,7 @@ marker_table=array2table(marker_summary);
 marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStart','CheckStop','Letter','StartMovie','StopMovie'};
 
 %% Extract Task Data
-EEG_task=extractTaskData_EEG(EEG);
+EEG_task=extractTaskData_EEG(EEG,marker_table, results);
 
 %% Filter EEG - 50 Hz noise and harmonics
 cd('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment');
@@ -196,19 +196,19 @@ n_movie     = N_trials/2;
 n_key       = N_trials*12;
 n_flips     = 300;
 %Letters
-if marker_table(2,{'Letter'})==n_letters
+if marker_table.Letter(2)==n_letters
     disp('Correct number of letters for EEG only');
 else
     disp('Incorrect number of letters for EEG only');
 end
 %Keys
-if marker_table(2,{'Key'})==n_key
+if marker_table.Key(2)==n_key
     disp('Correct number of keys for EEG only');
 else
     disp('Incorrect number of keys for EEG only');
 end
 %Flips
-if marker_table(2,{'Check Flip'})==n_flips
+if marker_table.CheckFlip(2)==n_flips
     disp('Correct number of checkboard flips for EEG only');
 else
     disp('Incorrect number of checkboard flips for EEG only');
@@ -252,35 +252,35 @@ Stop_NonAutoDual   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_t
 Start_Metronome_NonAutoDual=strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoDualNoCue(1)))==1;
 %index of the metronome events in the event vector
 idx=find(Start_Metronome_NonAutoDual);
-UNCUED_start    = [UNCUED_START event_samp(idx-2)-5*EEG.srate];
+UNCUED_start    = [UNCUED_start event_samp(idx-2)-5*EEG.srate];
 UNCUED_stop     = [UNCUED_stop Stop_NonAutoDual+5*EEG.srate];
 
 % AUTO SINGLE
-Start_AutoSingle  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoSingleNoCue(1))))==1);
-Stop_AutoSingle   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopAutoSingleNoCue(1))))==1);
-Start_Metronome_AutoSingle=strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoSingleNoCue(1)))==1;
+Start_AutoSingle  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoNoCue(1))))==1);
+Stop_AutoSingle   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopAutoNoCue(1))))==1);
+Start_Metronome_AutoSingle=strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoNoCue(1)))==1;
 %index of the metronome events in the event vector
 idx=find(Start_Metronome_AutoSingle);
-UNCUED_start=[UNCUED_START event_samp(idx-2)-5*EEG.srate];
+UNCUED_start=[UNCUED_start event_samp(idx-2)-5*EEG.srate];
 UNCUED_stop     = [UNCUED_stop Stop_AutoSingle+5*EEG.srate];
 
 % NON AUTO SINGLE
-Start_NonAutoSingle  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoSingleNoCue(1))))==1);
-Stop_NonAutoSingle   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopNonAutoSingleNoCue(1))))==1);
-Start_Metronome_NonAutoSingle=strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoSingleNoCue(1)))==1;
+Start_NonAutoSingle  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoNoCue(1))))==1);
+Stop_NonAutoSingle   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopNonAutoNoCue(1))))==1);
+Start_Metronome_NonAutoSingle=strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoNoCue(1)))==1;
 %index of the metronome events in the event vector
 idx=find(Start_Metronome_NonAutoSingle);
-UNCUED_start=[UNCUED_START event_samp(idx-2)-5*EEG.srate];
+UNCUED_start=[UNCUED_start event_samp(idx-2)-5*EEG.srate];
 UNCUED_stop     = [UNCUED_stop Stop_NonAutoSingle+5*EEG.srate];
 
-start=sort([CUED_start UNCUED_start]);
-stop=sort([CUED_stop UNCUED_stop]);
-rej=[2 start(1)];
-for ii=1:length(stop)
-    if ii==length(stop)
-        rej=[rej;stops(7) event_samp(end)];
-    else
-        rej=[rej;stop(ii) start(ii+1)];
+starts=sort([CUED_start UNCUED_start]);
+stops=sort([CUED_stop UNCUED_stop]);
+
+rej=[2 starts(1)];
+for ii=1:length(stops)-1
+    rej=[rej;stops(ii) starts(ii+1)];
+    if ii==length(stops)-1
+        rej=[rej;stops(ii+1) event_samp(end)];
     end
 end
 
