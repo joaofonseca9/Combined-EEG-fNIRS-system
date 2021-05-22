@@ -72,6 +72,33 @@ end
 %% Read stimuli results
 results=load(fullfile(sub_path,'stim',['results_sub-',sub,'_rec-',rec]));
 
+% %% FIX MARKERS
+% if strcmp(sub,'02') && strcmp(rec,'02')
+%     %Replace 1715 for 1714, 1716 for 1715...
+%     tmp=(strcmp({EEG.event.type}, 's1715'))==1; 
+%     idx_tmp=find(tmp);
+%     for r=idx_tmp
+%         EEG.event(r).type='s1714';
+%     end
+%     
+%     tmp=(strcmp({EEG.event.type}, 's1716'))==1; 
+%     idx_tmp=find(tmp);
+%     for r=idx_tmp
+%         EEG.event(r).type='s1715';
+%     end
+%     
+%     tmp=(strcmp({EEG.event.type}, 's1717'))==1; 
+%     idx_tmp=find(tmp);
+%     for r=idx_tmp
+%         EEG.event(r).type='s1716';
+%     end
+%     
+%     tmp=(strcmp({EEG.event.type}, 's1718'))==1; 
+%     idx_tmp=find(tmp);
+%     for r=idx_tmp
+%         EEG.event(r).type='s1717';
+%     end
+% end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% VERIFY MARKERS
@@ -154,10 +181,13 @@ marker_table=array2table(marker_summary);
 marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStart','CheckStop','Letter','StartMovie','StopMovie'};
 
 %% Extract Task Data
-EEG_task=extractTaskData_EEG(EEG,marker_table, results);
+[EEG starts stops]=extractTaskData_EEG(EEG,marker_table, results);
+[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','taskData','gui','off');
+pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'eeg'));
+
 
 %% Filter EEG - 50 Hz noise and harmonics
-cd('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment');
+%cd('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment');
 % Determine the power spectrum of the raw data.
 raw_data = EEG.data;
 [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
@@ -176,7 +206,7 @@ filtered_data = EEG_filtered;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function EEG=extractTaskData_EEG(EEG, marker_table,results)
+function [EEG starts stops]=extractTaskData_EEG(EEG, marker_table,results)
 % extract events of tasks and check/add correct number of events
 event_samp  = [EEG.event.latency];
 
@@ -273,8 +303,8 @@ idx=find(Start_Metronome_NonAutoSingle);
 UNCUED_start=[UNCUED_start event_samp(idx-2)-5*EEG.srate];
 UNCUED_stop     = [UNCUED_stop Stop_NonAutoSingle+5*EEG.srate];
 
-starts=sort([CUED_start UNCUED_start]);
-stops=sort([CUED_stop UNCUED_stop]);
+starts=sort([CUED_start-5*EEG.srate UNCUED_start]);
+stops=sort([CUED_stop+5*EEG.srate UNCUED_stop]);
 
 rej=[2 starts(1)];
 for ii=1:length(stops)-1
@@ -283,5 +313,7 @@ for ii=1:length(stops)-1
         rej=[rej;stops(ii+1) event_samp(end)];
     end
 end
+
+[EEG] = eeg_eegrej(EEG, rej);
 
 end

@@ -11,6 +11,7 @@ n=0;
 %colors
 colors=rand(length(markers.id),3); % Cell array of colros.
 
+figure
 for m=markers.id
     n=n+1;
     y=data{1}.time_series==m;

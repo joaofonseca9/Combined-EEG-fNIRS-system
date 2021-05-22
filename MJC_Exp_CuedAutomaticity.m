@@ -11,11 +11,11 @@ clear;
 % Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
 
-% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
-% addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+% root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
+% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -141,7 +141,7 @@ while complete==0
 end
 
 % Go to subject folder
-sub_dir=fullfile(root_dir,'..','..','Data' ,sub);
+sub_dir=fullfile(root_dir,'..','Data' ,sub);
 if ~exist(sub_dir)
     mkdir(sub_dir)
 end
@@ -703,6 +703,7 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             onset=GetSecs;
             
             keypresses=playMovie(moviePtr.nonauto.id(t),window, outlet, Marker_Keypress, isLetterFrame, keypresses);
+            
             %% Stop cueing & Set marker of end of dual task with non auto sequence
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
