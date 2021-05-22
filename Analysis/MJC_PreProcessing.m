@@ -1,8 +1,8 @@
 clear;
 
 %% Initialize FieldTrip & EEGLAB
-laptop='laptopJoao';
-% laptop='laptopMariana';
+% laptop='laptopJoao';
+laptop='laptopMariana';
 % laptop='laptopCatarina';
 addFolders;
 eeglab;
@@ -11,9 +11,15 @@ ft_defaults;
 sub='02';
 rec='02';
 
-mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
-% mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
+% mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
+mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
 % mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
+
+mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
+
+file = getFileNames(mainpath_out, ID, rec);
+
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
 
 %% Select Data Folder (if pilots, select pilots folder)
 sub_path    = fullfile(mainpath_in,'incoming',['sub-',sub]);
@@ -191,14 +197,46 @@ pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'ee
 % Determine the power spectrum of the raw data.
 raw_data = EEG.data;
 [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
+
 % Filter the signal.
-EEG_filtered = filterNoise(double(raw_data), EEG, 4);
-filtered_data = EEG_filtered;
+if ~isfile(file.filtered) 
+    EEG_filtered = EEG;
+    filtered_data = filterNoise(double(raw_data), EEG, 4);
+    EEG_filtered.data = filtered_data;
+    [ALLEEG, EEG_filtered, ~] = pop_newset(ALLEEG, EEG_filtered, 1,...
+        'setname','filtData','gui','off');
+    save(file.filtered, 'EEG_filtered');
+else
+    load(file.filtered, 'EEG_filtered');
+    [ALLEEG, EEG_filtered, ~] = pop_newset(ALLEEG, EEG_filtered, 1,...
+        'setname', 'filtData', 'gui', 'off');
+end
+
 % Determine the power spectrum of the filtered data.
 [P_filt, f_filt] = periodogram(filtered_data', [], [] , EEG.srate);
 
-%% Remove eye blinks
+% Plot the power spectrums.
+figure;
+subplot(1, 3, 1); plot(f_raw, P_raw); 
+xlim([0 200]); ylim([0 7e5]); title('Raw data');
+subplot(1, 3, 2); plot(f_filt, P_filt); 
+xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
+subplot(1, 3, 3); plot(f_filt, P_filt); 
+xlim([0 50]); title('Filtered data - different scale');
 
+%% Removal of eye blinks
+
+if ~isfile(file.preICA)  
+    [EEG_preICA] = pop_runica(EEG_filtered,'icatype', 'runica',...
+        'extended', 1, 'interrupt', 'on');
+    [ALLEEG, EEG_preICA, ~] = pop_newset(ALLEEG, EEG_preICA, 1,...
+        'setname', 'preICA', 'gui', 'off');
+    save(file.preICA, 'EEG_preICA');
+else
+    load(file.preICA, 'EEG_preICA');
+    [ALLEEG, EEG_preICA, ~] = pop_newset(ALLEEG, EEG_preICA, 1,...
+        'setname', 'preICA', 'gui', 'off');
+end
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
