@@ -188,7 +188,7 @@ xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
 subplot(1, 3, 3); plot(f_filt, P_filt); 
 xlim([0 50]); title('Filtered data - different scale');
 
-%% Removal of eye blinks
+%% Removal of eye blinks - preICA
 
 if ~isfile(file.preICA)  
     [EEG_preICA] = pop_runica(EEG_filtered,'icatype', 'runica',...
@@ -202,6 +202,19 @@ else
         'setname', 'preICA', 'gui', 'off');
 end
 
+%% Removal of eye blinks - pstICA
+% ERRO
+
+if ~isfile(file.pstICA)
+    [EEG_pstICA] = run_postICA(EEG_preICA);
+    [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
+        'setname', 'pstICA','gui','off');
+    save(file.pstICA, 'EEG_pstICA');
+else                          
+    load(file.pstICA, 'EEG_pstICA');
+    [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
+        'setname', 'pstICA','gui','off');
+end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %HELPER FUNCTIONS
