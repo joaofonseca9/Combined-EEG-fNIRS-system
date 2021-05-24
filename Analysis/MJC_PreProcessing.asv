@@ -327,5 +327,8 @@ end
 [EEG] = eeg_eegrej(EEG, rej);
 
 
-
+%LETTER TRIALS
+Letter=event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.Letter(1))))==1);
+Start_Letter=Letter-floor(0.1*EEG.srate);
+Start_Letter=Letter-floor(0.1*EEG.srate);
 end
