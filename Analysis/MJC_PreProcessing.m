@@ -8,13 +8,13 @@ addFolders;
 eeglab;
 ft_defaults;
 
-mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
+% mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
 % mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
-% mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
+mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
 
 % mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
-mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
-% mainpath_out='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots\pre-processed';
+% mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
+mainpath_out='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots\pre-processed';
 
 sub='02';
 rec='02';
@@ -22,8 +22,7 @@ rec='02';
 file = getFileNames(mainpath_out, sub, rec);
 
 %addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
-% addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis');
-addpath 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Analysis'
+addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis');
 
 %% Select Data Folder (if pilots, select pilots folder)
 sub_path    = fullfile(mainpath_in,'incoming',['sub-',sub]);
@@ -320,7 +319,7 @@ starts=sort([CUED_start-5*EEG.srate UNCUED_start]);
 stops=sort([CUED_stop+5*EEG.srate UNCUED_stop]);
 
 rej=[2 starts(1)];
-for ii=1:(length(stops)-1)
+for ii=1:length(stops)-1
     rej=[rej;stops(ii) starts(ii+1)];
     if ii==length(stops)-1
         rej=[rej;stops(ii+1) event_samp(end)];
