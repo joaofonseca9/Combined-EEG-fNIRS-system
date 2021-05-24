@@ -117,6 +117,37 @@ for iSub = 1:length(subject)
     % average over trials, use omit NaNs (bad channels within trials)
 
     ERP = mean(data,3,'omitnan');
+    
+    %% Global field power in time domain (GFPt)
+    % calculate difference between two channels, per time point 
+    % take the sum of the differences, per time point
+    % gives the GFPt over time
+
+    [GFPt]  = GlobalFieldPotential(ERP);
+    LETTERerp.data      = data;
+    LETTERerp.ERP       = ERP;
+    LETTERerp.GFPt      = GFPt; 
+    LETTERerp.time      = time;
+    LETTERerp.chans     = {EEG.chanlocs.labels};
+    
+%     LETTERerpBAD.chans     = {EEG.chanlocs.labels};
+%     LETTERerpBAD.badchans  = EEG.badchan;
+%     LETTERerpBAD.badtrial  = badtrial;
+
+    save(file.results,'LETTERerp');
+%     save(file.results_bad,'CHECKerpBAD');
+
+    %% Plotting
+    subplot(1,2,1); plot(time,mean(ERP,3,'omitnan'),'b');
+    subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFPt,fliplr(GFPt)],'b','LineStyle','none');
+    set(h1,'FaceAlpha',0.4); plot(time,GFPt,'r','LineWidth',1.5);
+    
+    subplot(1,2,1); set(gca,'FontSize',11); box on;
+    ylabel('Potential (\muV)','FontSize',14); title('ERP','FontSize',14); ylim([-6 6])
+    xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k');xlabel('Time (s)','FontSize',14);
+    subplot(1,2,2); set(gca,'FontSize',11); box on;
+    ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
+    xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k');  title('GFPt');
 end
 
 
@@ -199,7 +230,7 @@ function [data, time] = extractEpochs (EEG)
         data(:,:,iTrial) = EEG.data(:, [event_letter(iTrial)-floor(0.1*EEG.srate) : event_letter(iTrial)+ceil(0.1*EEG.srate)]);
     end
     % create time vector [s]
-    time = -0.1 : 1/EEG.srate : 0.4;
+    time = -0.1 : 1/EEG.srate : 0.1;
 end
 
 %%
