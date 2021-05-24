@@ -150,13 +150,13 @@ marker_table=array2table(marker_summary);
 marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStart','CheckStop','Letter','StartMovie','StopMovie'};
 
 %% Extract Task Data
-[EEG starts stops]=extractTaskData_EEG(EEG,marker_table, results, file);
+[EEG, starts, stops]=extractTaskData_EEG(EEG,marker_table, results, file);
 [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','taskData','gui','off');
 pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'eeg'));
 
 
 %% Filter EEG - 50 Hz noise and harmonics
-%addpath('C:\Users\joaop\OneDrive - Universidade do Porto\Internship\After Experiment');
+
 % Determine the power spectrum of the raw data.
 raw_data = EEG.data;
 [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
@@ -171,6 +171,7 @@ if ~isfile(file.filtered)
     save(file.filtered, 'EEG_filtered');
 else
     load(file.filtered, 'EEG_filtered');
+    filtered_data = EEG_filtered.data;
     [ALLEEG, EEG_filtered, ~] = pop_newset(ALLEEG, EEG_filtered, 1,...
         'setname', 'filtData', 'gui', 'off');
 end
@@ -207,7 +208,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function [EEG starts stops]=extractTaskData_EEG(EEG, marker_table,results, file)
+function [EEG, starts, stops]=extractTaskData_EEG(EEG, marker_table,results, file)
 % extract events of tasks and check/add correct number of events
 event_samp  = [EEG.event.latency];
 
