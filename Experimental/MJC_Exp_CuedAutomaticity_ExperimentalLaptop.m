@@ -9,14 +9,10 @@
 clear;
 
 % Synch test skip => comment when actually testing patient
-Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 0);
 
-% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
-% addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
-
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -40,6 +36,7 @@ sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 % 1=auto sequence, 2 non-auto sequence
 order_sequence=[1,2];
 
+
 % Parameters for the resting period in between the trials
 t1 = 20; % Resting period in seconds
 t2 = 5;  % Random interval around the resting period time
@@ -48,7 +45,7 @@ t3 = 10; % Duration of a trial (tapping the sequence 1 time)
 % Amount of letters presented during test for automaticity for one trial.
 % Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % Number of trials per block
+N_trials=20; % Number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -124,6 +121,7 @@ while (done==0)
         done=1;
     end
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
@@ -154,6 +152,9 @@ while complete==0
 end
 
 % Go to subject folder
+%Folder Organization
+%Combined-EEG -> Experimental (project directory)
+%Data -> sub
 sub_dir=fullfile(root_dir,'..','..','Data' ,sub);
 if ~exist(sub_dir)
     mkdir(sub_dir)
@@ -450,8 +451,8 @@ for j=1:N_trials
         response={[]};
     end
     %% Convert fingertapping responses to numerical values
-%     keypresses = convertKeypresses(keypresses);
-    keypresses=convertKeypresses_DEV(keypresses);
+    keypresses = convertKeypresses(keypresses);
+%     keypresses=convertKeypresses_DEV(keypresses);
     moviename=moviePtr.auto.moviename(j);
     events_autodual.trial(j).stimuli=table(onset,duration, value, response, moviename);
     events_autodual.trial(j).responses=keypresses;
@@ -645,8 +646,8 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             % Save the response and the key presses
             value={'red X'};
             %% Convert fingertapping responses to numerical values
-    %       keypresses = convertKeypresses(keypresses);
-            keypresses=convertKeypresses_DEV(keypresses);
+            keypresses = convertKeypresses(keypresses);
+%             keypresses=convertKeypresses_DEV(keypresses);
             events_nonautosingle.trial(j).stimuli=table(onset,duration, value);
             events_nonautosingle.trial(j).responses=keypresses;
         end
@@ -753,8 +754,8 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             end
             
             %% Convert fingertapping responses to numerical values
-%     keypresses = convertKeypresses(keypresses);
-            keypresses=convertKeypresses_DEV(keypresses);
+            keypresses = convertKeypresses(keypresses);
+%             keypresses=convertKeypresses_DEV(keypresses);
             moviename=moviePtr.nonauto.moviename(t);
             events_nonautodual.trial(t).stimuli=table(onset,duration, value, response, moviename);
             events_nonautodual.trial(t).responses=keypresses;
@@ -862,8 +863,8 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             end
 
          %% Convert fingertapping responses to numerical values and save results
-        %   keypresses = convertKeypresses(keypresses);
-            keypresses=convertKeypresses_DEV(keypresses);
+            keypresses = convertKeypresses(keypresses);
+%             keypresses=convertKeypresses_DEV(keypresses);
             value={'red X'};
             events_autosingle.trial(j).stimuli=table(onset,duration, value);
             events_autosingle.trial(j).responses=keypresses;

@@ -9,14 +9,10 @@
 clear;
 
 % Synch test skip => comment when actually testing patient
-Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 0);
 
-% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
-% addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
-
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -34,11 +30,8 @@ addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 % 2 4 3 4 1 3 4 1 2 1 3 2
 % 4 2 4 1 3 1 4 2 3 2 1 3
 sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 2 4 1 3 1 4 2 3 2 1 3')};
-sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
-% Order of the sequences to be tested 
-% 1=auto sequence, 2 non-auto sequence
-order_sequence=[1,2];
+sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Parameters for the resting period in between the trials
 t1 = 20; % Resting period in seconds
@@ -48,7 +41,7 @@ t3 = 10; % Duration of a trial (tapping the sequence 1 time)
 % Amount of letters presented during test for automaticity for one trial.
 % Should be adjusted when letter presenting speed is changed!
 N_letters=8; % 8 letters presented during a trial
-N_trials=2; % Number of trials per block
+N_trials=20; % Number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LSL SETUP
@@ -124,6 +117,7 @@ while (done==0)
         done=1;
     end
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
@@ -154,6 +148,9 @@ while complete==0
 end
 
 % Go to subject folder
+%Folder Organization
+%Combined-EEG -> Experimental (project directory)
+%Data -> sub
 sub_dir=fullfile(root_dir,'..','..','Data' ,sub);
 if ~exist(sub_dir)
     mkdir(sub_dir)
@@ -283,6 +280,10 @@ for ii=movie_id_nonauto
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
+
+% Randomize the first sequence to be tested
+% 1=auto sequence, 2 non-auto sequence
+order_sequence=randperm(2,2);
 
 % Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
@@ -450,8 +451,8 @@ for j=1:N_trials
         response={[]};
     end
     %% Convert fingertapping responses to numerical values
-%     keypresses = convertKeypresses(keypresses);
-    keypresses=convertKeypresses_DEV(keypresses);
+    keypresses = convertKeypresses(keypresses);
+%     keypresses=convertKeypresses_DEV(keypresses);
     moviename=moviePtr.auto.moviename(j);
     events_autodual.trial(j).stimuli=table(onset,duration, value, response, moviename);
     events_autodual.trial(j).responses=keypresses;

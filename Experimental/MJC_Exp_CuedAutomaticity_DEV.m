@@ -17,7 +17,6 @@ root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
 % addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
 addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% SET UP PARAMETERS
@@ -33,12 +32,9 @@ addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 % OUR SEQUENCES - script generateSequences
 % 2 4 3 4 1 3 4 1 2 1 3 2
 % 4 2 4 1 3 1 4 2 3 2 1 3
-sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 2 4 1 3 1 4 2 3 2 1 3')};
-sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
+sequencesprint = {('4  1  4  2  1  2  3  2  2  4  3  3'),('4  2  4  4  2  3  1  1  3  4  4  1')};
 
-% Order of the sequences to be tested 
-% 1=auto sequence, 2 non-auto sequence
-order_sequence=[1,2];
+sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Parameters for the resting period in between the trials
 t1 = 20; % Resting period in seconds
@@ -115,16 +111,7 @@ Marker_CHECK = 1255;        % Checkerboard flip
 Marker_start = 1555;        % Start signal 
 Marker_stop = 1500;         % Stop signal 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Test Markers
-done=0;
-while (done==0)
-    outlet.push_sample(Marker_Test);
-    correct=input('Check if marker was sent \n (Y - continue; Other Key - Send another marker \n', 's');
-    if strcmpi(correct, 'y')
-        done=1;
-    end
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); % Links the key presses to the key board names
@@ -283,6 +270,10 @@ for ii=movie_id_nonauto
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSEUDORANDOMIZATION
+
+% Randomize the first sequence to be tested
+% 1=auto sequence, 2 non-auto sequence
+order_sequence=randperm(2,2);
 
 % Pseudorandomize which trials are cued and uncued (must be 50/50 split)
 events_autodual=randCuedTrials(N_trials);
