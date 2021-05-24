@@ -2,27 +2,16 @@ clear;
 
 %% Initialize FieldTrip & EEGLAB
 % laptop='laptopJoao';
-% laptop='laptopMariana';
-laptop='laptopCatarina';
-addFolders;
+laptop='laptopMariana';
+% laptop='laptopCatarina';
+[mainpath_in, mainpath_out] = addFolders(laptop);
 eeglab;
 ft_defaults;
-
-% mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
-% mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
-mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
-
-% mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
-% mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
-mainpath_out='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots\pre-processed';
 
 sub='02';
 rec='02';
 
 file = getFileNames(mainpath_out, sub, rec);
-
-%addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
-addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis');
 
 %% Select Data Folder (if pilots, select pilots folder)
 sub_path    = fullfile(mainpath_in,'incoming',['sub-',sub]);
