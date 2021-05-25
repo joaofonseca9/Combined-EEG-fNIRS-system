@@ -5,7 +5,7 @@
 % OUTPUT:
 % - folder = struct with all stings to pathnames
 
-function [mainpath_in, mainpath_out]=addFolders(laptop)
+function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
 
     if strcmp(laptop, 'laptopJoao')
         % why?
@@ -14,7 +14,8 @@ function [mainpath_in, mainpath_out]=addFolders(laptop)
     %     cd 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne';
 
         % add EEGlab
-        addpath('C:\Users\joaop\Downloads\eeglab2021.0');
+        eeglab_path = 'C:\\Users\\joaop\\Downloads\\eeglab2021.0';
+        addpath(eeglab_path);
         
         % add fieldtrip
         addpath('C:\Users\joaop\Downloads\fieldtrip-20210212\fieldtrip-20210212');
@@ -32,7 +33,8 @@ function [mainpath_in, mainpath_out]=addFolders(laptop)
     %     cd 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne';
 
         % add EEGlab
-        addpath('C:\Users\maria\OneDrive\Ambiente de Trabalho\eeglab2021.0');
+        eeglab_path = 'C:\\Users\\maria\\OneDrive\\Ambiente de Trabalho\\eeglab2021.0';
+        addpath(eeglab_path);
         
         % add fieldtrip
         addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip');
@@ -51,7 +53,8 @@ function [mainpath_in, mainpath_out]=addFolders(laptop)
         % cd 'C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne';
 
         % add EEGlab
-        addpath('C:\Program Files\Matlab\R2020b\toolbox\eeglab_current\eeglab2021.0');
+        eeglab_path = 'C:\\Program Files\\Matlab\\R2020b\\toolbox\\eeglab_current\\eeglab2021.0';
+        addpath(eeglab_path);
         
         % add fieldtrip
         addpath('C:\Program Files\Matlab\R2020b\toolbox\fieldtrip-20210308');
