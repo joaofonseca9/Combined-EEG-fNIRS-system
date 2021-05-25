@@ -47,7 +47,7 @@ function [mainpath_in, mainpath_out]=addFolders(laptop)
     elseif strcmp(laptop, 'laptopCatarina')
         % why?
         % add folder for analyses / data
-        addpath(genpath('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne'));
+        % addpath(genpath('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne'));
         % cd 'C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne';
 
         % add EEGlab
