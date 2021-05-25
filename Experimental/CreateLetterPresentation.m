@@ -2,7 +2,7 @@
 %Please define filepath before
 %It will save a .mov file of the presentation as well as a .txt with the
 %number
-filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\LetterPresentation';
+filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental\LetterPresentation';
 
 %Number of trials per block
 N_trials=20;
@@ -88,12 +88,11 @@ moviePtr = Screen('CreateMovie', window, filename,[], [], framerate);
 %occupy. so frame_letter= round(time_letter * framerate)
 
 frame_letter=zeros(1,N_letters);
-frame_cross=zeros(1,N_letters);
+frame_cross=round(0.25*framerate)*ones(1,N_letters);
 % frameduration= time_letter/framerate;
 for n=1:N_letters
     %Defining number of frames per letter and cross
     frame_letter(n)=round((rand(1)+0.55)*framerate); %Speed with which the letters are presented
-    frame_cross(n)=round(0.25*framerate);
     
     %Present random letter on the screen
     Screen('TextSize', window, 100);
@@ -108,7 +107,11 @@ for n=1:N_letters
     Screen('Flip', window);
     Screen('AddFrameToMovie',window,windowRect,'frontBuffer',moviePtr,frame_cross(n));
 end
-
+Screen('DrawLines', window, allCoords,...
+        lineWidthPix, white, [xCenter yCenter], 2);
+Screen('Flip', window);
+frame_white_cross=round(((8-5).*rand(1) + 5)*framerate);
+Screen('AddFrameToMovie',window,windowRect,'frontBuffer',moviePtr,frame_white_cross);
 
 Screen('FinalizeMovie', moviePtr);
 sca;
@@ -118,12 +121,15 @@ sca;
 %     letter_timestamps(k)=letter_timestamps(k-1)+frame_cross(k-1)+frame_letter(k-1);
 % end
 
-isLetterFrame=zeros(1,sum(frame_letter)+sum(frame_cross));
+isLetterFrame=zeros(1,sum(frame_letter)+sum(frame_cross)+frame_white_cross);
 tmp=1;
 for k=1:length(frame_letter)
     isLetterFrame(tmp)=1; %mark only the first frame of the letter to 1
     isLetterFrame(tmp+frame_letter(k):tmp+frame_letter(k)+frame_cross(k)-1)=0;
     tmp=tmp+frame_letter(k)+frame_cross(k);
 end
+
+%The last tmp will be the sample of the first white cross frame
+isLetterFrame(tmp)=2;
 
 end

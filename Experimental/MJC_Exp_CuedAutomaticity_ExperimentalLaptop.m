@@ -40,7 +40,7 @@ order_sequence=[1,2];
 % Parameters for the resting period in between the trials
 t1 = 20; % Resting period in seconds
 t2 = 5;  % Random interval around the resting period time
-t3 = 10; % Duration of a trial (tapping the sequence 1 time)
+t3 = 12; % Duration of a trial (tapping the sequence 1 time)
 
 % Amount of letters presented during test for automaticity for one trial.
 % Should be adjusted when letter presenting speed is changed!
@@ -269,7 +269,7 @@ for ii=movie_id_auto
     [id,duration]=Screen('OpenMovie', window, moviename);
     moviePtr.auto.id(iter)=id;
     moviePtr.auto.duration(iter)=duration;
-    moviePtr.auto.moviename(iter)={moviename};
+    moviePtr.auto.moviename(iter)=convertCharsToStrings(videofilename);
     iter=iter+1;
 end
 iter=1;
@@ -279,7 +279,7 @@ for ii=movie_id_nonauto
     [id,duration]=Screen('OpenMovie', window, moviename);
     moviePtr.nonauto.id(iter)=id;
     moviePtr.nonauto.duration(iter)=duration;
-    moviePtr.nonauto.moviename(iter)={moviename};
+    moviePtr.nonauto.moviename(iter)=convertCharsToStrings(videofilename);
     iter=iter+1;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -406,29 +406,10 @@ for j=1:N_trials
     % tapping test + recording of the key presses
     onset=GetSecs;
     
-    keypresses=playMovie(moviePtr.auto.id(j),window, outlet, Marker_Keypress, isLetterFrame,keypresses);
-
-    %% Stop cueing & push end trial markers
-    if (cued==1)
-%         audio1 = PsychPortAudio('GetAudioData',CAP_cue1_25Hz);
-%         stoprecord = GetSecs;
-        PsychPortAudio('Stop', file(2));
-        outlet.push_sample(Marker_EndBlock_Cue);
-        outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Cued);
-    else
-        outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Uncued);
-    end
+    keypresses=playMovie(moviePtr.auto.id(j),window, outlet, isLetterFrame,keypresses,cued,'auto', file);
     
-    %% Present white fixation cross for some seconds to show that
-    % trial is over
     duration=GetSecs-onset;
-    Screen('TextSize', window, 30);
-    Screen('DrawLines', window, allCoords,...
-        lineWidthPix, white, [xCenter yCenter], 2);
-    Screen('Flip', window);
-    WaitSecs((8-5).*rand(1) + 5); % 5 seconds, so the nirs signal has time to go back to baseline
 
-    
     %% Ask how many G's were presented
     Screen('TextSize',window,30);
     DrawFormattedText(window, 'How many times was G presented? ','center','center', white);
@@ -712,25 +693,10 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             % tapping test + recording of the key presses 
             onset=GetSecs;
             
-            keypresses=playMovie(moviePtr.nonauto.id(t),window, outlet, Marker_Keypress, isLetterFrame, keypresses);
-            %% Stop cueing & Set marker of end of dual task with non auto sequence
-            if (cued==1)
-                PsychPortAudio('Stop', file(2));
-                outlet.push_sample(Marker_EndBlock_Cue);
-                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Cued);
-            else
-                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Uncued);
-            end
-           
-            %% Present white fixation cross for some seconds to show that
-            % Trial is over
+            keypresses=playMovie(moviePtr.nonauto.id(t),window, outlet, isLetterFrame, keypresses, cued, 'nonauto', file);
+            
             duration=GetSecs-onset;
-        %     trig.beep(440, 0.2, 'rest');
-            Screen('TextSize', window, 30);
-            Screen('DrawLines', window, allCoords,...
-                lineWidthPix, white, [xCenter yCenter], 2);
-            Screen('Flip', window);
-            WaitSecs((8-5).*rand(1) + 5); % 5-8 seconds, so the nirs signal has time to go back to baseline
+
             %% Ask how many G's were presented
             Screen('TextSize',window,30);
             DrawFormattedText(window, 'How many times was G presented? ','center','center', white);

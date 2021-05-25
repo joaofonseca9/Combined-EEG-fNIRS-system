@@ -1,4 +1,4 @@
-function keypresses=playMovie(movie, win, outlet, isLetterFrame,keypresses, cued, sequence, file)
+function keypresses=playMovie(movie, win, outlet, isLetterFrame,keypresses, sequence)
 % Most simplistic demo on how to play a movie.
 %
 % SimpleMovieDemo(moviename [, windowrect=[]]);
@@ -17,8 +17,6 @@ function keypresses=playMovie(movie, win, outlet, isLetterFrame,keypresses, cued
 % 02/05/2009  Created. (MK)
 % 06/17/2013  Cleaned up. (MK)
 % 25/04/2021 Changed. Joao Fonseca
-
-%% Markers
 Marker_StartMovie = 1798;
 Marker_StopMovie = 1799;
 Marker_Letter = 1797;
@@ -27,9 +25,8 @@ Marker_EndBlock_AutomaticSequence_Dual_Uncued       = 1715;
 Marker_EndBlock_NonAutomaticSequence_Dual_Cued      = 1716;
 Marker_EndBlock_NonAutomaticSequence_Dual_Uncued    = 1717;
 Marker_EndBlock_Cue         = 1701;
-Marker_Keypress = 1777;
 
-%% Playback
+
 m=1; %first key press
 KbQueueFlush; % clear all previous key presses from the list
 keyReleased=1;
@@ -58,7 +55,7 @@ try
         
         [keyIsDown, secs, keyCode] = KbCheck;
         if keyIsDown==1 && keyReleased==1 && m<13  %only register the keypress once (wait for release of key to register again)
-            outlet.push_sample(Marker_Keypress);
+            outlet.push_sample(marker);
             keypresses.onset(m)=secs;
             keypresses.value(m)={KbName(find(keyCode))};
             keyReleased=0;
@@ -76,18 +73,14 @@ try
             if (cued==1)
                 PsychPortAudio('Stop', file(2));
                 outlet.push_sample(Marker_EndBlock_Cue);
-                if strcmp(sequence,'auto')
+                if sequence=='auto'
                     outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Cued);
                 else
                     outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Cued);
                 end
 
             else
-                if strcmp(sequence,'auto')
-                    outlet.push_sample(Marker_EndBlock_AutomaticSequence_Dual_Uncued);
-                else
-                    outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Uncued);
-                end
+                outlet.push_sample(Marker_EndBlock_NonAutomaticSequence_Dual_Uncued);
             end
         end
         
