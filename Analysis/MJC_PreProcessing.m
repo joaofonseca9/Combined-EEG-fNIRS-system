@@ -1,12 +1,12 @@
 clear;
 
 %% Initialize FieldTrip & EEGLAB
-<<<<<<< HEAD
+
 % laptop='laptopJoao';
 laptop='laptopMariana';
 % laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
-=======
+
 eeglab;
 ft_defaults;
 
@@ -207,7 +207,10 @@ end
 %% Removal of eye blinks - pstICA
 
 if ~isfile(file.pstICA)
-    [EEG_preICA] = pop_chanedit(EEG_preICA, 'lookup', join([eeglab_path, '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']), 'lookup', join([eeglab_path, '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
+    [EEG_preICA] = pop_chanedit(EEG_preICA, 'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
+        'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
     [EEG_pstICA] = run_postICA(EEG_preICA);
     [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
         'setname', 'pstICA','gui','off');
