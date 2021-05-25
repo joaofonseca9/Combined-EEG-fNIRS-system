@@ -322,9 +322,10 @@ starts=sort([CUED_start-5*EEG.srate UNCUED_start]);
 stops=sort([CUED_stop+5*EEG.srate UNCUED_stop]);
 
 rej=[2 starts(1)];
-for ii=1:length(stops)-1
+ength(X):-1:1
+for ii=length(stops):-1:1
     rej=[rej;stops(ii) starts(ii+1)];
-    if ii==length(stops)-1
+    if ii==len
         rej=[rej;stops(ii+1) event_samp(end)];
     end
 end
