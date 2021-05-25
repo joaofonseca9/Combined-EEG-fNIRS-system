@@ -115,7 +115,16 @@ Marker_CHECK = 1255;        % Checkerboard flip
 Marker_start = 1555;        % Start signal 
 Marker_stop = 1500;         % Stop signal 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%% Test Markers
+done=0;
+while (done==0)
+    outlet.push_sample(Marker_Test);
+    correct=input('Check if marker was sent \n (Y - continue; Other Key - Send another marker \n', 's');
+    if strcmpi(correct, 'y')
+        done=1;
+    end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
 KbName('UnifyKeyNames'); % Links the key presses to the key board names

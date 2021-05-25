@@ -4,7 +4,7 @@ clear all; close all; clc;
 
 % add path to correct folders and open eeglab
 laptop = 'laptopJoao';
-addFolders;
+[mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 % select ID number and cap
 subject=[{'02'}];
@@ -15,13 +15,13 @@ for iSub = 1:length(subject)
     eeglab;
     
     % set settings
-    runBadTrial = true;
+    runBadTrial = false;
     checkBadChan = false;
 
     % create filenames to save/load data 
     mainpath_in    = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
     mainpath_out     = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\processed\';
-%     file.CHECK       = fullfile([mainpath_out,'ID',sub,'\ID',ID,'_',cap,'EEG_CHECK.mat']);
+    file.pstICA    = fullfile(mainpath_in,['sub-',sub],'eeg',['sub-',sub,'_rec-',rec,'_eeg_pstICA.mat']);
     file.results     = fullfile([mainpath_out,'sub-',sub,'\ResultsMatrix\sub-',sub,'_','letterVEP.mat']);
     file.results_bad = fullfile([mainpath_out,'sub-',sub,'\ResultsMatrix\sub-',sub,'_','letterVEP_bad.mat']);
     
@@ -32,8 +32,9 @@ for iSub = 1:length(subject)
     addpath(sub_path);
 
     % load EEG-files and create a new dataset in eeglab
-    [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg_filtData.set'],fullfile(sub_path,'eeg'));
-    EEG_letter=extractLetterTrials(EEG);
+    load(file.pstICA, 'EEG_pstICA');
+%     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg_filtData.set'],fullfile(sub_path,'eeg'));
+    EEG_letter=extractLetterTrials(EEG_pstICA);
     [ALLEEG, EEG, CURRENTSET] = pop_newset(ALLEEG, EEG_letter, 1,'setname','eegdata','gui','off');
     EEG.data = double(EEG.data);
     
@@ -138,6 +139,7 @@ for iSub = 1:length(subject)
 %     save(file.results_bad,'CHECKerpBAD');
 
     %% Plotting
+%     time(end+1)=time(end);
     subplot(1,2,1); plot(time,mean(ERP,3,'omitnan'),'b');
     subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFPt,fliplr(GFPt)],'b','LineStyle','none');
     set(h1,'FaceAlpha',0.4); plot(time,GFPt,'r','LineWidth',1.5);
@@ -158,8 +160,8 @@ event_samp  = [EEG.event.latency];
 
 %LETTER TRIALS
 Letter=event_samp((strcmp({EEG.event.type}, 's1797'))==1);
-starts=Letter-floor(0.1*EEG.srate);
-stops=Letter+ceil(0.1*EEG.srate);
+starts=Letter-floor(0.5*EEG.srate);
+stops=Letter+ceil(0.5*EEG.srate);
 
 
 rej=[starts(1)-floor(0.1*EEG.srate) starts(1)];
@@ -227,10 +229,10 @@ function [data, time] = extractEpochs (EEG)
     
     % extract trials ERP
     for iTrial = 1:length(event_letter)
-        data(:,:,iTrial) = EEG.data(:, [event_letter(iTrial)-floor(0.1*EEG.srate) : event_letter(iTrial)+ceil(0.1*EEG.srate)]);
+        data(:,:,iTrial) = EEG.data(:, [event_letter(iTrial)-floor(0.1*EEG.srate) : event_letter(iTrial)+ceil(0.4*EEG.srate)]);
     end
     % create time vector [s]
-    time = -0.1 : 1/EEG.srate : 0.1;
+    time = -0.1 : 1/EEG.srate : 0.4;
 end
 
 %%
