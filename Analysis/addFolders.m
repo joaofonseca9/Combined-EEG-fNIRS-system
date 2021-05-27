@@ -8,11 +8,6 @@
 function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
 
     if strcmp(laptop, 'laptopJoao')
-        % why?
-        % add folder for analyses / data
-        addpath(genpath('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne'));
-    %     cd 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne';
-
         % add EEGlab
         eeglab_path = 'C:\\Users\\joaop\\Downloads\\eeglab2021.0';
         addpath(eeglab_path);
@@ -28,10 +23,6 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
         
     elseif strcmp(laptop, 'laptopMariana')
-        % add folder for analyses / data
-    %    addpath(genpath('C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne'));
-    %     cd 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\EEG scripts (introductory)\dryEEG_analysisscripts_Janne';
-
         % add EEGlab
         eeglab_path = 'C:\\Users\\maria\\OneDrive\\Ambiente de Trabalho\\eeglab2021.0';
         addpath(eeglab_path);
@@ -47,11 +38,6 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
 
     elseif strcmp(laptop, 'laptopCatarina')
-        % why?
-        % add folder for analyses / data
-        % addpath(genpath('C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne'));
-        % cd 'C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\Previous Analysis Scripts\dryEEG_analysisscripts_Janne';
-
         % add EEGlab
         eeglab_path = 'C:\\Program Files\\Matlab\\R2020b\\toolbox\\eeglab_current\\eeglab2021.0';
         addpath(eeglab_path);

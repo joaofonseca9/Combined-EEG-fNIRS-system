@@ -1,7 +1,7 @@
 clear;
 close all;
 
-%% Specify where you saved the 3D model folder
+%% Specify where 3D model folder is saved
 laptop='laptopCatarina';
 % laptop='laptopJoao';
 % laptop='laptopMariana';
@@ -17,7 +17,7 @@ cd(out_path) % folder to save the data
 
 [ftver, ftpath] = ft_version; % specify your path to fieldtrip
 
-%% Load the 3D-model
+%% Load the 3D model
 head_surface = ft_read_headshape(obj_file);
 
 % Convert the units to mm
