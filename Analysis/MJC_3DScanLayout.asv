@@ -268,9 +268,10 @@ bg = ft_prepare_layout(cfg);
 % Notes:
 % Specify electrode locations --> only select Cz as electrode (we need
 % it as the middlepoint to align the layout with the mask & outline) --> press q
-% Create mask: skip this step --> press q
+% Create mask: this area will be used when making a topoplot --> press q
 % Create outline: these are the lines that will be shown in the layout
-% (outline the circumference with nose + central sulcus) --> press q
+% (e.g. head shape, sulci) (see info on command window how to create 
+% the polygon)--> press q
 
 % Scale according to layout and place Cz in the middle
 for i=1:length(bg.outline)
@@ -295,11 +296,8 @@ cfg = [];
 cfg.image = image;
 bg = ft_prepare_layout(cfg);
 
-% Notes:
-% Specify electrode locations --> only select Cz as electrode --> press q
-% Create mask: this area will be used when making a topoplot (select optode
-% areas) --> press q
-% Create outline: skip this step --> press q
+% Note:
+% Select Cz and the mask
 
 % Center around Cz + rescale
 for i=1:length(bg.mask)
