@@ -443,7 +443,7 @@ for j=1:N_trials
 
     % If it's in the last trial of the block (where we change the
     % sequence), prompt user to continue to next trial
-    if j<N_trials/2
+    if j<N_trials
         DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
          Screen('Flip', window);
         KbStrokeWait;

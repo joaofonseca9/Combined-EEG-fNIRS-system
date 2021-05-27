@@ -12,10 +12,11 @@ clear;
 Screen('Preference', 'SkipSyncTests', 1);
 
 % root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
+root_dir = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system';
+% root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
 % addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
-addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
+addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+% addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -461,7 +462,7 @@ for j=1:N_trials
 
     % If it's in the last trial of the block (where we change the
     % sequence), prompt user to continue to next trial
-    if j<N_trials/2
+    if j<N_trials
         DrawFormattedText(window, 'Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a letter on the screen appears.' ,'center','center', white);
          Screen('Flip', window);
         KbStrokeWait;
