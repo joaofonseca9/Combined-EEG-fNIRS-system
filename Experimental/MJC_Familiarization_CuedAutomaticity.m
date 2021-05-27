@@ -12,9 +12,9 @@ clear;
 % Skip screen synchronization to prevent Pyshtoolbox for freezing
 Screen('Preference', 'SkipSyncTests', 1);
 
-% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-% root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
-root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system';
+% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
+% root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Experimental';
+root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
 
 %% SET RIGHT AUTOMATIC SEQUENCE
 sequenceA = '4 3 4 1 4 1 2 4 3 2 1 2';
@@ -122,6 +122,7 @@ KbStrokeWait;
 Screen('TextSize', window, 50);
 DrawFormattedText(window, sprintf('%s', sequenceauto), 'center', 'center', white);
 vbl= Screen('Flip', window);
+WaitSecs(180)
 PsychPortAudio('Start', file(2), 1, [], []); %Play metronome sound file (2 minutes)
 WaitSecs(120)
 PsychPortAudio('Stop', file(2));
