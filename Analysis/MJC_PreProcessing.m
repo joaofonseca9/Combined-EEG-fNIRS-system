@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-% laptop='laptopJoao';
 laptop='laptopMariana';
+% laptop='laptopJoao';
 % laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -20,6 +20,10 @@ sub_path = fullfile(mainpath_in,'incoming',['sub-',sub]);
 eeg_path = fullfile(sub_path,'eeg');
 nirseeg_path = fullfile(sub_path,'nirseeg');
 sub_vhdr = fullfile(['sub-',sub,'_rec-',rec,'_eeg.vhdr']);
+
+%Before changing directory to the subpath, add current directory to access
+%the function files
+addpath(pwd)
 cd(sub_path);
 
 oxyfile = fullfile(sub_path,'nirseeg',['sub-',sub,'_rec-',rec,'_nirseeg.edf']);
@@ -146,12 +150,9 @@ end
 
 lbl = sprintfc('%d',lbl_numeric);
 marker_table=array2table(marker_summary);
-marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStart','CheckStop','Letter','StartMovie','StopMovie'};
+marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStop','CheckStart','Letter','StartMovie','StopMovie'};
 
-%% Extract task data
-[EEG, starts, stops]=extractTaskData_EEG(EEG,marker_table, results, file);
-[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','taskData','gui','off');
-pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'eeg'));
+
 
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
@@ -246,3 +247,9 @@ else
     [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
         'setname', 'pstICA','gui','off');
 end
+
+%% Extract task data
+[EEG_divided, file]=extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
+save(file.EEG_divided,'EEG_divided');
+%[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
+

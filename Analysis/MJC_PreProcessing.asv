@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-% laptop='laptopJoao';
-laptop='laptopMariana';
+laptop='laptopJoao';
+% laptop='laptopMariana';
 % laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -148,18 +148,7 @@ lbl = sprintfc('%d',lbl_numeric);
 marker_table=array2table(marker_summary);
 marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCue','StopCue','StartAutoCue','StartAutoNoCue','StartNonAutoCue','StartNonAutoNoCue','StartAutoDualCue','StartAutoDualNoCue','StartNonAutoDualCue','StartNonAutoDualNoCue','StopAutoCue','StopAutoNoCue','StopNonAutoCue','StopNonAutoNoCue','StopAutoDualCue','StopAutoDualNoCue','StopNonAutoDualCue','StopNonAutoDualNoCue','Key','CheckFlip','CheckStart','CheckStop','Letter','StartMovie','StopMovie'};
 
-%% Extract task data
-[EEG, starts, stops]=extractTaskData_EEG(EEG,marker_table, results, file);
-[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','taskData','gui','off');
-pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'eeg'));
 
-%% Load MNI coordinates
-% Load channel coordinates/positions of the standard MNI model of eeglab: 
-% MNI dipfit channel positions
-[EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
-        'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
@@ -193,28 +182,6 @@ xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
 subplot(1, 3, 3); plot(f_filt, P_filt); 
 xlim([0 50]); title('Filtered data - different scale');
 
-%% Remove bad channels 
-% Visually inspect the signals and choose if a signals is too bad that it
-% needs to be removed.
-% First see the power spectrum and then check if the signal is actually bad
-% on the plot.
-
-if ~isfile(file.removedBadChannels) 
-    figure; 
-    pop_spectopo(EEG_filtered, 1, [0 EEG_filtered.pnts], 'EEG', 'percent',...
-        50, 'freqrange', [2 75], 'electrodes', 'off');
-    pop_eegplot(EEG_filtered);
-    RC = input('Remove channel [nr/no]: ','s');
-    while ~strcmp(RC, 'no')
-            pop_prop(EEG,0,str2double(IC),NaN,{'freqrange' [2 55]}); % plot eyeblink IC
-    end
-else
-    load(file.removedBadChannels, 'EEG_removedBadChannels');
-    [ALLEEG, EEG_removedBadChannels, ~] = pop_newset(ALLEEG,...
-        EEG_removedBadChannels, 1, 'setname', 'removedBadChannels',...
-        'gui', 'off');
-end
-
 %% Removal of eye blinks - preICA
 if ~isfile(file.preICA)  
     [EEG_preICA] = pop_runica(EEG_filtered,'icatype', 'runica',...
@@ -230,6 +197,10 @@ end
 
 %% Removal of eye blinks - pstICA
 if ~isfile(file.pstICA)
+    [EEG_preICA] = pop_chanedit(EEG_preICA, 'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
+        'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
     [EEG_pstICA] = run_postICA(EEG_preICA);
     [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
         'setname', 'pstICA','gui','off');
@@ -239,3 +210,8 @@ else
     [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
         'setname', 'pstICA','gui','off');
 end
+
+%% Extract task data
+[EEG_task, file]=extractTaskData_EEG(EEG,marker_table, results, file);
+[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
+pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'eeg'));
