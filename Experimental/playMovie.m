@@ -50,7 +50,7 @@ try
         if(isLetterFrame(n)==1)
             outlet.push_sample(Marker_Letter);
         end
-        n=n+1;
+        
         
         % Draw the new texture immediately to screen:
         Screen('DrawTexture', win, tex);
@@ -90,6 +90,7 @@ try
                 end
             end
         end
+        n=n+1;
         
     end
     
