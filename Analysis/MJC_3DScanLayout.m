@@ -312,4 +312,5 @@ load('layout.mat')
 layout.mask = bg.mask;
 figure; ft_plot_layout(layout)
 save('layout.mat', 'layout')
+saveas(gcf, 'layout.png')
 
