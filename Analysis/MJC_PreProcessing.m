@@ -2,9 +2,9 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-% laptop='laptopMariana';
+laptop='laptopMariana';
 % laptop='laptopJoao';
-laptop='laptopCatarina';
+% laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
@@ -234,7 +234,7 @@ end
 
 %% Removal of eye blinks - pstICA
 if ~isfile(file.pstICA)
-    [EEG] = run_postICA(EEG_);
+    [EEG] = run_postICA(EEG);
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'pstICA',...
         'gui', 'off');
     save(file.pstICA, 'EEG');
