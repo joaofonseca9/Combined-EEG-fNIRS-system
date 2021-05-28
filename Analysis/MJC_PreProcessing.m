@@ -2,9 +2,9 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-laptop='laptopMariana';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
-% laptop='laptopCatarina';
+laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
