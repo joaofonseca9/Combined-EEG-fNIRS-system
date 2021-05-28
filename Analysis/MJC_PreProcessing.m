@@ -248,6 +248,20 @@ else
         'setname', 'pstICA','gui','off');
 end
 
+%% Set reference
+% Re-reference the system to Cz 
+
+if ~isfile(file.preprocessed)
+    [EEG_preprocessed] = pop_reref(EEG_pstICA, 'Cz');
+    [ALLEEG, EEG_preprocessed, ~] = pop_newset(ALLEEG, EEG_preprocessed,...
+        1, 'setname', 'preprocessed','gui','off');
+    save(file.preprocessed, 'EEG_preprocessed');
+else                          
+    load(file.preprocessed, 'EEG_preprocessed');
+    [ALLEEG, EEG_preprocessed, ~] = pop_newset(ALLEEG, EEG_preprocessed,...
+        1, 'setname', 'preprocessed','gui','off');
+end
+
 %% Extract task data
 [EEG_divided, file]=extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
 save(file.EEG_divided,'EEG_divided');
