@@ -156,8 +156,10 @@ pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'ee
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
-
-
+[EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
+        'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
@@ -190,6 +192,28 @@ subplot(1, 3, 2); plot(f_filt, P_filt);
 xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
 subplot(1, 3, 3); plot(f_filt, P_filt); 
 xlim([0 50]); title('Filtered data - different scale');
+
+%% Remove bad channels 
+% Visually inspect the signals and choose if a signals is too bad that it
+% needs to be removed.
+% First see the power spectrum and then check if the signal is actually bad
+% on the plot.
+
+if ~isfile(file.removedBadChannels) 
+    figure; 
+    pop_spectopo(EEG_filtered, 1, [0 EEG_filtered.pnts], 'EEG', 'percent',...
+        50, 'freqrange', [2 75], 'electrodes', 'off');
+    pop_eegplot(EEG_filtered);
+    RC = input('Remove channel [nr/no]: ','s');
+    while ~strcmp(RC, 'no')
+            pop_prop(EEG,0,str2double(IC),NaN,{'freqrange' [2 55]}); % plot eyeblink IC
+    end
+else
+    load(file.removedBadChannels, 'EEG_removedBadChannels');
+    [ALLEEG, EEG_removedBadChannels, ~] = pop_newset(ALLEEG,...
+        EEG_removedBadChannels, 1, 'setname', 'removedBadChannels',...
+        'gui', 'off');
+end
 
 %% Removal of eye blinks - preICA
 if ~isfile(file.preICA)  
