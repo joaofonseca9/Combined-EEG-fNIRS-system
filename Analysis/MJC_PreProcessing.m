@@ -169,17 +169,16 @@ raw_data = EEG.data;
 
 % Filter the signal
 if ~isfile(file.filtered) 
-    EEG_filtered = EEG;
     filtered_data = filterNoise(double(raw_data), EEG, 4);
-    EEG_filtered.data = filtered_data;
-    [ALLEEG, EEG_filtered, ~] = pop_newset(ALLEEG, EEG_filtered, 1,...
-        'setname','filtData','gui','off');
-    save(file.filtered, 'EEG_filtered');
+    EEG.data = filtered_data;
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
+        'gui', 'off');
+    save(file.filtered, 'EEG');
 else
-    load(file.filtered, 'EEG_filtered');
-    filtered_data = EEG_filtered.data;
-    [ALLEEG, EEG_filtered, ~] = pop_newset(ALLEEG, EEG_filtered, 1,...
-        'setname', 'filtData', 'gui', 'off');
+    load(file.filtered, 'EEG');
+    filtered_data = EEG.data;
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
+        'gui', 'off');
 end
 
 % Determine the power spectrum of the filtered data
@@ -200,66 +199,63 @@ xlim([0 50]); title('Filtered data - different scale');
 % First see the power spectrum and then check if the signal is actually bad
 % on the plot.
 if ~isfile(file.removedBadChannels) 
-    EEG_removedBadChannels = EEG_filtered;
     figure; 
-    pop_spectopo(EEG_removedBadChannels, 1, [0 EEG_removedBadChannels.pnts],...
-        'EEG', 'percent', 50, 'freqrange', [2 75], 'electrodes', 'off');
-    pop_eegplot(EEG_removedBadChannels);
+    pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50, 'freqrange',...
+        [2 75], 'electrodes', 'off');
+    pop_eegplot(EEG);
     RC = input('Remove channel [nr/no]: ','s');
     while ~strcmp(RC, 'no')
-        [EEG_removedBadChannels] = pop_select(EEG_removedBadChannels,...
-            'nochannel', eval(RC));
+        [EEG] = pop_select(EEG, 'nochannel', eval(RC));
         figure;
-        pop_spectopo(EEG_removedBadChannels, 1, [0 EEG_removedBadChannels.pnts],...
-            'EEG', 'percent', 50, 'freqrange', [2 75], 'electrodes', 'off');
-        pop_eegplot(EEG_removedBadChannels);
+        pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50,...
+            'freqrange', [2 75], 'electrodes', 'off');
+        pop_eegplot(EEG);
         RC = input('Remove channel [nr/no]: ','s');
     end
-    save(file.removedBadChannels, 'EEG_removedBadChannels');
+    save(file.removedBadChannels, 'EEG');
 else
-    load(file.removedBadChannels, 'EEG_removedBadChannels');
-    [ALLEEG, EEG_removedBadChannels, ~] = pop_newset(ALLEEG,...
-        EEG_removedBadChannels, 1, 'setname', 'removedBadChannels',...
-        'gui', 'off');
+    load(file.removedBadChannels, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'removedBadChannels', 'gui', 'off');
 end
 
 %% Removal of eye blinks - preICA
 if ~isfile(file.preICA)  
-    [EEG_preICA] = pop_runica(EEG_removedBadChannels,'icatype', 'runica',...
-        'extended', 1, 'interrupt', 'on');
-    [ALLEEG, EEG_preICA, ~] = pop_newset(ALLEEG, EEG_preICA, 1,...
-        'setname', 'preICA', 'gui', 'off');
-    save(file.preICA, 'EEG_preICA');
+    [EEG] = pop_runica(EEG,'icatype', 'runica', 'extended', 1,...
+        'interrupt', 'on');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'preICA',...
+        'gui', 'off');
+    save(file.preICA, 'EEG');
 else
-    load(file.preICA, 'EEG_preICA');
-    [ALLEEG, EEG_preICA, ~] = pop_newset(ALLEEG, EEG_preICA, 1,...
-        'setname', 'preICA', 'gui', 'off');
+    load(file.preICA, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'preICA',...
+        'gui', 'off');
 end
 
 %% Removal of eye blinks - pstICA
 if ~isfile(file.pstICA)
-    [EEG_pstICA] = run_postICA(EEG_preICA);
-    [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
-        'setname', 'pstICA','gui','off');
-    save(file.pstICA, 'EEG_pstICA');
+    [EEG] = run_postICA(EEG_);
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'pstICA',...
+        'gui', 'off');
+    save(file.pstICA, 'EEG');
 else                          
-    load(file.pstICA, 'EEG_pstICA');
-    [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
-        'setname', 'pstICA','gui','off');
+    load(file.pstICA, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'pstICA',...
+        'gui', 'off');
 end
 
 %% Set reference
 % Re-reference the system to Cz 
 
 if ~isfile(file.preprocessed)
-    [EEG_preprocessed] = pop_reref(EEG_pstICA, 'Cz');
-    [ALLEEG, EEG_preprocessed, ~] = pop_newset(ALLEEG, EEG_preprocessed,...
-        1, 'setname', 'preprocessed','gui','off');
-    save(file.preprocessed, 'EEG_preprocessed');
+    [EEG] = pop_reref(EEG, 'Cz');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'preprocessed', 'gui', 'off');
+    save(file.preprocessed, 'EEG');
 else                          
-    load(file.preprocessed, 'EEG_preprocessed');
-    [ALLEEG, EEG_preprocessed, ~] = pop_newset(ALLEEG, EEG_preprocessed,...
-        1, 'setname', 'preprocessed','gui','off');
+    load(file.preprocessed, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'preprocessed', 'gui', 'off');
 end
 
 %% Extract task data
