@@ -11,11 +11,11 @@ clear;
 % Synch test skip => comment when actually testing patient
 Screen('Preference', 'SkipSyncTests', 1);
 
-% root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
-root_dir = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system';
+root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
+% root_dir = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system';
 % root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system';
-% addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
-addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
+addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
+% addpath(genpath('C:\Users\catar\Downloads\liblsl-Matlab-master'));
 % addpath(genpath('C:\Users\maria\OneDrive\Documentos\GitHub\liblsl-Matlab'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
