@@ -156,10 +156,8 @@ pop_saveset( EEG, ['sub-',sub,'_rec-',rec,'_eeg_task.set'],fullfile(sub_path,'ee
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
-[EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
-        'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
+
+
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
