@@ -28,8 +28,8 @@ addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % sequencesprint={ num2str(reshape(newseq1', 1, [])), num2str(reshape(newseq2', 1, [])) }
 % OUR SEQUENCES - script generateSequences
 % 2 4 3 4 1 3 4 1 2 1 3 2
-% 4 2 4 1 3 1 4 2 3 2 1 3
-sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 2 4 1 3 1 4 2 3 2 1 3')};
+% 4 1 3 2 4 1 4 2 3 2 1 3
+sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 1 3 2 4 1 4 2 3 2 1 3')};
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Order of the sequences to be tested 

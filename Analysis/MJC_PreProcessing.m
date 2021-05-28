@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-laptop='laptopJoao';
-% laptop='laptopMariana';
+laptop='laptopMariana';
+% laptop='laptopJoao';
 % laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -154,6 +154,14 @@ marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCu
 
 
 
+%% Load MNI coordinates
+% Load channel coordinates/positions of the standard MNI model of eeglab: 
+% MNI dipfit channel positions
+[EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
+        'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
+
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
 raw_data = EEG.data;
@@ -186,9 +194,38 @@ xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
 subplot(1, 3, 3); plot(f_filt, P_filt); 
 xlim([0 50]); title('Filtered data - different scale');
 
+%% Remove bad channels 
+% Visually inspect the signals and choose if a signals is too bad that it
+% needs to be removed.
+% First see the power spectrum and then check if the signal is actually bad
+% on the plot.
+if ~isfile(file.removedBadChannels) 
+    EEG_removedBadChannels = EEG_filtered;
+    figure; 
+    pop_spectopo(EEG_removedBadChannels, 1, [0 EEG_removedBadChannels.pnts],...
+        'EEG', 'percent', 50, 'freqrange', [2 75], 'electrodes', 'off');
+    pop_eegplot(EEG_removedBadChannels);
+    RC = input('Remove channel [nr/no]: ','s');
+    while ~strcmp(RC, 'no')
+        [EEG_removedBadChannels] = pop_select(EEG_removedBadChannels,...
+            'nochannel', eval(RC));
+        figure;
+        pop_spectopo(EEG_removedBadChannels, 1, [0 EEG_removedBadChannels.pnts],...
+            'EEG', 'percent', 50, 'freqrange', [2 75], 'electrodes', 'off');
+        pop_eegplot(EEG_removedBadChannels);
+        RC = input('Remove channel [nr/no]: ','s');
+    end
+    save(file.removedBadChannels, 'EEG_removedBadChannels');
+else
+    load(file.removedBadChannels, 'EEG_removedBadChannels');
+    [ALLEEG, EEG_removedBadChannels, ~] = pop_newset(ALLEEG,...
+        EEG_removedBadChannels, 1, 'setname', 'removedBadChannels',...
+        'gui', 'off');
+end
+
 %% Removal of eye blinks - preICA
 if ~isfile(file.preICA)  
-    [EEG_preICA] = pop_runica(EEG_filtered,'icatype', 'runica',...
+    [EEG_preICA] = pop_runica(EEG_removedBadChannels,'icatype', 'runica',...
         'extended', 1, 'interrupt', 'on');
     [ALLEEG, EEG_preICA, ~] = pop_newset(ALLEEG, EEG_preICA, 1,...
         'setname', 'preICA', 'gui', 'off');
@@ -201,10 +238,6 @@ end
 
 %% Removal of eye blinks - pstICA
 if ~isfile(file.pstICA)
-    [EEG_preICA] = pop_chanedit(EEG_preICA, 'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
-        'lookup', join([eeglab_path,...
-        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
     [EEG_pstICA] = run_postICA(EEG_preICA);
     [ALLEEG, EEG_pstICA, ~] = pop_newset(ALLEEG, EEG_pstICA, 1,...
         'setname', 'pstICA','gui','off');

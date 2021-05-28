@@ -17,8 +17,8 @@ Screen('Preference', 'SkipSyncTests', 1);
 root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
 
 %% SET RIGHT AUTOMATIC SEQUENCE
-sequenceA = '4 3 4 1 4 1 2 4 3 2 1 2';
-sequenceB = '2 1 2 3 2 1 3 2 4 2 4 1';
+sequenceA = '2 4 3 4 1 3 4 1 2 1 3 2';
+sequenceB = '4 1 3 2 4 1 4 2 3 2 1 3';
 sequenceauto = sequenceA;
 
 %% Open Phsychtoolbox
