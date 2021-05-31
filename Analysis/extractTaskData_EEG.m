@@ -44,6 +44,11 @@ else
     disp('Incorrect number of checkboard flips for EEG only');
 end
 
+%% Remove data before the last test marker
+TEST_end = event_samp((strcmp({EEG.event.type}, 's1600'))==1);
+TEST_end= TEST_end(end);
+EEG=eeg_eegrej (EEG,[TEST_end size(EEG.data,2)]);
+
 %% CHECKERBOARD_________________________________________________________
 CHECK_start = event_samp((strcmp({EEG.event.type}, 's1555'))==1);
 CHECK_stop  = event_samp((strcmp({EEG.event.type}, 's1500'))==1);

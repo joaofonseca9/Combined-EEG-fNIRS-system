@@ -2,7 +2,7 @@
 %Please define filepath before
 %It will save a .mov file of the presentation as well as a .txt with the
 %number
-filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental\LetterPresentation';
+filepath='C:\Users\joaop\Desktop\LetterPresentation';
 
 %Number of trials per block
 N_trials=20;
