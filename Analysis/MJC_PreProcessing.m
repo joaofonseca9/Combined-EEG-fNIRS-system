@@ -10,7 +10,7 @@ laptop='laptopMariana';
 eeglab;
 ft_defaults;
 
-sub='02';
+sub='03';
 rec='02';
 
 file = getFileNames(mainpath_out, sub, rec);
@@ -164,8 +164,8 @@ marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCu
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
-raw_data = EEG.data;
-[P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
+% raw_data = EEG.data;
+% [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
 
 % Filter the signal
 if ~isfile(file.filtered) 
@@ -182,16 +182,16 @@ else
 end
 
 % Determine the power spectrum of the filtered data
-[P_filt, f_filt] = periodogram(filtered_data', [], [] , EEG.srate);
+% [P_filt, f_filt] = periodogram(filtered_data', [], [] , EEG.srate);
 
 % Plot the power spectrums
-figure;
-subplot(1, 3, 1); plot(f_raw, P_raw); 
-xlim([0 200]); ylim([0 7e5]); title('Raw data');
-subplot(1, 3, 2); plot(f_filt, P_filt); 
-xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
-subplot(1, 3, 3); plot(f_filt, P_filt); 
-xlim([0 50]); title('Filtered data - different scale');
+% figure;
+% subplot(1, 3, 1); plot(f_raw, P_raw); 
+% xlim([0 200]); ylim([0 7e5]); title('Raw data');
+% subplot(1, 3, 2); plot(f_filt, P_filt); 
+% xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
+% subplot(1, 3, 3); plot(f_filt, P_filt); 
+% xlim([0 50]); title('Filtered data - different scale');
 
 %% Remove bad channels 
 % Visually inspect the signals and choose if a signals is too bad that it
@@ -212,6 +212,8 @@ if ~isfile(file.removedBadChannels)
         pop_eegplot(EEG);
         RC = input('Remove channel [nr/no]: ','s');
     end
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'removedBadChannels', 'gui', 'off');
     save(file.removedBadChannels, 'EEG');
 else
     load(file.removedBadChannels, 'EEG');
