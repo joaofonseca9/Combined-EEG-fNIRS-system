@@ -21,8 +21,8 @@ eeg_path = fullfile(sub_path,'eeg');
 nirs_path = fullfile(sub_path,'nirs');
 sub_vhdr = fullfile(['sub-',sub,'_rec-',rec,'_eeg.vhdr']);
 
-% Before changing directory to the subpath, add current directory to access
-% the function files
+%Before changing directory to the subpath, add current directory to access
+%the function files
 addpath(pwd)
 cd(sub_path);
 
@@ -53,7 +53,7 @@ end
 
 %% Read data 
 if data_loaded == 0
-    % FIELDTRIP - load the eeg&nirs data
+    %FIELDTRIP - load the eeg&nirs data
     cfg = [];
     cfg.dataset = oxyfile;
     [nirs_raw] = ft_preprocessing(cfg);
@@ -61,29 +61,20 @@ if data_loaded == 0
 	save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'nirs_raw');
     save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events');
     
-    % EEGLAB load eeg only data
+    %EEGLAB load eeg only data
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
     [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off');
-    
-    % Show layout of optode template
-    cfg = [];
-    cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
-    ft_layoutplot(cfg);
 
 else %if data has been loaded and the datasets created, load the structs
-    load(['sub-',sub,'_rec-',rec,'_nirs.mat']); %Avoids call to ft_preprocessing
-	load(['sub-',sub,'_rec-',rec,'_nirs_events.mat']); %Avoids call to ft_readevents
-	[EEG] = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'], fullfile(sub_path,'eeg'));
-
-	% Show layout of optode template
-    cfg = [];
-    cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
-    ft_layoutplot(cfg);
+    load(['sub-',sub,'_rec-',rec,'_nirs.mat']);    %Avoids call to ft_preprocessing
+	load(['sub-',sub,'_rec-',rec,'_nirs_events.mat']);%Avoids call to ft_readevents
+	[EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
 %% Read stimuli results
-results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
-marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
+results=load(fullfile(sub_path,'stim',['results_sub-',sub,'_rec-',rec]));
+
+marker_table=checkMarkers(EEG,nirs_raw,nirs_events);
 
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
@@ -95,41 +86,40 @@ marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
-% eeg_raw = EEG.data;
-% [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
+% raw_data = EEG.data;
+% [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
 
 % Filter the signal
 if ~isfile(file.filtered) 
-    eeg_filtered = filterNoise(double(eeg_raw), EEG, 4);
-    EEG.data = eeg_filtered;
+    filtered_data = filterNoise(double(raw_data), EEG, 4);
+    EEG.data = filtered_data;
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
         'gui', 'off');
     save(file.filtered, 'EEG');
 else
     load(file.filtered, 'EEG');
-    eeg_filtered = EEG.data;
+    filtered_data = EEG.data;
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
         'gui', 'off');
 end
 
 % Determine the power spectrum of the filtered data
-% [P_filt, f_filt] = periodogram(eeg_filtered', [], [] , EEG.srate);
+% [P_filt, f_filt] = periodogram(filtered_data', [], [] , EEG.srate);
 
 % Plot the power spectrums
 % figure;
 % subplot(1, 3, 1); plot(f_raw, P_raw); 
-% xlim([0 200]); ylim([0 7e5]); title('EEG raw data');
+% xlim([0 200]); ylim([0 7e5]); title('Raw data');
 % subplot(1, 3, 2); plot(f_filt, P_filt); 
-% xlim([0 200]); ylim([0 7e5]); title('EEG filtered data - same scale');
+% xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
 % subplot(1, 3, 3); plot(f_filt, P_filt); 
-% xlim([0 50]); title('EEG filtered data - different scale');
+% xlim([0 50]); title('Filtered data - different scale');
 
 %% Remove bad channels 
 % Visually inspect the signals and choose if a signals is too bad that it
 % needs to be removed.
 % First see the power spectrum and then check if the signal is actually bad
 % on the plot.
-
 if ~isfile(file.removedBadChannels) 
     figure; 
     pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50, 'freqrange',...
@@ -193,7 +183,7 @@ else
 end
 
 %% Extract task data
-[EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
+[EEG_divided, file]=extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
 save(file.EEG_divided,'EEG_divided');
-% [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
+%[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
 
