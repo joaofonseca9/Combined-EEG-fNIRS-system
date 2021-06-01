@@ -57,17 +57,15 @@ if data_loaded==0
     cfg = [];
     cfg.dataset = oxyfile;
     [data_raw] = ft_preprocessing(cfg);
-    fnirs_events=ft_read_event(cfg.dataset);
-    if strcmp(sub,'03') && strcmp(rec,'02')
-        fnirs_events=ft_filter_event(fnirs_events,'minsample',72787);
-    end
+    eeg_fnirs_events=ft_read_event(cfg.dataset);
+    if strcmp(sub,'03')
     
     if strcmp(sub,'02') && strcmp(rec,'02')
         save(['sub-',sub,'_rec-',rec,'_nirseeg.mat'], 'data_raw');
         save(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat'], 'eeg_fnirs_events');
     else
         save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'data_raw');
-        save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'fnirs_events');
+        save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'eeg_fnirs_events');
     end
     
     %EEGLAB load eeg only data
@@ -79,8 +77,8 @@ else %if data has been loaded and the datasets created, load the structs
         load(['sub-',sub,'_rec-',rec,'_nirseeg.mat']);    %Avoids call to ft_preprocessing
         load(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']);%Avoids call to ft_readevents
     else
-        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs.mat']));    %Avoids call to ft_preprocessing
-        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs_events.mat']));%Avoids call to ft_readevents
+        load(['sub-',sub,'_rec-',rec,'_nirs.mat']);    %Avoids call to ft_preprocessing
+        load(['sub-',sub,'_rec-',rec,'_nirs_events.mat']);%Avoids call to ft_readevents
     end
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
@@ -88,7 +86,7 @@ end
 %% Read stimuli results
 results=load(fullfile(sub_path,'stim',['results_sub-',sub,'_rec-',rec]));
 
-marker_table=checkMarkers(EEG,data_raw,fnirs_events);
+marker_table=checkMarkers(EEG,data_raw,eeg_fnirs_events);
 
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
