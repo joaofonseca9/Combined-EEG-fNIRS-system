@@ -2,9 +2,9 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
+laptop='laptopCatarina';
 % laptop='laptopMariana';
-laptop='laptopJoao';
-% laptop='laptopCatarina';
+% laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
@@ -18,11 +18,11 @@ file = getFileNames(mainpath_out, sub, rec);
 %% Select data folder 
 sub_path = fullfile(mainpath_in,'incoming',['sub-',sub]);
 eeg_path = fullfile(sub_path,'eeg');
-nirseeg_path = fullfile(sub_path,'nirs');
+nirs_path = fullfile(sub_path,'nirs');
 sub_vhdr = fullfile(['sub-',sub,'_rec-',rec,'_eeg.vhdr']);
 
-%Before changing directory to the subpath, add current directory to access
-%the function files
+% Before changing directory to the subpath, add current directory to access
+% the function files
 addpath(pwd)
 cd(sub_path);
 
@@ -43,36 +43,41 @@ oxyfile = fullfile(sub_path,'nirs',['sub-',sub,'_rec-',rec,'_nirs.oxy3']);
 % eegfile = 'C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\After Experiment\pilots\pilot 1\pilotfnirs_01.vhdr';
 % eegfile = 'C:\Users\catar\OneDrive - Universidade do Porto\Internship\After Experiment\pilots\pilot 1\pilotfnirs_01.vhdr'
 
-correct=input('Load data (Y/N)? If not, its assumed the .set files have been generated \n', 's');
+correct = input('Load data (Y/N)? If not, its assumed the .set files have been generated \n', 's');
 if strcmpi(correct, 'y')
-    done=1;
-    data_loaded=0;
+    done = 1;
+    data_loaded = 0;
 elseif strcmpi(correct, 'n')
-    data_loaded=1;
+    data_loaded = 1;
 end
 
 %% Read data 
-if data_loaded==0
-    %FIELDTRIP - load the eeg&nirs data
+if data_loaded == 0
+    % FIELDTRIP - load the eeg&nirs data
     cfg = [];
     cfg.dataset = oxyfile;
-    [data_raw] = ft_preprocessing(cfg);
-    fnirs_events=ft_read_event(cfg.dataset);
+    [nirs_raw] = ft_preprocessing(cfg);
+    nirs_events = ft_read_event(cfg.dataset);
     if strcmp(sub,'03') && strcmp(rec,'02')
-        fnirs_events=ft_filter_event(fnirs_events,'minsample',72787);
+        nirs_events=ft_filter_event(nirs_events,'minsample',72787);
     end
     
     if strcmp(sub,'02') && strcmp(rec,'02')
-        save(['sub-',sub,'_rec-',rec,'_nirseeg.mat'], 'data_raw');
-        save(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat'], 'eeg_fnirs_events');
+        save(['sub-',sub,'_rec-',rec,'_nirseeg.mat'], 'nirs_raw');
+        save(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat'], 'nirs_events');
     else
-        save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'data_raw');
-        save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'fnirs_events');
+        save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'nirs_raw');
+        save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events');
     end
     
-    %EEGLAB load eeg only data
+    % EEGLAB load eeg only data
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
-    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','rawData','gui','off');
+    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off');
+    
+    % Show layout of optode template
+    cfg = [];
+    cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
+    ft_layoutplot(cfg);
 
 else %if data has been loaded and the datasets created, load the structs
     if strcmp(sub,'02') && strcmp(rec,'02')
@@ -85,10 +90,15 @@ else %if data has been loaded and the datasets created, load the structs
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
-%% Read stimuli results
-results=load(fullfile(sub_path,'stim',['results_sub-',sub,'_rec-',rec]));
 
-marker_table=checkMarkers(EEG,data_raw,fnirs_events);
+%% Show layout of optode template
+cfg = [];
+cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
+ft_layoutplot(cfg);
+
+%% Read stimuli results
+results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
+marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 
 %% Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
@@ -100,40 +110,41 @@ marker_table=checkMarkers(EEG,data_raw,fnirs_events);
 
 %% Filter EEG - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
-% raw_data = EEG.data;
-% [P_raw, f_raw] = periodogram(raw_data', [], [] , EEG.srate);
+% eeg_raw = EEG.data;
+% [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
 
 % Filter the signal
 if ~isfile(file.filtered) 
-    filtered_data = filterNoise(double(raw_data), EEG, 4);
-    EEG.data = filtered_data;
+    eeg_filtered = filterNoise(double(eeg_raw), EEG, 4);
+    EEG.data = eeg_filtered;
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
         'gui', 'off');
     save(file.filtered, 'EEG');
 else
     load(file.filtered, 'EEG');
-    filtered_data = EEG.data;
+    eeg_filtered = EEG.data;
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
         'gui', 'off');
 end
 
 % Determine the power spectrum of the filtered data
-% [P_filt, f_filt] = periodogram(filtered_data', [], [] , EEG.srate);
+% [P_filt, f_filt] = periodogram(eeg_filtered', [], [] , EEG.srate);
 
 % Plot the power spectrums
 % figure;
 % subplot(1, 3, 1); plot(f_raw, P_raw); 
-% xlim([0 200]); ylim([0 7e5]); title('Raw data');
+% xlim([0 200]); ylim([0 7e5]); title('EEG raw data');
 % subplot(1, 3, 2); plot(f_filt, P_filt); 
-% xlim([0 200]); ylim([0 7e5]); title('Filtered data - same scale');
+% xlim([0 200]); ylim([0 7e5]); title('EEG filtered data - same scale');
 % subplot(1, 3, 3); plot(f_filt, P_filt); 
-% xlim([0 50]); title('Filtered data - different scale');
+% xlim([0 50]); title('EEG filtered data - different scale');
 
 %% Remove bad channels 
 % Visually inspect the signals and choose if a signals is too bad that it
 % needs to be removed.
 % First see the power spectrum and then check if the signal is actually bad
 % on the plot.
+
 if ~isfile(file.removedBadChannels) 
     figure; 
     pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50, 'freqrange',...
@@ -183,10 +194,10 @@ else
 end
 
 %% Set reference
-% Re-reference the system to Cz 
+% Re-reference the system to M1
 
 if ~isfile(file.preprocessed)
-    [EEG] = pop_reref(EEG, 'Cz');
+    [EEG] = pop_reref(EEG, 'M1');
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
         'preprocessed', 'gui', 'off');
     save(file.preprocessed, 'EEG');
@@ -197,7 +208,7 @@ else
 end
 
 %% Extract task data
-[EEG_divided, file]=extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
+[EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
 save(file.EEG_divided,'EEG_divided');
-%[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
+% [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
 
