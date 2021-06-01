@@ -81,37 +81,26 @@ post   =  round(2*data_down.fsample); % seconds post-stimulus
 offset = -pre; % see ft_definetrial
 
 %% Setting the trials
-trl.autodual_cue = [smp.start_autodual_cue-pre smp.stop_autodual_cue+post];
-trl.autosingle_cue = [smp.start_autosingle_cue-pre smp.stop_autosingle_cue+post];
-trl.nonautodual_cue = [smp.start_nonautodual_cue-pre smp.stop_nonautodual_cue+post];
-trl.nonautosingle_cue = [smp.start_nonautosingle_cue-pre smp.stop_nonautosingle_cue+post];
+trl.autodual_cue = [smp.start_autodual_cue-pre smp.start_autodual_cue+post];
+trl.autosingle_cue = [smp.start_autosingle_cue-pre smp.start_autosingle_cue+post];
+trl.nonautodual_cue = [smp.start_nonautodual_cue-pre smp.start_nonautodual_cue+post];
+trl.nonautosingle_cue = [smp.start_nonautosingle_cue-pre smp.start_nonautosingle_cue+post];
 
-trl.autodual_nocue = [smp.start_autodual_nocue-pre smp.stop_autodual_nocue+post];
-trl.autosingle_nocue = [smp.start_autosingle_nocue-pre smp.stop_autosingle_nocue+post];
-trl.nonautodual_nocue = [smp.start_nonautodual_nocue-pre smp.stop_nonautodual_nocue+post];
-trl.nonautosingle_nocue = [smp.start_nonautosingle_nocue-pre smp.stop_nonautosingle_nocue+post];
+trl.autodual_nocue = [smp.start_autodual_nocue-pre smp.foot_auto+post];
+trl.autosingle_nocue = [smp.start_autosingle_nocue-pre smp.foot_nonauto+post];
+trl.nonautodual_nocue = [smp.start_nonautodual_nocue-pre smp.finger_auto+post];
+trl.nonautosingle_nocue = [smp.start_nonautosingle_nocue-pre smp.finger_nonauto+post];
 
 
 %% Add the offset
-trl.autodual_cue(:,3) = offset;
-trl.autosingle_cue(:,3) = offset;
-trl.nonautodual_cue(:,3) = offset;
-trl.nonautosingle_cue(:,3) = offset;
-
-trl.autodual_nocue(:,3) = offset;
-trl.autosingle_nocue(:,3) = offset;
-trl.nonautodual_nocue(:,3) = offset;
-trl.nonautosingle_nocue(:,3) = offset;
+trl.foot_auto(:,3) = offset;
+trl.foot_nonauto(:,3) = offset;
+trl.finger_auto(:,3) = offset;
+trl.finger_nonauto(:,3) = offset;
 
 %% trialinfo
-trl.autodual_cue(:,4) = 1;
-trl.autosingle_cue(:,4) = 2;
-trl.nonautodual_cue(:,4) = 3;
-trl.nonautosingle_cue(:,4) = 4;
-
-trl.autodual_nocue(:,4) = 5;
-trl.autosingle_nocue(:,4) = 6;
-trl.nonautodual_nocue(:,4) = 7;
-trl.nonautosingle_nocue(:,4) = 8;
-
+trl.foot_auto(:,4) = 3;
+trl.foot_nonauto(:,4) = 4;
+trl.finger_auto(:,4) = 1;
+trl.finger_nonauto(:,4) = 2;
 end
