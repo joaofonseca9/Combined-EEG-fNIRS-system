@@ -1,7 +1,7 @@
 clear;
 close all;
 
-%% Initialize FieldTrip & EEGLAB
+%% Initialize FieldTrip and EEGLAB
 laptop='laptopCatarina';
 % laptop='laptopMariana';
 % laptop='laptopJoao';
@@ -56,7 +56,7 @@ if data_loaded == 0
     % FIELDTRIP - load the eeg&nirs data
     cfg = [];
     cfg.dataset = oxyfile;
-    [nirs_raw] = ft_preprocessing(cfg);
+    nirs_raw = ft_preprocessing(cfg);
     nirs_events = ft_read_event(cfg.dataset);
     if strcmp(sub,'03') && strcmp(rec,'02')
         nirs_events=ft_filter_event(nirs_events,'minsample',72787);
@@ -73,11 +73,6 @@ if data_loaded == 0
     % EEGLAB load eeg only data
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
     [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off');
-    
-    % Show layout of optode template
-    cfg = [];
-    cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
-    ft_layoutplot(cfg);
 
 else %if data has been loaded and the datasets created, load the structs
     if strcmp(sub,'02') && strcmp(rec,'02')
@@ -90,8 +85,7 @@ else %if data has been loaded and the datasets created, load the structs
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
-
-%% Show layout of optode template
+%% NIRS: Show layout of optode template
 cfg = [];
 cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
@@ -100,7 +94,7 @@ ft_layoutplot(cfg);
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
 marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 
-%% Load MNI coordinates
+%% EEG: Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
 [EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
@@ -108,7 +102,7 @@ marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
         'lookup', join([eeglab_path,...
         '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
 
-%% Filter EEG - 50 Hz noise and harmonics
+%% EEG: Filter - 50 Hz noise and harmonics
 % Determine the power spectrum of the raw data
 % eeg_raw = EEG.data;
 % [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
@@ -139,7 +133,7 @@ end
 % subplot(1, 3, 3); plot(f_filt, P_filt); 
 % xlim([0 50]); title('EEG filtered data - different scale');
 
-%% Remove bad channels 
+%% EEG: Remove bad channels 
 % Visually inspect the signals and choose if a signals is too bad that it
 % needs to be removed.
 % First see the power spectrum and then check if the signal is actually bad
@@ -168,7 +162,7 @@ else
         'removedBadChannels', 'gui', 'off');
 end
 
-%% Removal of eye blinks - preICA
+%% EEG: Removal of eye blinks - preICA
 if ~isfile(file.preICA)  
     [EEG] = pop_runica(EEG,'icatype', 'runica', 'extended', 1,...
         'interrupt', 'on');
@@ -181,7 +175,7 @@ else
         'gui', 'off');
 end
 
-%% Removal of eye blinks - pstICA
+%% EEG: Removal of eye blinks - pstICA
 if ~isfile(file.pstICA)
     [EEG] = run_postICA(EEG);
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'pstICA',...
@@ -193,7 +187,7 @@ else
         'gui', 'off');
 end
 
-%% Set reference
+%% EEG: Set reference
 % Re-reference the system to M1
 
 if ~isfile(file.preprocessed)
