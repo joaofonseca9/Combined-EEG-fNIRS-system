@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip & EEGLAB
-% laptop='laptopMariana';
-laptop='laptopJoao';
+laptop='laptopMariana';
+% laptop='laptopJoao';
 % laptop='laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -179,10 +179,10 @@ else
 end
 
 %% Set reference
-% Re-reference the system to Cz 
+% Re-reference the system to M1
 
 if ~isfile(file.preprocessed)
-    [EEG] = pop_reref(EEG, 'Cz');
+    [EEG] = pop_reref(EEG, 'M1');
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
         'preprocessed', 'gui', 'off');
     save(file.preprocessed, 'EEG');
