@@ -10,7 +10,7 @@ ft_defaults;
 
 sub='03';
 
-model_path = fullfile(mainpath_in,'incoming',['sub-',sub],'3d');
+model_path = fullfile(mainpath_in,'source',['sub-',sub],'3d');
 obj_file = fullfile(model_path, 'Model', 'Model.obj');
 out_path = fullfile(mainpath_out,['sub-',sub],'3d');
 cd(out_path) % folder to save the data

@@ -16,7 +16,8 @@ rec='02';
 file = getFileNames(mainpath_out, sub, rec);
 
 %% Select data folder 
-sub_path = fullfile(mainpath_in,'incoming',['sub-',sub]);
+
+sub_path = fullfile(mainpath_in,'source',['sub-',sub]);
 eeg_path = fullfile(sub_path,'eeg');
 nirs_path = fullfile(sub_path,'nirs');
 sub_vhdr = fullfile(['sub-',sub,'_rec-',rec,'_eeg.vhdr']);
@@ -52,6 +53,7 @@ elseif strcmpi(correct, 'n')
 end
 
 %% Read data 
+
 if data_loaded == 0
     % FIELDTRIP - load the eeg&nirs data
     cfg = [];
@@ -74,40 +76,45 @@ if data_loaded == 0
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
     [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off');
 
-else %if data has been loaded and the datasets created, load the structs
+else % If data has been loaded and the datasets created, load the structs
     if strcmp(sub,'02') && strcmp(rec,'02')
-        load(['sub-',sub,'_rec-',rec,'_nirseeg.mat']);    %Avoids call to ft_preprocessing
-        load(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']);%Avoids call to ft_readevents
+        load(['sub-',sub,'_rec-',rec,'_nirseeg.mat']); % Avoids call to ft_preprocessing
+        load(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']); % Avoids call to ft_readevents
     else
-        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs.mat']));    %Avoids call to ft_preprocessing
-        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs_events.mat']));%Avoids call to ft_readevents
+        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs.mat'])); % Avoids call to ft_preprocessing
+        load(fullfile('nirs',['sub-',sub,'_rec-',rec,'_nirs_events.mat'])); % Avoids call to ft_readevents
     end
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
 %% NIRS: Show layout of optode template
+
 cfg = [];
 cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
 %% Read stimuli results
-results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
+
+results = load(fullfile(sub_path, 'stim', ['results_sub-', sub, '_rec-', rec]));
 marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 
 %% EEG: Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
+
 [EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
         '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
         'lookup', join([eeglab_path,...
         '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
 
 %% EEG: Filter - 50 Hz noise and harmonics
+
 % Determine the power spectrum of the raw data
 % eeg_raw = EEG.data;
 % [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
 
-% Filter the signal
+% Filter the signal to obtain the desired frequencies and to eliminate the
+% 50 Hz noise
 if ~isfile(file.filtered) 
     eeg_filtered = filterNoise(double(eeg_raw), EEG, 4);
     EEG.data = eeg_filtered;
@@ -163,6 +170,8 @@ else
 end
 
 %% EEG: Removal of eye blinks - preICA
+% Identify the different independent components in the signal
+
 if ~isfile(file.preICA)  
     [EEG] = pop_runica(EEG,'icatype', 'runica', 'extended', 1,...
         'interrupt', 'on');
@@ -176,6 +185,8 @@ else
 end
 
 %% EEG: Removal of eye blinks - pstICA
+% Visual analysis to remove the component corresponding to eye blinks
+
 if ~isfile(file.pstICA)
     [EEG] = run_postICA(EEG);
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'pstICA',...

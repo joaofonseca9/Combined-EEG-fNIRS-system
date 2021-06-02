@@ -1,10 +1,8 @@
 %% FUNCTION
-%   The usable data from the EEG is extracted into EEG(output), including
+% The usable data from the EEG is extracted into EEG(output), including
 % baseline data.
-%   file will also get the different epochs: CHECK, autodual, autosingle,
-%   nonautodual, nonautosingle (cued and uncued)
-%
-%
+% File will also get the different epochs: CHECK, autodual, autosingle,
+% nonautodual, nonautosingle (cued and uncued)
 
 function [EEG_divided, file]=extractTaskData_EEG(EEG, marker_table,results, file,mainpath_out)
 % extract events of tasks and check/add correct number of events
