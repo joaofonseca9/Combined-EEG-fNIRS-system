@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-laptop='laptopCatarina';
-% laptop='laptopMariana';
+% laptop='laptopCatarina';
+laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -188,10 +188,14 @@ else
 end
 
 %% EEG: Set reference
-% Re-reference the system to M1
+% Re-reference the system to linked mastoids
+
+locs = {EEG.chanlocs.labels};
+M1_loc = find(contains(locs, 'M1'));
+M2_loc = find(contains(locs, 'M2'));
 
 if ~isfile(file.preprocessed)
-    [EEG] = pop_reref(EEG, 'M1');
+    [EEG] = pop_reref(EEG, [M1_loc, M2_loc]);
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
         'preprocessed', 'gui', 'off');
     save(file.preprocessed, 'EEG');
