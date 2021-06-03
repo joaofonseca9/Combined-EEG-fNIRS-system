@@ -94,6 +94,7 @@ cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
 %% Read stimuli results
+<<<<<<< HEAD
 nirs_raw=data_raw;
 nirs_events=eeg_fnirs_events;
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));

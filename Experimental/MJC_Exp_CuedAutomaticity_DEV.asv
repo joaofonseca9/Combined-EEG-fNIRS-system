@@ -334,30 +334,28 @@ DrawFormattedText(window, sprintf('While you perform the task, letters will be s
  Screen('Flip', window);
 KbStrokeWait; % Wait for response to terminate instructions
 
-%Page 3 - Demonstrate the letter sequence
-Screen('TextSize',window,30);
-DrawFormattedText(window,'You can see a demonstration of the mentioned letter presentations \n \n Press any key to see the letter presentation.','center', 'center', white);
-Screen('Flip', window);
-KbStrokeWait; % Wait for response to terminate instructions
-
-videofilename='LetterPresentation_test.mov';
-moviename=fullfile(videodir, videofilename);
-[id]=Screen('OpenMovie', window, moviename);
-playMovieTest(id,window);
-
-% Page 4
+% Page 3
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n Press any key to continue.'),'center','center', white);
  Screen('Flip', window);
 KbStrokeWait; % Wait for response to terminate instructions
 
-% Page 5 - Demonstrate how cueing works
+% Page 4 - Demonstrate how cueing works
 Screen('TextSize',window,30);
 DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
  Screen('Flip', window);
 PsychPortAudio('Start', file(2), 1, [], []);
 WaitSecs(8);
 PsychPortAudio('Stop', file(2));
+
+%Page 5 - Demonstrate the letter sequence
+Screen('TextSize',window,30);
+DrawFormattedText(window,'You can also see a demonstration of the letter presentations \n that will','center', 'center', white);
+ Screen('Flip', window);
+videofilename='LetterPresentation_test.mov';
+moviename=fullfile(videodir, videofilename);
+[id]=Screen('OpenMovie', window, moviename);
+playMovieTest(id,window);
 
 % Page 6 - Show sequence
 Screen('TextSize',window,30);

@@ -29,7 +29,7 @@ addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % OUR SEQUENCES - script generateSequences
 % 2 4 3 4 1 3 4 1 2 1 3 2
 % 4 1 3 2 4 1 4 2 3 2 1 3
-sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 1 3 2 4 1 4 2 3 2 1 3')};
+sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Order of the sequences to be tested 
@@ -44,7 +44,7 @@ t3 = 12; % Duration of a trial (tapping the sequence 1 time)
 
 % Amount of letters presented during test for automaticity for one trial.
 % Should be adjusted when letter presenting speed is changed!
-N_letters=8; % 8 letters presented during a trial
+N_letters=15; % 8 letters presented during a trial
 N_trials=20; % Number of trials per block
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -161,7 +161,7 @@ if ~exist(sub_dir)
 end
 cd(sub_dir)
 
-logname=sprintf('%s_%s_triggers.log', sub, rec); diary(logname);
+logname=sprintf('%s_%s_logs.log', sub, rec); diary(logname);
 % Save current script in subject directory
 script=mfilename('fullpath');
 script_name=mfilename;
@@ -328,13 +328,24 @@ DrawFormattedText(window, sprintf('While you perform the task, letters will be s
  Screen('Flip', window);
 KbStrokeWait; % Wait for response to terminate instructions
 
-% Page 3
+%Page 3 - Demonstrate the letter sequence
+Screen('TextSize',window,30);
+DrawFormattedText(window,'You can see a demonstration of the mentioned letter presentations \n \n Press any key to see the letter presentation.','center', 'center', white);
+Screen('Flip', window);
+KbStrokeWait; % Wait for response to terminate instructions
+
+videofilename='LetterPresentation_test.mov';
+moviename=fullfile(videodir, videofilename);
+[id]=Screen('OpenMovie', window, moviename);
+playMovieTest(id,window);
+
+% Page 4
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('In between the trials you will see a fixation cross for 20 seconds. \n \n  You will hear a metronome sound during the first few seconds \n or during the entire 20 seconds. \n \n Tap the sequence on this rhythm, which is the same as you studied at home. \n \n After the fixation cross, the first trial will start automatically. \n So start tapping the sequence as soon as a letter on the screen appears. \n \n Note that during the tapping task you cannot talk. \n Try to keep your body movements as still as possible exept for the right hand. \n Keep your eyes open (also during the rest periods). \n Press any key to continue.'),'center','center', white);
  Screen('Flip', window);
 KbStrokeWait; % Wait for response to terminate instructions
 
-% Page 4 - Demonstrate how cueing works
+% Page 5 - Demonstrate how cueing works
 Screen('TextSize',window,30);
 DrawFormattedText(window,'While you perform the tasks and during the white crosses, \n you may hear a rhytmic sound like this one. \n Or you may just hear nothing. \n \n In any situation, you should start tapping when the letters appear','center', 'center', white);
  Screen('Flip', window);
@@ -342,7 +353,7 @@ PsychPortAudio('Start', file(2), 1, [], []);
 WaitSecs(8);
 PsychPortAudio('Stop', file(2));
 
-% Page 5 - Show sequence
+% Page 6 - Show sequence
 Screen('TextSize',window,30);
 DrawFormattedText(window, sprintf('Sequence: \n %s \n\n  When ready to start: press any key.', char(sequencesprint(1))),'center','center', white);
  Screen('Flip', window);

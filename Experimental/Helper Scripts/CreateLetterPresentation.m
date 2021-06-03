@@ -2,10 +2,10 @@
 %Please define filepath before
 %It will save a .mov file of the presentation as well as a .txt with the
 %number
-filepath='C:\Users\joaop\Desktop\LetterPresentation';
+filepath='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental\LetterPresentation';
 
 %Number of trials per block
-N_trials=20;
+N_trials=1;
 %Number of letter counting trials = 2 * N_trials (2 blocks of dual tasking)
 N=N_trials*2; 
 
