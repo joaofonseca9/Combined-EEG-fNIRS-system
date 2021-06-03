@@ -32,12 +32,6 @@ for subject = 1:size(subrec, 1)
     [autodual_averageMistakes_cued, autodual_averageMistakes_uncued] = ...
         averageMistakesPerCondition(events_autodual, autodual_correct);
     
-    % Add values to final average (all subjects).
-    autodual_finalAverageMistakes_cued =...
-        autodual_finalAverageMistakes_cued + autodual_averageMistakes_cued;
-    autodual_finalAverageMistakes_uncued =...
-        autodual_finalAverageMistakes_uncued + autodual_averageMistakes_uncued;
-    
     %% Non-automatic sequence.
     % Check if counting answers from non-automatic sequence were correct.
     nonautodual_correct = checkCorrectCountingPerTrial(events_nonautodual);
@@ -46,12 +40,6 @@ for subject = 1:size(subrec, 1)
     [nonautodual_averageMistakes_cued, nonautodual_averageMistakes_uncued] = ...
         averageMistakesPerCondition(events_nonautodual, nonautodual_correct);
     
-    % Add values to final average (all subjects).
-    nonautodual_finalAverageMistakes_cued =...
-        nonautodual_finalAverageMistakes_cued + nonautodual_averageMistakes_cued;
-    nonautodual_finalAverageMistakes_uncued =...
-        nonautodual_finalAverageMistakes_uncued + nonautodual_averageMistakes_uncued;
-    
     %% Put values of error into final struct.
     % Values for the current subject.
     s.autodual_avgMistakes_cued = autodual_averageMistakes_cued;
@@ -59,16 +47,17 @@ for subject = 1:size(subrec, 1)
     s.nonautodual_avgMistakes_cued = nonautodual_averageMistakes_cued;
     s.nonautodual_avgMistakes_uncued = nonautodual_averageMistakes_uncued;
     
-    % Add struct of current subject to all subjects struct.
+    % Add struct of current subject to all subjects struct
     allsubs.(genvarname(strcat('sub', char(sub)))) = s;
-    
-    % Add average values of all subjects to final struct.
-    average.autodual_avgMistakes_cued = autodual_finalAverageMistakes_cued/size(subrec, 1);
-    average.autodual_avgMistakes_uncued = autodual_finalAverageMistakes_uncued/size(subrec, 1);
-    average.nonautodual_avgMistakes_cued = nonautodual_finalAverageMistakes_cued/size(subrec, 1);
-    average.nonautodual_avgMistakes_uncued = nonautodual_finalAverageMistakes_uncued/size(subrec, 1);
-    allsubs.avg = average;
    
+end
+
+%% Take average values of all subjects.
+for subject = 1:length(fieldnames(allsubs))
+    s = 
+    allsubs.sub03.autodual_avgMistakes_cued
+    
+    
 end
 
 %% Functions necessary
