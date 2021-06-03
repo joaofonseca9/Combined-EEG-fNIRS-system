@@ -2,15 +2,15 @@ clear;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-laptop='laptopCatarina';
+% laptop='laptopCatarina';
 % laptop='laptopMariana';
-% laptop='laptopJoao';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
 ft_defaults;
 
-sub='03';
+sub='02';
 rec='02';
 
 file = getFileNames(mainpath_out, sub, rec);
@@ -91,6 +91,8 @@ cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
 %% Read stimuli results
+nirs_raw=data_raw;
+nirs_events=eeg_fnirs_events;
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
 marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 

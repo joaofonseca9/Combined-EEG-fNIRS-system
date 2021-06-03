@@ -2,13 +2,13 @@ clear;
 close all;
 
 %% Specify where 3D model folder is saved
-laptop='laptopCatarina';
-% laptop='laptopJoao';
+% laptop='laptopCatarina';
+laptop='laptopJoao';
 % laptop='laptopMariana';
 [mainpath_in, mainpath_out] = addFolders(laptop);
 ft_defaults;
 
-sub='03';
+sub='02';
 
 model_path = fullfile(mainpath_in,'incoming',['sub-',sub],'3d');
 obj_file = fullfile(model_path, 'Model', 'Model.obj');

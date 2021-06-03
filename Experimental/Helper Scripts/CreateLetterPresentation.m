@@ -5,7 +5,7 @@
 filepath='C:\Users\joaop\Desktop\LetterPresentation';
 
 %Number of trials per block
-N_trials=20;
+N_trials=1;
 %Number of letter counting trials = 2 * N_trials (2 blocks of dual tasking)
 N=N_trials*2; 
 
