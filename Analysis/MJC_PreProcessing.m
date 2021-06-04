@@ -228,6 +228,7 @@ TF = startsWith(nirs_raw.label,names_channels);
 channels_opt = nirs_raw.label(TF);
 
 % Select data of correct channels
+cd(nirs_path);
 cfg = [];
 cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat']; 
 cfg.channel = channels_opt;
@@ -336,6 +337,26 @@ cfg.linecolor = 'br';
 cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
 ft_databrowser(cfg, nirs_epoch);
 
+% % Frequency analysis
+% cfg = [];
+% cfg.output = 'pow';
+% cfg.method = 'mtmfft';
+% cfg.taper = 'hanning';
+% spectr = ft_freqanalysis(cfg, nirs_epoch);
+% figure;
+% hold on;
+% plot(spectr.freq, (spectr.powspctrm));
+% xlabel('Frequency (Hz)')
+% ylabel('Power')
+% 
+% P=[];F=[];
+% for i=1:length(nirs_epoch.trial)
+%     [p, f] = pwelch(nirs_epoch.trial{i},[],[],[],nirs_epoch.fsample);
+%     P=[P p];
+%     F=[F f];
+% end
+% figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
+
 %% NIRS: Transform optical densities to concentration changes
 load('nirs_epoch.mat');
 cfg = [];
@@ -357,6 +378,7 @@ save('nirs_conc.mat','nirs_conc');
 % multiplot_condition doesn't exist??
 
 %% NIRS: Low-pass filtering
+% Low-pass filter data below the frequency of the heart beat (1 Hz).
 cfg = [];
 cfg.inputfile = 'nirs_conc.mat'; 
 cfg.lpfilter = 'yes';
@@ -365,7 +387,91 @@ nirs_lpf = ft_preprocessing(cfg);
 cd(nirs_path);
 save('nirs_lpf.mat','nirs_lpf'); 
 
+% %Plot Low-pass filtered hemoglobin concentrations 
+% idx = find(nirs_lpf.trialinfo==2, 1, 'first'); % check trials
+% cfg          = [];
+% cfg.channel  = 'Rx*';
+% cfg.trials   = idx;
+% cfg.baseline = 'yes';
+% ft_singleplotER(cfg, nirs_lpf)
+
 % to have a look at data multiplot_condition doesn't exist??
 
-%%
+%% NIRS: Timelock analysis and baseline correction
+% Timelock analysis
+load('nirs_lpf.mat')
+for task = 1:8 % 8 conditions 
+    cfg = [];
+    cfg.trials = find(nirs_lpf.trialinfo(:,1) == task); % average the data for given task
+    nirs_TL{task} = ft_timelockanalysis(cfg, nirs_lpf);
+end
+cd(nirs_path);
+save('nirs_TL.mat', 'nirs_TL');
+
+% Apply baseline correction
+for task = 1:8
+    cfg = [];
+    cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
+    nirs_TL_blc{task} = ft_timelockbaseline(cfg, nirs_TL{task});
+end
+cd(nirs_path);
+save('nirs_TL_blc.mat','nirs_TL_blc');
+
+%% NIRS: Separate O2Hb and HHb channels and plot tasks on the layout
+load('nirs_TL_blc.mat')
+for task = 1:8
+    cfg = [];
+    cfg.channel='* [O2Hb]';
+    nirs_TL_O2Hb{task} = ft_preprocessing(cfg, nirs_TL_blc{task});
+    % rename labels so that they have the same name as HHb channels
+    for i = 1:length(nirs_TL_O2Hb{task}.label)
+        tmp = strsplit(nirs_TL_O2Hb{task}.label{i});
+        nirs_TL_O2Hb{task}.label{i} = tmp{1};
+    end
+    save('nirs_TL_O2Hb.mat','nirs_TL_O2Hb');
+    
+    % same for HHb channels
+    cfg = [];
+    cfg.channel = '* [HHb]';
+    nirs_TL_HHb{task} = ft_preprocessing(cfg, nirs_TL_blc{task});
+    for i = 1:length(nirs_TL_HHb{task}.label)
+        tmp = strsplit(nirs_TL_HHb{task}.label{i});
+        nirs_TL_HHb{task}.label{i} = tmp{1};
+    end
+    cd(nirs_path);
+    save('nirs_TL_HHb.mat','nirs_TL_HHb');
+end
+
+load('nirs_TL_O2Hb.mat');
+load('nirs_TL_HHb.mat');
+loyolagreen = 1/255*[0,104,87];
+for i = [5 1]
+  cfg = [];
+  cfg.showlabels = 'yes';
+  cfg.layout = layout;
+  cfg.ylim = [-1 1.5];
+  cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
+  cfg.linecolor  = 'rbmcgykw'; % O2Hb is showed in red/magenta/green/black and HHb in blue/cyan/yellow/white
+  cfg.comment = 'auto dual task is red and blue line\n auto single task is magenta and cyan line\n non auto dual task is green and yellow\n non auto single task is black and white';
+  figure; 
+  taskshort = {'multiplotuncued','','','','multiplotcued'};
+  ft_multiplotER(cfg, nirs_TL_O2Hb{i}, nirs_TL_HHb{i}, nirs_TL_O2Hb{i+1}, nirs_TL_HHb{i+1}, nirs_TL_O2Hb{i+2}, nirs_TL_HHb{i+2},nirs_TL_O2Hb{i+3}, nirs_TL_HHb{i+3});
+  saveas(gcf, ['sub-',sub,'_rec-',rec,char(taskshort(i)), '_timelock.jpg']);
+end
+
+savefigure = input('Press any key once the plots are edited and saved: \n', 's');
+
+% Plot for each task separately
+taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
+taskshort = {'autodualcued', 'autosinglecued', 'nonautodualcued', 'nonautosinglecued','autodualuncued', 'autosingleuncued', 'nonautodualuncued', 'nonautosingleuncued'};
+for task = 1:8
+    cfg = [];
+    cfg.showlabels = 'yes';
+    cfg.layout = layout;
+    cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
+    cfg.linecolor = 'rb'; % O2Hb is in red and HHb in blue
+    figure; title(taskname(task)); 
+    ft_multiplotER(cfg, nirs_TL_O2Hb{task}, nirs_TL_HHb{task});
+    saveas(gcf, ['sub-',sub,'_rec-',rec,char(taskshort(task)), '_timelock.jpg']);
+end
 
