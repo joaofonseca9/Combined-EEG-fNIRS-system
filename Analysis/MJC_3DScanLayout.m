@@ -2,13 +2,13 @@ clear;
 close all;
 
 %% Specify where 3D model folder is saved
-% laptop='laptopCatarina';
-laptop='laptopJoao';
+laptop='laptopCatarina';
+% laptop='laptopJoao';
 % laptop='laptopMariana';
 [mainpath_in, mainpath_out] = addFolders(laptop);
 ft_defaults;
 
-sub='02';
+sub='04';
 
 model_path = fullfile(mainpath_in,'source',['sub-',sub],'3d');
 obj_file = fullfile(model_path, 'Model', 'Model.obj');
@@ -195,6 +195,7 @@ ft_plot_sens(electarg, 'elecsize', 20, 'facecolor', 'b');
 %% Calculate channel locations based on optode positions (in MNI space)
 % define here the channels you want to create:
 channels = {'Rx1x-Tx2x', 'Rx1x-Tx3x', 'Rx2x-Tx3x', 'Rx2x-Tx4x', 'Rx3x-Tx2x', 'Rx3x-Tx3x', 'Rx3x-Tx5x', 'Rx4x-Tx4x', 'Rx4x-Tx5x', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx2-Tx4', 'Rx4-Tx4', 'Rx4-Tx5'};
+%channels = {'Rx5-Tx6b','Rx7-Tx6d','Rx6-Tx6a','Rx8-Tx6c','Rx4-Tx1d','Rx2-Tx1b','Rx3-Tx1c','Rx1-Tx1a','Rx1x-Tx1bx','Rx2x-Tx1ax','Rx3x-Tx1dx','Rx4x-Tx1ax'}; %short channels
 [rxnames, rem] = strtok(channels, {'-', ' '});
 [txnames, rem] = strtok(rem, {'-', ' '});
 
@@ -224,6 +225,7 @@ ft_plot_sens(opto_chan, 'opto', true, 'optosize', 10,'facecolor', 'k', 'label', 
 % Load atlas (AAL atlas)
 atlas = ft_read_atlas([ftpath filesep 'template/atlas/aal/ROI_MNI_V4.nii']);
 channels = {'Rx1x-Tx2x', 'Rx1x-Tx3x', 'Rx2x-Tx3x', 'Rx2x-Tx4x', 'Rx3x-Tx2x', 'Rx3x-Tx3x', 'Rx3x-Tx5x', 'Rx4x-Tx4x', 'Rx4x-Tx5x', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx2-Tx4', 'Rx4-Tx4', 'Rx4-Tx5'};
+%channels = {'Rx5-Tx6b','Rx7-Tx6d','Rx6-Tx6a','Rx8-Tx6c','Rx4-Tx1d','Rx2-Tx1b','Rx3-Tx1c','Rx1-Tx1a','Rx1x-Tx1bx','Rx2x-Tx1ax','Rx3x-Tx1dx','Rx4x-Tx1ax'}; %short channels
 
 % Look up the corresponding anatomical label
 cfg = [];
