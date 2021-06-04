@@ -417,7 +417,7 @@ end
 cd(nirs_path);
 save('nirs_TL_blc.mat','nirs_TL_blc');
 
-%% NIRS: Separate O2Hb and HHb channels and plot them on the layout
+%% NIRS: Separate O2Hb and HHb channels and plot tasks on the layout
 load('nirs_TL_blc.mat')
 for task = 1:8
     cfg = [];
@@ -454,20 +454,16 @@ for i = [5 1]
   cfg.linecolor  = 'rbmcgykw'; % O2Hb is showed in red/magenta/green/black and HHb in blue/cyan/yellow/white
   cfg.comment = 'auto dual task is red and blue line\n auto single task is magenta and cyan line\n non auto dual task is green and yellow\n non auto single task is black and white';
   figure; 
-  if i == 5
-    title(sprintf('Multiplot for uncued tasks'));
-  else
-    title(sprintf('Multiplot for cued tasks'));
-  end
+  taskshort = {'multiplotuncued','','','','multiplotcued'};
   ft_multiplotER(cfg, nirs_TL_O2Hb{i}, nirs_TL_HHb{i}, nirs_TL_O2Hb{i+1}, nirs_TL_HHb{i+1}, nirs_TL_O2Hb{i+2}, nirs_TL_HHb{i+2},nirs_TL_O2Hb{i+3}, nirs_TL_HHb{i+3});
-
+  saveas(gcf, ['sub-',sub,'_rec-',rec,char(taskshort(i)), '_timelock.jpg']);
 end
 
 savefigure = input('Press any key once the plots are edited and saved: \n', 's');
 
 % Plot for each task separately
 taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
-taskshort = {'auto dual cued', 'auto single cued', 'non auto dual cued', 'non auto single cued','auto dual uncued', 'auto single uncued', 'non auto dual uncued', 'non auto single uncued'};
+taskshort = {'autodualcued', 'autosinglecued', 'nonautodualcued', 'nonautosinglecued','autodualuncued', 'autosingleuncued', 'nonautodualuncued', 'nonautosingleuncued'};
 for task = 1:8
     cfg = [];
     cfg.showlabels = 'yes';
@@ -476,5 +472,36 @@ for task = 1:8
     cfg.linecolor = 'rb'; % O2Hb is in red and HHb in blue
     figure; title(taskname(task)); 
     ft_multiplotER(cfg, nirs_TL_O2Hb{task}, nirs_TL_HHb{task});
-    saveas(gcf, [char(taskshort(task)) '_timelock.jpg']);
+    saveas(gcf, ['sub-',sub,'_rec-',rec,char(taskshort(task)), '_timelock.jpg']);
 end
+
+%% NIRS: Spatial representation
+nirs_NAvA_autodualcued = nirs_TL_O2Hb{1};
+nirs_NAvA_autosinglecued = nirs_TL_O2Hb{2};
+nirs_NAvA_nonautodualcued = nirs_TL_O2Hb{3};
+nirs_NAvA_nonautosinglecued = nirs_TL_O2Hb{4};
+nirs_NAvA_autodualuncued = nirs_TL_O2Hb{5};
+nirs_NAvA_autosingleuncued = nirs_TL_O2Hb{6};
+nirs_NAvA_nonautodualuncued = nirs_TL_O2Hb{7};
+nirs_NAvA_nonautosingleuncued = nirs_TL_O2Hb{8};
+
+nirs_NAvA = [nirs_NAvA_autodualcued, nirs_NAvA_autosinglecued, nirs_NAvA_nonautodualcued, nirs_NAvA_nonautosinglecued,nirs_NAvA_autodualuncued, nirs_NAvA_autosingleuncued,nirs_NAvA_nonautodualuncued,nirs_NAvA_nonautosingleuncued];
+
+% Plot the spatial representation
+for task = 1:8
+    cfg = [];
+    cfg.layout = layout;
+    cfg.marker = 'labels';
+    cfg.xlim = [5 10]; % choose the time window over which you want to average
+    cfg.zlim = [-0.5 0.5]; % choose the window over which you want to scale based on the plots
+    cfg.channel  = '* [O2Hb]';
+    figure; subplot(1,2,1);
+    ft_topoplotER(cfg, nirs_NAvA(task));
+    title(sprintf('Topoplot average [O2Hb] during %s (%d to %d sec)', taskname, cfg.xlim(1), cfg.xlim(2)));
+    cfg.channel  = '* [HHb]';
+    subplot(1,2,2);
+    ft_topoplotER(cfg, nirs_NAvA(task));
+    title(sprintf('Topoplot average [HHb] during %s (%d to %d sec)', taskname, cfg.xlim(1), cfg.xlim(2)));
+
+end
+

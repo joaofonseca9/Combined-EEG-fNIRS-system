@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
-laptop='laptopMariana';
+laptop='laptopCatarina';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -217,12 +217,6 @@ channels_conc = layout.label(1:(length(layout.label)-2)); % remove 'COMNT' and '
 for i = 1:length(channels_conc)
     tmp = strsplit(channels_conc{i});
     names_channels{i}=char(tmp(1));
-    
-    %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if contains(names_channels{i},'x-T')
-       names_channels{i} = eraseBetween(names_channels{i},9,9);
-       names_channels{i} = eraseBetween(names_channels{i},4,4);
-    end
 end
 TF = startsWith(nirs_raw.label,names_channels);
 channels_opt = nirs_raw.label(TF);
@@ -473,5 +467,34 @@ for task = 1:8
     figure; title(taskname(task)); 
     ft_multiplotER(cfg, nirs_TL_O2Hb{task}, nirs_TL_HHb{task});
     saveas(gcf, ['sub-',sub,'_rec-',rec,char(taskshort(task)), '_timelock.jpg']);
+end
+
+%% NIRS: Spatial representation
+nirs_NAvA_autodualcued = nirs_TL_O2Hb{1};
+nirs_NAvA_autosinglecued = nirs_TL_O2Hb{2};
+nirs_NAvA_nonautodualcued = nirs_TL_O2Hb{3};
+nirs_NAvA_nonautosinglecued = nirs_TL_O2Hb{4};
+nirs_NAvA_autodualuncued = nirs_TL_O2Hb{5};
+nirs_NAvA_autosingleuncued = nirs_TL_O2Hb{6};
+nirs_NAvA_nonautodualuncued = nirs_TL_O2Hb{7};
+nirs_NAvA_nonautosingleuncued = nirs_TL_O2Hb{8};
+
+nirs_NAvA = [nirs_NAvA_autodualcued, nirs_NAvA_autosinglecued, nirs_NAvA_nonautodualcued, nirs_NAvA_nonautosinglecued,nirs_NAvA_autodualuncued, nirs_NAvA_autosingleuncued,nirs_NAvA_nonautodualuncued,nirs_NAvA_nonautosingleuncued];
+
+% Plot the spatial representation
+for task = 1:8
+    cfg = [];
+    cfg.layout = layout;
+    cfg.marker = 'labels';
+    cfg.xlim = [5 10]; % choose the time window over which you want to average
+    cfg.zlim = [-0.5 0.5]; % choose the window over which you want to scale based on the plots
+    cfg.channel  = '* [O2Hb]';
+    figure; subplot(1,2,1);
+    ft_topoplotER(cfg, nirs_NAvA(task));
+    title(sprintf('Topoplot average [O2Hb] during %s (%d to %d sec)', taskname, cfg.xlim(1), cfg.xlim(2)));
+    cfg.channel  = '* [HHb]';
+    subplot(1,2,2);
+    ft_topoplotER(cfg, nirs_NAvA(task));
+    title(sprintf('Topoplot average [HHb] during %s (%d to %d sec)', taskname, cfg.xlim(1), cfg.xlim(2)));
 end
 
