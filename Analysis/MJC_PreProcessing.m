@@ -10,8 +10,8 @@ laptop='laptopMariana';
 eeglab;
 ft_defaults;
 
-sub='02';
-rec='02';
+sub='04';
+rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -111,7 +111,7 @@ marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 %% EEG: Filter - 50 Hz noise and harmonics
 
 % Determine the power spectrum of the raw data
-% eeg_raw = EEG.data;
+eeg_raw = EEG.data;
 % [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
 
 % Filter the signal to obtain the desired frequencies and to eliminate the
