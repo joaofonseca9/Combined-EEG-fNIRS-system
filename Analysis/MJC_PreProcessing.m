@@ -10,8 +10,8 @@ laptop='laptopCatarina';
 eeglab;
 ft_defaults;
 
-sub='03';
-rec='02';
+sub='04';
+rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -213,17 +213,78 @@ ft_layoutplot(cfg);
 %% NIRS: Select channels
 % Selects channels that are also present in the original template
 load(cfg.layout);
-channels_conc = layout.label(1:(length(layout.label)-2)); % remove 'COMNT' and 'SCALE' from channellabels
-for i=1:length(channels_conc)
+channels_conc = layout.label(1:(length(layout.label)-2)); % remove 'COMNT' and 'SCALE' from channel labels
+for i = 1:length(channels_conc)
     tmp = strsplit(channels_conc{i});
     names_channels{i}=char(tmp(1));
+    
+    %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if contains(names_channels{i},'x-T')
+       names_channels{i} = eraseBetween(names_channels{i},9,9);
+       names_channels{i} = eraseBetween(names_channels{i},4,4);
+    end
 end
-TF=startsWith(data_raw.label,names_channels);
-channels_opt=data_raw.label(TF);
+TF = startsWith(nirs_raw.label,names_channels);
+channels_opt = nirs_raw.label(TF);
 
 % Select data of correct channels
-cfg=[];
-cfg.inputfile =['sub-',sub,'_rec-',rec,'_nirseeg.mat']; 
-cfg.channel=channels_opt;
-data_chan=ft_selectdata(cfg);
-save('data_chan.mat', 'data_chan');
+cfg = [];
+cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat']; 
+cfg.channel = channels_opt;
+nirs_chan = ft_selectdata(cfg);
+cd(nirs_path);
+save('nirs_chan.mat', 'nirs_chan');
+
+%% NIRS: Downsample the data (save memory, make processing faster and low pass filtering)
+% The hemodynamic response takes about 5-10s (0.2-0.1Hz) to reach its peak.
+% A 250 Hz measurement is much faster than needed so we need to downsample to 10Hz.  
+% If resampling factor is larger than 10 -> resample multiple times
+% New frequency must be higher than frequency of trigger
+
+if ~exist(fullfile(['sub-',sub,'_rec-',rec,'_nirs.mat'],'nirs_raw'))
+    cfg = [];
+    cfg.inputfile = 'nirs_chan.mat';
+    cfg.resamplefs = 10;
+    nirs_down = ft_resampledata(cfg);
+    cd(nirs_path);
+    save('nirs_down.mat', 'nirs_down');
+else load('nirs_down.mat')
+end
+
+% Plot downsampled data
+cfg                = [];
+cfg.preproc.demean = 'yes';
+cfg.viewmode       = 'vertical';
+cfg.continuous     = 'no';
+cfg.ylim           = [ -0.003   0.003 ];
+cfg.channel        = 'Rx*'; % only show channels starting with Rx
+ft_databrowser(cfg, nirs_down);
+
+%% NIRS: Extract task data (epoch)
+clear pre post offset trl sel smp
+load('nirs_down.mat');
+load(['sub-',sub,'_rec-',rec,'_nirs.mat']);
+
+if ~exist('nirs_epoch.mat') 
+    % Find the event triggers and event types of the dataset
+    cfg.dataset = oxyfile;
+    cfg.trialdef = [];
+    cfg.trialdef.eventtype = '?';
+    cfg.trialdef.chanindx = -1;
+    ft_definetrial(cfg);
+    cfg = [];
+    cfg.dataset = oxyfile;
+    event = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
+    
+    % Extract the data
+    [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, event, marker_table);
+    cd(nirs_path);
+    save('nirs_epoch.mat', 'nirs_epoch');
+    
+else
+    load('nirs_epoch.mat')
+end
+
+
+
+
