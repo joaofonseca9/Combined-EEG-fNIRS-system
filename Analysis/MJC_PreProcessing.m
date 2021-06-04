@@ -10,8 +10,8 @@ laptop='laptopCatarina';
 eeglab;
 ft_defaults;
 
-sub='03';
-rec='02';
+sub='04';
+rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -95,6 +95,96 @@ cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
 %% Read stimuli results
+nirs_raw=data_raw;
+nirs_events=eeg_fnirs_events;
+results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
+marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
+
+%% EEG: Load MNI coordinates
+% Load channel coordinates/positions of the standard MNI model of eeglab: 
+% MNI dipfit channel positions
+
+[EEG] = pop_chanedit(EEG, 'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BESA\\standard-10-5-cap385.elp']),...
+        'lookup', join([eeglab_path,...
+        '\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc']));
+
+%% EEG: Filter - 50 Hz noise and harmonics
+
+% Determine the power spectrum of the raw data
+eeg_raw = EEG.data;
+% [P_raw, f_raw] = periodogram(eeg_raw', [], [] , EEG.srate);
+
+% Filter the signal to obtain the desired frequencies and to eliminate the
+% 50 Hz noise
+if ~isfile(file.filtered) 
+    eeg_filtered = filterNoise(double(eeg_raw), EEG, 4);
+    EEG.data = eeg_filtered;
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
+        'gui', 'off');
+    save(file.filtered, 'EEG');
+else
+    load(file.filtered, 'EEG');
+    eeg_filtered = EEG.data;
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'filtData',...
+        'gui', 'off');
+end
+
+% Determine the power spectrum of the filtered data
+% [P_filt, f_filt] = periodogram(eeg_filtered', [], [] , EEG.srate);
+
+% Plot the power spectrums
+% figure;
+% subplot(1, 3, 1); plot(f_raw, P_raw); 
+% xlim([0 200]); ylim([0 7e5]); title('EEG raw data');
+% subplot(1, 3, 2); plot(f_filt, P_filt); 
+% xlim([0 200]); ylim([0 7e5]); title('EEG filtered data - same scale');
+% subplot(1, 3, 3); plot(f_filt, P_filt); 
+% xlim([0 50]); title('EEG filtered data - different scale');
+
+%% EEG: Remove bad channels 
+% Visually inspect the signals and choose if a signals is too bad that it
+% needs to be removed.
+% First see the power spectrum and then check if the signal is actually bad
+% on the plot.
+
+if ~isfile(file.removedBadChannels) 
+    figure; 
+    pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50, 'freqrange',...
+        [2 75], 'electrodes', 'off');
+    pop_eegplot(EEG);
+    RC = input('Remove channel [nr/no]: ','s');
+    while ~strcmp(RC, 'no')
+        [EEG] = pop_select(EEG, 'nochannel', eval(RC));
+        figure;
+        pop_spectopo(EEG, 1, [0 EEG.pnts], 'EEG', 'percent', 50,...
+            'freqrange', [2 75], 'electrodes', 'off');
+        pop_eegplot(EEG);
+        RC = input('Remove channel [nr/no]: ','s');
+    end
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'removedBadChannels', 'gui', 'off');
+    save(file.removedBadChannels, 'EEG');
+else
+    load(file.removedBadChannels, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
+        'removedBadChannels', 'gui', 'off');
+end
+
+%% EEG: Removal of eye blinks - preICA
+% Identify the different independent components in the signal
+
+if ~isfile(file.preICA)  
+    [EEG] = pop_runica(EEG,'icatype', 'runica', 'extended', 1,...
+        'interrupt', 'on');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'preICA',...
+        'gui', 'off');
+    save(file.preICA, 'EEG');
+else
+    load(file.preICA, 'EEG');
+    [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname', 'preICA',...
+        'gui', 'off');
+end
 
 if strcmp(sub,'02') && strcmp(rec,'02')
     nirs_raw = data_raw;

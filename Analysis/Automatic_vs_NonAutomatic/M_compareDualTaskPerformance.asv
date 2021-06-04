@@ -165,17 +165,11 @@ function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual)
     
 end
 
-function checkIncorrectSequencePerTrial(dual, real_sequence)
+function checkIncorrectSequencePerTrial(dual)
 
     dual = events_dual.trial;
     
-     for trial = 1:length(dual)
-         typed_sequence = events_autodual.trial(trial).responses.value;
-         correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
-         if correctSequence == true & dual(trial).cue == 1
-             dual_incorrectSequences
-         
-     end
+    
 
 end
 
