@@ -353,4 +353,19 @@ save('nirs_conc.mat','nirs_conc');
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_conc)
 
-%% 
+%% NIRS: Look at the data per condition
+% multiplot_condition doesn't exist??
+
+%% NIRS: Low-pass filtering
+cfg = [];
+cfg.inputfile = 'nirs_conc.mat'; 
+cfg.lpfilter = 'yes';
+cfg.lpfreq = 0.2; % look at frequency plot
+nirs_lpf = ft_preprocessing(cfg);
+cd(nirs_path);
+save('nirs_lpf.mat','nirs_lpf'); 
+
+% to have a look at data multiplot_condition doesn't exist??
+
+%%
+

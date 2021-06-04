@@ -113,7 +113,7 @@ trl.autosingle_nocue(:,4) = 6;
 trl.nonautodual_nocue(:,4) = 7;
 trl.nonautosingle_nocue(:,4) = 8;
 
-% concatenate the four conditions and sort them
+% concatenate the eight conditions and sort them
 trl = sortrows([trl.autodual_cue; trl.autosingle_cue; trl.nonautodual_cue; trl.nonautosingle_cue;...
     trl.autodual_nocue; trl.autosingle_nocue; trl.nonautodual_nocue; trl.nonautosingle_nocue]);
 %% 

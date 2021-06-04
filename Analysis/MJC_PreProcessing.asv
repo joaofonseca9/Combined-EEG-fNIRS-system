@@ -336,10 +336,25 @@ cfg.linecolor = 'br';
 cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
 ft_databrowser(cfg, nirs_epoch);
 
-%% NIRS: Transform optical densities to oxy- and deoxy-hemoglobin concentration changes
-load('data_epoch.mat');
-cfg  = [];
+%% NIRS: Transform optical densities to concentration changes
+load('nirs_epoch.mat');
+cfg = [];
 cfg.target = {'O2Hb', 'HHb'};
 cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
-data_conc = ft_nirs_transform_ODs(cfg, data_epoch);
-save('data_conc.mat','data_conc'); 
+nirs_conc = ft_nirs_transform_ODs(cfg, nirs_epoch);
+cd(nirs_path);
+save('nirs_conc.mat','nirs_conc'); 
+
+% %Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
+% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
+% cfg          = [];
+% cfg.channel  = 'Rx*';
+% cfg.trials   = idx;
+% cfg.baseline = 'yes';
+% ft_singleplotER(cfg, nirs_conc)
+
+%% NIRS: Look at the data per condition
+load('data_conc.mat'); %load('data_x.mat');
+h=multiplot_condition(data_conc, layout, [3 4 1 2], {'foot auto', 'foot nonauto', 'finger auto', 'finger nonauto'}, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-1 1.5]);
+savefig(h{1}, 'foot_auto_multi'); savefig(h{3}, 'foot_nonauto_mulitplot');
+savefig(h{5}, 'hand_auto_multi'); savefig(h{7}, 'hand_nonauto_mulitplot');
