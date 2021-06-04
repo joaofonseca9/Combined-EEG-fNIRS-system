@@ -57,10 +57,10 @@ if data_loaded == 0
         save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'nirs_raw');
         save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events');
     end
-    cd(sub_path);
+    
     % EEGLAB load eeg only data
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
-    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off');
+    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off','savenew',fullfile(eeg_path,['sub-',sub,'_rec-',rec,'_eeg']));
 
 else % If data has been loaded and the datasets created, load the structs
     if strcmp(sub,'02') && strcmp(rec,'02')
