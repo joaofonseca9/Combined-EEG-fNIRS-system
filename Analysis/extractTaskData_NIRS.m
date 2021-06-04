@@ -122,7 +122,7 @@ sel = trl(:,2)<size(data_down.trial{1},2);
 trl = trl(sel,:);
 
 cfg     = [];
-cfg.inputfile = 'data_down.mat';
+cfg.inputfile = 'nirs_down.mat';
 cfg.trl = trl;
 data_epoch = ft_redefinetrial(cfg);
 
