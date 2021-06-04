@@ -6,7 +6,7 @@ addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Ana
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
-subrec = ["02" "02"; "03" "02"];
+subrec = ["02" "02"; "03" "02"; "04" "01"];
 seq_auto = '4 1 4 2 1 2 3 2 2 4 3 3';
 seq_nonauto = '4 2 4 4 2 3 1 1 3 4 4 1';
 
