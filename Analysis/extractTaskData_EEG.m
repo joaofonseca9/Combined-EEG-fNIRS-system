@@ -1,6 +1,6 @@
 %% FUNCTION
 % The usable data from the EEG is extracted into EEG(output), including
-% baseline data.
+% baseline data (10 seconds before every start block)
 % File will also get the different epochs: CHECK, autodual, autosingle,
 % nonautodual, nonautosingle (cued and uncued)
 
@@ -64,22 +64,22 @@ elseif size(CHECK_start,2) < 1 || isempty(CHECK_start)  % start-event is missing
 else
     error('CHECK : INCORRECT NUMBER OF EVENTS');
 end
-starts=CHECK_start-5*EEG.srate;
-stops=CHECK_stop+5*EEG.srate;
+starts=CHECK_start-10*EEG.srate;
+stops=CHECK_stop+10*EEG.srate;
 [EEG_CHECK] = reject(starts, stops, EEG);
 %save(file.CHECK, 'EEG_CHECK');
 
 %% CUED TRIALS - the cued trials are easily separable (including the
-% baseline which is from Start_Cue -> Start_Block
-CUED_start=event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartCue(1))))==1);
-CUED_stop=event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopCue(1))))==1);
-
-%Every cued trial (and 3 seconds before and after)
-starts=sort(CUED_start-10*EEG.srate);
-stops=sort(CUED_stop+10*EEG.srate);
-
-EEG_cued=reject(starts,stops,EEG);
-%save(file.EEG_cued,'EEG_cued');
+% % baseline which is from Start_Cue -> Start_Block
+% CUED_start=event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartCue(1))))==1);
+% CUED_stop=event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopCue(1))))==1);
+% 
+% %Every cued trial (and 3 seconds before and after)
+% starts=sort(CUED_start-10*EEG.srate);
+% stops=sort(CUED_stop+10*EEG.srate);
+% 
+% EEG_cued=reject(starts,stops,EEG);
+% %save(file.EEG_cued,'EEG_cued');
 
 % AUTO DUAL CUE
 Start_AutoDualCue  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoDualCue(1))))==1);
@@ -88,26 +88,35 @@ Stop_AutoDualCue   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_t
 [EEG_AutoDualCue] = reject(Start_AutoDualCue-pre*EEG.srate, Stop_AutoDualCue+post*EEG.srate,EEG);
 %save(file.EEG_AutoDualCue,'EEG_AutoDualCue');
 
+CUED_start=Start_AutoDualCue;
+CUED_stop=Stop_AutoDualCue;
+
 
 % AUTO SINGLE CUE
 Start_AutoCue  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartAutoCue(1))))==1);
 Stop_AutoCue   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopAutoCue(1))))==1);
 [EEG_AutoCue] = reject(Start_AutoCue-pre*EEG.srate, Stop_AutoCue+post*EEG.srate,EEG);
 %save(file.EEG_AutoCue,'EEG_AutoCue');
+CUED_start=[CUED_start Start_AutoCue];
+CUED_stop=[CUED_stop Stop_AutoCue];
 
 % NON AUTO DUAL CUE
 Start_NonAutoDualCue  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoDualCue(1))))==1);
 Stop_NonAutoDualCue   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopNonAutoDualCue(1))))==1);
 [EEG_NonAutoDualCue] = reject(Start_NonAutoDualCue-pre*EEG.srate, Stop_NonAutoDualCue+post*EEG.srate,EEG);
 %save(file.EEG_NonAutoDualCue,'EEG_NonAutoDualCue');
+CUED_start=[CUED_start Start_NonAutoDualCue];
+CUED_stop=[CUED_stop Stop_NonAutoDualCue];
 
 % NON AUTO SINGLE CUE
 Start_NonAutoCue  = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StartNonAutoCue(1))))==1);
 Stop_NonAutoCue   = event_samp((strcmp({EEG.event.type}, sprintf('s%d',marker_table.StopNonAutoCue(1))))==1);
 [EEG_NonAutoCue] = reject(Start_NonAutoCue-pre*EEG.srate, Stop_NonAutoCue+post*EEG.srate,EEG);
 %save(file.EEG_NonAutoCue,'EEG_NonAutoCue');
+CUED_start=[CUED_start Start_NonAutoCue];
+CUED_stop=[CUED_stop Stop_NonAutoCue];
 
-
+EEG_cued=reject(CUED_start-pre*EEG.srate,CUED_stop+post*EEG.srate,EEG);
 
 %% UNCUED TRIALS - the uncued trials have a cue that only lasts 8 seconds;
 %to separate them we get the Task Blocks and then add the baseline from
@@ -168,8 +177,8 @@ UNCUED_stop     = [UNCUED_stop Stop_NonAutoNoCue];
 
 [EEG_uncued]    =reject(UNCUED_start-pre*EEG.srate, UNCUED_stop+post*EEG.srate,EEG);
 
-[EEG_task]=reject([CUED_start-3*EEG.srate UNCUED_start],...
-        [CUED_stop+3*EEG.srate UNCUED_stop],EEG);
+[EEG_task]=reject([CUED_start UNCUED_start]-pre*EEG.srate,...
+        [CUED_stop UNCUED_stop]+post*EEG.srate,EEG);
 %save(file.EEG_task,'EEG_task');
 
 

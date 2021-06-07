@@ -1,4 +1,4 @@
-function [data_epoch]=extractTaskData_NIRS(data_raw, data_down, event, marker_table)
+function [data_epoch]=extractTaskData_NIRS(data_raw, data_down, event, marker_table, sub, rec)
 %% Define events + epochs
 %% Get offset and pre and post
 pre    =  round(10*data_down.fsample); % seconds pre-stimulus - baseline (20s-25s)
@@ -6,30 +6,30 @@ post   =  round(10*data_down.fsample); % seconds post-stimulus
 offset = -pre; % see ft_definetrial
 %% Starts
 %Cued
-start_autodual_cue = find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoDualCue(1))));
-start_autosingle_cue =  find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoCue(1))));
-start_nonautodual_cue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoDualCue(1))));
-start_nonautosingle_cue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoCue(1))));
+start_autodual_cue = strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoDualCue(1)));
+start_autosingle_cue =  strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoCue(1)));
+start_nonautodual_cue= strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoDualCue(1)));
+start_nonautosingle_cue= strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoCue(1)));
 
 %Uncued
-start_autodual_nocue = find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoDualNoCue(1))));
-start_autosingle_nocue =  find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoNoCue(1))));
-start_nonautodual_nocue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoDualNoCue(1))));
-start_nonautosingle_nocue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoNoCue(1))));
+start_autodual_nocue = strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoDualNoCue(1)));
+start_autosingle_nocue =  strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoNoCue(1)));
+start_nonautodual_nocue= strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoDualNoCue(1)));
+start_nonautosingle_nocue= strcmp({event.value}, sprintf('LSL %d',marker_table.StartNonAutoNoCue(1)));
 
 
 %% Stops
 %Cued
-stop_autodual_cue = find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoDualCue(1))));
-stop_autosingle_cue =  find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoCue(1))));
-stop_nonautodual_cue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoDualCue(1))));
-stop_nonautosingle_cue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoCue(1))));
+stop_autodual_cue = strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoDualCue(1)));
+stop_autosingle_cue =  strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoCue(1)));
+stop_nonautodual_cue= strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoDualCue(1)));
+stop_nonautosingle_cue= strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoCue(1)));
 
 %Uncued
-stop_autodual_nocue = find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoDualNoCue(1))));
-stop_autosingle_nocue =  find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoNoCue(1))));
-stop_nonautodual_nocue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoDualNoCue(1))));
-stop_nonautosingle_nocue= find(strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoNoCue(1))));
+stop_autodual_nocue = strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoDualNoCue(1)));
+stop_autosingle_nocue =  strcmp({event.value}, sprintf('LSL %d',marker_table.StopAutoNoCue(1)));
+stop_nonautodual_nocue= strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoDualNoCue(1)));
+stop_nonautosingle_nocue= strcmp({event.value}, sprintf('LSL %d',marker_table.StopNonAutoNoCue(1)));
 
 % get the sample number in the original dataset
 % note that we transpose them to get columns
@@ -122,7 +122,7 @@ sel = trl(:,2)<size(data_down.trial{1},2);
 trl = trl(sel,:);
 
 cfg     = [];
-cfg.inputfile = 'data_down.mat';
+cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat'];
 cfg.trl = trl;
 data_epoch = ft_redefinetrial(cfg);
 

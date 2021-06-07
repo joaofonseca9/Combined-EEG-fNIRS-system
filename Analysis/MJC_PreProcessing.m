@@ -3,15 +3,15 @@ close all;
 
 %% Initialize FieldTrip and EEGLAB
 % laptop='laptopCatarina';
-laptop='laptopMariana';
-% laptop='laptopJoao';
+% laptop='laptopMariana';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
 ft_defaults;
 
-sub='02';
-rec='02';
+sub='04';
+rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -94,8 +94,6 @@ cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
 %% Read stimuli results
-nirs_raw=data_raw;
-nirs_events=eeg_fnirs_events;
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
 marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
 
@@ -219,6 +217,6 @@ end
 
 %% Extract task data
 [EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
-save(file.EEG_divided,'EEG_divided');
-% [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_task, 1,'setname','taskData','gui','off');
+% save(file.EEG_divided,'EEG_divided');
+[ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_divided.EEG_task, 1,'setname','taskData','gui','off');
 
