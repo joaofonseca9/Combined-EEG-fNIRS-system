@@ -2,13 +2,13 @@ clear;
 close all;
 
 %% Specify where 3D model folder is saved
-% laptop='laptopCatarina';
-laptop='laptopJoao';
+laptop='laptopCatarina';
+% laptop='laptopJoao';
 % laptop='laptopMariana';
 [mainpath_in, mainpath_out] = addFolders(laptop);
 ft_defaults;
 
-sub='02';
+sub='04';
 
 model_path = fullfile(mainpath_in,'source',['sub-',sub],'3d');
 obj_file = fullfile(model_path, 'Model', 'Model.obj');
@@ -36,11 +36,11 @@ cfg.channel{2} = 'LPA';
 cfg.channel{3} = 'RPA';
 cfg.channel{4}= 'Iz';
 cfg.channel{5} = 'Cz';
-tnames = {'Tx1a', 'Tx1b', 'Tx1c', 'Tx1d', 'Tx6a', 'Tx6b', 'Tx6c', 'Tx6d', 'Tx1ax', 'Tx1bx', 'Tx1cx', 'Tx1dx', 'Tx2', 'Tx3', 'Tx4', 'Tx5', 'Tx7', 'Tx8', 'Tx9', 'Tx10', 'Tx2x', 'Tx3x', 'Tx4x', 'Tx5x'};
+tnames = {'Tx1a', 'Tx1b', 'Tx1c', 'Tx1d', 'Tx6a', 'Tx6b', 'Tx6c', 'Tx6d', 'Tx11a', 'Tx11b', 'Tx11c', 'Tx11d', 'Tx2', 'Tx3', 'Tx4', 'Tx5', 'Tx7', 'Tx8', 'Tx9', 'Tx10', 'Tx12', 'Tx13', 'Tx14', 'Tx15'};
 for i =6:29
     cfg.channel{i}=sprintf('%s', tnames{i-5}); % change this according to the number of transmitters your layout has
 end
-rnames = {'Rx1', 'Rx2', 'Rx3', 'Rx4', 'Rx5', 'Rx6', 'Rx7', 'Rx8', 'Rx1x', 'Rx2x', 'Rx3x', 'Rx4x'};
+rnames = {'Rx1', 'Rx2', 'Rx3', 'Rx4', 'Rx5', 'Rx6', 'Rx7', 'Rx8', 'Rx9', 'Rx10', 'Rx11', 'Rx12'};
 for i =30:41
     cfg.channel{i}=sprintf('%s', rnames{i-29}); % change this according to the number of receivers your layout has
 end
@@ -194,7 +194,8 @@ ft_plot_sens(electarg, 'elecsize', 20, 'facecolor', 'b');
 
 %% Calculate channel locations based on optode positions (in MNI space)
 % define here the channels you want to create:
-channels = {'Rx1x-Tx2x', 'Rx1x-Tx3x', 'Rx2x-Tx3x', 'Rx2x-Tx4x', 'Rx3x-Tx2x', 'Rx3x-Tx3x', 'Rx3x-Tx5x', 'Rx4x-Tx4x', 'Rx4x-Tx5x', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx2-Tx4', 'Rx4-Tx4', 'Rx4-Tx5'};
+channels = {'Rx9-Tx12', 'Rx9-Tx13', 'Rx11-Tx12', 'Rx11-Tx13', 'Rx10-Tx14', 'Rx12-Tx14', 'Rx12-Tx15', 'Rx4-Tx4', 'Rx4-Tx5', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx3-Tx5', 'Rx2-Tx4', 'Rx2-Tx3'};
+%channels = {'Rx5-Tx6b','Rx7-Tx6d','Rx6-Tx6a','Rx8-Tx6c','Rx4-Tx1c','Rx2-Tx1a','Rx3-Tx1d','Rx1-Tx1b','Rx9-Tx11a','Rx11-Tx11c','Rx12-Tx11d','Rx10-Tx11b'}; %short channels
 [rxnames, rem] = strtok(channels, {'-', ' '});
 [txnames, rem] = strtok(rem, {'-', ' '});
 
@@ -223,7 +224,8 @@ ft_plot_sens(opto_chan, 'opto', true, 'optosize', 10,'facecolor', 'k', 'label', 
 %% Determine anatomical labels for the channels
 % Load atlas (AAL atlas)
 atlas = ft_read_atlas([ftpath filesep 'template/atlas/aal/ROI_MNI_V4.nii']);
-channels = {'Rx1x-Tx2x', 'Rx1x-Tx3x', 'Rx2x-Tx3x', 'Rx2x-Tx4x', 'Rx3x-Tx2x', 'Rx3x-Tx3x', 'Rx3x-Tx5x', 'Rx4x-Tx4x', 'Rx4x-Tx5x', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx2-Tx4', 'Rx4-Tx4', 'Rx4-Tx5'};
+channels = {'Rx9-Tx12', 'Rx9-Tx13', 'Rx11-Tx12', 'Rx11-Tx13', 'Rx10-Tx14', 'Rx12-Tx14', 'Rx12-Tx15', 'Rx4-Tx4', 'Rx4-Tx5', 'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2', 'Rx3-Tx3', 'Rx3-Tx5', 'Rx2-Tx4', 'Rx2-Tx3'};
+%channels = {'Rx5-Tx6b','Rx7-Tx6d','Rx6-Tx6a','Rx8-Tx6c','Rx4-Tx1c','Rx2-Tx1a','Rx3-Tx1d','Rx1-Tx1b','Rx9-Tx11a','Rx11-Tx11c','Rx12-Tx11d','Rx10-Tx11b'}; %short channels
 
 % Look up the corresponding anatomical label
 cfg = [];
