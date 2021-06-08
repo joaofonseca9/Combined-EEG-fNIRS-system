@@ -119,8 +119,8 @@ for subject = 1:size(subrec, 1)
     average.nonautodual_avgMistakes_uncued = nonautodual_finalAverageMistakes_uncued/size(subrec, 1);
     average.autodual_incorrectSeqs_cued = autodual_finalIncorrectSequences_cued/size(subrec, 1);
     average.autodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
-    average.nonautodual_incorrectSeqs_cued = nonautodual_finalIncorrectSequences_cued/size(subrec, 1);
-    average.nonautodual_incorrectSeqs_uncued = nonautodual_finalIncorrectSequences_uncued/size(subrec, 1);
+    average.nonautodual_incorrectSeqs_cued = autodual_finalIncorrectSequences_cued/size(subrec, 1);
+    average.nonautodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
     % average.autodual_avgDelay_cued = autodual_finalDelay_cued/size(subrec, 1);
     % average.autodual_avgDelay_uncued = autodual_finalDelay_uncued/size(subrec, 1);
     % average.nonautodual_avgDelay_cued = nonautodual_finalDelay_cued/size(subrec, 1);
@@ -198,7 +198,7 @@ dual_incorrectSequences_cued = 0;
 dual_incorrectSequences_uncued = 0;
     
 for trial = 1:length(dual)
-    typed_sequence = events_dual.trial(trial).responses.value;
+    typed_sequence = events_autodual.trial(trial).responses.value;
     correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
     if correctSequence == false && dual(trial).cue == 1
         dual_incorrectSequences_cued = dual_incorrectSequences_cued + 1;
