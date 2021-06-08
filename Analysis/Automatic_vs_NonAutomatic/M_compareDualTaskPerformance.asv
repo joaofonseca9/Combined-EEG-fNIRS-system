@@ -7,8 +7,16 @@ laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 subrec = ["02" "02"; "03" "02"; "04" "01"];
-seq_auto = '4 1 4 2 1 2 3 2 2 4 3 3';
-seq_nonauto = '4 2 4 4 2 3 1 1 3 4 4 1';
+% Sub 02
+% seq_auto = '434141243212';
+% seq_nonauto = '212321324241';
+% Sub 03
+% seq_auto = '414212322433';
+% seq_nonauto= '424423113441';
+% Sub 04
+seq_auto = '212321324241';
+seq_nonauto = '413241423213';
+
 
 autodual_finalAverageMistakes_cued = 0;
 autodual_finalAverageMistakes_uncued = 0;
@@ -24,7 +32,7 @@ nonautodual_finalIncorrectSequences_uncued = 0;
 % nonautodual_finalDelay_uncued = 0;
 
 % Go through every subject.
-for subject = 1:size(subrec, 1)
+for subject = 3:3%1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);
     
@@ -119,8 +127,8 @@ for subject = 1:size(subrec, 1)
     average.nonautodual_avgMistakes_uncued = nonautodual_finalAverageMistakes_uncued/size(subrec, 1);
     average.autodual_incorrectSeqs_cued = autodual_finalIncorrectSequences_cued/size(subrec, 1);
     average.autodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
-    average.nonautodual_incorrectSeqs_cued = autodual_finalIncorrectSequences_cued/size(subrec, 1);
-    average.nonautodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
+    average.nonautodual_incorrectSeqs_cued = nonautodual_finalIncorrectSequences_cued/size(subrec, 1);
+    average.nonautodual_incorrectSeqs_uncued = nonautodual_finalIncorrectSequences_uncued/size(subrec, 1);
     % average.autodual_avgDelay_cued = autodual_finalDelay_cued/size(subrec, 1);
     % average.autodual_avgDelay_uncued = autodual_finalDelay_uncued/size(subrec, 1);
     % average.nonautodual_avgDelay_cued = nonautodual_finalDelay_cued/size(subrec, 1);
@@ -198,8 +206,13 @@ dual_incorrectSequences_cued = 0;
 dual_incorrectSequences_uncued = 0;
     
 for trial = 1:length(dual)
-    typed_sequence = events_autodual.trial(trial).responses.value;
+    typed_sequence = events_dual.trial(trial).responses.value;
+    typed_sequence = typed_sequen(~cellfun('isempty',ans));
+    typed_sequence = cell2mat()';
+    disp(real_sequence)
+    disp(typed_sequence)
     correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
+    disp(correctSequence)
     if correctSequence == false && dual(trial).cue == 1
         dual_incorrectSequences_cued = dual_incorrectSequences_cued + 1;
     elseif correctSequence == false && dual(trial).cue == 0
