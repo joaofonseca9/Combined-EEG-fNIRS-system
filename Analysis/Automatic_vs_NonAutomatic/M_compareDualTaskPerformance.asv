@@ -178,26 +178,6 @@ dual_averageMistakes_uncued = dual_mistakes_uncued/(length(dual)/2);
 
 end
 
-% function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual)
-% 
-%     margin = 0.25; % Margin of error: think about what is most convenient.
-%     dual = events_dual.trial;
-%     delay_cued = 0;
-%     delay_uncued = 0;
-%     
-%     for trial = 1:length(dual)
-%         if dual(trial).cue == 1
-%             delay_cued = delay_cued + mean(diff(dual(trial).responses.onset) - 1/1.50);
-%         elseif dual(trial).cue == 0
-%             delay_uncued = delay_uncued + mean(diff(dual(trial).responses.onset) - 1/1.50);
-%         end
-%     end
-%     
-%     delay_cued = delay_cued / (length(dual)/2);
-%     delay_uncued = delay_uncued / (length(dual)/2);
-%     
-% end
-
 function [dual_incorrectSequences_cued, dual_incorrectSequences_uncued] = ...
     checkIncorrectSequencePerTrial(events_dual, real_sequence)
 
@@ -207,12 +187,9 @@ dual_incorrectSequences_uncued = 0;
     
 for trial = 1:length(dual)
     typed_sequence = events_dual.trial(trial).responses.value;
-    typed_sequence = typed_sequen(~cellfun('isempty',ans));
-    typed_sequence = cell2mat()';
-    disp(real_sequence)
-    disp(typed_sequence)
+    typed_sequence = typed_sequence(~cellfun('isempty', typed_sequence));
+    typed_sequence = cell2mat(typed_sequence)';
     correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
-    disp(correctSequence)
     if correctSequence == false && dual(trial).cue == 1
         dual_incorrectSequences_cued = dual_incorrectSequences_cued + 1;
     elseif correctSequence == false && dual(trial).cue == 0
@@ -222,6 +199,36 @@ end
 dual_incorrectSequences_cued = dual_incorrectSequences_cued/(length(dual)/2);
 dual_incorrectSequences_uncued = dual_incorrectSequences_uncued/(length(dual)/2);
 
+end
+
+function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual, real_sequence)
+
+dual = events_dual.trial;
+delay_cued = 0;
+delay_uncued = 0;
+
+len_cued = len_uncued = length(dual)/2;
+    
+for trial = 1:length(dual)
+    typed_sequence = events_dual.trial(trial).responses.value;
+    typed_sequence = typed_sequence(~cellfun('isempty', typed_sequence));
+    typed_sequence = cell2mat(typed_sequence)';
+    correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
+
+    if dual(trial).cue == 1 && correctSequence == true
+            delay_cued = delay_cued + mean(diff(dual(trial).responses.onset) - 1/1.50);
+        elseif dual(trial).cue == 1 && correctSequence == false
+            len_cued = len_cued - 1;
+        elseif dual(trial).cue == 0 && correctSequence == true
+            delay_uncued = delay_uncued + mean(diff(dual(trial).responses.onset) - 1/1.50);
+        elseif dual(trial).cue == 0 && correctSequence == false
+            len_uncued = len_uncued - 1;
+        end
+    end
+    
+    delay_cued = delay_cued / len_cued;
+    delay_uncued = delay_uncued / len_uncued;
+    
 end
 
 function correctSequence = checkCorrectSequence(typed_sequence, real_sequence)

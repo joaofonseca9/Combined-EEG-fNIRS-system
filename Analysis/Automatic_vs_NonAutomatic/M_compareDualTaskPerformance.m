@@ -17,7 +17,6 @@ subrec = ["02" "02"; "03" "02"; "04" "01"];
 seq_auto = '212321324241';
 seq_nonauto = '413241423213';
 
-
 autodual_finalAverageMistakes_cued = 0;
 autodual_finalAverageMistakes_uncued = 0;
 nonautodual_finalAverageMistakes_cued = 0;
@@ -26,10 +25,10 @@ autodual_finalIncorrectSequences_cued = 0;
 autodual_finalIncorrectSequences_uncued = 0;
 nonautodual_finalIncorrectSequences_cued = 0;
 nonautodual_finalIncorrectSequences_uncued = 0;
-% autodual_finalDelay_cued = 0;
-% autodual_finalDelay_uncued = 0;
-% nonautodual_finalDelay_cued = 0;
-% nonautodual_finalDelay_uncued = 0;
+autodual_finalDelay_cued = 0;
+autodual_finalDelay_uncued = 0;
+nonautodual_finalDelay_cued = 0;
+nonautodual_finalDelay_uncued = 0;
 
 % Go through every subject.
 for subject = 3:3%1:size(subrec, 1)
@@ -55,8 +54,8 @@ for subject = 3:3%1:size(subrec, 1)
         checkIncorrectSequencePerTrial(events_autodual, seq_auto);
        
     % Get the delay in the fingertapping performance.
-    % [autodual_delay_cued, autodual_delay_uncued] = ...
-    %     calculateDelayPerformance(events_autodual);
+    [autodual_delay_cued, autodual_delay_uncued] = ...
+        calculateDelayPerformance(events_autodual, seq_auto);
     
     % Add values to final average (all subjects).
     autodual_finalAverageMistakes_cued =...
@@ -67,10 +66,10 @@ for subject = 3:3%1:size(subrec, 1)
         autodual_finalIncorrectSequences_cued + autodual_incorrectSequences_cued;
     autodual_finalIncorrectSequences_uncued =...
         autodual_finalIncorrectSequences_uncued + autodual_incorrectSequences_uncued;
-    % autodual_finalDelay_cued =...
-    %     autodual_finalDelay_cued + abs(autodual_delay_cued);
-    % autodual_finalDelay_uncued =...
-    %     autodual_finalDelay_uncued + abs(autodual_delay_uncued);
+    autodual_finalDelay_cued =...
+        autodual_finalDelay_cued + autodual_delay_cued;
+    autodual_finalDelay_uncued =...
+        autodual_finalDelay_uncued + autodual_delay_uncued;
     
     %% Non-automatic sequence.
     % Check if counting answers from non-automatic sequence were correct.
@@ -85,8 +84,8 @@ for subject = 3:3%1:size(subrec, 1)
         checkIncorrectSequencePerTrial(events_nonautodual, seq_nonauto);
     
     % Get the delay in the fingertapping performance.
-    % [nonautodual_delay_cued, nonautodual_delay_uncued] = ...
-    %     calculateDelayPerformance(events_nonautodual);
+    [nonautodual_delay_cued, nonautodual_delay_uncued] = ...
+        calculateDelayPerformance(events_nonautodual, seq_nonauto);
     
     % Add values to final average (all subjects).
     nonautodual_finalAverageMistakes_cued =...
@@ -97,10 +96,10 @@ for subject = 3:3%1:size(subrec, 1)
         nonautodual_finalIncorrectSequences_cued + nonautodual_incorrectSequences_cued;
     nonautodual_finalIncorrectSequences_uncued =...
         nonautodual_finalIncorrectSequences_uncued + nonautodual_incorrectSequences_uncued;
-    % nonautodual_finalDelay_cued =...
-    %     nonautodual_finalDelay_cued + abs(nonautodual_delay_cued);
-    % nonautodual_finalDelay_uncued =...
-    %     nonautodual_finalDelay_uncued + abs(nonautodual_delay_uncued);
+    nonautodual_finalDelay_cued =...
+        nonautodual_finalDelay_cued + nonautodual_delay_cued;
+    nonautodual_finalDelay_uncued =...
+        nonautodual_finalDelay_uncued + nonautodual_delay_uncued;
     
     %% Put values of error into final struct.
     % Values for the current subject.
@@ -112,10 +111,10 @@ for subject = 3:3%1:size(subrec, 1)
     s.autodual_incorrectSeqs_uncued = autodual_incorrectSequences_uncued;
     s.nonautodual_incorrectSeqs_cued = nonautodual_incorrectSequences_cued;
     s.nonautodual_incorrectSeqs_uncued = nonautodual_incorrectSequences_uncued;
-    % s.autodual_delay_cued = autodual_delay_cued;
-    % s.autodual_delay_uncued = autodual_delay_uncued;
-    % s.nonautodual_delay_cued = nonautodual_delay_cued;
-    % s.nonautodual_delay_uncued = nonautodual_delay_uncued;
+    s.autodual_delay_cued = autodual_delay_cued;
+    s.autodual_delay_uncued = autodual_delay_uncued;
+    s.nonautodual_delay_cued = nonautodual_delay_cued;
+    s.nonautodual_delay_uncued = nonautodual_delay_uncued;
     
     % Add struct of current subject to all subjects struct.
     allsubs.(genvarname(strcat('sub', char(sub)))) = s;
@@ -129,10 +128,10 @@ for subject = 3:3%1:size(subrec, 1)
     average.autodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
     average.nonautodual_incorrectSeqs_cued = nonautodual_finalIncorrectSequences_cued/size(subrec, 1);
     average.nonautodual_incorrectSeqs_uncued = nonautodual_finalIncorrectSequences_uncued/size(subrec, 1);
-    % average.autodual_avgDelay_cued = autodual_finalDelay_cued/size(subrec, 1);
-    % average.autodual_avgDelay_uncued = autodual_finalDelay_uncued/size(subrec, 1);
-    % average.nonautodual_avgDelay_cued = nonautodual_finalDelay_cued/size(subrec, 1);
-    % average.nonautodual_avgDelay_uncued = nonautodual_finalDelay_uncued/size(subrec, 1);
+    average.autodual_avgDelay_cued = autodual_finalDelay_cued/size(subrec, 1);
+    average.autodual_avgDelay_uncued = autodual_finalDelay_uncued/size(subrec, 1);
+    average.nonautodual_avgDelay_cued = nonautodual_finalDelay_cued/size(subrec, 1);
+    average.nonautodual_avgDelay_uncued = nonautodual_finalDelay_uncued/size(subrec, 1);
     allsubs.avg = average;
    
 end
@@ -178,26 +177,6 @@ dual_averageMistakes_uncued = dual_mistakes_uncued/(length(dual)/2);
 
 end
 
-% function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual)
-% 
-%     margin = 0.25; % Margin of error: think about what is most convenient.
-%     dual = events_dual.trial;
-%     delay_cued = 0;
-%     delay_uncued = 0;
-%     
-%     for trial = 1:length(dual)
-%         if dual(trial).cue == 1
-%             delay_cued = delay_cued + mean(diff(dual(trial).responses.onset) - 1/1.50);
-%         elseif dual(trial).cue == 0
-%             delay_uncued = delay_uncued + mean(diff(dual(trial).responses.onset) - 1/1.50);
-%         end
-%     end
-%     
-%     delay_cued = delay_cued / (length(dual)/2);
-%     delay_uncued = delay_uncued / (length(dual)/2);
-%     
-% end
-
 function [dual_incorrectSequences_cued, dual_incorrectSequences_uncued] = ...
     checkIncorrectSequencePerTrial(events_dual, real_sequence)
 
@@ -209,10 +188,7 @@ for trial = 1:length(dual)
     typed_sequence = events_dual.trial(trial).responses.value;
     typed_sequence = typed_sequence(~cellfun('isempty', typed_sequence));
     typed_sequence = cell2mat(typed_sequence)';
-    disp(real_sequence)
-    disp(typed_sequence)
     correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
-    disp(correctSequence)
     if correctSequence == false && dual(trial).cue == 1
         dual_incorrectSequences_cued = dual_incorrectSequences_cued + 1;
     elseif correctSequence == false && dual(trial).cue == 0
@@ -224,6 +200,38 @@ dual_incorrectSequences_uncued = dual_incorrectSequences_uncued/(length(dual)/2)
 
 end
 
+function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual, real_sequence)
+
+dual = events_dual.trial;
+delay_cued = 0;
+delay_uncued = 0;
+
+len_cued = length(dual)/2;
+len_uncued = length(dual)/2;
+    
+for trial = 1:length(dual)
+    typed_sequence = events_dual.trial(trial).responses.value;
+    typed_sequence = typed_sequence(~cellfun('isempty', typed_sequence));
+    typed_sequence = cell2mat(typed_sequence)';
+    correctSequence = checkCorrectSequence(typed_sequence, real_sequence);
+
+    if dual(trial).cue == 1 && correctSequence == true
+        delay_cued = delay_cued + abs(mean(diff(dual(trial).responses.onset) - 1/1.50));
+    elseif dual(trial).cue == 1 && correctSequence == false
+        len_cued = len_cued - 1;
+    elseif dual(trial).cue == 0 && correctSequence == true
+        delay_uncued = delay_uncued + abs(mean(diff(dual(trial).responses.onset) - 1/1.50));
+    elseif dual(trial).cue == 0 && correctSequence == false
+        len_uncued = len_uncued - 1;
+    end
+    
+end
+    
+delay_cued = delay_cued / len_cued;
+delay_uncued = delay_uncued / len_uncued;
+    
+end
+
 function correctSequence = checkCorrectSequence(typed_sequence, real_sequence)
 
 if all(strcmp(typed_sequence, real_sequence))
@@ -233,19 +241,3 @@ else
 end
 
 end
-
-
-% 
-%     
-%%
-% Show if the tapping tempo was correct.
-%     margin=0.25; % margin of error: think about what is most convenient
-%     delay=mean(diff(events_autodual.trial(h).responses.onset)-1/1.50);
-%     tempo=sprintf('The tempo was off with on average %f seconds \n', delay);
-%     % Show if the tapped sequence was correct
-%     correctSequence=sequences(1);
-%     if all(strcmp(events_autodual.trial(h).responses.value,correctSequence{:}'))
-%         seq='Sequence is correct \n \n';
-%     else
-%         seq='Sequence is incorrect \n \n';
-%     end
