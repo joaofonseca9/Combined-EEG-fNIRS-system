@@ -9,7 +9,6 @@ laptop='laptopCatarina';
 
 eeglab;
 ft_defaults;
-[~, ftpath] = ft_version;
 
 sub='04';
 rec='01';
@@ -211,45 +210,32 @@ cfg = [];
 cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
-%% NIRS: Select channels and read events
+%% NIRS: Select channels
 % Selects channels that are also present in the original template
 load(cfg.layout);
 names_channels = layout.label(1:(length(layout.label)-2)); % remove 'COMNT' and 'SCALE' from channel labels
+% for i = 1:length(channels_conc)
+%     tmp = strsplit(channels_conc{i});
+%     names_channels{i}=char(tmp(1));
+% end
 TF = startsWith(nirs_raw.label,names_channels);
 channels_opt = nirs_raw.label(TF);
 
 % Add all the short channels that are connected to receivers that are
 % part of the template
-SC = nirs_raw.label(contains(nirs_raw.label, {'a ', 'b ', 'c ', 'd '})); % all short channels
-Rx_channels = cellfun(@(x)(strsplit(x, 'T')), names_channels, 'UniformOutput', false); % get the receivers that are part of the template
-Rx_channels = cellfun(@(x)(x{1}), Rx_channels, 'UniformOutput', false);
-channels_short = SC(startsWith(SC, Rx_channels));
+SC = data_raw.label(contains(data_raw.label, {'a ', 'b ', 'c ', 'd '})); % all short channels
+Rx_channels =cellfun(@(x)(strsplit(x, 'T')), names_channels, 'UniformOutput', false); % get the receivers that are part of the template
+Rx_channels=cellfun(@(x)(x{1}), Rx_channels, 'UniformOutput', false);
+channels_short=SC(startsWith(SC, Rx_channels));
 
 % Select data of correct channels
 cd(nirs_path);
 cfg = [];
-cfg.channel=[channels_opt; channels_short];
-nirs_chan = ft_selectdata(cfg, nirs_raw);
+cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat']; 
+cfg.channel = channels_opt;
+nirs_chan = ft_selectdata(cfg);
+cd(nirs_path);
 save('nirs_chan.mat', 'nirs_chan');
-
-% Find the event triggers and event types of the dataset (not necessary)
-cfg.dataset = oxyfile;
-cfg.trialdef = [];
-cfg.trialdef.eventtype = '?';
-cfg.trialdef.chanindx = -1;
-ft_definetrial(cfg);
-
-% Read events
-cfg = [];
-cfg.dataset = oxyfile;
-nirs_event = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
-save('nirs_event.mat', 'nirs_event')
-
-% % Select only 0-3000 seconds(to get rid of NaNs)
-% cfg = [];
-% cfg.latency = [0 3000];
-% nirs_chan = ft_selectdata(cfg, nirs_chan);
-% save('nirs_raw.mat', 'nirs_raw');
 
 %% NIRS: Downsample the data (save memory, make processing faster and low pass filtering)
 % The hemodynamic response takes about 5-10s (0.2-0.1Hz) to reach its peak.
@@ -257,10 +243,15 @@ save('nirs_event.mat', 'nirs_event')
 % If resampling factor is larger than 10 -> resample multiple times
 % New frequency must be higher than frequency of trigger
 
-cfg = [];
-cfg.resamplefs = 10;
-nirs_down = ft_resampledata(cfg, nirs_chan);
-save('nirs_down.mat', 'nirs_down');
+if ~exist(fullfile(['sub-',sub,'_rec-',rec,'_nirs.mat'],'nirs_raw'))
+    cfg = [];
+    cfg.inputfile = 'nirs_chan.mat';
+    cfg.resamplefs = 10;
+    nirs_down = ft_resampledata(cfg);
+    cd(nirs_path);
+    save('nirs_down.mat', 'nirs_down');
+else load('nirs_down.mat')
+end
 
 % % Plot downsampled data
 % cfg                = [];
