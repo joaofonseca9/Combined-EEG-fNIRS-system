@@ -242,8 +242,8 @@ ft_definetrial(cfg);
 % Read events
 cfg = [];
 cfg.dataset = oxyfile;
-nirs_event = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
-save('nirs_event.mat', 'nirs_event')
+nirs_events = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
+save('nirs_events.mat', 'nirs_events')
 
 % % Select only 0-3000 seconds(to get rid of NaNs)
 % cfg = [];
@@ -272,29 +272,17 @@ save('nirs_down.mat', 'nirs_down');
 % ft_databrowser(cfg, nirs_down);
 
 %% NIRS: Extract task data (epoch)
+% Because of the resampling of the data we can't use the current events for 
+% epoching so first need to convert them
 clear pre post offset trl sel smp
+
 load('nirs_down.mat');
 load(['sub-',sub,'_rec-',rec,'_nirs.mat']);
 
-if ~exist('nirs_epoch.mat') 
-    % Find the event triggers and event types of the dataset
-    cfg.dataset = oxyfile;
-    cfg.trialdef = [];
-    cfg.trialdef.eventtype = '?';
-    cfg.trialdef.chanindx = -1;
-    ft_definetrial(cfg);
-    cfg = [];
-    cfg.dataset = oxyfile;
-    event = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
-    
-    % Extract the data
-    [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, event, marker_table);
-    cd(nirs_path);
-    save('nirs_epoch.mat', 'nirs_epoch');
-    
-else
-    load('nirs_epoch.mat')
-end
+% Extract the data
+[nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec);
+cd(nirs_path);
+save('nirs_epoch.mat', 'nirs_epoch');
 
 % % Plot epoched optical density data around the first deviant stimulus
 % idx = find(nirs_epoch.trialinfo==2, 1, 'first'); % check trials
@@ -303,6 +291,9 @@ end
 % cfg.trials   = idx;
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_epoch)
+
+% Visualize
+databrowser_nirs(nirs_epoch);
 
 %% NIRS: Remove bad channels - Inspect the raw data visually 
 % Show channels with low SCI
