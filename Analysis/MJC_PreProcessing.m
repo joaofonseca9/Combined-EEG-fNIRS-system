@@ -355,37 +355,21 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
-%% NIRS: Transform optical densities to concentration changes
-load('nirs_epoch.mat');
+%% NIRS: Detrend and low-pass filtering
+% Detrend + low-pass filter (low-pass filter data below the frequency of 
+% the heart beat (1 Hz))
 cfg = [];
-cfg.target = {'O2Hb', 'HHb'};
-cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
-nirs_conc = ft_nirs_transform_ODs(cfg, nirs_epoch);
-cd(nirs_path);
-save('nirs_conc.mat','nirs_conc'); 
-
-% %Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
-% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
-% cfg          = [];
-% cfg.channel  = 'Rx*';
-% cfg.trials   = idx;
-% cfg.baseline = 'yes';
-% ft_singleplotER(cfg, nirs_conc)
-
-%% NIRS: Look at the data per condition
-% multiplot_condition doesn't exist??
-
-%% NIRS: Low-pass filtering
-% Low-pass filter data below the frequency of the heart beat (1 Hz).
-cfg = [];
-cfg.inputfile = 'nirs_conc.mat'; 
+cfg.detrend = 'yes';
 cfg.lpfilter = 'yes';
 cfg.lpfreq = 0.2; % look at frequency plot
-nirs_lpf = ft_preprocessing(cfg);
+nirs_lpf = ft_preprocessing(cfg, nirs_reject);
 cd(nirs_path);
 save('nirs_lpf.mat','nirs_lpf'); 
 
-% %Plot Low-pass filtered hemoglobin concentrations 
+% Visualize
+databrowser_nirs(nirs_lpf);
+
+% % Plot Low-pass filtered hemoglobin concentrations 
 % idx = find(nirs_lpf.trialinfo==2, 1, 'first'); % check trials
 % cfg          = [];
 % cfg.channel  = 'Rx*';
@@ -393,121 +377,38 @@ save('nirs_lpf.mat','nirs_lpf');
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_lpf)
 
-% to have a look at data multiplot_condition doesn't exist??
-
-%% NIRS: Timelock analysis and baseline correction
-% Timelock analysis
-load('nirs_lpf.mat')
-for task = 1:8 % 8 conditions 
-    cfg = [];
-    cfg.trials = find(nirs_lpf.trialinfo(:,1) == task); % average the data for given task
-    nirs_TL{task} = ft_timelockanalysis(cfg, nirs_lpf);
-end
+%% NIRS: Transform optical densities to concentration changes
+cfg = [];
+cfg.target = {'O2Hb', 'HHb'};
+cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
+nirs_conc = ft_nirs_transform_ODs(cfg, nirs_lpf);
 cd(nirs_path);
-save('nirs_TL.mat', 'nirs_TL');
+save('nirs_conc.mat','nirs_conc'); 
 
-% Apply baseline correction
-for task = 1:8
-    cfg = [];
-    cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
-    nirs_TL_blc{task} = ft_timelockbaseline(cfg, nirs_TL{task});
-end
-cd(nirs_path);
-save('nirs_TL_blc.mat','nirs_TL_blc');
+% Visualize
+databrowser_nirs(nirs_conc)
 
-%% NIRS: Separate O2Hb and HHb channels and plot tasks on the layout
-close all;
-load('nirs_TL_blc.mat')
-for task = 1:8
-    cfg = [];
-    cfg.channel='* [O2Hb]';
-    nirs_TL_O2Hb{task} = ft_preprocessing(cfg, nirs_TL_blc{task});
-    % rename labels so that they have the same name as HHb channels
-    for i = 1:length(nirs_TL_O2Hb{task}.label)
-        tmp = strsplit(nirs_TL_O2Hb{task}.label{i});
-        nirs_TL_O2Hb{task}.label{i} = tmp{1};
-    end
-    save('nirs_TL_O2Hb.mat','nirs_TL_O2Hb');
-    
-    % same for HHb channels
-    cfg = [];
-    cfg.channel = '* [HHb]';
-    nirs_TL_HHb{task} = ft_preprocessing(cfg, nirs_TL_blc{task});
-    for i = 1:length(nirs_TL_HHb{task}.label)
-        tmp = strsplit(nirs_TL_HHb{task}.label{i});
-        nirs_TL_HHb{task}.label{i} = tmp{1};
-    end
-    cd(nirs_path);
-    save('nirs_TL_HHb.mat','nirs_TL_HHb');
-end
+% % Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
+% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
+% cfg          = [];
+% cfg.channel  = 'Rx*';
+% cfg.trials   = idx;
+% cfg.baseline = 'yes';
+% ft_singleplotER(cfg, nirs_conc)
 
-load('nirs_TL_O2Hb.mat');
-load('nirs_TL_HHb.mat');
-for i = [5 1]
-  cfg = [];
-  cfg.showlabels = 'yes';
-  cfg.layout = layout;
-  cfg.ylim = [-1 1.5];
-  cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
-  cfg.linecolor  = 'rbmcgykw'; % O2Hb is showed in red/magenta/green/black and HHb in blue/cyan/yellow/white
-  cfg.comment = 'auto dual task is red and blue line\n auto single task is magenta and cyan line\n non auto dual task is green and yellow\n non auto single task is black and white';
-  taskshort = {'multiplotuncued','','','','multiplotcued'};
-  ft_multiplotER(cfg, nirs_TL_O2Hb{i}, nirs_TL_HHb{i}, nirs_TL_O2Hb{i+1}, nirs_TL_HHb{i+1}, nirs_TL_O2Hb{i+2}, nirs_TL_HHb{i+2},nirs_TL_O2Hb{i+3}, nirs_TL_HHb{i+3});
-  saveas(gcf, ['sub-',sub,'_rec-',rec,'_',char(taskshort(i)), '_timelock.jpg']);
-end
-
-% change white line to orange, edit title and legend of the plot and save
-% the image
-savefigure = input('Enter any key once the plots are edited and saved: \n', 's');
-
-% Plot for each task separately
+%% NIRS: Timelock analysis, baseline correction and spatial representation
 taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
-taskshort = {'autodualcued', 'autosinglecued', 'nonautodualcued', 'nonautosinglecued','autodualuncued', 'autosingleuncued', 'nonautodualuncued', 'nonautosingleuncued'};
-for task = 1:8
-    cfg = [];
-    cfg.showlabels = 'yes';
-    cfg.layout = layout;
-    cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
-    cfg.linecolor = 'rb'; % O2Hb is in red and HHb in blue
-    ft_multiplotER(cfg, nirs_TL_O2Hb{task}, nirs_TL_HHb{task});
-    saveas(gcf, ['sub-',sub,'_rec-',rec,'_',char(taskshort(task)), '_timelock.jpg']);
-end
+tasktimelock = {'autodualcued_timelock', 'autosinglecued_timelock', 'nonautodualcued_timelock', 'nonautosinglecued_timelock','autodualuncued_timelock', 'autosingleuncued_timelock', 'nonautodualuncued_timelock', 'nonautosingleuncued_timelock'};
+taskspatial = {'autodualcued_spatial', 'autosinglecued_spatial', 'nonautodualcued_spatial', 'nonautosinglecued_spatial','autodualuncued_spatial', 'autosingleuncued_spatial', 'nonautodualuncued_spatial', 'nonautosingleuncued_spatial'};
+h = multiplot_condition(nirs_conc, layout, [1:8],taskname, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-0.5 1]);
+% saveas(h{1},tasktimelock{1},'png'); saveas(h{2},taskspatial{1},'png'); 
+% saveas(h{3},tasktimelock{2},'png'); saveas(h{4},taskspatial{1},'png'); 
+% saveas(h{5},tasktimelock{3},'png'); saveas(h{6},taskspatial{1},'png'); 
+% saveas(h{7},tasktimelock{4},'png'); saveas(h{8},taskspatial{1},'png'); 
+% saveas(h{9},tasktimelock{5},'png'); saveas(h{10},taskspatial{1},'png'); 
+% saveas(h{11},tasktimelock{6},'png'); saveas(h{12},taskspatial{1},'png'); 
+% saveas(h{13},tasktimelock{7},'png'); saveas(h{14},taskspatial{1},'png'); 
+% saveas(h{15},tasktimelock{8},'png'); saveas(h{16},taskspatial{1},'png'); 
 
-%% NIRS: Spatial representation
-close all;
-nirs_NAvA_autodualcued = nirs_TL_blc{1,1};
-nirs_NAvA_autosinglecued = nirs_TL_blc{1,2};
-nirs_NAvA_nonautodualcued = nirs_TL_blc{1,3};
-nirs_NAvA_nonautosinglecued = nirs_TL_blc{1,4};
-nirs_NAvA_autodualuncued = nirs_TL_blc{1,5};
-nirs_NAvA_autosingleuncued = nirs_TL_blc{1,6};
-nirs_NAvA_nonautodualuncued = nirs_TL_blc{1,7};
-nirs_NAvA_nonautosingleuncued = nirs_TL_blc{1,8};
+%%
 
-nirs_NAvA = [nirs_NAvA_autodualcued, nirs_NAvA_autosinglecued, nirs_NAvA_nonautodualcued, nirs_NAvA_nonautosinglecued,nirs_NAvA_autodualuncued, nirs_NAvA_autosingleuncued,nirs_NAvA_nonautodualuncued,nirs_NAvA_nonautosingleuncued];
-
-% the plot doesn't look like the layout??
-% Plot the spatial representation
-load('layout.mat')
-figure; ft_plot_layout(layout)
-cd(nirs_path);
-for task = 1:8
-    cfg = [];
-    cfg.layout = sort(layout.label); 
-    cfg.marker = 'labels';
-    cfg.xlim = [5 10]; % choose the time window over which you want to average
-    cfg.zlim = [-0.5 0.5]; % choose the window over which you want to scale based on the plots
-    cfg.channel  = '* [O2Hb]';
-    nirs_NAvA(task).label = sort(nirs_NAvA(task).label);
-    
-    % Plot [O2Hb] channels
-    figure; subplot(1,2,1);
-    ft_topoplotER(cfg, nirs_NAvA(task));
-    title('Topoplot average [O2Hb]'); 
-    % Plot [HHb] channels
-    cfg.channel  = '* [HHb]';
-    subplot(1,2,2);
-    ft_topoplotER(cfg, nirs_NAvA(task));
-    title('Topoplot average [HHb]');
-    saveas(gcf, ['sub-',sub,'_rec-',rec,'_',char(taskshort(task)), '_spatial.jpg']);
-end

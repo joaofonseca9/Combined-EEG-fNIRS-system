@@ -276,9 +276,7 @@ save('nirs_down.mat', 'nirs_down');
 % epoching so first need to convert them
 clear pre post offset trl sel smp
 
-load('nirs_down.mat');
-load(['sub-',sub,'_rec-',rec,'_nirs.mat']);
-
+cd(nirs_path);
 % Extract the data
 [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec);
 cd(nirs_path);
@@ -315,10 +313,6 @@ databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 cfg = [];
 cfg.method = 'summary';
 nirs_reject = ft_rejectvisual(cfg, nirs_sci);
-% in this case, I rejected: 
-% channels: 28, 38, 47,48
-% trials: 3, 9, 11, 12, 17
-% that is quite conservative
 
 % Make sure that if one channel is rejected, the corresponding channel with
 % the other wavelength is rejected too
@@ -361,37 +355,21 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
-%% NIRS: Transform optical densities to concentration changes
-load('nirs_epoch.mat');
+%% NIRS: Detrend and low-pass filtering
+% Detrend + low-pass filter (low-pass filter data below the frequency of 
+% the heart beat (1 Hz))
 cfg = [];
-cfg.target = {'O2Hb', 'HHb'};
-cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
-nirs_conc = ft_nirs_transform_ODs(cfg, nirs_epoch);
-cd(nirs_path);
-save('nirs_conc.mat','nirs_conc'); 
-
-% %Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
-% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
-% cfg          = [];
-% cfg.channel  = 'Rx*';
-% cfg.trials   = idx;
-% cfg.baseline = 'yes';
-% ft_singleplotER(cfg, nirs_conc)
-
-%% NIRS: Look at the data per condition
-% multiplot_condition doesn't exist??
-
-%% NIRS: Low-pass filtering
-% Low-pass filter data below the frequency of the heart beat (1 Hz).
-cfg = [];
-cfg.inputfile = 'nirs_conc.mat'; 
+cfg.detrend = 'yes';
 cfg.lpfilter = 'yes';
 cfg.lpfreq = 0.2; % look at frequency plot
-nirs_lpf = ft_preprocessing(cfg);
+nirs_lpf = ft_preprocessing(cfg, nirs_reject);
 cd(nirs_path);
 save('nirs_lpf.mat','nirs_lpf'); 
 
-% %Plot Low-pass filtered hemoglobin concentrations 
+% Visualize
+databrowser_nirs(nirs_lpf);
+
+% % Plot Low-pass filtered hemoglobin concentrations 
 % idx = find(nirs_lpf.trialinfo==2, 1, 'first'); % check trials
 % cfg          = [];
 % cfg.channel  = 'Rx*';
@@ -399,27 +377,33 @@ save('nirs_lpf.mat','nirs_lpf');
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_lpf)
 
-% to have a look at data multiplot_condition doesn't exist??
+%% NIRS: Transform optical densities to concentration changes
+cfg = [];
+cfg.target = {'O2Hb', 'HHb'};
+cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
+nirs_conc = ft_nirs_transform_ODs(cfg, nirs_lpf);
+cd(nirs_path);
+save('nirs_conc.mat','nirs_conc'); 
+
+% Visualize
+databrowser_nirs(nirs_conc)
+
+% % Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
+% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
+% cfg          = [];
+% cfg.channel  = 'Rx*';
+% cfg.trials   = idx;
+% cfg.baseline = 'yes';
+% ft_singleplotER(cfg, nirs_conc)
 
 %% NIRS: Timelock analysis and baseline correction
-% Timelock analysis
-load('nirs_lpf.mat')
-for task = 1:8 % 8 conditions 
-    cfg = [];
-    cfg.trials = find(nirs_lpf.trialinfo(:,1) == task); % average the data for given task
-    nirs_TL{task} = ft_timelockanalysis(cfg, nirs_lpf);
-end
-cd(nirs_path);
-save('nirs_TL.mat', 'nirs_TL');
-
-% Apply baseline correction
-for task = 1:8
-    cfg = [];
-    cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
-    nirs_TL_blc{task} = ft_timelockbaseline(cfg, nirs_TL{task});
-end
-cd(nirs_path);
-save('nirs_TL_blc.mat','nirs_TL_blc');
+taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
+taskshort = {'autodualcued_multiplot', 'autosinglecued_multiplot', 'nonautodualcued_multiplot', 'nonautosinglecued_multiplot','autodualuncued_multiplot', 'autosingleuncued_multiplot', 'nonautodualuncued_multiplot', 'nonautosingleuncued_multiplot'};
+h = multiplot_condition(nirs_conc, layout, [1:8],taskname, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-0.5 1]);
+savefig(h{1},  taskshort(1)); savefig(h{3},  taskshort(2)+'_multiplot');
+savefig(h{5},  taskshort(3)); savefig(h{7},  taskshort(4)+'_multiplot');
+savefig(h{9},  taskshort(5)); savefig(h{11},  taskshort(6)+'_multiplot');
+savefig(h{13},  taskshort(7)); savefig(h{15},  taskshort(8)+'_multiplot');
 
 %% NIRS: Separate O2Hb and HHb channels and plot tasks on the layout
 close all;
@@ -467,8 +451,6 @@ end
 savefigure = input('Enter any key once the plots are edited and saved: \n', 's');
 
 % Plot for each task separately
-taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
-taskshort = {'autodualcued', 'autosinglecued', 'nonautodualcued', 'nonautosinglecued','autodualuncued', 'autosingleuncued', 'nonautodualuncued', 'nonautosingleuncued'};
 for task = 1:8
     cfg = [];
     cfg.showlabels = 'yes';
