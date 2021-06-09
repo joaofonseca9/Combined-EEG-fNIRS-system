@@ -276,9 +276,7 @@ save('nirs_down.mat', 'nirs_down');
 % epoching so first need to convert them
 clear pre post offset trl sel smp
 
-load('nirs_down.mat');
-load(['sub-',sub,'_rec-',rec,'_nirs.mat']);
-
+cd(nirs_path);
 % Extract the data
 [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec);
 cd(nirs_path);
@@ -297,46 +295,45 @@ databrowser_nirs(nirs_epoch);
 
 %% NIRS: Remove bad channels - Inspect the raw data visually 
 % Show channels with low SCI
-load('nirs_down.mat')
+addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
 cfg = [];
-nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_down);
+nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_epoch);
 
 % Show names of bad channels
-idx = find(~ismember(nirs_down.label, nirs_sci.label));
+idx = find(~ismember(nirs_epoch.label, nirs_sci.label));
 bad_nirschannels = nirs_down.label(idx);
 disp('The following channels are removed from the data set:');
 disp(bad_nirschannels);
 cd(nirs_path);
 save('nirs_sci.mat', 'nirs_sci');
 
-% Inspect the data visually per channel
-load('nirs_chan.mat'); % it's not possible to plot events on data that has been resampled
-cfg = [];
-cfg.preproc.demean = 'yes'; % substracts the mean value in the plot
-cfg.viewmode = 'vertical';
-cfg.event = ft_read_event(oxyfile, 'chanindx', -1, 'type', 'event');
-cfg.ploteventlabels= 'colorvalue';
-cfg.plotlabels= 'yes';
-cfg.fontsize = 5;
-cfg.continuous = 'yes'; 
-cfg.blocksize = 300;
-cfg.nirsscale = 10;
-cfg.channel = 1:2; % [channels_opt(1), channels_opt(2)];
-cfg.linecolor = 'brmm';
-cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
-ft_databrowser(cfg, nirs_chan);
+databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 
-% Inspect the data visually for each trial
-load('nirs_epoch.mat'); 
+% Reject bad channels and trials visually 
 cfg = [];
-cfg.preproc.demean = 'yes'; % substracts the mean value in the plot so that the channels are well visualized above each other
-cfg.viewmode = 'butterfly';
-cfg.continuous = 'no';
-cfg.ylim = [ -0.003   0.003 ];
-cfg.channel = 'Rx*';
-cfg.linecolor = 'br';
-cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
-ft_databrowser(cfg, nirs_epoch);
+cfg.method = 'summary';
+nirs_reject = ft_rejectvisual(cfg, nirs_sci);
+
+% Make sure that if one channel is rejected, the corresponding channel with
+% the other wavelength is rejected too
+nirschan_names = cellfun(@(x)(strsplit(x)), nirs_reject.label,'UniformOutput', false);
+nirschan_names = cellfun(@(x)(x{1}), nirschan_names, 'UniformOutput', false);
+idx = 1; keepnirschan = [];
+while idx<length(nirschan_names)-1
+  if  strcmp(nirschan_names{idx}, nirschan_names{idx+1})
+    keepnirschan = [keepnirschan idx idx+1];
+    idx = idx+2;
+  else
+    idx = idx+1;
+  end
+end
+cfg = [];
+cfg.channel = keepnirschan;
+nirs_reject = ft_selectdata(cfg, nirs_reject);
+save('nirs_reject.mat', 'nirs_reject');
+
+% Visualize
+databrowser_nirs(nirs_reject)
 
 % % Frequency analysis
 % cfg = [];

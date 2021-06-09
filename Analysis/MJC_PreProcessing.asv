@@ -9,6 +9,7 @@ laptop='laptopCatarina';
 
 eeglab;
 ft_defaults;
+[~, ftpath] = ft_version;
 
 sub='04';
 rec='01';
@@ -210,32 +211,45 @@ cfg = [];
 cfg.layout = fullfile(mainpath_out,['sub-',sub],'3d','layout.mat');
 ft_layoutplot(cfg);
 
-%% NIRS: Select channels
+%% NIRS: Select channels and read events
 % Selects channels that are also present in the original template
 load(cfg.layout);
 names_channels = layout.label(1:(length(layout.label)-2)); % remove 'COMNT' and 'SCALE' from channel labels
-% for i = 1:length(channels_conc)
-%     tmp = strsplit(channels_conc{i});
-%     names_channels{i}=char(tmp(1));
-% end
 TF = startsWith(nirs_raw.label,names_channels);
 channels_opt = nirs_raw.label(TF);
 
 % Add all the short channels that are connected to receivers that are
 % part of the template
-SC = data_raw.label(contains(data_raw.label, {'a ', 'b ', 'c ', 'd '})); % all short channels
-Rx_channels =cellfun(@(x)(strsplit(x, 'T')), names_channels, 'UniformOutput', false); % get the receivers that are part of the template
-Rx_channels=cellfun(@(x)(x{1}), Rx_channels, 'UniformOutput', false);
-channels_short=SC(startsWith(SC, Rx_channels));
+SC = nirs_raw.label(contains(nirs_raw.label, {'a ', 'b ', 'c ', 'd '})); % all short channels
+Rx_channels = cellfun(@(x)(strsplit(x, 'T')), names_channels, 'UniformOutput', false); % get the receivers that are part of the template
+Rx_channels = cellfun(@(x)(x{1}), Rx_channels, 'UniformOutput', false);
+channels_short = SC(startsWith(SC, Rx_channels));
 
 % Select data of correct channels
 cd(nirs_path);
 cfg = [];
-cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat']; 
-cfg.channel = channels_opt;
-nirs_chan = ft_selectdata(cfg);
-cd(nirs_path);
+cfg.channel=[channels_opt; channels_short];
+nirs_chan = ft_selectdata(cfg, nirs_raw);
 save('nirs_chan.mat', 'nirs_chan');
+
+% Find the event triggers and event types of the dataset (not necessary)
+cfg.dataset = oxyfile;
+cfg.trialdef = [];
+cfg.trialdef.eventtype = '?';
+cfg.trialdef.chanindx = -1;
+ft_definetrial(cfg);
+
+% Read events
+cfg = [];
+cfg.dataset = oxyfile;
+nirs_events = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
+save('nirs_events.mat', 'nirs_events')
+
+% % Select only 0-3000 seconds(to get rid of NaNs)
+% cfg = [];
+% cfg.latency = [0 3000];
+% nirs_chan = ft_selectdata(cfg, nirs_chan);
+% save('nirs_raw.mat', 'nirs_raw');
 
 %% NIRS: Downsample the data (save memory, make processing faster and low pass filtering)
 % The hemodynamic response takes about 5-10s (0.2-0.1Hz) to reach its peak.
@@ -243,15 +257,10 @@ save('nirs_chan.mat', 'nirs_chan');
 % If resampling factor is larger than 10 -> resample multiple times
 % New frequency must be higher than frequency of trigger
 
-if ~exist(fullfile(['sub-',sub,'_rec-',rec,'_nirs.mat'],'nirs_raw'))
-    cfg = [];
-    cfg.inputfile = 'nirs_chan.mat';
-    cfg.resamplefs = 10;
-    nirs_down = ft_resampledata(cfg);
-    cd(nirs_path);
-    save('nirs_down.mat', 'nirs_down');
-else load('nirs_down.mat')
-end
+cfg = [];
+cfg.resamplefs = 10;
+nirs_down = ft_resampledata(cfg, nirs_chan);
+save('nirs_down.mat', 'nirs_down');
 
 % % Plot downsampled data
 % cfg                = [];
@@ -263,29 +272,17 @@ end
 % ft_databrowser(cfg, nirs_down);
 
 %% NIRS: Extract task data (epoch)
+% Because of the resampling of the data we can't use the current events for 
+% epoching so first need to convert them
 clear pre post offset trl sel smp
+
 load('nirs_down.mat');
 load(['sub-',sub,'_rec-',rec,'_nirs.mat']);
 
-if ~exist('nirs_epoch.mat') 
-    % Find the event triggers and event types of the dataset
-    cfg.dataset = oxyfile;
-    cfg.trialdef = [];
-    cfg.trialdef.eventtype = '?';
-    cfg.trialdef.chanindx = -1;
-    ft_definetrial(cfg);
-    cfg = [];
-    cfg.dataset = oxyfile;
-    event = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
-    
-    % Extract the data
-    [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, event, marker_table);
-    cd(nirs_path);
-    save('nirs_epoch.mat', 'nirs_epoch');
-    
-else
-    load('nirs_epoch.mat')
-end
+% Extract the data
+[nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec);
+cd(nirs_path);
+save('nirs_epoch.mat', 'nirs_epoch');
 
 % % Plot epoched optical density data around the first deviant stimulus
 % idx = find(nirs_epoch.trialinfo==2, 1, 'first'); % check trials
@@ -295,48 +292,54 @@ end
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_epoch)
 
+% Visualize
+databrowser_nirs(nirs_epoch);
+
 %% NIRS: Remove bad channels - Inspect the raw data visually 
 % Show channels with low SCI
-load('nirs_down.mat')
+addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
 cfg = [];
-nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_down);
+nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_epoch);
 
 % Show names of bad channels
-idx = find(~ismember(nirs_down.label, nirs_sci.label));
+idx = find(~ismember(nirs_epoch.label, nirs_sci.label));
 bad_nirschannels = nirs_down.label(idx);
 disp('The following channels are removed from the data set:');
 disp(bad_nirschannels);
 cd(nirs_path);
 save('nirs_sci.mat', 'nirs_sci');
 
-% Inspect the data visually per channel
-load('nirs_chan.mat'); % it's not possible to plot events on data that has been resampled
-cfg = [];
-cfg.preproc.demean = 'yes'; % substracts the mean value in the plot
-cfg.viewmode = 'vertical';
-cfg.event = ft_read_event(oxyfile, 'chanindx', -1, 'type', 'event');
-cfg.ploteventlabels= 'colorvalue';
-cfg.plotlabels= 'yes';
-cfg.fontsize = 5;
-cfg.continuous = 'yes'; 
-cfg.blocksize = 300;
-cfg.nirsscale = 10;
-cfg.channel = 1:2; % [channels_opt(1), channels_opt(2)];
-cfg.linecolor = 'brmm';
-cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
-ft_databrowser(cfg, nirs_chan);
+databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 
-% Inspect the data visually for each trial
-load('nirs_epoch.mat'); 
+% Reject bad channels and trials visually 
 cfg = [];
-cfg.preproc.demean = 'yes'; % substracts the mean value in the plot so that the channels are well visualized above each other
-cfg.viewmode = 'butterfly';
-cfg.continuous = 'no';
-cfg.ylim = [ -0.003   0.003 ];
-cfg.channel = 'Rx*';
-cfg.linecolor = 'br';
-cfg.colorgroups = repmat([1 2],1, length(nirs_chan.label)/2);
-ft_databrowser(cfg, nirs_epoch);
+cfg.method = 'summary';
+nirs_reject = ft_rejectvisual(cfg, nirs_sci);
+% in this case, I rejected: 
+% channels: 28, 38, 47,48
+% trials: 3, 9, 11, 12, 17
+% that is quite conservative
+
+% Make sure that if one channel is rejected, the corresponding channel with
+% the other wavelength is rejected too
+nirschan_names = cellfun(@(x)(strsplit(x)), nirs_reject.label,'UniformOutput', false);
+nirschan_names = cellfun(@(x)(x{1}), nirschan_names, 'UniformOutput', false);
+idx = 1; keepnirschan = [];
+while idx<length(nirschan_names)-1
+  if  strcmp(nirschan_names{idx}, nirschan_names{idx+1})
+    keepnirschan = [keepnirschan idx idx+1];
+    idx = idx+2;
+  else
+    idx = idx+1;
+  end
+end
+cfg = [];
+cfg.channel = keepnirschan;
+nirs_reject = ft_selectdata(cfg, nirs_reject);
+save('nirs_reject.mat', 'nirs_reject');
+
+% Visualize
+databrowser_nirs(nirs_reject)
 
 % % Frequency analysis
 % cfg = [];

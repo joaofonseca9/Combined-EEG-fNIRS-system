@@ -1,9 +1,5 @@
 function [data_epoch]=extractTaskData_NIRS(data_raw, data_down, event, marker_table, sub, rec)
 %% Define events + epochs
-%% Get offset and pre and post
-pre    =  round(10*data_down.fsample); % seconds pre-stimulus - baseline (20s-25s)
-post   =  round(10*data_down.fsample); % seconds post-stimulus 
-offset = -pre; % see ft_definetrial
 %% Starts
 %Cued
 start_autodual_cue = strcmp({event.value}, sprintf('LSL %d',marker_table.StartAutoDualCue(1)));
@@ -77,7 +73,10 @@ smp.stop_autosingle_nocue= round((smp.stop_autosingle_nocue-1)/factor+1);
 smp.stop_nonautodual_nocue = round((smp.stop_nonautodual_nocue-1)/factor+1);
 smp.stop_nonautosingle_nocue= round((smp.stop_nonautosingle_nocue-1)/factor+1);
 
-
+%% Get offset and pre and post
+pre    =  round(10*data_down.fsample); % seconds pre-stimulus - baseline (20s-25s)
+post   =  round(10*data_down.fsample); % seconds post-stimulus 
+offset = -pre; % see ft_definetrial
 
 %% Setting the trials
 trl.autodual_cue = [smp.start_autodual_cue-pre smp.stop_autodual_cue+post];
@@ -121,9 +120,8 @@ trl = sortrows([trl.autodual_cue; trl.autosingle_cue; trl.nonautodual_cue; trl.n
 sel = trl(:,2)<size(data_down.trial{1},2);
 trl = trl(sel,:);
 
-cfg     = [];
-cfg.inputfile = ['sub-',sub,'_rec-',rec,'_nirs.mat'];
+cfg = [];
 cfg.trl = trl;
-data_epoch = ft_redefinetrial(cfg);
+data_epoch = ft_redefinetrial(cfg, data_down);
 
 end
