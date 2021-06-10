@@ -2,9 +2,9 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-laptop='laptopCatarina';
+% laptop='laptopCatarina';
 % laptop='laptopMariana';
-% laptop='laptopJoao';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
@@ -65,11 +65,11 @@ if data_loaded == 0
 
 else % If data has been loaded and the datasets created, load the structs
     if strcmp(sub,'02') && strcmp(rec,'02')
-        load(nirs_path,['sub-',sub,'_rec-',rec,'_nirseeg.mat']); % Avoids call to ft_preprocessing
-        load(nirs_path,['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']); % Avoids call to ft_readevents
+        load(fullfile(mainpath_out,'nirs','sub-',sub,['sub-',sub,'_rec-',rec,'_nirseeg.mat'])); % Avoids call to ft_preprocessing
+        load(fullfile(mainpath_out,'nirs','sub-',sub,['sub-',sub,'_rec-',rec,'_nirseeg_events.mat'])); % Avoids call to ft_readevents
     else
-        load(fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.mat'])); % Avoids call to ft_preprocessing
-        load(fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs_events.mat'])); % Avoids call to ft_readevents
+        load(fullfile(mainpath_out,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs.mat'])); % Avoids call to ft_preprocessing
+        load(fullfile(mainpath_out,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_events.mat'])); % Avoids call to ft_readevents
     end
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
