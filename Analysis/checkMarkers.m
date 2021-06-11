@@ -48,7 +48,7 @@ eeg_length=(eeg_event_samp(last_marker)-eeg_event_samp(first_marker))/EEG.srate;
 
 if nirs_length~=eeg_length
     warning('NIRS and EEG signals seem to have different lengths')
-    fprintf('Time difference is %d' ,nirs_length-eeg_length)
+    fprintf('Time difference is %d \n' ,nirs_length-eeg_length)
 end
  
 % %Check time in hh:mm:ss
