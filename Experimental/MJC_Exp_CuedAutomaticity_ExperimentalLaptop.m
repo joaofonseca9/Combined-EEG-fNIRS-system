@@ -68,14 +68,7 @@ info = lsl_streaminfo(lib, 'MJC_Automaticity', 'Markers', 1, 0.0, 'cf_int32', 'A
 % Open an outlet for the data to run through.
 outlet = lsl_outlet(info);
 
-%% ASK TO START LABRECORDER
-done=0;
-while (done==0)
-    correct=input('Please start up LabRecorder. After that, press Y to continue. \n', 's');
-    if strcmpi(correct, 'y')
-        done=1;
-    end
-end
+
 %% MARKER SETUP
 % Block related
 Marker_Test= 1600;
@@ -122,6 +115,14 @@ while (done==0)
     end
 end
 
+%% ASK TO START LABRECORDER
+done=0;
+while (done==0)
+    correct=input('Please start up LabRecorder. After that, press Y to continue. \n', 's');
+    if strcmpi(correct, 'y')
+        done=1;
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
