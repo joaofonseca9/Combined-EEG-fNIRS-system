@@ -13,8 +13,8 @@ clear;
 Screen('Preference', 'SkipSyncTests', 1);
 
 % root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
-% root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Experimental';
-root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
+root_dir='C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Experimental';
+% root_dir='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Combined-EEG-fNIRS-system\Experimental';
 
 %% SET RIGHT AUTOMATIC SEQUENCE
 sequenceA = '2 4 3 4 1 3 4 1 2 1 3 2';

@@ -207,7 +207,7 @@ end
 
 %% EEG: Extract task data
 [EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
-% save(file.EEG_divided,'EEG_divided');
+% save(file.EEG_divided ,'EEG_divided');
 [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_divided.EEG_task, 1,'setname','taskData','gui','off');
 
 %% NIRS: Show layout of optode template
