@@ -35,18 +35,23 @@ EEG_NonAutoUncued = EEG_divided.EEG_NonAutoNoCue;
 
 %%
 event_samp  = [EEG_AutoUncued.event.latency];
+times = EEG_AutoUncued.times;
 
 startAutoUncued = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
 endAutoUncued = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
-keypresses = event_samp(find(strcmp({EEG_AutoUncued.event.type}, 's1777')==1));
 
-for trial=1:10
-    title = char(strcat('Trial_', string(trial)));
+for trial=1:1
     startAutoUncued_times = event_samp(startAutoUncued(trial));
     endAutoUncued_times = event_samp(endAutoUncued(trial));
-    keypresses_times = keypresses(find(keypresses>startAutoUncued_times & keypresses<endAutoUncued_times));
-    keypresses_times = keypresses_times - startAutoUncued_times;
     EEG_trial = pop_select(EEG_AutoUncued, 'point',...
         [startAutoUncued_times endAutoUncued_times]);
-    pop_topoplot(EEG_trial, 1, keypresses_times, title);    
+    pop_topoplot(EEG_trial);
+    
+    range = [times(startAutoUncued_times) times(endAutoUncued_times)]; % range in ms
+    pts = round(eeg_lat2point(range/1000, [1 1], EEG.srate, [EEG.xmin 
+    EEG.xmax])); % convert latencies in seconds to data points
+    ERP = mean(EEG.data,3); % average all data trials
+ERPinrange = mean(ERP(:, pts(1):pts(2)),2);
+    
+    
 end
