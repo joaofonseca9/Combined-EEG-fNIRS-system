@@ -33,20 +33,42 @@ EEG_NonAutoUncued = EEG_divided.EEG_NonAutoNoCue;
 
 % pop_spectopo(EEG_AutoUncued, 1);
 
-%%
+%% Topoplots for Auto Uncued
 event_samp  = [EEG_AutoUncued.event.latency];
 
 startAutoUncued = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
 endAutoUncued = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
-keypresses = event_samp(find(strcmp({EEG_AutoUncued.event.type}, 's1777')==1));
+keypresses = event_samp((strcmp({EEG_AutoUncued.event.type}, 's1777')==1));
 
 for trial=1:10
     title = char(strcat('Trial_', string(trial)));
     startAutoUncued_times = event_samp(startAutoUncued(trial));
     endAutoUncued_times = event_samp(endAutoUncued(trial));
-    keypresses_times = keypresses(find(keypresses>startAutoUncued_times & keypresses<endAutoUncued_times));
+    keypresses_times = keypresses((keypresses>startAutoUncued_times & keypresses<endAutoUncued_times));
     keypresses_times = keypresses_times - startAutoUncued_times;
     EEG_trial = pop_select(EEG_AutoUncued, 'point',...
         [startAutoUncued_times endAutoUncued_times]);
+    pop_topoplot(EEG_trial, 1, keypresses_times, title); 
+    
+    % EEG_trial_key = pop_select(EEG_trial, 'point',...
+        [keypresses_times(1)-2 keypresses_times(1)+2]);
+    % figure; pop_plottopo(EEG_trial_key, [1:30] , 'preprocessed', 0, 'ydir',1);
+end
+
+%% Topoplots for Non-Auto Uncued
+event_samp  = [EEG_NonAutoUncued.event.latency];
+
+startNonAutoUncued = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
+endNonAutoUncued = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
+keypresses = event_samp((strcmp({EEG_NonAutoUncued.event.type}, 's1777')==1));
+
+for trial=1:1
+    title = char(strcat('Trial_', string(trial)));
+    startNonAutoUncued_times = event_samp(startNonAutoUncued(trial));
+    endNonAutoUncued_times = event_samp(endNonAutoUncued(trial));
+    keypresses_times = keypresses((keypresses>startNonAutoUncued_times & keypresses<endNonAutoUncued_times));
+    keypresses_times = keypresses_times - startNonAutoUncued_times;
+    EEG_trial = pop_select(EEG_NonAutoUncued, 'point',...
+        [startNonAutoUncued_times endNonAutoUncued_times]);
     pop_topoplot(EEG_trial, 1, keypresses_times, title);    
 end
