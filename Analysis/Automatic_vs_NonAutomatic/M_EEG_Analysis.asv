@@ -38,7 +38,7 @@ for trial=1:1
         % select the data of this specific window [channel x time]
         data_window = trial_data(:, window);
         
-        for channel = 1:size(data_window, 1)  % channel loop
+        for channel = 1:1%size(data_window, 1)  % channel loop
             if isempty(find(isnan(data_window(channel, :)))) % if window is NOT removed because of badchannel (=NaN)
                 % calculate PSD
                 % data_window = data of the window
@@ -53,26 +53,15 @@ for trial=1:1
                 % here)
                 pow(:, channel, window_id) = P((f(:,1)>=0 & f(:,1)<=48),1);
             else
-                pow(:, channel, window_id) = NaN;
+                % pow(:, iChan, idx) = NaN;
             end
         end
-        % increase indices and window
         window_id = window_id + 1;
         window = window+0.5*EEG_trial.srate; % increase sliding window with 0.5*fs
     end
     
-    % frequency variable
-    freq = f(f(:,1)>=0 & f(:,1)<=48);   % change frequency variable for frequencies of interest
-    % average power per channel over windows
-    power = mean(pow,3,'omitnan');
     
-    % figure;
-    % topoplot(power, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
     
-    % figure; axes = metaplottopo(power', 'chanlocs', EEG_AutoUncued.chanlocs, 'title', title);
-    
-    figure; [Movie,Colormap] = eegmovie(power, EEG_AutoUncued.srate, EEG_AutoUncued.chanlocs, 'framenum', 'off', 'vert', 0, 'startsec', -0.1, 'topoplotopt', {'numcontour' 0});
-    seemovie(Movie,-5,Colormap);
     
     
     
