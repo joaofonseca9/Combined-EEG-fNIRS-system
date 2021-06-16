@@ -51,9 +51,13 @@ for trial=1:1
                 % save the power between 0 and 48 Hz (frequency of
                 % interest) in a variable pow (all windows of all trials will be saved
                 % here)
-                pow(:, channel, window_id) = P((f(:,1)>=0 & f(:,1)<=48),1);
+                pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
+                pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
+                pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
             else
-                pow(:, channel, window_id) = NaN;
+                pow_theta(:, channel, window_id) = NaN;
+                pow_alpha(:, channel, window_id) = NaN;
+                pow_beta(:, channel, window_id) = NaN;
             end
         end
         % increase indices and window
@@ -62,26 +66,25 @@ for trial=1:1
     end
     
     % frequency variable
-    freq = f(f(:,1)>=0 & f(:,1)<=48);   % change frequency variable for frequencies of interest
+    freq_theta = f(f(:,1)>=4 & f(:,1)<=8);   % change frequency variable for frequencies of interest
+    freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
+    freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
     % average power per channel over windows
-    power = mean(pow,3,'omitnan');
+    power_theta = mean(mean(pow_theta,3,'omitnan'));
+    power_alpha = mean(mean(pow_alpha,3,'omitnan'));
+    power_beta = mean(mean(pow_beta,3,'omitnan'));
     
-    % figure;
-    % topoplot(power, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
-    
-    % figure; axes = metaplottopo(power', 'chanlocs', EEG_AutoUncued.chanlocs, 'title', title);
-    
-    figure; [Movie,Colormap] = eegmovie(power, EEG_AutoUncued.srate, EEG_AutoUncued.chanlocs, 'framenum', 'off', 'vert', 0, 'startsec', -0.1, 'topoplotopt', {'numcontour' 0});
-    seemovie(Movie,-5,Colormap);
-    
-    
-    
-    
-    % pop_topoplot(EEG_trial, 1, keypresses_times, title); 
-    
-    % EEG_trial_key = pop_select(EEG_trial, 'point',...
-    %    [keypresses_times(1)-2 keypresses_times(1)+2]);
-    % figure; pop_plottopo(EEG_trial_key, [1:30] , 'preprocessed', 0, 'ydir',1);
+    figure;
+    subplot(1, 3, 1);
+    topoplot(power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    colorbar;
+    subplot(1, 3, 2);
+    topoplot(power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    colorbar;
+    subplot(1, 3, 3);
+    topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    colorbar;   
+
 end
 
 %%
