@@ -20,8 +20,13 @@ EEG_NonAutoCued = EEG_divided.EEG_NonAutoCue;
 
 %% Auto Uncued
 
+event_samp  = [EEG_AutoUncued.event.latency];
+startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
+endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
+
 [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-    freq_beta] = calculateAveragePowerAllTrials(EEG_AutoUncued);
+    freq_beta] = calculateAveragePowerAllTrials(EEG_AutoUncued,...
+    event_samp, startTask, endTask);
 
 figure;
 subplot(1, 3, 1);
@@ -35,18 +40,88 @@ colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
 topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+colorbar;
+
+% savefig('AutoUncued_topoplot.fig')
+
+%% Non-Auto Uncued
+
+event_samp  = [EEG_NonAutoUncued.event.latency];
+startTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
+endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
+
+[power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
+    freq_beta] = calculateAveragePowerAllTrials(EEG_NonAutoUncued,...
+    event_samp, startTask, endTask);
+
+figure;
+subplot(1, 3, 1);
+text(-0.13, 0.7, 'Theta', 'FontSize', 18);
+topoplot(power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 2);
+text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
+topoplot(power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 3);
+text(-0.1, 0.7, 'Beta', 'FontSize', 18)
+topoplot(power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+colorbar; 
+
+%% Auto Cued
+
+event_samp  = [EEG_AutoCued.event.latency];
+startTask = find(strcmp({EEG_AutoCued.event.type}, 's1702')==1);
+endTask = find(strcmp({EEG_AutoCued.event.type}, 's1710')==1);
+
+[power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
+    freq_beta] = calculateAveragePowerAllTrials(EEG_AutoCued,...
+    event_samp, startTask, endTask);
+
+figure;
+subplot(1, 3, 1);
+text(-0.13, 0.7, 'Theta', 'FontSize', 18);
+topoplot(power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 2);
+text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
+topoplot(power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 3);
+text(-0.1, 0.7, 'Beta', 'FontSize', 18)
+topoplot(power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+colorbar;   
+
+%% NonAuto Cued
+
+event_samp  = [EEG_NonAutoCued.event.latency];
+startTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1704')==1);
+endTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1712')==1);
+
+[power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
+    freq_beta] = calculateAveragePowerAllTrials(EEG_NonAutoCued,...
+    event_samp, startTask, endTask);
+
+figure;
+subplot(1, 3, 1);
+text(-0.13, 0.7, 'Theta', 'FontSize', 18);
+topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 2);
+text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
+topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+colorbar;
+subplot(1, 3, 3);
+text(-0.1, 0.7, 'Beta', 'FontSize', 18)
+topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
 colorbar;   
 
 %% Functions
 
 % Loop through the power from the individual trials and average them.
 function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-    freq_beta] = calculateAveragePowerAllTrials(EEG)
+    freq_beta] = calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask)
 
-    event_samp  = [EEG.event.latency];
-    startTask = find(strcmp({EEG.event.type}, 's1703')==1);
-    endTask = find(strcmp({EEG.event.type}, 's1711')==1);
-    
     for trial=1:length(startTask)
     
         title = char(strcat('Trial_', string(trial)));
