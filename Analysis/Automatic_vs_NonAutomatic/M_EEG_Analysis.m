@@ -41,15 +41,15 @@ for subject = 1:size(subrec, 1)
     figure;
     subplot(1, 3, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
@@ -73,15 +73,15 @@ for subject = 1:size(subrec, 1)
     figure;
     subplot(1, 3, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+    topoplot(power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
@@ -105,15 +105,15 @@ for subject = 1:size(subrec, 1)
     figure;
     subplot(1, 3, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;   
     
     % Save the values onto a allSubjects variable.
@@ -137,15 +137,15 @@ for subject = 1:size(subrec, 1)
     figure;
     subplot(1, 3, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(1, 3, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+    topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar; 
     
     % Save the values onto a allSubjects variable.
@@ -184,57 +184,57 @@ nonautocued_power_beta = mean(nonautocued_power_beta_allSubjects, 2);
 figure;
 subplot(1, 3, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autouncued_power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(autouncued_power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autouncued_power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(autouncued_power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autouncued_power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(autouncued_power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 % Non-Auto Uncued.
 figure;
 subplot(1, 3, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautouncued_power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(nonautouncued_power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautouncued_power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(nonautouncued_power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautouncued_power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(nonautouncued_power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 % Auto Cued.
 figure;
 subplot(1, 3, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autocued_power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+topoplot(autocued_power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autocued_power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+topoplot(autocued_power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autocued_power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
+topoplot(autocued_power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 % Non-Auto Cued.
 figure;
 subplot(1, 3, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautocued_power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+topoplot(nonautocued_power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautocued_power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+topoplot(nonautocued_power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautocued_power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+topoplot(nonautocued_power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 
 disp('This was the end of individual subjects.');
