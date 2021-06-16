@@ -153,8 +153,8 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_alpha_allSubjects(:, subject) = power_alpha;
     nonautocued_power_beta_allSubjects(:, subject) = power_beta;
     
-    disp(['These are the topoplots for subject ', char(sub), '.']);
-    disp('Press any key to move onto the next subject.');
+    disp(['These are the topoplots for subject ', char(sub), ' .']);
+    disp('Press any key to move onto the next subject');
     pause;
     close all;
     
@@ -180,62 +180,19 @@ nonautocued_power_beta = mean(nonautocued_power_beta_allSubjects, 2);
 
 % Topographic distribution of the frequency bands over the head
 % (topoplot).
-% Auto Uncued.
 figure;
 subplot(1, 3, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autouncued_power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
 colorbar;
 subplot(1, 3, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autouncued_power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
+topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
 colorbar;
 subplot(1, 3, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autouncued_power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'on');
-colorbar; 
-% Non-Auto Uncued.
-figure;
-subplot(1, 3, 1);
-text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautouncued_power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 2);
-text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautouncued_power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 3);
-text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautouncued_power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'on');
-colorbar; 
-% Auto Cued.
-figure;
-subplot(1, 3, 1);
-text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autocued_power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 2);
-text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autocued_power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 3);
-text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autocued_power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'on');
-colorbar; 
-% Non-Auto Cued.
-figure;
-subplot(1, 3, 1);
-text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautocued_power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 2);
-text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautocued_power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
-colorbar;
-subplot(1, 3, 3);
-text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautocued_power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
-colorbar; 
+topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'on');
+    colorbar; 
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');

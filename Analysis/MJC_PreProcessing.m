@@ -2,8 +2,8 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-laptop='laptopCatarina';
-% laptop='laptopMariana';
+% laptop='laptopCatarina';
+laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -11,8 +11,8 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='04';
-rec='01';
+sub='03';
+rec='02';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -190,11 +190,10 @@ end
 %% EEG: Set reference
 % Re-reference the system to linked mastoids
 
-locs = {EEG.chanlocs.labels};
-M1_loc = find(contains(locs, 'M1'));
-M2_loc = find(contains(locs, 'M2'));
-
 if ~isfile(file.preprocessed)
+    locs = {EEG.chanlocs.labels};
+    M1_loc = find(contains(locs, 'M1'));
+    M2_loc = find(contains(locs, 'M2'));
     [EEG] = pop_reref(EEG, [M1_loc, M2_loc]);
     [ALLEEG, EEG, ~] = pop_newset(ALLEEG, EEG, 1, 'setname',...
         'preprocessed', 'gui', 'off');
@@ -207,7 +206,7 @@ end
 
 %% EEG: Extract task data
 [EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
-% save(file.EEG_divided ,'EEG_divided');
+save(file.EEG_divided ,'EEG_divided');
 [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_divided.EEG_task, 1,'setname','taskData','gui','off');
 
 %% NIRS: Show layout of optode template
