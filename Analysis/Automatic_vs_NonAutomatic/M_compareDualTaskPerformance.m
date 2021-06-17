@@ -30,8 +30,21 @@ autodual_finalDelay_uncued = 0;
 nonautodual_finalDelay_cued = 0;
 nonautodual_finalDelay_uncued = 0;
 
+array_autodual_finalAverageMistakes_cued = zeros(1, size(subrec, 1));
+array_autodual_finalAverageMistakes_uncued = zeros(1, size(subrec, 1));
+array_nonautodual_finalAverageMistakes_cued = zeros(1, size(subrec, 1));
+array_nonautodual_finalAverageMistakes_uncued = zeros(1, size(subrec, 1));
+array_autodual_finalIncorrectSequences_cued = zeros(1, size(subrec, 1));
+array_autodual_finalIncorrectSequences_uncued = zeros(1, size(subrec, 1));
+array_nonautodual_finalIncorrectSequences_cued = zeros(1, size(subrec, 1));
+array_nonautodual_finalIncorrectSequences_uncued = zeros(1, size(subrec, 1));
+array_autodual_finalDelay_cued = zeros(1, size(subrec, 1));
+array_autodual_finalDelay_uncued = zeros(1, size(subrec, 1));
+array_nonautodual_finalDelay_cued = zeros(1, size(subrec, 1));
+array_nonautodual_finalDelay_uncued = zeros(1, size(subrec, 1));
+
 % Go through every subject.
-for subject = 3:3%1:size(subrec, 1)
+for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);
     
@@ -71,6 +84,23 @@ for subject = 3:3%1:size(subrec, 1)
     autodual_finalDelay_uncued =...
         autodual_finalDelay_uncued + autodual_delay_uncued;
     
+    
+    array_autodual_finalAverageMistakes_cued(subject) =...
+        autodual_averageMistakes_cued;
+    array_autodual_finalAverageMistakes_uncued(subject) =...
+        autodual_averageMistakes_uncued;
+    array_autodual_finalIncorrectSequences_cued(subject) =...
+        autodual_incorrectSequences_cued;
+    array_autodual_finalIncorrectSequences_uncued(subject) =...
+        autodual_incorrectSequences_uncued;
+    array_autodual_finalDelay_cued(subject) =...
+        autodual_delay_cued;
+    array_autodual_finalDelay_uncued(subject) =...
+        autodual_delay_uncued;
+    
+    
+    
+    
     %% Non-automatic sequence.
     % Check if counting answers from non-automatic sequence were correct.
     nonautodual_correct = checkCorrectCountingPerTrial(events_nonautodual);
@@ -100,6 +130,23 @@ for subject = 3:3%1:size(subrec, 1)
         nonautodual_finalDelay_cued + nonautodual_delay_cued;
     nonautodual_finalDelay_uncued =...
         nonautodual_finalDelay_uncued + nonautodual_delay_uncued;
+    
+    
+    
+    array_nonautodual_finalAverageMistakes_cued(subject) =...
+        nonautodual_averageMistakes_cued;
+    array_nonautodual_finalAverageMistakes_uncued(subject) =...
+        nonautodual_averageMistakes_uncued;
+    array_nonautodual_finalIncorrectSequences_cued(subject) =...
+        nonautodual_incorrectSequences_cued;
+    array_nonautodual_finalIncorrectSequences_uncued(subject) =...
+        nonautodual_incorrectSequences_uncued;
+    array_nonautodual_finalDelay_cued(subject) =...
+        autodual_delay_cued;
+    array_nonautodual_finalDelay_uncued(subject) =...
+        autodual_delay_uncued;
+    
+    
     
     %% Put values of error into final struct.
     % Values for the current subject.
@@ -138,6 +185,88 @@ end
 
 % Save the struct from all subs.
 save(strcat(pwd, '\allsubs.mat'), 'allsubs')
+
+
+
+
+mean_autodual_finalAverageMistakes_cued = mean(array_autodual_finalAverageMistakes_cued);
+std_autodual_finalAverageMistakes_cued = std(array_autodual_finalAverageMistakes_cued);
+mean_autodual_finalAverageMistakes_uncued = mean(array_autodual_finalAverageMistakes_uncued);
+std_autodual_finalAverageMistakes_uncued = std(array_autodual_finalAverageMistakes_uncued);
+mean_nonautodual_finalAverageMistakes_cued = mean(array_nonautodual_finalAverageMistakes_cued);
+std_nonautodual_finalAverageMistakes_cued = std(array_nonautodual_finalAverageMistakes_cued);
+mean_nonautodual_finalAverageMistakes_uncued = mean(array_nonautodual_finalAverageMistakes_uncued);
+std_nonautodual_finalAverageMistakes_uncued = std(array_nonautodual_finalAverageMistakes_uncued);
+
+X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+Y = [mean_autodual_finalAverageMistakes_uncued mean_autodual_finalAverageMistakes_cued;...
+    mean_nonautodual_finalAverageMistakes_uncued mean_nonautodual_finalAverageMistakes_cued];
+error = [std_autodual_finalAverageMistakes_uncued std_autodual_finalAverageMistakes_cued;...
+    std_nonautodual_finalAverageMistakes_uncued std_nonautodual_finalAverageMistakes_cued];
+figure; title('Average Number of Mistakes on Letter Counting');
+bar(X, Y); hold on;
+errorbar(X, Y, error, error);    
+hold off;
+
+
+
+
+mean_autodual_finalIncorrectSequences_cued = mean(array_autodual_finalIncorrectSequences_cued);
+std_autodual_finalIncorrectSequences_cued = std(array_autodual_finalIncorrectSequences_cued);
+mean_autodual_finalIncorrectSequences_uncued = mean(array_autodual_finalIncorrectSequences_uncued);
+std_autodual_finalIncorrectSequences_uncued = std(array_autodual_finalIncorrectSequences_uncued);
+mean_nonautodual_finalIncorrectSequences_cued = mean(array_nonautodual_finalIncorrectSequences_cued);
+std_nonautodual_finalIncorrectSequences_cued = std(array_nonautodual_finalIncorrectSequences_cued);
+mean_nonautodual_finalIncorrectSequences_uncued = mean(array_nonautodual_finalIncorrectSequences_uncued);
+std_nonautodual_finalIncorrectSequences_uncued = std(array_nonautodual_finalIncorrectSequences_uncued);
+
+X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+Y = [mean_autodual_finalIncorrectSequences_uncued mean_autodual_finalIncorrectSequences_cued;...
+    mean_nonautodual_finalIncorrectSequences_uncued mean_nonautodual_finalIncorrectSequences_cued];
+error = [std_autodual_finalIncorrectSequences_uncued std_autodual_finalIncorrectSequences_cued;...
+    std_nonautodual_finalIncorrectSequences_uncued std_nonautodual_finalIncorrectSequences_cued];
+figure; title('Average Number of Incorrectly Performed Sequences');
+bar(X, Y); hold on;
+errorbar(X, Y, error, error);    
+hold off;
+
+
+
+
+
+mean_autodual_finalDelay_cued = mean(array_autodual_finalDelay_cued);
+std_autodual_finalDelay_cued = std(array_autodual_finalDelay_cued);
+mean_autodual_finalDelay_uncued = mean(array_autodual_finalDelay_uncued);
+std_autodual_finalDelay_uncued = std(array_autodual_finalDelay_uncued);
+mean_nonautodual_finalDelay_cued = mean(array_nonautodual_finalDelay_cued);
+std_nonautodual_finalDelay_cued = std(array_nonautodual_finalDelay_cued);
+mean_nonautodual_finalDelay_uncued = mean(array_nonautodual_finalDelay_uncued);
+std_nonautodual_finalDelay_uncued = std(array_nonautodual_finalDelay_uncued);
+
+X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
+Y = [mean_autodual_finalDelay_uncued mean_autodual_finalDelay_cued;...
+    mean_nonautodual_finalDelay_uncued mean_nonautodual_finalDelay_cued];
+error = [std_autodual_finalDelay_uncued std_autodual_finalDelay_cued;...
+    std_nonautodual_finalDelay_uncued std_nonautodual_finalDelay_cued];
+figure; title('Average Delay of Performing the Sequence');
+bar(X, Y); hold on;
+errorbar(X, Y, error, error);    
+hold off;
+
+
+
+
+
+
+
+
+
+
+
+
 
 %% Functions necessary
 
