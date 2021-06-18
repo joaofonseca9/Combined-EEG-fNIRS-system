@@ -9,7 +9,7 @@
 clear;
 
 % Synch test skip => comment when actually testing patient
-Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 0);
 
 root_dir='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system';
 addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
@@ -29,7 +29,7 @@ addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % OUR SEQUENCES - script generateSequences
 % 2 4 3 4 1 3 4 1 2 1 3 2
 % 4 1 3 2 4 1 4 2 3 2 1 3
-sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 1 3 2 4 1 4 2 3 2 1 3')};
+sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Order of the sequences to be tested 
@@ -123,17 +123,6 @@ while (done==0)
         done=1;
     end
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Test Markers again (After starting labrecorder)
-done=0;
-while (done==0)
-    outlet.push_sample(Marker_Test);
-    correct=input('Check if marker was sent \n (Y - continue; Other Key - Send another marker \n', 's');
-    if strcmpi(correct, 'y')
-        done=1;
-    end
-end
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);

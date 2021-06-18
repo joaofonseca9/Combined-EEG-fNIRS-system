@@ -29,7 +29,7 @@ addpath(genpath('C:\Users\joaop\Downloads\liblsl-Matlab'));
 % OUR SEQUENCES - script generateSequences
 % 2 4 3 4 1 3 4 1 2 1 3 2
 % 4 1 3 2 4 1 4 2 3 2 1 3
-sequencesprint = {('4 3 4 1 4 1 2 4 3 2 1 2'),('2 1 2 3 2 1 3 2 4 2 4 1')};
+sequencesprint = {('2 4 3 4 1 3 4 1 2 1 3 2'),('4 1 3 2 4 1 4 2 3 2 1 3')};
 sequences = {split(sequencesprint(1))',split(sequencesprint(2))'} ;
 
 % Order of the sequences to be tested 
@@ -123,6 +123,17 @@ while (done==0)
         done=1;
     end
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Test Markers again (After starting labrecorder)
+done=0;
+while (done==0)
+    outlet.push_sample(Marker_Test);
+    correct=input('Check if marker was sent \n (Y - continue; Other Key - Send another marker \n', 's');
+    if strcmpi(correct, 'y')
+        done=1;
+    end
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Open Pshychtoolbox.
 PsychDefaultSetup(2);
@@ -512,7 +523,7 @@ HideCursor;
 %% Instructions
 % Page 1
 Screen('TextSize',window,30);
-DrawFormattedText(window,'You will now start with the finger tapping task, just like you trained at home. \n \n You will either start with the the sequence you studied at home, \n or with a new sequence you will learn today for 5 minutes. \n \n Note that for this new sequence you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n \n Press any key to continue and see with which test you start.','center', 'center', white);
+DrawFormattedText(window,'You will now start with the finger tapping task. \n \n You will either start with the sequence you studied at home, \n or with a new sequence you will learn today for 5 minutes. \n \n Note that for this new sequence you will also perform an automaticity test. \n This is the same test as the one you just did for the \n automatic (at home studied) sequence. \n\n Detailed instructions will appear at the start of each new task. \n \n Press any key to continue and see with which test you start.','center', 'center', white);
 vbl = Screen('Flip', window);
 KbStrokeWait; % Wait for response to terminate instructions
 
