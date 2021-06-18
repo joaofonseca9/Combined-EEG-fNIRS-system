@@ -833,7 +833,7 @@ for sequence_idx=order_sequence % Either [1,2] or [2,1] -> determines the order 
             % If it's in the last trial of the block (where we change the
             % sequence), prompt user to continue to next trial
             if j<N_trials
-                DrawFormattedText(window, sprintf('Sequence:\n %s \n Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a red cross appears on the screen.' , char(sequencesprint(sequence_idx))),'center','center', white);
+                DrawFormattedText(window, sprintf('Sequence:\n %s \n Press any key to continue with the next trial. \n Note that you will first start with a fixation cross again. \n Start tapping the sequence as soon as a red cross on the screen appears.' , char(sequencesprint(sequence_idx))),'center','center', white);
                 vbl = Screen('Flip', window);
                 KbStrokeWait;
             end
