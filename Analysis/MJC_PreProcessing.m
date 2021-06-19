@@ -11,8 +11,8 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='03';
-rec='02';
+sub='28';
+rec='04';
 
 file = getFileNames(mainpath_out, sub, rec);
 
