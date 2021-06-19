@@ -16,8 +16,8 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         addpath('C:\Users\joaop\Downloads\fieldtrip-20210212\fieldtrip-20210212');
         
         % set paths for the input and output data
-        mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots';
-        mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Pilots\pre-processed\';
+        mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp';
+        mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\pre-processed\';
         
     elseif strcmp(laptop, 'laptopMariana')
         % add EEGlab
@@ -28,8 +28,8 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip');
         
         % set paths for the input and output data
-        mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
-        mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
+        mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Exp';
+        mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Exp\pre-processed\';
 
     elseif strcmp(laptop, 'laptopCatarina')
         % add EEGlab
@@ -40,8 +40,8 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         addpath('C:\Program Files\Matlab\R2020b\toolbox\fieldtrip-20210308');
         
         % set paths for the input and output data
-        mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots';
-        mainpath_out='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Pilots\pre-processed';
+        mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Exp';
+        mainpath_out='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Exp\pre-processed';
         
     end
 end
