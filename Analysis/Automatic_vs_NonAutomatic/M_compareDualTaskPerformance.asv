@@ -105,9 +105,9 @@ for subject = 1:size(subrec, 1)
     array_nonautodual_finalIncorrectSequences_uncued(subject-numRemovedSubs) =...
         nonautodual_incorrectSequences_uncued;
     array_nonautodual_finalDelay_cued(subject-numRemovedSubs) =...
-        nonautodual_delay_cued;
+        autodual_delay_cued;
     array_nonautodual_finalDelay_uncued(subject-numRemovedSubs) =...
-        nonautodual_delay_uncued;
+        autodual_delay_uncued;
     
     %% Put values of the current subject into final struct.
     s.autodual_avgMistakes_cued = autodual_averageMistakes_cued;
@@ -334,20 +334,21 @@ errorbar(X3, Y3, error3, error3);
 hold off;
 
 %% Add average values of all subjects to final struct.
-  
-average.autodual_avgMistakes_cued = mean_autodual_finalAverageMistakes_cued;
-average.autodual_avgMistakes_uncued = mean_autodual_finalAverageMistakes_uncued;
-average.nonautodual_avgMistakes_cued = mean_nonautodual_finalAverageMistakes_cued;
-average.nonautodual_avgMistakes_uncued = mean_nonautodual_finalAverageMistakes_uncued;
-average.autodual_incorrectSeqs_cued = mean_autodual_finalIncorrectSequences_cued;
-average.autodual_incorrectSeqs_uncued = mean_autodual_finalIncorrectSequences_uncued;
-average.nonautodual_incorrectSeqs_cued = mean_nonautodual_finalIncorrectSequences_cued;
-average.nonautodual_incorrectSeqs_uncued = mean_nonautodual_finalIncorrectSequences_uncued;
-average.autodual_avgDelay_cued = mean_autodual_finalDelay_cued;
-average.autodual_avgDelay_uncued = mean_autodual_finalDelay_uncued;
-average.nonautodual_avgDelay_cued = mean_nonautodual_finalDelay_cued;
-average.nonautodual_avgDelay_uncued = mean_nonautodual_finalDelay_uncued;
+    
+average.autodual_avgMistakes_cued = autodual_finalAverageMistakes_cued/size(subrec, 1);
+average.autodual_avgMistakes_uncued = autodual_finalAverageMistakes_uncued/size(subrec, 1);
+average.nonautodual_avgMistakes_cued = nonautodual_finalAverageMistakes_cued/size(subrec, 1);
+average.nonautodual_avgMistakes_uncued = nonautodual_finalAverageMistakes_uncued/size(subrec, 1);
+average.autodual_incorrectSeqs_cued = autodual_finalIncorrectSequences_cued/size(subrec, 1);
+average.autodual_incorrectSeqs_uncued = autodual_finalIncorrectSequences_uncued/size(subrec, 1);
+average.nonautodual_incorrectSeqs_cued = nonautodual_finalIncorrectSequences_cued/size(subrec, 1);
+average.nonautodual_incorrectSeqs_uncued = nonautodual_finalIncorrectSequences_uncued/size(subrec, 1);
+average.autodual_avgDelay_cued = autodual_finalDelay_cued/size(subrec, 1);
+average.autodual_avgDelay_uncued = autodual_finalDelay_uncued/size(subrec, 1);
+average.nonautodual_avgDelay_cued = nonautodual_finalDelay_cued/size(subrec, 1);
+average.nonautodual_avgDelay_uncued = nonautodual_finalDelay_uncued/size(subrec, 1);
 allsubs.avg = average;
+
 
 % Save the struct from all subs.
 save(strcat(pwd, '\allsubs.mat'), 'allsubs')
