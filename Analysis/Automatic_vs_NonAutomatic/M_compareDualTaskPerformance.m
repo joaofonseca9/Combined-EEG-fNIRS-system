@@ -6,16 +6,10 @@ addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Ana
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
-subrec = ["02" "02"; "03" "02"; "04" "01"];
-% Sub 02
-% seq_auto = '434141243212';
-% seq_nonauto = '212321324241';
-% Sub 03
-% seq_auto = '414212322433';
-% seq_nonauto= '424423113441';
-% Sub 04
-seq_auto = '212321324241';
-seq_nonauto = '413241423213';
+subrec = ["28" "04" "A"];
+
+A = '243413412132';
+B = '413241423213';
 
 autodual_finalAverageMistakes_cued = 0;
 autodual_finalAverageMistakes_uncued = 0;
@@ -47,6 +41,14 @@ array_nonautodual_finalDelay_uncued = zeros(1, size(subrec, 1));
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);
+    
+    if subrec(subject, 3) == "A"
+        seq_auto = A;
+        seq_nonauto = B;
+    else
+        seq_auto = B;
+        seq_nonauto = A;
+    end
     
     subvar = genvarname(sub);
 
@@ -186,87 +188,185 @@ end
 % Save the struct from all subs.
 save(strcat(pwd, '\allsubs.mat'), 'allsubs')
 
-
-
+%% Average Number of Mistakes on Letter Counting
 
 mean_autodual_finalAverageMistakes_cued = mean(array_autodual_finalAverageMistakes_cued);
 std_autodual_finalAverageMistakes_cued = std(array_autodual_finalAverageMistakes_cued);
 mean_autodual_finalAverageMistakes_uncued = mean(array_autodual_finalAverageMistakes_uncued);
 std_autodual_finalAverageMistakes_uncued = std(array_autodual_finalAverageMistakes_uncued);
+mean_autodual_finalAverageMistakes = mean([array_autodual_finalAverageMistakes_cued array_autodual_finalAverageMistakes_uncued]);
+std_autodual_finalAverageMistakes = std([array_autodual_finalAverageMistakes_cued array_autodual_finalAverageMistakes_uncued]);
+
 mean_nonautodual_finalAverageMistakes_cued = mean(array_nonautodual_finalAverageMistakes_cued);
 std_nonautodual_finalAverageMistakes_cued = std(array_nonautodual_finalAverageMistakes_cued);
 mean_nonautodual_finalAverageMistakes_uncued = mean(array_nonautodual_finalAverageMistakes_uncued);
 std_nonautodual_finalAverageMistakes_uncued = std(array_nonautodual_finalAverageMistakes_uncued);
+mean_nonautodual_finalAverageMistakes = mean([array_nonautodual_finalAverageMistakes_cued array_nonautodual_finalAverageMistakes_uncued]);
+std_nonautodual_finalAverageMistakes = std([array_nonautodual_finalAverageMistakes_cued array_nonautodual_finalAverageMistakes_uncued]);
 
-X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-Y = [mean_autodual_finalAverageMistakes_uncued mean_autodual_finalAverageMistakes_cued;...
-    mean_nonautodual_finalAverageMistakes_uncued mean_nonautodual_finalAverageMistakes_cued];
-error = [std_autodual_finalAverageMistakes_uncued std_autodual_finalAverageMistakes_cued;...
-    std_nonautodual_finalAverageMistakes_uncued std_nonautodual_finalAverageMistakes_cued];
-figure; title('Average Number of Mistakes on Letter Counting');
-bar(X, Y); hold on;
-errorbar(X, Y, error, error);    
+X1 = categorical({'Auto'; 'Non-Auto'});
+Y1 = [mean_autodual_finalAverageMistakes; mean_nonautodual_finalAverageMistakes];
+error1 = [std_autodual_finalAverageMistakes; std_nonautodual_finalAverageMistakes];
+
+figure;
+b = bar(X1, Y1, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.5 0.3];
+b.CData(2,:) = [0.5 1 0.5];
+ylim([0 1]);
+hold on;
+errorbar(X1, Y1, error1, error1);    
 hold off;
 
+X2 = categorical({'Auto Uncued'; 'Auto Cued'});
+X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
+Y2 = [mean_autodual_finalAverageMistakes_uncued; mean_autodual_finalAverageMistakes_cued];
+error2 = [std_autodual_finalAverageMistakes_uncued; std_autodual_finalAverageMistakes_cued];
 
+X3 = categorical({'Non-Auto Uncued'; 'Non-Auto Cued'});
+X3 = reordercats(X3, {'Non-Auto Uncued'; 'Non-Auto Cued'});
+Y3 = [mean_nonautodual_finalAverageMistakes_uncued; mean_nonautodual_finalAverageMistakes_cued];
+error3 = [std_nonautodual_finalAverageMistakes_uncued; std_nonautodual_finalAverageMistakes_cued];
 
+figure;
+subplot(1, 2, 1);
+b = bar(X2, Y2, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.67 0.52];
+b.CData(2,:) = [1 0.37 0.10];
+ylim([0 1]);
+hold on;
+errorbar(X2, Y2, error2, error2);    
+hold off;
+subplot(1, 2, 2);
+b = bar(X3, Y3, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [0.71 1 0.71];
+b.CData(2,:) = [0.35 1 0.35];
+ylim([0 1]);
+hold on;
+errorbar(X3, Y3, error3, error3);    
+hold off;
+
+%% Average Number of Incorrectly Performed Sequences
 
 mean_autodual_finalIncorrectSequences_cued = mean(array_autodual_finalIncorrectSequences_cued);
 std_autodual_finalIncorrectSequences_cued = std(array_autodual_finalIncorrectSequences_cued);
 mean_autodual_finalIncorrectSequences_uncued = mean(array_autodual_finalIncorrectSequences_uncued);
 std_autodual_finalIncorrectSequences_uncued = std(array_autodual_finalIncorrectSequences_uncued);
+mean_autodual_finalIncorrectSequences = mean([array_autodual_finalIncorrectSequences_cued array_autodual_finalIncorrectSequences_uncued]);
+std_autodual_finalIncorrectSequences = std([array_autodual_finalIncorrectSequences_cued array_autodual_finalIncorrectSequences_uncued]);
+
 mean_nonautodual_finalIncorrectSequences_cued = mean(array_nonautodual_finalIncorrectSequences_cued);
 std_nonautodual_finalIncorrectSequences_cued = std(array_nonautodual_finalIncorrectSequences_cued);
 mean_nonautodual_finalIncorrectSequences_uncued = mean(array_nonautodual_finalIncorrectSequences_uncued);
 std_nonautodual_finalIncorrectSequences_uncued = std(array_nonautodual_finalIncorrectSequences_uncued);
+mean_nonautodual_finalIncorrectSequences = mean([array_nonautodual_finalIncorrectSequences_cued array_nonautodual_finalIncorrectSequences_uncued]);
+std_nonautodual_finalIncorrectSequences = std([array_nonautodual_finalIncorrectSequences_cued array_nonautodual_finalIncorrectSequences_uncued]);
 
-X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-Y = [mean_autodual_finalIncorrectSequences_uncued mean_autodual_finalIncorrectSequences_cued;...
-    mean_nonautodual_finalIncorrectSequences_uncued mean_nonautodual_finalIncorrectSequences_cued];
-error = [std_autodual_finalIncorrectSequences_uncued std_autodual_finalIncorrectSequences_cued;...
-    std_nonautodual_finalIncorrectSequences_uncued std_nonautodual_finalIncorrectSequences_cued];
-figure; title('Average Number of Incorrectly Performed Sequences');
-bar(X, Y); hold on;
-errorbar(X, Y, error, error);    
+X1 = categorical({'Auto'; 'Non-Auto'});
+Y1 = [mean_autodual_finalIncorrectSequences; mean_nonautodual_finalIncorrectSequences];
+error1 = [std_autodual_finalIncorrectSequences; std_nonautodual_finalIncorrectSequences];
+
+figure;
+b = bar(X1, Y1, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.5 0.3];
+b.CData(2,:) = [0.5 1 0.5];
+ylim([0 1]);
+hold on;
+errorbar(X1, Y1, error1, error1);    
 hold off;
 
+X2 = categorical({'Auto Uncued'; 'Auto Cued'});
+X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
+Y2 = [mean_autodual_finalIncorrectSequences_uncued; mean_autodual_finalIncorrectSequences_cued];
+error2 = [std_autodual_finalIncorrectSequences_uncued; std_autodual_finalIncorrectSequences_cued];
 
+X3 = categorical({'Non-Auto Uncued'; 'Non-Auto Cued'});
+X3 = reordercats(X3, {'Non-Auto Uncued'; 'Non-Auto Cued'});
+Y3 = [mean_nonautodual_finalIncorrectSequences_uncued; mean_nonautodual_finalIncorrectSequences_cued];
+error3 = [std_nonautodual_finalIncorrectSequences_uncued; std_nonautodual_finalIncorrectSequences_cued];
 
-
+figure;
+subplot(1, 2, 1);
+b = bar(X2, Y2, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.67 0.52];
+b.CData(2,:) = [1 0.37 0.10];
+ylim([0 1]);
+hold on;
+errorbar(X2, Y2, error2, error2);    
+hold off;
+subplot(1, 2, 2);
+b = bar(X3, Y3, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [0.71 1 0.71];
+b.CData(2,:) = [0.35 1 0.35];
+ylim([0 1]);
+hold on;
+errorbar(X3, Y3, error3, error3);    
+hold off;
+ 
+%% Average Delay of Performing the Sequence
 
 mean_autodual_finalDelay_cued = mean(array_autodual_finalDelay_cued);
 std_autodual_finalDelay_cued = std(array_autodual_finalDelay_cued);
 mean_autodual_finalDelay_uncued = mean(array_autodual_finalDelay_uncued);
 std_autodual_finalDelay_uncued = std(array_autodual_finalDelay_uncued);
+mean_autodual_finalDelay = mean([array_autodual_finalDelay_cued array_autodual_finalDelay_uncued]);
+std_autodual_finalDelay = std([array_autodual_finalDelay_cued array_autodual_finalDelay_uncued]);
+
 mean_nonautodual_finalDelay_cued = mean(array_nonautodual_finalDelay_cued);
 std_nonautodual_finalDelay_cued = std(array_nonautodual_finalDelay_cued);
 mean_nonautodual_finalDelay_uncued = mean(array_nonautodual_finalDelay_uncued);
 std_nonautodual_finalDelay_uncued = std(array_nonautodual_finalDelay_uncued);
+mean_nonautodual_finalDelay = mean([array_nonautodual_finalDelay_cued array_nonautodual_finalDelay_uncued]);
+std_nonautodual_finalDelay = std([array_nonautodual_finalDelay_cued array_nonautodual_finalDelay_uncued]);
 
-X = categorical({'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-X = reordercats(X,{'Auto Uncued','Auto Cued','Non-Auto Uncued', 'Non-Auto Cued'});
-Y = [mean_autodual_finalDelay_uncued mean_autodual_finalDelay_cued;...
-    mean_nonautodual_finalDelay_uncued mean_nonautodual_finalDelay_cued];
-error = [std_autodual_finalDelay_uncued std_autodual_finalDelay_cued;...
-    std_nonautodual_finalDelay_uncued std_nonautodual_finalDelay_cued];
-figure; title('Average Delay of Performing the Sequence');
-bar(X, Y); hold on;
-errorbar(X, Y, error, error);    
+X1 = categorical({'Auto'; 'Non-Auto'});
+Y1 = [mean_autodual_finalDelay; mean_nonautodual_finalDelay];
+error1 = [std_autodual_finalDelay; std_nonautodual_finalDelay];
+
+figure;
+b = bar(X1, Y1, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.5 0.3];
+b.CData(2,:) = [0.5 1 0.5];
+ylim([0 0.15]);
+hold on;
+errorbar(X1, Y1, error1, error1);    
 hold off;
 
+X2 = categorical({'Auto Uncued'; 'Auto Cued'});
+X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
+Y2 = [mean_autodual_finalDelay_uncued; mean_autodual_finalDelay_cued];
+error2 = [std_autodual_finalDelay_uncued; std_autodual_finalDelay_cued];
 
+X3 = categorical({'Non-Auto Uncued'; 'Non-Auto Cued'});
+X3 = reordercats(X3, {'Non-Auto Uncued'; 'Non-Auto Cued'});
+Y3 = [mean_nonautodual_finalDelay_uncued; mean_nonautodual_finalDelay_cued];
+error3 = [std_nonautodual_finalDelay_uncued; std_nonautodual_finalDelay_cued];
 
-
-
-
-
-
-
-
-
-
+figure;
+subplot(1, 2, 1);
+b = bar(X2, Y2, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [1 0.67 0.52];
+b.CData(2,:) = [1 0.37 0.10];
+ylim([0 0.15]);
+hold on;
+errorbar(X2, Y2, error2, error2);    
+hold off;
+subplot(1, 2, 2);
+b = bar(X3, Y3, 0.4);
+b.FaceColor = 'flat';
+b.CData(1,:) = [0.71 1 0.71];
+b.CData(2,:) = [0.35 1 0.35];
+ylim([0 0.15]);
+hold on;
+errorbar(X3, Y3, error3, error3);    
+hold off;
 
 %% Functions necessary
 
