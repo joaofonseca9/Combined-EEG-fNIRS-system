@@ -5,6 +5,7 @@ addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Ana
 
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
+results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Dual Task Performance';
 
 subrec = ["28" "04" "A"; "64" "01" "A"];
 
@@ -183,6 +184,9 @@ hold on;
 errorbar(X1, Y1, error1, error1);    
 hold off;
 
+saveas(gcf, fullfile(results_path,...
+    'AutovsNonAuto_LetterCountingMistakes'),'png');
+
 X2 = categorical({'Auto Uncued'; 'Auto Cued'});
 X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
 Y2 = [mean_autodual_finalAverageMistakes_uncued; mean_autodual_finalAverageMistakes_cued];
@@ -212,6 +216,9 @@ ylim([0 1]);
 hold on;
 errorbar(X3, Y3, error3, error3);    
 hold off;
+
+saveas(gcf, fullfile(results_path,...
+    'AutovsNonAuto_CuedvsUncued_LetterCountingMistakes'),'png');
 
 %% Average number of incorrectly performed sequences for non-excluded participants.
 
@@ -243,6 +250,9 @@ hold on;
 errorbar(X1, Y1, error1, error1);    
 hold off;
 
+saveas(gcf, fullfile(results_path,...
+    'AutovsNonAuto_FingerTappingMistakes'),'png');
+
 X2 = categorical({'Auto Uncued'; 'Auto Cued'});
 X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
 Y2 = [mean_autodual_finalIncorrectSequences_uncued; mean_autodual_finalIncorrectSequences_cued];
@@ -272,6 +282,9 @@ ylim([0 1]);
 hold on;
 errorbar(X3, Y3, error3, error3);    
 hold off;
+
+saveas(gcf, fullfile(results_path,...
+    'AutovsNonAuto_CuedvsUncued_FingerTappingMistakes'),'png');
  
 %% Average delay of performing the sequence for non-excluded participants.
 
@@ -303,6 +316,9 @@ hold on;
 errorbar(X1, Y1, error1, error1);    
 hold off;
 
+saveas(gcf, fullfile(results_path,...
+    'AutovsNonAuto_FingerTappingDelay'),'png');
+
 X2 = categorical({'Auto Uncued'; 'Auto Cued'});
 X2 = reordercats(X2, {'Auto Uncued'; 'Auto Cued'});
 Y2 = [mean_autodual_finalDelay_uncued; mean_autodual_finalDelay_cued];
@@ -333,6 +349,9 @@ hold on;
 errorbar(X3, Y3, error3, error3);    
 hold off;
 
+saveas(gcf,fullfile(results_path,...
+    'AutovsNonAuto_CuedvsUncued_FingerTappingDelay'),'png');
+
 %% Add average values of all subjects to final struct.
 average.autodual_avgMistakes_cued = mean_autodual_finalAverageMistakes_cued;
 average.autodual_avgMistakes_uncued = mean_autodual_finalAverageMistakes_uncued;
@@ -349,7 +368,7 @@ average.nonautodual_avgDelay_uncued = mean_nonautodual_finalDelay_uncued;
 allsubs.avg = average;
 
 % Save the struct from all subs.
-save(strcat(pwd, '\allsubs.mat'), 'allsubs')
+save(strcat(results_path, '\allsubs.mat'), 'allsubs')
 
 %% Functions necessary
 
@@ -542,5 +561,6 @@ if removeSubject == 1
 else
     remove = 0;
 end
+fprintf('\n');
     
 end

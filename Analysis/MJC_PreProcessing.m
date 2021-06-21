@@ -11,8 +11,8 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='28';
-rec='04';
+sub='64';
+rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -29,7 +29,7 @@ nirspre_path = fullfile(mainpath_out, ['sub-',sub], 'nirs');
 addpath(pwd)
 cd(sub_path);
 
-oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.oxy3']);
+oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.oxy4']);
 
 %% Upload files
 correct = input('Load data (Y/N)? If not, its assumed the .set files have been generated \n', 's');
