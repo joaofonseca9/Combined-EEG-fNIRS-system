@@ -334,7 +334,6 @@ errorbar(X3, Y3, error3, error3);
 hold off;
 
 %% Add average values of all subjects to final struct.
-  
 average.autodual_avgMistakes_cued = mean_autodual_finalAverageMistakes_cued;
 average.autodual_avgMistakes_uncued = mean_autodual_finalAverageMistakes_uncued;
 average.nonautodual_avgMistakes_cued = mean_nonautodual_finalAverageMistakes_cued;
@@ -411,6 +410,9 @@ end
 
 function [dual_incorrectSequences_cued, dual_incorrectSequences_uncued] = ...
     checkIncorrectSequencePerTrial(events_dual, real_sequence)
+% For each trial see if the sequence was performed correctly.
+% Check average number of incorrectly performed sequences per condition
+% (cued and uncued).
 
 dual = events_dual.trial;
 dual_incorrectSequences_cued = 0;
@@ -433,6 +435,10 @@ dual_incorrectSequences_uncued = dual_incorrectSequences_uncued/(length(dual)/2)
 end
 
 function [delay_cued, delay_uncued] = calculateDelayPerformance(events_dual, real_sequence)
+% For each trial see if the sequence was performed correctly and if so
+% check the delay in the performance.
+% Check average delay on correctly performed sequences per condition
+% (cued and uncued).
 
 dual = events_dual.trial;
 delay_cued = 0;
@@ -465,6 +471,7 @@ delay_uncued = delay_uncued / len_uncued;
 end
 
 function correctSequence = checkCorrectSequence(typed_sequence, real_sequence)
+% Check if the sequence performed was equal to the real sequence.
 
 if all(strcmp(typed_sequence, real_sequence))
     correctSequence = true;
@@ -481,47 +488,59 @@ function remove = removeSubject(sub,...
     nonautodual_incorrectSequences_cued, nonautodual_incorrectSequences_uncued,...
     autodual_delay_cued, autodual_delay_uncued, nonautodual_delay_cued,...
     nonautodual_delay_uncued)
+% Based on the subject results, determine wether he should be eliminated or
+% not and confirm with the researcher.
 
-    badLetterCounting = 0;
-    badFingerKeypresses = 0;
-    badDelay = 0;
-    descriptionErrors = 'bad performance in \n';
+badLetterCounting = 0;
+badFingerKeypresses = 0;
+badDelay = 0;
+descriptionErrors = 'bad performance in \n';
 
-    if mean([autodual_averageMistakes_cued autodual_averageMistakes_uncued])...
-            >= mean([nonautodual_averageMistakes_cued nonautodual_averageMistakes_uncued])
-        badLetterCounting = 1;
-        descriptionErrors = strcat(descriptionErrors, '- letter couting \n');
-    end
-    
-    if mean([autodual_incorrectSequences_cued autodual_incorrectSequences_uncued])...
-            >= mean([nonautodual_incorrectSequences_cued nonautodual_incorrectSequences_uncued])
-        badFingerKeypresses = 1;
-        descriptionErrors = strcat(descriptionErrors, '- performing the sequence correctly \n');
-    end
-    
-    if mean([autodual_delay_cued autodual_delay_uncued])...
-            >= mean([nonautodual_delay_cued nonautodual_delay_uncued])
-        badDelay = 1;
-        descriptionErrors = strcat(descriptionErrors, '- performing the sequence at the right tempo \n');
-    end
-    
-    if (badLetterCounting + badFingerKeypresses + badDelay) >= 2
-        removeSubject = 1;
-    else
-        removeSubject = 0;
-    end
-   
-    if removeSubject == 1
-        fprintf(['Subject ', char(sub), ' should be removed due to ',...
-            descriptionErrors, '\n']);
-        decision = input(['Remove subject ', char(sub), ' [y/n]? '], 's');
-        if strcmpi(decision, 'y')
-            remove = 1;
-        else
-            remove = 0;
-        end
+% Check if the average mistakes of letter counting were higher in the
+% automatic task rather then in the non-automatic task.
+if mean([autodual_averageMistakes_cued autodual_averageMistakes_uncued])...
+        >= mean([nonautodual_averageMistakes_cued nonautodual_averageMistakes_uncued])
+    badLetterCounting = 1;
+    descriptionErrors = strcat(descriptionErrors, '- letter couting \n');
+end
+ 
+% Check if the average of incorrectly performed sequences were higher in the
+% automatic task rather then in the non-automatic task.
+if mean([autodual_incorrectSequences_cued autodual_incorrectSequences_uncued])...
+        >= mean([nonautodual_incorrectSequences_cued nonautodual_incorrectSequences_uncued])
+    badFingerKeypresses = 1;
+    descriptionErrors = strcat(descriptionErrors, '- performing the sequence correctly \n');
+end
+ 
+% Check if the average delay of finger tapping was higher in the
+% automatic task rather then in the non-automatic task.
+if mean([autodual_delay_cued autodual_delay_uncued])...
+        >= mean([nonautodual_delay_cued nonautodual_delay_uncued])
+    badDelay = 1;
+    descriptionErrors = strcat(descriptionErrors, '- performing the sequence at the right tempo \n');
+end
+
+% If at least two out of the three evaluated conditions was worse in the
+% automatic sequence, suggest that the subject should be eliminated.
+if (badLetterCounting + badFingerKeypresses + badDelay) >= 2
+    removeSubject = 1;
+else
+    removeSubject = 0;
+end
+ 
+% Show the researcher why the subject should be eliminated and confirm
+% their intention.
+if removeSubject == 1
+    fprintf(['Subject ', char(sub), ' should be removed due to ',...
+        descriptionErrors, '\n']);
+    decision = input(['Remove subject ', char(sub), ' [y/n]? '], 's');
+    if strcmpi(decision, 'y')
+        remove = 1;
     else
         remove = 0;
     end
+else
+    remove = 0;
+end
     
 end

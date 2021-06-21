@@ -12,7 +12,7 @@ ft_defaults;
 [~, ftpath] = ft_version;
 
 sub='28';
-rec='04';
+rec_eeg='04';
 
 file = getFileNames(mainpath_out, sub, rec);
 
