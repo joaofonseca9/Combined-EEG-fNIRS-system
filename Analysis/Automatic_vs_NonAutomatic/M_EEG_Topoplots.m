@@ -1,4 +1,4 @@
-%% Analysis of the EEG signals.
+%% Analysis of the EEG signals - topoplots.
 
 clear; clc; close all;
 addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
@@ -32,30 +32,36 @@ for subject = 1:size(subrec, 1)
     endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
 
     % Get the power spectrum density (PSD) averaged over all trials.
-    [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-        freq_beta] = calculateAveragePowerAllTrials(EEG_AutoUncued,...
-        event_samp, startTask, endTask);
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startTask, endTask);
 
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
-    subplot(1, 3, 1);
+    subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
     topoplot(power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 2);
+    subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
     topoplot(power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 3);
+    subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
     topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(power_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
     autouncued_power_theta_allSubjects(:, subject) = power_theta;
     autouncued_power_alpha_allSubjects(:, subject) = power_alpha;
     autouncued_power_beta_allSubjects(:, subject) = power_beta;
+    autouncued_power_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Non-Auto Uncued.
 
@@ -64,30 +70,36 @@ for subject = 1:size(subrec, 1)
     endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
     
     % Get the power spectrum density (PSD) averaged over all trials.
-    [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-        freq_beta] = calculateAveragePowerAllTrials(EEG_NonAutoUncued,...
-        event_samp, startTask, endTask);
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
+        startTask, endTask);
     
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
-    subplot(1, 3, 1);
+    subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
     topoplot(power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 2);
+    subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
     topoplot(power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 3);
+    subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
     topoplot(power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(power_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
     nonautouncued_power_theta_allSubjects(:, subject) = power_theta;
     nonautouncued_power_alpha_allSubjects(:, subject) = power_alpha;
     nonautouncued_power_beta_allSubjects(:, subject) = power_beta;
+    nonautouncued_power_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Auto Cued.
 
@@ -96,30 +108,36 @@ for subject = 1:size(subrec, 1)
     endTask = find(strcmp({EEG_AutoCued.event.type}, 's1710')==1);
 
     % Get the power spectrum density (PSD) averaged over all trials.
-    [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-        freq_beta] = calculateAveragePowerAllTrials(EEG_AutoCued,...
-        event_samp, startTask, endTask);
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoCued, event_samp,...
+        startTask, endTask);
 
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
-    subplot(1, 3, 1);
+    subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
     topoplot(power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 2);
+    subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
     topoplot(power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 3);
+    subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
     topoplot(power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;   
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(power_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
     
     % Save the values onto a allSubjects variable.
     autocued_power_theta_allSubjects(:, subject) = power_theta;
     autocued_power_alpha_allSubjects(:, subject) = power_alpha;
     autocued_power_beta_allSubjects(:, subject) = power_beta;
+    autocued_power_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Non-Auto Cued.
 
@@ -128,30 +146,36 @@ for subject = 1:size(subrec, 1)
     endTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1712')==1);
 
     % Get the power spectrum density (PSD) averaged over all trials.   
-    [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-        freq_beta] = calculateAveragePowerAllTrials(EEG_NonAutoCued,...
-        event_samp, startTask, endTask);
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_NonAutoCued, event_samp,...
+        startTask, endTask);
 
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
-    subplot(1, 3, 1);
+    subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
     topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 2);
+    subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
     topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
-    subplot(1, 3, 3);
+    subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
     topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar; 
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(power_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
     
     % Save the values onto a allSubjects variable.
     nonautocued_power_theta_allSubjects(:, subject) = power_theta;
     nonautocued_power_alpha_allSubjects(:, subject) = power_alpha;
     nonautocued_power_beta_allSubjects(:, subject) = power_beta;
+    nonautocued_power_gamma_allSubjects(:, subject) = power_beta;
     
     disp(['These are the topoplots for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
@@ -165,77 +189,97 @@ end
 autouncued_power_theta = mean(autouncued_power_theta_allSubjects, 2);
 autouncued_power_alpha = mean(autouncued_power_alpha_allSubjects, 2);
 autouncued_power_beta = mean(autouncued_power_beta_allSubjects, 2);
+autouncued_power_gamma = mean(autouncued_power_gamma_allSubjects, 2);
 % Non-Auto Uncued.
 nonautouncued_power_theta = mean(nonautouncued_power_theta_allSubjects, 2);
 nonautouncued_power_alpha = mean(nonautouncued_power_alpha_allSubjects, 2);
 nonautouncued_power_beta = mean(nonautouncued_power_beta_allSubjects, 2);
+nonautouncued_power_gamma = mean(nonautouncued_power_gamma_allSubjects, 2);
 % Auto Cued.
 autocued_power_theta = mean(autocued_power_theta_allSubjects, 2);
 autocued_power_alpha = mean(autocued_power_alpha_allSubjects, 2);
 autocued_power_beta = mean(autocued_power_beta_allSubjects, 2);
+autocued_power_gamma = mean(autocued_power_gamma_allSubjects, 2);
 % Non-Auto Cued.
 nonautocued_power_theta = mean(nonautocued_power_theta_allSubjects, 2);
 nonautocued_power_alpha = mean(nonautocued_power_alpha_allSubjects, 2);
 nonautocued_power_beta = mean(nonautocued_power_beta_allSubjects, 2);
+nonautocued_power_gamma = mean(nonautocued_power_gamma_allSubjects, 2);
 
 % Topographic distribution of the frequency bands over the head
 % (topoplot).
 % Auto Uncued.
 figure;
-subplot(1, 3, 1);
+subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
 topoplot(autouncued_power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 2);
+subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
 topoplot(autouncued_power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 3);
+subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
 topoplot(autouncued_power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
+subplot(2, 2, 4);
+text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+topoplot(autouncued_power_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+colorbar;
 % Non-Auto Uncued.
 figure;
-subplot(1, 3, 1);
+subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
 topoplot(nonautouncued_power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 2);
+subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
 topoplot(nonautouncued_power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 3);
+subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
 topoplot(nonautouncued_power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
+subplot(2, 2, 4);
+text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+topoplot(nonautouncued_power_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+colorbar;
 % Auto Cued.
 figure;
-subplot(1, 3, 1);
+subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
 topoplot(autocued_power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 2);
+subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
 topoplot(autocued_power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 3);
+subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
 topoplot(autocued_power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
+subplot(2, 2, 4);
+text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+topoplot(autocued_power_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+colorbar;
 % Non-Auto Cued.
 figure;
-subplot(1, 3, 1);
+subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
 topoplot(nonautocued_power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 2);
+subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
 topoplot(nonautocued_power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
-subplot(1, 3, 3);
+subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
 topoplot(nonautocued_power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
+subplot(2, 2, 4);
+text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+topoplot(nonautocued_power_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+colorbar;
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
@@ -243,8 +287,9 @@ disp('These are the topoplots for the average of all subjects.');
 %% Functions
 
 % Loop through the power from the individual trials and average them.
-function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-    freq_beta] = calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask)
+function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+    freq_alpha, freq_beta, freq_gamma] =...
+    calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask)
 
     for trial=1:length(startTask)
     
@@ -256,26 +301,30 @@ function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
         trial_data = EEG_trial.data;
 
         [power_theta_oneTrial, power_alpha_oneTrial, power_beta_oneTrial,...
-            freq_theta, freq_alpha, freq_beta] =...
-            calculatePowerPerTrial(EEG_trial, trial_data);
+            power_gamma_oneTrial, freq_theta, freq_alpha, freq_beta,...
+            freq_gamma] = calculatePowerPerTrial(EEG_trial, trial_data);
             
         power_theta_allTrials(:, trial) = power_theta_oneTrial;
         power_alpha_allTrials(:, trial) = power_alpha_oneTrial;
         power_beta_allTrials(:, trial) = power_beta_oneTrial;
+        power_gamma_allTrials(:, trial) = power_gamma_oneTrial;
     
     end
     
     power_theta = mean(power_theta_allTrials, 2);
     power_alpha = mean(power_alpha_allTrials, 2);
     power_beta = mean(power_beta_allTrials, 2);
+    power_gamma = mean(power_gamma_allTrials, 2);
 
 end
 
 % From the trial data, calculate the power over each frequency band for all
 % electrodes.
-% Theta - 4 to 8 Hz; Alpha - 8 to 13 Hz; Beta - 13 to 32 Hz.
-function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
-    freq_beta] = calculatePowerPerTrial(EEG_trial, trial_data)
+% Theta - 4 to 8 Hz; Alpha - 8 to 13 Hz; Beta - 13 to 32 Hz; Gamma - 32 to
+% 48 Hz.
+function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+    freq_alpha, freq_beta, freq_gamma] =...
+    calculatePowerPerTrial(EEG_trial, trial_data)
     
     % Using a sliding Hann window.
     window_id = 1;
@@ -298,10 +347,12 @@ function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
                 pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
                 pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
                 pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
+                pow_gamma(:, channel, window_id) = P((f(:,1)>=32 & f(:,1)<=48),1);
             else
                 pow_theta(:, channel, window_id) = NaN;
                 pow_alpha(:, channel, window_id) = NaN;
                 pow_beta(:, channel, window_id) = NaN;
+                pow_gamma(:, channel, window_id) = NaN;
             end
         end
         % Increase indices and window (increase sliding window with
@@ -314,9 +365,12 @@ function [power_theta, power_alpha, power_beta, freq_theta, freq_alpha,...
     freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
     freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
     freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
-    % Average power per channel over windows.
+    freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
+    % Average power per channel over windows and then average over the
+    % different channels.
     power_theta = mean(mean(pow_theta,3,'omitnan'));
     power_alpha = mean(mean(pow_alpha,3,'omitnan'));
     power_beta = mean(mean(pow_beta,3,'omitnan'));
+    power_gamma = mean(mean(pow_gamma,3,'omitnan'));
 
 end
