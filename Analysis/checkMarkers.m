@@ -33,7 +33,7 @@ nirs_event_samp=[nirs_events.sample];
 nirs_event_idx=find(strncmp({nirs_events.value},'LSL',3));
 test=find(strcmp({nirs_events.value},'LSL 1600'));
 last_test=test(end);%sample of last test marker
-first_marker=nirs_event_idx(nirs_event_idx==last_test)+1;
+first_marker=nirs_event_idx(find(nirs_event_idx==last_test)+1);
 
 last_marker=find(strcmp({nirs_events.value},'LSL 1500'));
 nirs_length=(nirs_event_samp(last_marker)-nirs_event_samp(first_marker))/nirs_raw.fsample;
@@ -41,7 +41,7 @@ nirs_length=(nirs_event_samp(last_marker)-nirs_event_samp(first_marker))/nirs_ra
 eeg_event_idx=find(strncmp({EEG.event.type}, 's',1));
 test=find(strcmp({EEG.event.type},'s1600'));
 last_test=test(end);%sample of last test marker
-first_marker=eeg_event_idx(eeg_event_idx==last_test)+1;
+first_marker=eeg_event_idx(find(eeg_event_idx==last_test)+1);
 
 last_marker=find(strcmp({EEG.event.type},'s1500'));
 eeg_length=(eeg_event_samp(last_marker)-eeg_event_samp(first_marker))/EEG.srate;
@@ -52,8 +52,8 @@ if nirs_length~=eeg_length
 end
  
 % %Check time in hh:mm:ss
-% nirs_length = seconds(nirs_length);  
-% nirs_length.Format = 'hh:mm:ss'; 
-% eeg_length = seconds(eeg_length);  
-% eeg_length.Format = 'hh:mm:ss'; 
+nirs_length = seconds(nirs_length);  
+nirs_length.Format = 'hh:mm:ss'; 
+eeg_length = seconds(eeg_length);  
+eeg_length.Format = 'hh:mm:ss'; 
 end

@@ -3,8 +3,8 @@ close all;
 
 %% Initialize FieldTrip and EEGLAB
 % laptop='laptopCatarina';
-laptop='laptopMariana';
-% laptop='laptopJoao';
+% laptop='laptopMariana';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
@@ -12,7 +12,7 @@ ft_defaults;
 [~, ftpath] = ft_version;
 
 sub='28';
-rec='04';
+rec='02';
 
 file = getFileNames(mainpath_out, sub, rec);
 
@@ -29,7 +29,7 @@ nirspre_path = fullfile(mainpath_out, ['sub-',sub], 'nirs');
 addpath(pwd)
 cd(sub_path);
 
-oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.oxy3']);
+oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.oxy4']);
 
 %% Upload files
 correct = input('Load data (Y/N)? If not, its assumed the .set files have been generated \n', 's');
@@ -85,8 +85,7 @@ if strcmp(sub,'02') && strcmp(rec,'02')
 end
 
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
-marker_table = checkMarkers(EEG, nirs_raw, nirs_events);
-
+[marker_table,eeg_length,nirs_length]=checkMarkers(EEG,nirs_raw, nirs_events);
 %% EEG: Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
