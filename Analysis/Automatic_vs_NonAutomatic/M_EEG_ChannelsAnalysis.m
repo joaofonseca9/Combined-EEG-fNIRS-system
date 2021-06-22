@@ -7,6 +7,8 @@ laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 eeglab;
 ft_defaults;
+results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Separate Channels';
+
 
 subrec = ["04" "01"];
 %%
@@ -77,6 +79,84 @@ for subject = 1:size(subrec, 1)
     % Save the values onto a allSubjects variable.
     nonautocued_power_allSubjects(:, :, subject) = power;
 
+    %% Get the locations of the channels of interest.
+    
+    locs = {EEG_AutoCued.chanlocs.labels};
+    F7_loc = find(contains(locs, 'F7'));
+    F8_loc = find(contains(locs, 'F8'));
+    AFFz_loc = find(contains(locs, 'AFFz'));
+    FC1_loc = find(contains(locs, 'FC1'));
+    
+    %% Get the values of power for the specific channels and plot them.
+    
+    % F7.
+    autouncued_power_F7 = autouncued_power_allSubjects(:, F7_loc, subject);
+    autocued_power_F7 = autocued_power_allSubjects(:, F7_loc, subject);
+    nonautouncued_power_F7 = nonautouncued_power_allSubjects(:, F7_loc, subject);
+    nonautocued_power_F7 = nonautocued_power_allSubjects(:, F7_loc, subject);
+    
+    figure; title('F7');
+    plot(freq, autouncued_power_F7); hold on;
+    plot(freq, autocued_power_F7); hold on;
+    plot(freq, nonautouncued_power_F7); hold on;
+    plot(freq, nonautocued_power_F7); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    % F8.
+    autouncued_power_F8 = autouncued_power_allSubjects(:, F8_loc, subject);
+    autocued_power_F8 = autocued_power_allSubjects(:, F8_loc, subject);
+    nonautouncued_power_F8 = nonautouncued_power_allSubjects(:, F8_loc, subject);
+    nonautocued_power_F8 = nonautocued_power_allSubjects(:, F8_loc, subject);
+    
+    figure; title('F8');
+    plot(freq, autouncued_power_F8); hold on;
+    plot(freq, autocued_power_F8); hold on;
+    plot(freq, nonautouncued_power_F8); hold on;
+    plot(freq, nonautocued_power_F8); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    % AFFz.
+    autouncued_power_AFFz = autouncued_power_allSubjects(:, AFFz_loc, subject);
+    autocued_power_AFFz = autocued_power_allSubjects(:, AFFz_loc, subject);
+    nonautouncued_power_AFFz = nonautouncued_power_allSubjects(:, AFFz_loc, subject);
+    nonautocued_power_AFFz = nonautocued_power_allSubjects(:, AFFz_loc, subject);
+    
+    figure; title('AFFz');
+    plot(freq, autouncued_power_AFFz); hold on;
+    plot(freq, autocued_power_AFFz); hold on;
+    plot(freq, nonautouncued_power_AFFz); hold on;
+    plot(freq, nonautocued_power_AFFz); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    % FC1.
+    autouncued_power_FC1 = autouncued_power_allSubjects(:, FC1_loc, subject);
+    autocued_power_FC1 = autocued_power_allSubjects(:, FC1_loc, subject);
+    nonautouncued_power_FC1 = nonautouncued_power_allSubjects(:, FC1_loc, subject);
+    nonautocued_power_FC1 = nonautocued_power_allSubjects(:, FC1_loc, subject);
+    
+    figure; title('FC1');
+    plot(freq, autouncued_power_FC1); hold on;
+    plot(freq, autocued_power_FC1); hold on;
+    plot(freq, nonautouncued_power_FC1); hold on;
+    plot(freq, nonautocued_power_FC1); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
     pause;
@@ -93,6 +173,84 @@ nonautouncued_power = mean(nonautouncued_power_allSubjects, 3);
 autocued_power = mean(autocued_power_allSubjects, 3);
 % Non-Auto Cued.
 nonautocued_power = mean(nonautocued_power_allSubjects, 3);
+
+%% Plot the PSD for specific channels.
+
+% F7.
+autouncued_power_F7 = autouncued_power(:, F7_loc);
+autocued_power_F7 = autocued_power(:, F7_loc);
+nonautouncued_power_F7 = nonautouncued_power(:, F7_loc);
+nonautocued_power_F7 = nonautocued_power(:, F7_loc);
+
+figure; title('F7');
+plot(freq, autouncued_power_F7); hold on;
+plot(freq, autocued_power_F7); hold on;
+plot(freq, nonautouncued_power_F7); hold on;
+plot(freq, nonautocued_power_F7); hold on;
+xline(4); hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+
+saveas(gcf, fullfile(results_path, 'F7_PowervsFreq'),'png');
+
+% F8.
+autouncued_power_F8 = autouncued_power(:, F8_loc);
+autocued_power_F8 = autocued_power(:, F8_loc);
+nonautouncued_power_F8 = nonautouncued_power(:, F8_loc);
+nonautocued_power_F8 = nonautocued_power(:, F8_loc);
+
+figure; title('F8');
+plot(freq, autouncued_power_F8); hold on;
+plot(freq, autocued_power_F8); hold on;
+plot(freq, nonautouncued_power_F8); hold on;
+plot(freq, nonautocued_power_F8); hold on;
+xline(4); hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+
+saveas(gcf, fullfile(results_path, 'F8_PowervsFreq'),'png');
+
+% AFFz.
+autouncued_power_AFFz = autouncued_power(:, AFFz_loc);
+autocued_power_AFFz = autocued_power(:, AFFz_loc);
+nonautouncued_power_AFFz = nonautouncued_power(:, AFFz_loc);
+nonautocued_power_AFFz = nonautocued_power(:, AFFz_loc);
+
+figure; title('AFFz');
+plot(freq, autouncued_power_AFFz); hold on;
+plot(freq, autocued_power_AFFz); hold on;
+plot(freq, nonautouncued_power_AFFz); hold on;
+plot(freq, nonautocued_power_AFFz); hold on;
+xline(4); hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+
+saveas(gcf, fullfile(results_path, 'AFFz_PowervsFreq'),'png');
+
+% FC1.
+autouncued_power_FC1 = autouncued_power(:, FC1_loc);
+autocued_power_FC1 = autocued_power(:, FC1_loc);
+nonautouncued_power_FC1 = nonautouncued_power(:, FC1_loc);
+nonautocued_power_FC1 = nonautocued_power(:, FC1_loc);
+
+figure; title('FC1');
+plot(freq, autouncued_power_FC1); hold on;
+plot(freq, autocued_power_FC1); hold on;
+plot(freq, nonautouncued_power_FC1); hold on;
+plot(freq, nonautocued_power_FC1); hold on;
+xline(4); hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+
+saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
