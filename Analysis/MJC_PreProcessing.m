@@ -13,6 +13,8 @@ ft_defaults;
 
 sub='28';
 rec='02';
+% sub='64';
+% rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
