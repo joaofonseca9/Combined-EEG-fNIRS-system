@@ -9,9 +9,8 @@ eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Separate Channels';
 
+subrec = ["28" "04"];
 
-subrec = ["04" "01"];
-%%
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
