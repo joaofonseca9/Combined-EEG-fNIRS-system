@@ -74,10 +74,10 @@ for subject = 1:size(subrec, 1)
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    autouncued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
-    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
-    autouncued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
-    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
+    autouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    autouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
     %% Non-Auto Uncued.
 
@@ -128,10 +128,10 @@ for subject = 1:size(subrec, 1)
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    nonautouncued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
-    nonautouncued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
-    nonautouncued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
-    nonautouncued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
+    nonautouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    nonautouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    nonautouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    nonautouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
     %% Auto Cued.
 
@@ -182,10 +182,10 @@ for subject = 1:size(subrec, 1)
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    autocued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
-    autocued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
-    autocued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
-    autocued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
+    autocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    autocued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    autocued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    autocued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
     %% Non-Auto Cued.
 
@@ -236,10 +236,10 @@ for subject = 1:size(subrec, 1)
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    nonautocued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
-    nonautocued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
-    nonautocued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
-    nonautocued_ERD_ERS_gamma_allSubjects(:, subject) = power_beta;
+    nonautocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    nonautocued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    nonautocued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    nonautocued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_beta;
     
     disp(['These are the topoplots for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
