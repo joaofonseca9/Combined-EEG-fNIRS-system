@@ -8,7 +8,7 @@ laptop = 'laptopMariana';
 eeglab;
 ft_defaults;
 
-subrec = ["04" "01"];
+subrec = ["28" "04"];
 
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
@@ -28,154 +28,218 @@ for subject = 1:size(subrec, 1)
     %% Auto Uncued.
 
     event_samp  = [EEG_AutoUncued.event.latency];
+    startBaseline = find(strcmp({EEG_AutoUncued.event.type}, 'boundary')==1);
+    startBaseline(12) = [];
+    startBaseline(1) = [];
     startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
     endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
 
     % Get the power spectrum density (PSD) averaged over all trials.
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startBaseline, startTask);
+    % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
         startTask, endTask);
+    
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
 
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
     subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 4);
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(power_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    autouncued_power_theta_allSubjects(:, subject) = power_theta;
-    autouncued_power_alpha_allSubjects(:, subject) = power_alpha;
-    autouncued_power_beta_allSubjects(:, subject) = power_beta;
-    autouncued_power_gamma_allSubjects(:, subject) = power_gamma;
+    autouncued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
+    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
+    autouncued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
+    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Non-Auto Uncued.
 
     event_samp  = [EEG_NonAutoUncued.event.latency];
+    startBaseline = find(strcmp({EEG_NonAutoUncued.event.type}, 'boundary')==1);
+    startBaseline(12) = [];
+    startBaseline(1) = [];
     startTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
     endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
     
     % Get the power spectrum density (PSD) averaged over all trials.
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
+        startBaseline, startTask);
+    % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
         startTask, endTask);
     
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
+    
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
     subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 4);
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(power_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    nonautouncued_power_theta_allSubjects(:, subject) = power_theta;
-    nonautouncued_power_alpha_allSubjects(:, subject) = power_alpha;
-    nonautouncued_power_beta_allSubjects(:, subject) = power_beta;
-    nonautouncued_power_gamma_allSubjects(:, subject) = power_gamma;
+    nonautouncued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
+    nonautouncued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
+    nonautouncued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
+    nonautouncued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Auto Cued.
 
     event_samp  = [EEG_AutoCued.event.latency];
+    startBaseline = find(strcmp({EEG_AutoCued.event.type}, 'boundary')==1);
+    startBaseline(12) = [];
+    startBaseline(1) = [];
     startTask = find(strcmp({EEG_AutoCued.event.type}, 's1702')==1);
     endTask = find(strcmp({EEG_AutoCued.event.type}, 's1710')==1);
 
     % Get the power spectrum density (PSD) averaged over all trials.
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoCued, event_samp,...
+        startBaseline, startTask);
+    % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrials(EEG_AutoCued, event_samp,...
         startTask, endTask);
-
+    
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
+    
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
     subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;   
     subplot(2, 2, 4);
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(power_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    autocued_power_theta_allSubjects(:, subject) = power_theta;
-    autocued_power_alpha_allSubjects(:, subject) = power_alpha;
-    autocued_power_beta_allSubjects(:, subject) = power_beta;
-    autocued_power_gamma_allSubjects(:, subject) = power_gamma;
+    autocued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
+    autocued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
+    autocued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
+    autocued_ERD_ERS_gamma_allSubjects(:, subject) = power_gamma;
     
     %% Non-Auto Cued.
 
     event_samp  = [EEG_NonAutoCued.event.latency];
+    startBaseline = find(strcmp({EEG_NonAutoCued.event.type}, 'boundary')==1);
+    startBaseline(12) = [];
+    startBaseline(1) = [];
     startTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1704')==1);
     endTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1712')==1);
 
-    % Get the power spectrum density (PSD) averaged over all trials.   
+    % Get the power spectrum density (PSD) averaged over all trials.  
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_NonAutoCued, event_samp,...
+        startBaseline, startTask);
+    % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrials(EEG_NonAutoCued, event_samp,...
         startTask, endTask);
+    
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
 
     % Topographic distribution of the frequency bands over the head
     % (topoplot).
     figure;
     subplot(2, 2, 1);
     text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 2);
     text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     subplot(2, 2, 3);
     text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar; 
     subplot(2, 2, 4);
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(power_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+    topoplot(ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
     % Save the values onto a allSubjects variable.
-    nonautocued_power_theta_allSubjects(:, subject) = power_theta;
-    nonautocued_power_alpha_allSubjects(:, subject) = power_alpha;
-    nonautocued_power_beta_allSubjects(:, subject) = power_beta;
-    nonautocued_power_gamma_allSubjects(:, subject) = power_beta;
+    nonautocued_ERD_ERS_theta_allSubjects(:, subject) = power_theta;
+    nonautocued_ERD_ERS_alpha_allSubjects(:, subject) = power_alpha;
+    nonautocued_ERD_ERS_beta_allSubjects(:, subject) = power_beta;
+    nonautocued_ERD_ERS_gamma_allSubjects(:, subject) = power_beta;
     
     disp(['These are the topoplots for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
@@ -186,25 +250,25 @@ end
 
 % Get the power spectrum density (PSD) averaged over all subjects.
 % Auto Uncued.
-autouncued_power_theta = mean(autouncued_power_theta_allSubjects, 2);
-autouncued_power_alpha = mean(autouncued_power_alpha_allSubjects, 2);
-autouncued_power_beta = mean(autouncued_power_beta_allSubjects, 2);
-autouncued_power_gamma = mean(autouncued_power_gamma_allSubjects, 2);
+autouncued_ERD_ERS_theta = mean(autouncued_ERD_ERS_theta_allSubjects, 2);
+autouncued_ERD_ERS_alpha = mean(autouncued_ERD_ERS_alpha_allSubjects, 2);
+autouncued_ERD_ERS_beta = mean(autouncued_ERD_ERS_beta_allSubjects, 2);
+autouncued_ERD_ERS_gamma = mean(autouncued_ERD_ERS_gamma_allSubjects, 2);
 % Non-Auto Uncued.
-nonautouncued_power_theta = mean(nonautouncued_power_theta_allSubjects, 2);
-nonautouncued_power_alpha = mean(nonautouncued_power_alpha_allSubjects, 2);
-nonautouncued_power_beta = mean(nonautouncued_power_beta_allSubjects, 2);
-nonautouncued_power_gamma = mean(nonautouncued_power_gamma_allSubjects, 2);
+nonautouncued_ERD_ERS_theta = mean(nonautouncued_ERD_ERS_theta_allSubjects, 2);
+nonautouncued_ERD_ERS_alpha = mean(nonautouncued_ERD_ERS_alpha_allSubjects, 2);
+nonautouncued_ERD_ERS_beta = mean(nonautouncued_ERD_ERS_beta_allSubjects, 2);
+nonautouncued_ERD_ERS_gamma = mean(nonautouncued_ERD_ERS_gamma_allSubjects, 2);
 % Auto Cued.
-autocued_power_theta = mean(autocued_power_theta_allSubjects, 2);
-autocued_power_alpha = mean(autocued_power_alpha_allSubjects, 2);
-autocued_power_beta = mean(autocued_power_beta_allSubjects, 2);
-autocued_power_gamma = mean(autocued_power_gamma_allSubjects, 2);
+autocued_ERD_ERS_theta = mean(autocued_ERD_ERS_theta_allSubjects, 2);
+autocued_ERD_ERS_alpha = mean(autocued_ERD_ERS_alpha_allSubjects, 2);
+autocued_ERD_ERS_beta = mean(autocued_ERD_ERS_beta_allSubjects, 2);
+autocued_ERD_ERS_gamma = mean(autocued_ERD_ERS_gamma_allSubjects, 2);
 % Non-Auto Cued.
-nonautocued_power_theta = mean(nonautocued_power_theta_allSubjects, 2);
-nonautocued_power_alpha = mean(nonautocued_power_alpha_allSubjects, 2);
-nonautocued_power_beta = mean(nonautocued_power_beta_allSubjects, 2);
-nonautocued_power_gamma = mean(nonautocued_power_gamma_allSubjects, 2);
+nonautocued_ERD_ERS_theta = mean(nonautocued_ERD_ERS_theta_allSubjects, 2);
+nonautocued_ERD_ERS_alpha = mean(nonautocued_ERD_ERS_alpha_allSubjects, 2);
+nonautocued_ERD_ERS_beta = mean(nonautocued_ERD_ERS_beta_allSubjects, 2);
+nonautocued_ERD_ERS_gamma = mean(nonautocued_ERD_ERS_gamma_allSubjects, 2);
 
 % Topographic distribution of the frequency bands over the head
 % (topoplot).
@@ -212,73 +276,73 @@ nonautocued_power_gamma = mean(nonautocued_power_gamma_allSubjects, 2);
 figure;
 subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autouncued_power_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autouncued_ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autouncued_power_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autouncued_ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autouncued_power_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autouncued_ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-topoplot(autouncued_power_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autouncued_ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 % Non-Auto Uncued.
 figure;
 subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautouncued_power_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautouncued_ERD_ERS_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautouncued_power_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautouncued_ERD_ERS_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautouncued_power_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautouncued_ERD_ERS_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-topoplot(nonautouncued_power_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautouncued_ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 % Auto Cued.
 figure;
 subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(autocued_power_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autocued_ERD_ERS_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(autocued_power_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autocued_ERD_ERS_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(autocued_power_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autocued_ERD_ERS_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-topoplot(autocued_power_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(autocued_ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 % Non-Auto Cued.
 figure;
 subplot(2, 2, 1);
 text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-topoplot(nonautocued_power_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautocued_ERD_ERS_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 2);
 text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-topoplot(nonautocued_power_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautocued_ERD_ERS_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 subplot(2, 2, 3);
 text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-topoplot(nonautocued_power_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautocued_ERD_ERS_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar; 
 subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-topoplot(nonautocued_power_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+topoplot(nonautocued_ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 
 disp('This was the end of individual subjects.');
