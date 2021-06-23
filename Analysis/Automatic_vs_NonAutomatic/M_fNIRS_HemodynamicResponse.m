@@ -94,11 +94,18 @@ for con=1:size(xval_avgsubjects_allconditions, 3)
         find(~ismember(layout.label, {'COMNT', 'SCALE'})), 'interpreter',...
         'none');
 
-    % Plot scale .   
+    % Plot scale.   
     l = find(strcmp(layout.label, 'SCALE'));
     x = layout.pos(l,1);
     y = layout.pos(l,2);
-    plotScales([xmin xmax], [ymin ymax], x, y, chanWidth(1), chanHeight(1))
+    plotScales([xmin xmax], [ymin ymax], x, y, chanWidth(1), chanHeight(1));
+    
+    % Save figure.
+    set(gcf, 'Position', get(0, 'Screensize'));
+    savetitle = strcat(char(taskname{con}), '_hemodynamicresponse');
+    savetitle = savetitle(find(~isspace(savetitle)));
+    savetitle = lower(savetitle);
+    saveas(gcf, fullfile(results_path, savetitle),'png');
     
 end
 

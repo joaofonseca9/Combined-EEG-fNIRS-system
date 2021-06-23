@@ -7,6 +7,7 @@ laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 eeglab;
 ft_defaults;
+results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
 
 subrec = ["28" "04"];
 
@@ -272,6 +273,7 @@ nonautocued_ERD_ERS_gamma = mean(nonautocued_ERD_ERS_gamma_allSubjects, 2);
 
 % Topographic distribution of the frequency bands over the head
 % (topoplot).
+
 % Auto Uncued.
 figure;
 subplot(2, 2, 1);
@@ -290,6 +292,11 @@ subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(autouncued_ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
+
+% Save figure.
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'autouncued_erders'),'png');
+
 % Non-Auto Uncued.
 figure;
 subplot(2, 2, 1);
@@ -308,6 +315,11 @@ subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(nonautouncued_ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
+
+% Save figure.
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonautouncued_erders'),'png');
+
 % Auto Cued.
 figure;
 subplot(2, 2, 1);
@@ -326,6 +338,11 @@ subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(autocued_ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
+
+% Save figure.
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'autocued_erders'),'png');
+
 % Non-Auto Cued.
 figure;
 subplot(2, 2, 1);
@@ -344,6 +361,10 @@ subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(nonautocued_ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
+
+% Save figure.
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
