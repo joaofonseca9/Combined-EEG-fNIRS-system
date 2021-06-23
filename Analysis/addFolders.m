@@ -26,10 +26,11 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         
         % add fieldtrip
         addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip');
+        addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip\utilities');
         
         % set paths for the input and output data
-        mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Exp';
-        mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Exp\pre-processed\';
+        mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots';
+        mainpath_out='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Pilots\pre-processed\';
 
     elseif strcmp(laptop, 'laptopCatarina')
         % add EEGlab
