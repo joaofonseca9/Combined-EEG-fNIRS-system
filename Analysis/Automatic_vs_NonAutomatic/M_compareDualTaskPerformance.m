@@ -378,11 +378,11 @@ function [events_autodual, events_nonautodual] =...
 % changes to be made from the lab notes and apply them.
 
     if sub == "64"
-        % Remove the first trial because the subject did not know he had to
-        % memorize the sequence so he did nothing and we gave him some time
-        % to practice after it.
+        % Remove the first trial of auto dual because the subject did not 
+        % know he had to memorize the sequence so he did nothing and we
+        % gave him some time to practice after it.
         events_autodual.trial(1) = [];
-        % Letter counting answer's mistakes.
+        % Letter counting answer's mistakes on auto dual.
         events_autodual.trial(2).stimuli.response = {'2'};
         events_autodual.trial(5).stimuli.response = {'3'};
         events_autodual.trial(12).stimuli.response = {'3'};
