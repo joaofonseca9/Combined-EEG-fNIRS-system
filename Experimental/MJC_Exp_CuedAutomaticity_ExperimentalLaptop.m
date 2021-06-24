@@ -1104,7 +1104,11 @@ end
 function keypresses = convertKeypresses(keypresses)
 % Get the numeric value of the responses to keypressing as well
     for h=1:length(keypresses.value)
-        keyValue=cell2mat(keypresses.value(h));
+        try
+            keyValue=cell2mat(keypresses.value(h));
+        catch
+            keyValue='';
+        end
         if isempty(keyValue)
             continue;
         else
