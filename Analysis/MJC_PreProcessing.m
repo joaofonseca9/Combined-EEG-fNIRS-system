@@ -2,8 +2,8 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
-laptop='laptopMariana';
+laptop='laptopCatarina';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -11,9 +11,9 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='02';
-rec_nirs='02';
-rec_eeg='02';
+sub='64';
+rec_nirs='01';
+rec_eeg='01';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -382,14 +382,14 @@ save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed')
 databrowser_nirs(nirs_preprocessed)
 
 % % Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
-% idx = find(nirs_conc.trialinfo==2, 1, 'first'); % check trials
+% idx = find(nirs_preprocessed.trialinfo==2, 1, 'first'); % check trials
 % cfg          = [];
 % cfg.channel  = 'Rx*';
 % cfg.trials   = idx;
 % cfg.baseline = 'yes';
-% ft_singleplotER(cfg, nirs_conc)
+% ft_singleplotER(cfg, nirs_preprocessed)
 
-%% NIRS: Timelock analysis, baseline correction and spatial representation
+%% NIRS: Baseline correction (preprocessing), timelock analysis and spatial representation
 taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
 h = multiplot_condition(nirs_preprocessed, layout, [1:8],taskname, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-0.5 1]);
 tasktimelock = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_timelock'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_timelock']};
@@ -411,7 +411,7 @@ saveas(h{16},tasktimelock{6},'png'); saveas(h{17},taskspatialO2Hb{6},'png'); sav
 saveas(h{19},tasktimelock{7},'png'); saveas(h{20},taskspatialO2Hb{7},'png'); saveas(h{21},taskspatialHHb{7},'png'); 
 saveas(h{22},tasktimelock{8},'png'); saveas(h{23},taskspatialO2Hb{8},'png'); saveas(h{24},taskspatialHHb{8},'png'); 
 
-%% NIRS: Statistical testing
+%% NIRS: Statistical testing (processing)
 cd(nirspre_path);
 if not(isfolder('statistics'))
    mkdir('statistics')

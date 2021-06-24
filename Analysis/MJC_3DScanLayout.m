@@ -8,7 +8,7 @@ laptop='laptopCatarina';
 [mainpath_in, mainpath_out] = addFolders(laptop);
 ft_defaults;
 
-sub='28';
+sub='02';
 
 model_path = fullfile(mainpath_in,'source',['sub-',sub],'3d');
 obj_file = fullfile(model_path, 'Model', 'Model.obj');
