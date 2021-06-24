@@ -3,18 +3,16 @@ close all;
 
 %% Initialize FieldTrip and EEGLAB
 % laptop='laptopCatarina';
-% laptop='laptopMariana';
-laptop='laptopJoao';
+laptop='laptopMariana';
+% laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='28';
+sub='02';
 rec='02';
-% sub='64';
-% rec='01';
 
 file = getFileNames(mainpath_out, sub, rec);
 
