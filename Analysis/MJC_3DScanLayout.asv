@@ -29,29 +29,29 @@ ft_plot_mesh(head_surface)
 %% Specify the fiducials + optodes
 % note that we call Cz a fiducial (which is not a fiducial) but we will use
 % it in a later stage for coregistration
-if isfile('opto.mat')
-     load(['opto.mat'], 'opto')
+if isfile(opto.mat)
+     % File exists.
 else
-    cfg = [];
-    cfg.channel={};
-    cfg.channel{1} = 'Nz';
-    cfg.channel{2} = 'LPA';
-    cfg.channel{3} = 'RPA';
-    cfg.channel{4}= 'Iz';
-    cfg.channel{5} = 'Cz';
-    tnames = {'Tx1a', 'Tx1b', 'Tx1c', 'Tx1d', 'Tx6a', 'Tx6b', 'Tx6c', 'Tx6d', 'Tx11a', 'Tx11b', 'Tx11c', 'Tx11d', 'Tx2', 'Tx3', 'Tx4', 'Tx5', 'Tx7', 'Tx8', 'Tx9', 'Tx10', 'Tx12', 'Tx13', 'Tx14', 'Tx15'};
-    for i =6:29
-        cfg.channel{i}=sprintf('%s', tnames{i-5}); % change this according to the number of transmitters your layout has
-    end
-    rnames = {'Rx1', 'Rx2', 'Rx3', 'Rx4', 'Rx5', 'Rx6', 'Rx7', 'Rx8', 'Rx9', 'Rx10', 'Rx11', 'Rx12'};
-    for i =30:41
-       cfg.channel{i}=sprintf('%s', rnames{i-29}); % change this according to the number of receivers your layout has
-    end
-    cfg.method = 'headshape';
-    opto = ft_electrodeplacement(cfg, head_surface);
-    save(['opto.mat'], 'opto')
+     % File does not exist.
 end
-
+cfg = [];
+cfg.channel={};
+cfg.channel{1} = 'Nz';
+cfg.channel{2} = 'LPA';
+cfg.channel{3} = 'RPA';
+cfg.channel{4}= 'Iz';
+cfg.channel{5} = 'Cz';
+tnames = {'Tx1a', 'Tx1b', 'Tx1c', 'Tx1d', 'Tx6a', 'Tx6b', 'Tx6c', 'Tx6d', 'Tx11a', 'Tx11b', 'Tx11c', 'Tx11d', 'Tx2', 'Tx3', 'Tx4', 'Tx5', 'Tx7', 'Tx8', 'Tx9', 'Tx10', 'Tx12', 'Tx13', 'Tx14', 'Tx15'};
+for i =6:29
+    cfg.channel{i}=sprintf('%s', tnames{i-5}); % change this according to the number of transmitters your layout has
+end
+rnames = {'Rx1', 'Rx2', 'Rx3', 'Rx4', 'Rx5', 'Rx6', 'Rx7', 'Rx8', 'Rx9', 'Rx10', 'Rx11', 'Rx12'};
+for i =30:41
+    cfg.channel{i}=sprintf('%s', rnames{i-29}); % change this according to the number of receivers your layout has
+end
+cfg.method = 'headshape';
+opto = ft_electrodeplacement(cfg, head_surface);
+save(['opto.mat'], 'opto')
 
 % Notes:
 % Do you want to change the anatomical labels for the axes [Y, n]? --> n
