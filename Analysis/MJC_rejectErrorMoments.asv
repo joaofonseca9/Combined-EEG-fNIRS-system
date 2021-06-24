@@ -1,0 +1,64 @@
+function [EEG_out] = MJC_rejectErrorMoments(EEG_in, sub)
+% For each subject, check if there is the need to remove any particular
+% moment of the recording and remove it if so.
+
+event_samp  = [EEG_in.event.latency];
+
+% Sub-02.
+if sub == '02'
+    
+    % Identify when to remove moment at the end of the automaticity test up
+    % until the beggining of the next task - in this case auto single.
+    % Get the moment to start cutting.
+    endTask_autodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1714')==1));
+    endTask_autodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1715')==1));
+    start_cut1 = max(max(endTask_autodual_cued, endTask_autodual_uncued));
+    % Get the moment to end cutting.
+    startTask_autosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1702')==1));
+    startTask_autosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1703')==1));
+    end_cut1 = min(min(startTask_autosingle_cued, startTask_autosingle_uncued));
+    
+    % Identify when to remove moment at the start of the non-auto dual
+    % task - eliminate first two trials out of 22.
+    % Get the moment to start cutting.
+    endTask_nonautosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1704')==1));
+    endTask_nonautosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1705')==1));
+    start_cut2 = max(max(endTask_nonautosingle_cued, endTask_nonautosingle_uncued));
+    % Get the moment to stop cutting.
+    startTask_nonautodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1708')==1));
+    startTask_nonautodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1709')==1));
+    startTask_nonautodual = sort([startTask_nonautodual_cued, startTask_nonautodual_uncued]);
+    end_cut2 = startTask_nonautodual(3);
+    
+    % Eliminate the moments from the signal.
+    [EEG_out] = eeg_eegrej(EEG_in, [start_cut1+23*EEG_in.srate end_cut1-23*EEG_in.srate; start_cut2+23*EEG_in.srate end_cut2-23*EEG_in.srate]);  
+
+end
+
+fprintf('\n Start Auto Single Cued: ')
+StartBlock_AutomaticSequence_Cued = find(strcmp({EEG_out.event.type}, 's1702')==1)
+disp('\n Start Auto Single Uncued: ')
+Marker_StartBlock_AutomaticSequence_Uncued = find(strcmp({EEG_out.event.type}, 's1702')==1)
+Marker_StartBlock_NonAutomaticSequence_Cued         = 1704;
+Marker_StartBlock_NonAutomaticSequence_Uncued       = 1705;
+
+Marker_StartBlock_AutomaticSequence_Dual_Cued       = 1706;
+Marker_StartBlock_AutomaticSequence_Dual_Uncued     = 1707;
+Marker_StartBlock_NonAutomaticSequence_Dual_Cued    = 1708;
+Marker_StartBlock_NonAutomaticSequence_Dual_Uncued  = 1709;
+
+Marker_EndBlock_AutomaticSequence_Cued              = 1710;
+Marker_EndBlock_AutomaticSequence_Uncued            = 1711;
+Marker_EndBlock_NonAutomaticSequence_Cued           = 1712;
+Marker_EndBlock_NonAutomaticSequence_Uncued         = 1713;
+
+Marker_EndBlock_AutomaticSequence_Dual_Cued         = 1714;
+Marker_EndBlock_AutomaticSequence_Dual_Uncued       = 1715;
+Marker_EndBlock_NonAutomaticSequence_Dual_Cued      = 1716;
+Marker_EndBlock_NonAutomaticSequence_Dual_Uncued    = 1717;
+
+
+
+
+
+end
