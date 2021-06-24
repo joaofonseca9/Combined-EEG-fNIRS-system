@@ -2,8 +2,8 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
-laptop='laptopMariana';
+laptop='laptopCatarina';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -11,17 +11,19 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='02';
-rec='02';
+sub='28';
+rec_nirs='02';
+rec_eeg='04';
 
-file = getFileNames(mainpath_out, sub, rec);
+file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
+file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
 
 %% Select data folder 
 
 sub_path = fullfile(mainpath_in,'source',['sub-',sub]);
 eeg_path = fullfile(sub_path,'eeg');
 nirs_path = fullfile(sub_path,'nirs');
-sub_vhdr = fullfile(['sub-',sub,'_rec-',rec,'_eeg.vhdr']);
+sub_vhdr = fullfile(['sub-',sub,'_rec-',rec_eeg,'_eeg.vhdr']);
 nirspre_path = fullfile(mainpath_out, ['sub-',sub], 'nirs');
 
 % Before changing directory to the subpath, add current directory to access
@@ -29,7 +31,7 @@ nirspre_path = fullfile(mainpath_out, ['sub-',sub], 'nirs');
 addpath(pwd)
 cd(sub_path);
 
-oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec,'_nirs.oxy4']);
+oxyfile = fullfile(nirs_path,['sub-',sub,'_rec-',rec_nirs,'_nirs.oxy4']);
 
 %% Upload files
 correct = input('Load data (Y/N)? If not, its assumed the .set files have been generated \n', 's');
@@ -48,44 +50,26 @@ if data_loaded == 0
     cfg.dataset = oxyfile;
     nirs_raw = ft_preprocessing(cfg);
     nirs_events = ft_read_event(cfg.dataset);
-    if strcmp(sub,'03') && strcmp(rec,'02')
-        nirs_events=ft_filter_event(nirs_events,'minsample',72787);
-    end
-    
-    if strcmp(sub,'02') && strcmp(rec,'02')
-        cd(nirspre_path);
-        save(['sub-',sub,'_rec-',rec,'_nirseeg.mat'], 'nirs_raw');
-        save(['sub-',sub,'_rec-',rec,'_nirseeg_events.mat'], 'nirs_events');
-    else
-        cd(nirspre_path);
-        save(['sub-',sub,'_rec-',rec,'_nirs.mat'], 'nirs_raw');
-        save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events');
-    end
-    
+       
+    cd(nirspre_path);
+    save(['sub-',sub,'_rec-',rec_nirs,'_nirs.mat'], 'nirs_raw');
+    save(['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'], 'nirs_events');
+        
     % EEGLAB load eeg only data
     [EEG,~]         = pop_loadbv(fullfile(sub_path,'eeg'), sub_vhdr);
-    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off','savenew',fullfile(eeg_path,['sub-',sub,'_rec-',rec,'_eeg']));
+    [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG, 1,'setname','eeg_raw','gui','off','savenew',fullfile(eeg_path,['sub-',sub,'_rec-',rec_eeg,'_eeg']));
 
 else % If data has been loaded and the datasets created, load the structs
     cd(nirs_path);
-    if strcmp(sub,'02') && strcmp(rec,'02')
-        load(nirspre_path,['sub-',sub,'_rec-',rec,'_nirseeg.mat']); % Avoids call to ft_preprocessing
-        load(nirspre_path,['sub-',sub,'_rec-',rec,'_nirseeg_events.mat']); % Avoids call to ft_readevents
-    else
-        load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec,'_nirs.mat'])); % Avoids call to ft_preprocessing
-        load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec,'_nirs_events.mat'])); % Avoids call to ft_readevents
-    end
-    [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec,'_eeg.set'],fullfile(sub_path,'eeg'));
+    load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec_nirs,'_nirs.mat'])); % Avoids call to ft_preprocessing
+    load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'])); % Avoids call to ft_readevents
+    [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec_eeg,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
 
 %% Read stimuli results
-if strcmp(sub,'02') && strcmp(rec,'02')
-    nirs_raw = data_raw;
-    nirs_events=eeg_fnirs_events;
-end
-
-results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec]));
+results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec_eeg]));
 [marker_table,eeg_length,nirs_length]=checkMarkers(EEG,nirs_raw, nirs_events);
+
 %% EEG: Load MNI coordinates
 % Load channel coordinates/positions of the standard MNI model of eeglab: 
 % MNI dipfit channel positions
@@ -233,7 +217,7 @@ cd(nirspre_path);
 cfg = [];
 cfg.channel=[channels_opt; channels_short];
 nirs_chan = ft_selectdata(cfg, nirs_raw);
-save(['sub-',sub,'_rec-',rec,'_nirs_chan.mat'], 'nirs_chan');
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_chan.mat'], 'nirs_chan');
 
 % Find the event triggers and event types of the dataset (not necessary)
 cd(nirs_path);
@@ -248,7 +232,7 @@ cd(nirspre_path);
 cfg = [];
 cfg.dataset = oxyfile;
 nirs_events = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
-save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events')
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'], 'nirs_events')
 
 % % Select only 0-3000 seconds(to get rid of NaNs)
 % cfg = [];
@@ -265,7 +249,7 @@ save(['sub-',sub,'_rec-',rec,'_nirs_events.mat'], 'nirs_events')
 cfg = [];
 cfg.resamplefs = 10;
 nirs_down = ft_resampledata(cfg, nirs_chan);
-save(['sub-',sub,'_rec-',rec,'_nirs_down.mat'], 'nirs_down');
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_down.mat'], 'nirs_down');
 
 % % Plot downsampled data
 % cfg                = [];
@@ -283,8 +267,8 @@ clear pre post offset trl sel smp
 
 cd(nirspre_path);
 % Extract the data
-[nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec);
-save(['sub-',sub,'_rec-',rec,'_nirs_epoch.mat'], 'nirs_epoch');
+[nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_down, nirs_events, marker_table, sub, rec_nirs);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_epoch.mat'], 'nirs_epoch');
 
 % % Plot epoched optical density data around the first deviant stimulus
 % idx = find(nirs_epoch.trialinfo==2, 1, 'first'); % check trials
@@ -309,7 +293,7 @@ bad_nirschannels = nirs_down.label(idx);
 disp('The following channels are removed from the data set:');
 disp(bad_nirschannels);
 cd(nirspre_path);
-save(['sub-',sub,'_rec-',rec,'_nirs_sci.mat'], 'nirs_sci');
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_sci.mat'], 'nirs_sci');
 
 databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 
@@ -334,7 +318,7 @@ end
 cfg = [];
 cfg.channel = keepnirschan;
 nirs_reject = ft_selectdata(cfg, nirs_reject);
-save(['sub-',sub,'_rec-',rec,'_nirs_reject.mat'], 'nirs_reject');
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reject.mat'], 'nirs_reject');
 
 % Visualize
 databrowser_nirs(nirs_reject)
@@ -368,7 +352,7 @@ cfg.lpfilter = 'yes';
 cfg.lpfreq = 0.2; % look at frequency plot
 nirs_lpf = ft_preprocessing(cfg, nirs_reject);
 cd(nirspre_path);
-save(['sub-',sub,'_rec-',rec,'_nirs_lpf.mat'],'nirs_lpf'); 
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_lpf.mat'],'nirs_lpf'); 
 
 % Visualize
 databrowser_nirs(nirs_lpf);
@@ -387,7 +371,7 @@ cfg.target = {'O2Hb', 'HHb'};
 cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
 nirs_preprocessed = ft_nirs_transform_ODs(cfg, nirs_lpf);
 cd(nirspre_path);
-save(['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
 
 % Visualize
 databrowser_nirs(nirs_preprocessed)
@@ -403,9 +387,9 @@ databrowser_nirs(nirs_preprocessed)
 %% NIRS: Timelock analysis, baseline correction and spatial representation
 taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
 h = multiplot_condition(nirs_preprocessed, layout, [1:8],taskname, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-0.5 1]);
-tasktimelock = {['sub-',sub,'_rec-',rec,'_autodualcued_timelock'], ['sub-',sub,'_rec-',rec,'_autosinglecued_timelock'], ['sub-',sub,'_rec-',rec,'_nonautodualcued_timelock'], ['sub-',sub,'_rec-',rec,'_nonautosinglecued_timelock'],['sub-',sub,'_rec-',rec,'_autodualuncued_timelock'], ['sub-',sub,'_rec-',rec,'_autosingleuncued_timelock'], ['sub-',sub,'_rec-',rec,'_nonautodualuncued_timelock'], ['sub-',sub,'_rec-',rec,'_nonautosingleuncued_timelock']};
-taskspatialO2Hb = {['sub-',sub,'_rec-',rec,'_autodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_autosinglecued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautosinglecued_spatialO2Hb'],['sub-',sub,'_rec-',rec,'_autodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_autosingleuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautosingleuncued_spatialO2Hb']};
-taskspatialHHb = {['sub-',sub,'_rec-',rec,'_autodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_autosinglecued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_nonautodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_nonautosinglecued_spatialHHb'],['sub-',sub,'_rec-',rec,'_autodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_autosingleuncued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_nonautodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec,'_nonautosingleuncued_spatialHHb']};
+tasktimelock = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_timelock'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_timelock']};
+taskspatialO2Hb = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_spatialO2Hb'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_spatialO2Hb']};
+taskspatialHHb = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_spatialHHb'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_spatialHHb']};
 
 % Save figures
 cd(nirspre_path);
@@ -430,5 +414,5 @@ end
 cd(fullfile(nirspre_path,'statistics'));
 
 for i=1:8 % loop over the 4 conditions
-  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs_preprocessed, 'nirs_preprocessed', layout, i, taskname{i}, sub, rec);
+  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs_preprocessed, 'nirs_preprocessed', layout, i, taskname{i}, sub, rec_nirs);
 end
