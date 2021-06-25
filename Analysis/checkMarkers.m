@@ -29,31 +29,43 @@ marker_table.Properties.VariableNames={'StartMetronome','StopMetronome','StartCu
 eeg_event_samp=[EEG.event.latency];
 nirs_event_samp=[nirs_events.sample];
 
-%Find first and last event (excluding test markers) 1600
-nirs_event_idx=find(strncmp({nirs_events.value},'LSL',3));
-test=find(strcmp({nirs_events.value},'LSL 1600'));
-last_test=test(end);%sample of last test marker
-first_marker=nirs_event_idx(find(nirs_event_idx==last_test)+1);
+    if ~isempty(find(strcmp({nirs_events.value},'LSL 1600'))) && ~isempty(find(strcmp({EEG.event.type},'s1600')))
+        %Find first and last event (excluding test markers) 1600
+        nirs_event_idx=find(strncmp({nirs_events.value},'LSL',3));
+        test=find(strcmp({nirs_events.value},'LSL 1600'));
+        last_test=test(end);%sample of last test marker
+        first_marker=nirs_event_idx(find(nirs_event_idx==last_test)+1);
 
-last_marker=find(strcmp({nirs_events.value},'LSL 1500'));
-nirs_length=(nirs_event_samp(last_marker)-nirs_event_samp(first_marker))/nirs_raw.fsample;
+        last_marker=find(strcmp({nirs_events.value},'LSL 1500'));
+        nirs_length=(nirs_event_samp(last_marker)-nirs_event_samp(first_marker))/nirs_raw.fsample;
 
-eeg_event_idx=find(strncmp({EEG.event.type}, 's',1));
-test=find(strcmp({EEG.event.type},'s1600'));
-last_test=test(end);%sample of last test marker
-first_marker=eeg_event_idx(find(eeg_event_idx==last_test)+1);
+        eeg_event_idx=find(strncmp({EEG.event.type}, 's',1));
+        test=find(strcmp({EEG.event.type},'s1600'));
+        last_test=test(end);%sample of last test marker
+        first_marker=eeg_event_idx(find(eeg_event_idx==last_test)+1);
 
-last_marker=find(strcmp({EEG.event.type},'s1500'));
-eeg_length=(eeg_event_samp(last_marker)-eeg_event_samp(first_marker))/EEG.srate;
+        last_marker=find(strcmp({EEG.event.type},'s1500'));
+        eeg_length=(eeg_event_samp(last_marker)-eeg_event_samp(first_marker))/EEG.srate;
+    else
+        last_marker=find(strcmp({nirs_events.value},'LSL 1500'));
+        first_marker=find(strcmp({nirs_events.type},'event'));
+        first_marker=first_marker(1);
+        nirs_length=(nirs_event_samp(last_marker)-nirs_event_samp(first_marker))/nirs_raw.fsample;
 
-if nirs_length~=eeg_length
-    warning('NIRS and EEG signals seem to have different lengths')
-    fprintf('Time difference is %d \n' ,nirs_length-eeg_length)
-end
- 
-% %Check time in hh:mm:ss
-nirs_length = seconds(nirs_length);  
-nirs_length.Format = 'hh:mm:ss'; 
-eeg_length = seconds(eeg_length);  
-eeg_length.Format = 'hh:mm:ss'; 
+        %eeg
+        last_marker=find(strcmp({EEG.event.type},'s1500'));
+        eeg_event_idx=find(strncmp({EEG.event.type}, 's',1));
+        first_marker=eeg_event_idx(1);
+        eeg_length=(eeg_event_samp(last_marker)-eeg_event_samp(first_marker))/EEG.srate;
+    end
+    if nirs_length~=eeg_length
+        warning('NIRS and EEG signals seem to have different lengths')
+        fprintf('Time difference is %d \n' ,nirs_length-eeg_length)
+    end
+
+    % %Check time in hh:mm:ss
+    nirs_length = seconds(nirs_length);  
+    nirs_length.Format = 'hh:mm:ss'; 
+    eeg_length = seconds(eeg_length);  
+    eeg_length.Format = 'hh:mm:ss'; 
 end

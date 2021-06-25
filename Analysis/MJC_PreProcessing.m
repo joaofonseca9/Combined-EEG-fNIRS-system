@@ -2,18 +2,18 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-laptop='laptopCatarina';
+% laptop='laptopCatarina';
 % laptop='laptopMariana';
-% laptop='laptopJoao';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='64';
-rec_nirs='01';
-rec_eeg='01';
+sub='28';
+rec_nirs='02';
+rec_eeg='04';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -65,6 +65,8 @@ else % If data has been loaded and the datasets created, load the structs
     load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'])); % Avoids call to ft_readevents
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec_eeg,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
+
+
 
 %% Read stimuli results
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec_eeg]));

@@ -1,4 +1,11 @@
 function [data_epoch]=extractTaskData_NIRS(data_raw, data_down, event, marker_table, sub, rec)
+%% Remove events before last test marker
+nirs_event_idx=find(strncmp({event.value},'LSL',3));
+test=find(strcmp({event.value},'LSL 1600'));
+last_test=test(end);%sample of last test marker
+first_marker=nirs_event_idx(find(nirs_event_idx==last_test)+1);
+event = ft_filter_event(event, 'minsample', event(first_marker).sample);
+
 %% Define events + epochs
 %% Starts
 %Cued
