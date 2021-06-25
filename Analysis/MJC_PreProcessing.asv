@@ -2,18 +2,20 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
+laptop='laptopCatarina';
 % laptop='laptopMariana';
-laptop='laptopJoao';
+% laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
+
 sub='28';
 rec_nirs='02';
 rec_eeg='04';
+
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -350,6 +352,16 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
+%% NIRS: Short channel regression
+% Substact the short channel data from the long channels and thus canceling 
+% out some noise.
+cfg = [];
+cfg.method = 'OLS'; %ordinary least square
+cfg.verbose = true;
+cfg.nearest = false;
+nirs_reg = shortchannel_regression(cfg, nirs_reject);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
+
 %% NIRS: Detrend and low-pass filtering
 % Detrend + low-pass filter (low-pass filter data below the frequency of 
 % the heart beat (1 Hz))
@@ -357,7 +369,7 @@ cfg = [];
 cfg.detrend = 'yes';
 cfg.lpfilter = 'yes';
 cfg.lpfreq = 0.2; % look at frequency plot
-nirs_lpf = ft_preprocessing(cfg, nirs_reject);
+nirs_lpf = ft_preprocessing(cfg, nirs_reg);
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_lpf.mat'],'nirs_lpf'); 
 

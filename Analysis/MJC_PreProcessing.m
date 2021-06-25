@@ -2,8 +2,8 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
-laptop='laptopMariana';
+laptop='laptopCatarina';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -12,9 +12,9 @@ ft_defaults;
 [~, ftpath] = ft_version;
 
 
-sub='02';
+sub='28';
 rec_nirs='02';
-rec_eeg='02';
+rec_eeg='04';
 
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
@@ -352,6 +352,16 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
+%% NIRS: Short channel regression
+% Substact the short channel data from the long channels and thus canceling 
+% out some noise.
+cfg = [];
+cfg.method = 'OLS'; %ordinary least square
+cfg.verbose = true;
+cfg.nearest = false;
+nirs_reg = shortchannel_regression(cfg, nirs_reject);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
+
 %% NIRS: Detrend and low-pass filtering
 % Detrend + low-pass filter (low-pass filter data below the frequency of 
 % the heart beat (1 Hz))
@@ -359,7 +369,7 @@ cfg = [];
 cfg.detrend = 'yes';
 cfg.lpfilter = 'yes';
 cfg.lpfreq = 0.2; % look at frequency plot
-nirs_lpf = ft_preprocessing(cfg, nirs_reject);
+nirs_lpf = ft_preprocessing(cfg, nirs_reg);
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_lpf.mat'],'nirs_lpf'); 
 
@@ -392,36 +402,3 @@ databrowser_nirs(nirs_preprocessed)
 % cfg.trials   = idx;
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_preprocessed)
-
-%% NIRS: Baseline correction (preprocessing), timelock analysis and spatial representation
-taskname = {'Auto Dual Task Cued', 'Auto Single Task Cued', 'Non Auto Dual Task Cued', 'Non Auto Single Task Cued', 'Auto Dual Task Uncued', 'Auto Single Task Uncued', 'Non Auto Dual Task Uncued', 'Non Auto Single Task Uncued'};
-h = multiplot_condition(nirs_preprocessed, layout, [1:8],taskname, 'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim', [-0.5 1]);
-tasktimelock = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_timelock'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_timelock'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_timelock']};
-taskspatialO2Hb = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_spatialO2Hb'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_spatialO2Hb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_spatialO2Hb']};
-taskspatialHHb = {['sub-',sub,'_rec-',rec_nirs,'_autodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_autosinglecued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualcued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosinglecued_spatialHHb'],['sub-',sub,'_rec-',rec_nirs,'_autodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_autosingleuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautodualuncued_spatialHHb'], ['sub-',sub,'_rec-',rec_nirs,'_nonautosingleuncued_spatialHHb']};
-
-% Save figures
-cd(nirspre_path);
-if not(isfolder('timelock + spatial'))
-   mkdir('timelock + spatial')
-end
-cd(fullfile(nirspre_path, 'timelock + spatial'));
-saveas(h{1},tasktimelock{1},'png'); saveas(h{2},taskspatialO2Hb{1},'png'); saveas(h{3},taskspatialHHb{1},'png'); 
-saveas(h{4},tasktimelock{2},'png'); saveas(h{5},taskspatialO2Hb{2},'png'); saveas(h{6},taskspatialHHb{2},'png'); 
-saveas(h{7},tasktimelock{3},'png'); saveas(h{8},taskspatialO2Hb{3},'png'); saveas(h{9},taskspatialHHb{3},'png');
-saveas(h{10},tasktimelock{4},'png'); saveas(h{11},taskspatialO2Hb{4},'png'); saveas(h{12},taskspatialHHb{4},'png'); 
-saveas(h{13},tasktimelock{5},'png'); saveas(h{14},taskspatialO2Hb{5},'png'); saveas(h{15},taskspatialHHb{5},'png'); 
-saveas(h{16},tasktimelock{6},'png'); saveas(h{17},taskspatialO2Hb{6},'png'); saveas(h{18},taskspatialHHb{6},'png'); 
-saveas(h{19},tasktimelock{7},'png'); saveas(h{20},taskspatialO2Hb{7},'png'); saveas(h{21},taskspatialHHb{7},'png'); 
-saveas(h{22},tasktimelock{8},'png'); saveas(h{23},taskspatialO2Hb{8},'png'); saveas(h{24},taskspatialHHb{8},'png'); 
-
-%% NIRS: Statistical testing (processing)
-cd(nirspre_path);
-if not(isfolder('statistics'))
-   mkdir('statistics')
-end
-cd(fullfile(nirspre_path,'statistics'));
-
-for i=1:8 % loop over the 4 conditions
-  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs_preprocessed, 'nirs_preprocessed', layout, i, taskname{i}, sub, rec_nirs);
-end
