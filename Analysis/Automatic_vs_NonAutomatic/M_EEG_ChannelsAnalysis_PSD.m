@@ -9,7 +9,8 @@ eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Separate Channels';
 
-subrec = ["28" "04"];
+% subrec = ["28" "04"; "02" "02"];
+subrec = ["02" "02"];
 
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
@@ -292,7 +293,7 @@ function [power, freq] =...
         data_window = trial_data(:, window);
         
         % Channel loop.
-        for channel = 1:size(data_window, 1) 
+        for channel = 1:size(data_window, 1)
             % If window is NOT removed because of badchannel (=NaN)
             if isempty(find(isnan(data_window(channel, :))))
                 % Calculate PSD

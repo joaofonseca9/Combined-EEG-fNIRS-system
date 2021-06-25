@@ -72,7 +72,7 @@ end
 
 %% Read stimuli results
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec_eeg]));
-[marker_table,eeg_length,nirs_length]=checkMarkers(EEG,nirs_raw, nirs_events);
+[marker_table,eeg_length,nirs_length]=checkMarkers(EEG, nirs_raw, nirs_events);
 
 %% EEG: Eliminate error moments
 % Eliminate moments where the experience wasn't running due to an error.

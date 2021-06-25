@@ -47,9 +47,9 @@ else
 end
 
 %% Remove data before the last test marker
-TEST_end = event_samp((strcmp({EEG.event.type}, 's1600'))==1);
-TEST_end= TEST_end(end);
-EEG=eeg_eegrej(EEG, [1 TEST_end+1]);
+% TEST_end = event_samp((strcmp({EEG.event.type}, 's1600'))==1);
+% TEST_end = TEST_end(end);
+% EEG=eeg_eegrej(EEG, [1 TEST_end+1]);
 
 %% CHECKERBOARD_________________________________________________________
 CHECK_start = event_samp((strcmp({EEG.event.type}, 's1555'))==1);

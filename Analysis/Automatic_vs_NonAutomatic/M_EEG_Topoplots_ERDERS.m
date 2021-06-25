@@ -9,8 +9,11 @@ eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
 
-subrec = ["28" "04"];
-
+% subrec = ["28" "04"; "02" "02"];
+%%
+subrec = ["02" "02"];
+f = 0:0.2500:512;
+%%
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
@@ -26,68 +29,16 @@ for subject = 1:size(subrec, 1)
     EEG_AutoCued = EEG_divided.EEG_AutoCue;
     EEG_NonAutoCued = EEG_divided.EEG_NonAutoCue;
     
-    %% Auto Uncued.
-
-    event_samp  = [EEG_AutoUncued.event.latency];
-    startBaseline = find(strcmp({EEG_AutoUncued.event.type}, 'boundary')==1);
-    startBaseline(12) = [];
-    startBaseline(1) = [];
-    startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
-    endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
-
-    % Get the power spectrum density (PSD) averaged over all trials.
-    % For the baseline.
-    [power_base_theta, power_base_alpha, power_base_beta,...
-        power_base_gamma, freq_base_theta, freq_base_alpha,...
-        freq_base_beta, freq_base_gamma] =...
-        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
-        startBaseline, startTask);
-    % For the task.
-    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
-        freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
-        startTask, endTask);
-    
-    % Calculate the ERD/ERS for each of the frequency bands above.
-    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
-    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
-    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
-    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
-
-    % Topographic distribution of the frequency bands over the head
-    % (topoplot).
-    figure;
-    subplot(2, 2, 1);
-    text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 2);
-    text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 3);
-    text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 4);
-    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    
-    % Save the values onto a allSubjects variable.
-    autouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
-    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
-    autouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
-    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
-    
-    %% Non-Auto Uncued.
+     %% Non-Auto Uncued.
 
     event_samp  = [EEG_NonAutoUncued.event.latency];
     startBaseline = find(strcmp({EEG_NonAutoUncued.event.type}, 'boundary')==1);
-    startBaseline(12) = [];
-    startBaseline(1) = [];
+%    startBaseline(12) = [];
+%    startBaseline(1) = [];
     startTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
     endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
+    
+    startBaseline = removeExtraBoundaries(startBaseline, startTask);
     
     % Get the power spectrum density (PSD) averaged over all trials.
     % For the baseline.
@@ -95,7 +46,7 @@ for subject = 1:size(subrec, 1)
         power_base_gamma, freq_base_theta, freq_base_alpha,...
         freq_base_beta, freq_base_gamma] =...
         calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
-        startBaseline, startTask);
+        startBaseline, startTask, f);
     % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
@@ -134,14 +85,74 @@ for subject = 1:size(subrec, 1)
     nonautouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
     nonautouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
-    %% Auto Cued.
+    
+    
+    %% Auto Uncued.
+
+    event_samp  = [EEG_AutoUncued.event.latency];
+    startBaseline = find(strcmp({EEG_AutoUncued.event.type}, 'boundary')==1);
+%    startBaseline(12) = [];
+%    startBaseline(1) = [];
+    startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
+    endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
+    
+    startBaseline = removeExtraBoundaries(startBaseline, startTask);
+
+    % Get the power spectrum density (PSD) averaged over all trials.
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startBaseline, startTask, f);
+    % For the task.
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startTask, endTask);
+    
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
+
+    % Topographic distribution of the frequency bands over the head
+    % (topoplot).
+    figure;
+    subplot(2, 2, 1);
+    text(-0.13, 0.7, 'Theta', 'FontSize', 18);
+    topoplot(ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 2);
+    text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
+    topoplot(ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 3);
+    text(-0.1, 0.7, 'Beta', 'FontSize', 18)
+    topoplot(ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    
+    % Save the values onto a allSubjects variable.
+    autouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    autouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
+    
+   %% Auto Cued.
 
     event_samp  = [EEG_AutoCued.event.latency];
     startBaseline = find(strcmp({EEG_AutoCued.event.type}, 'boundary')==1);
-    startBaseline(12) = [];
-    startBaseline(1) = [];
+%    startBaseline(12) = [];
+%    startBaseline(1) = [];
     startTask = find(strcmp({EEG_AutoCued.event.type}, 's1702')==1);
     endTask = find(strcmp({EEG_AutoCued.event.type}, 's1710')==1);
+    
+    startBaseline = removeExtraBoundaries(startBaseline, startTask);
 
     % Get the power spectrum density (PSD) averaged over all trials.
     % For the baseline.
@@ -192,10 +203,12 @@ for subject = 1:size(subrec, 1)
 
     event_samp  = [EEG_NonAutoCued.event.latency];
     startBaseline = find(strcmp({EEG_NonAutoCued.event.type}, 'boundary')==1);
-    startBaseline(12) = [];
-    startBaseline(1) = [];
+%    startBaseline(12) = [];
+%    startBaseline(1) = [];
     startTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1704')==1);
     endTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1712')==1);
+    
+    startBaseline = removeExtraBoundaries(startBaseline, startTask);
 
     % Get the power spectrum density (PSD) averaged over all trials.  
     % For the baseline.
@@ -371,10 +384,19 @@ disp('These are the topoplots for the average of all subjects.');
 
 %% Functions
 
+function array_boundaries = removeExtraBoundaries(array_boundaries,...
+    array_task)
+    for i=length(array_boundaries):-1:1
+        if ~any(array_boundaries(i)+1==array_task(:))
+            array_boundaries(i) = [];
+        end
+    end
+end
+
 % Loop through the power from the individual trials and average them.
 function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     freq_alpha, freq_beta, freq_gamma] =...
-    calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask)
+    calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask, f)
 
     for trial=1:length(startTask)
     
@@ -384,10 +406,11 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
 
         EEG_trial = pop_select(EEG, 'point', [startTask_times endTask_times]);
         trial_data = EEG_trial.data;
-
+        
+        disp(trial)
         [power_theta_oneTrial, power_alpha_oneTrial, power_beta_oneTrial,...
             power_gamma_oneTrial, freq_theta, freq_alpha, freq_beta,...
-            freq_gamma] = calculatePowerPerTrial(EEG_trial, trial_data);
+            freq_gamma] = calculatePowerPerTrial(EEG_trial, trial_data, f);
             
         power_theta_allTrials(:, trial) = power_theta_oneTrial;
         power_alpha_allTrials(:, trial) = power_alpha_oneTrial;
@@ -409,7 +432,7 @@ end
 % 48 Hz.
 function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     freq_alpha, freq_beta, freq_gamma] =...
-    calculatePowerPerTrial(EEG_trial, trial_data)
+    calculatePowerPerTrial(EEG_trial, trial_data, f)
     
     % Using a sliding Hann window.
     window_id = 1;
@@ -447,6 +470,7 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     end
     
     % Change frequency variable for frequencies of interest.
+    disp(f)
     freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
     freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
     freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
