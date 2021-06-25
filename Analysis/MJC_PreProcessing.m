@@ -3,8 +3,8 @@ close all;
 
 %% Initialize FieldTrip and EEGLAB
 % laptop='laptopCatarina';
-laptop='laptopMariana';
-% laptop='laptopJoao';
+% laptop='laptopMariana';
+laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 eeglab;
@@ -12,9 +12,9 @@ ft_defaults;
 [~, ftpath] = ft_version;
 
 
-sub='02';
-rec_nirs='02';
-rec_eeg='02';
+sub='64';
+rec_nirs='01';
+rec_eeg='01';
 
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
@@ -198,7 +198,7 @@ else
 end
 
 %% EEG: Extract task data
-[EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
+[EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file_eeg, mainpath_out);
 save(file_eeg.EEG_divided ,'EEG_divided');
 [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_divided.EEG_task, 1,'setname','taskData','gui','off');
 
