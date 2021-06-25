@@ -198,7 +198,7 @@ else
 end
 
 %% EEG: Extract task data
-[EEG_divided, file] = extractTaskData_EEG(EEG,marker_table, results, file, mainpath_out);
+[EEG_divided, file_eeg] = extractTaskData_EEG(EEG,marker_table, results, file_eeg, mainpath_out);
 save(file_eeg.EEG_divided ,'EEG_divided');
 [ALLEEG,EEG,~]  = pop_newset(ALLEEG, EEG_divided.EEG_task, 1,'setname','taskData','gui','off');
 
