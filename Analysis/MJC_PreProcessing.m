@@ -12,9 +12,9 @@ ft_defaults;
 [~, ftpath] = ft_version;
 
 
-sub='28';
-rec_nirs='02';
-rec_eeg='04';
+sub='64';
+rec_nirs='01';
+rec_eeg='01';
 
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
@@ -294,6 +294,7 @@ databrowser_nirs(nirs_epoch);
 % Show channels with low SCI
 addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
 cfg = [];
+cfg.keepchannel = 'nan';
 nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_epoch);
 
 % Show names of bad channels
@@ -308,6 +309,7 @@ databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 
 % Reject bad channels and trials visually 
 cfg = [];
+cfg.keepchannel = 'nan';
 cfg.method = 'summary';
 nirs_reject = ft_rejectvisual(cfg, nirs_sci);
 
@@ -409,9 +411,9 @@ cfg = [];
 cfg.target = {'O2Hb', 'HHb'};
 cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
 nirs_preprocessed = ft_nirs_transform_ODs(cfg, nirs_lpf);
-nirs_preprocessed.sampleinfo = nirs_new.sampleinfo;
-nirs_preprocessed.hdr = nirs_new.hdr;
-nirs_preprocessed.time = nirs_new.time;
+nirs_preprocessed.sampleinfo = nirs_reject.sampleinfo;
+nirs_preprocessed.hdr = nirs_reject.hdr;
+nirs_preprocessed.time = nirs_reject.time;
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
 

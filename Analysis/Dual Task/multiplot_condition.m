@@ -1,10 +1,10 @@
-function [h, x_allconditions, y_allconditions]=multiplot_condition(data, layout, conditions, condition_names, varargin)
+function [h]=multiplot_condition(data, layout, conditions, condition_names, varargin)
 % This function is meant to create multiplots with the average for each
 % conidtion plotted in the layout. You can opt to plot all individual
 % trials into the plot ('trials'=true)
 %
 % Use as
-%   [h, x_allconditions, y_allconditions] = multiplot_condition(data, layout, conditions, varargin)
+%   [h] = multiplot_condition(data, layout, conditions, varargin)
 %
 % INPUT:
 %       data         = fnirs data
@@ -23,8 +23,6 @@ function [h, x_allconditions, y_allconditions]=multiplot_condition(data, layout,
 %
 % OUTPUT
 %       h           = figure handle of the created plots 
-%       x_allconditions = values of x for all conditions
-%       y_allconditions = values of y for all conditions
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -72,7 +70,6 @@ for con=1:length(conditions)
     h{f}=figure; f=f+1;
     for c=1:2:length(selchan)
         xval=data_blc.time;
-        x_allconditions(:, :, con) = xval;
         for i=1:length(trl)
             tmpdat=data_blc.trial(trl(i),selchan([c c+1]), :);
             yval=permute(tmpdat, [2 3 1]);
@@ -82,7 +79,6 @@ for con=1:length(conditions)
             end
         end
         yval=data_avg.trial(selchan([c c+1]), :);
-        y_allconditions(:, :, selchan(c), con) = yval;
         hold on;
         ft_plot_vector(xval, yval, 'width', chanWidth(c), 'height', chanHeight(c), 'hpos', chanX(c), 'vpos', chanY(c), 'hlim', [xmin xmax], 'vlim', [ymin ymax], 'color', 'rb','linewidth', 1, 'axis', 'yes');
     end
