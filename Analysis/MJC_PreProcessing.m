@@ -290,7 +290,7 @@ save(['sub-',sub,'_rec-',rec_nirs,'_nirs_epoch.mat'], 'nirs_epoch');
 % Visualize
 databrowser_nirs(nirs_epoch);
 
-%% NIRS: Remove bad channels - Inspect the raw data visually 
+%% NIRS: Remove bad channels - Inspect the raw data visually
 % Show channels with low SCI
 addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
 cfg = [];
@@ -352,15 +352,35 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
+%% NIRS: Short channel regression: Concatenate trials and time data 
+% This step is necessary for the short channel regression to work
+% properly. If not using short channel regression (when
+% plotting only short channel data) then skip this step.
+nirs_all = nirs_reject;
+nirs_all.trial = {cat(2,nirs_reject.trial{:})};
+nirs_all.time = {cat(2,nirs_reject.time{:})};
+
 %% NIRS: Short channel regression
-% Substact the short channel data from the long channels and thus canceling 
-% out some noise.
+% Substact the closely located short channel data from the long channels 
+% and thus canceling out some noise.
 cfg = [];
 cfg.method = 'OLS'; %ordinary least square
 cfg.verbose = true;
 cfg.nearest = false;
-nirs_reg = shortchannel_regression(cfg, nirs_reject);
+nirs_reg = shortchannel_regression(cfg, nirs_all);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
+
+%% NIRS: Short channel regression: Redefine the trial and time data
+% For proper preprocessing, the trial and time data have to be
+% redefined as previously estimated 
+cfg = [];
+cfg.length = length(nirs_reg.time{1})/length(nirs_reg.trialinfo)/nirs_reg.fsample;
+nirs_new = ft_redefinetrial(cfg, nirs_reg);
+nirs_new.trialinfo = nirs_reject.trialinfo;
+nirs_new.sampleinfo = nirs_reg.sampleinfo;
+
+% Visualize
+databrowser_nirs(nirs_new)
 
 %% NIRS: Detrend and low-pass filtering
 % Detrend + low-pass filter (low-pass filter data below the frequency of 
@@ -368,8 +388,8 @@ save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg');
 cfg = [];
 cfg.detrend = 'yes';
 cfg.lpfilter = 'yes';
-cfg.lpfreq = 0.2; % look at frequency plot
-nirs_lpf = ft_preprocessing(cfg, nirs_reg);
+cfg.lpfreq = 0.5; % look at frequency plot
+nirs_lpf = ft_preprocessing(cfg, nirs_new);
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_lpf.mat'],'nirs_lpf'); 
 
@@ -389,6 +409,9 @@ cfg = [];
 cfg.target = {'O2Hb', 'HHb'};
 cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
 nirs_preprocessed = ft_nirs_transform_ODs(cfg, nirs_lpf);
+nirs_preprocessed.sampleinfo = nirs_new.sampleinfo;
+nirs_preprocessed.hdr = nirs_new.hdr;
+nirs_preprocessed.time = nirs_new.time;
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
 
@@ -402,3 +425,4 @@ databrowser_nirs(nirs_preprocessed)
 % cfg.trials   = idx;
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_preprocessed)
+
