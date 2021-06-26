@@ -8,12 +8,10 @@ laptop = 'laptopMariana';
 eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
-
+%%
 % subrec = ["28" "04"; "02" "02"];
-%%
 subrec = ["02" "02"];
-f = 0:0.2500:512;
-%%
+
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
@@ -377,8 +375,49 @@ saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
 
+%%
+
+list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
+    "FC5"; "FC1"; "FC2"; "FC6"; "T7"; "C3"; "Cz"; "C4"; "T8"; "CP5";...
+    "CP1"; "CP2"; "CP6"; "P7"; "P3"; "Pz"; "P4"; "P8"; "POz"; "O1";...
+    "Oz"; "O2"];
+list_present = zeros(30, 1);
+
+if size(power_alpha, 1)~=30
+    new_power_alpha = zeros(30, 1);
+    new_power_alpha(1:size(power_alpha, 1), 1) = power_alpha;
+    channels_present = EEG_AutoCued.chanlocs;
+    for i=1:size(list_channels, 1)
+        for j=1:size(channels_present, 2)
+            if convertCharsToStrings(channels_present(j).labels) == list_channels(i)
+                list_present(i) = 1;
+                break;
+            end
+        end
+    end
+    
+    numMissing=0;
+    
+    for k=1:size(list_present, 1)
+        if list_present(k)==0
+            numMissing = numMissing+1;
+            new_power_alpha(k) = NaN;
+            for x=k+1:size(power_alpha, 1)       
+                new_power_alpha(x)=power_alpha(x-numMissing);
+            end
+        end
+    end
+    
+    new_power_alpha(30:-1:30-numMissing+1, 1) = power_alpha(size(power_alpha,1):-1:size(power_alpha, 1)-numMissing+1);
+   
+end
+
+
+
+
 %% Functions
 
+% Eliminate boundary points which are not followed by a start of task.
 function array_boundaries = removeExtraBoundaries(array_boundaries,...
     array_task)
     for i=length(array_boundaries):-1:1
