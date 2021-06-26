@@ -1,27 +1,29 @@
-%% Analysis of the fNIRS signal (Hemodynamic Responses)
+%% Analysis of the fNIRS signal (Hemodynamic Response and Statistical Analysis)
 clear; clc; close all;
 
 %% Initialize data
+addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis');
+addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis\Dual Task');
 laptop = 'laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
-results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Analysis\Hemodynamic Response';
+results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Analysis\nirs';
 
-subrec = ["28" "02"];
+ft_defaults;
+[~, ftpath] = ft_version;
 
-%% Load data + baseline correction (preprocessing), timelock analysis + spatial representation + statistical testing
+subrec = ["28" "02"; "64" "01"];
+conditions = [3 4 7 8];
+
+%% Load data + processing per subject
 % Go through all subjects
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);
   
-    % Load fNIRS signals
+    % Load fNIRS preprocessed signal
     load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
-        char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat']);
-    load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
-        char(sub), '_rec-', char(rec), '_nirs_epoch.mat']);
-    nirs_preprocessed.trialinfo = nirs_epoch.trialinfo;
-    nirs_preprocessed.sampleinfo = nirs_epoch.sampleinfo;
-    
+        char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat'], 'nirs_preprocessed');
+   
     % Load layout 
     load(fullfile(mainpath_out,['sub-',char(sub)],'3d','layout.mat'), 'layout');
     
@@ -29,40 +31,46 @@ for subject = 1:size(subrec, 1)
     % Uncued
     nirs = keepTrialsInterest(nirs_preprocessed);
     
-    % Get the hemodynamic response of all conditions for the subject
-    taskname = {'Dual Task Cued', 'Single Task Cued', 'Dual Task Uncued', 'Single Task Uncued'};
-    [h, x_allconditions, y_allconditions] =...
-        multiplot_condition(nirs, layout, [3 4 7 8], taskname,...
-        'baseline', [-10 0], 'trials', false, 'topoplot', 'no', 'ylim',...
-        [-0.5 1]);
-    tasktimelock = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_timelock']};
-    taskspatialO2Hb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_spatialO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_spatialO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_spatialO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_spatialO2Hb']};
-    taskspatialHHb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_spatialHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_spatialHHb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_spatialHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_spatialHHb']};
+    %% Baseline correction (preprocessing) + topoplot (spatial representation) per subject
+    % Get the baseline and topoplot of all conditions for the subject
+    taskname = {'Dual Cued', 'Single Cued', 'Dual Uncued', 'Single Uncued'};
+    h = multiplot_condition(nirs, layout, conditions, taskname,...
+        'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim',...
+        [-0.2 0.2]);
+    taskbaseline = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_baseline']};
+    tasktopoplotO2Hb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_topoplotO2Hb']};
+    tasktopoplotHHb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_topoplotHHb']};
     
     % Save figures
-    cd(results_path);
-    if not(isfolder('timelock + spatial'))
-       mkdir('timelock + spatial')
-    end
-    cd(fullfile(results_path, ['sub-',char(sub)], 'timelock + spatial'));
-    saveas(h{1},tasktimelock{1},'png'); saveas(h{2},taskspatialO2Hb{1},'png'); saveas(h{3},taskspatialHHb{1},'png'); 
-    saveas(h{4},tasktimelock{2},'png'); saveas(h{5},taskspatialO2Hb{2},'png'); saveas(h{6},taskspatialHHb{2},'png'); 
-    saveas(h{7},tasktimelock{3},'png'); saveas(h{8},taskspatialO2Hb{3},'png'); saveas(h{9},taskspatialHHb{3},'png');
-    saveas(h{10},tasktimelock{4},'png'); saveas(h{11},taskspatialO2Hb{4},'png'); saveas(h{12},taskspatialHHb{4},'png'); 
+    cd(fullfile(results_path, ['sub-',char(sub)], 'baseline + topoplot'));
+    saveas(h{1},taskbaseline{1},'png'); saveas(h{2},tasktopoplotO2Hb{1},'png'); saveas(h{3},tasktopoplotHHb{1},'png'); 
+    saveas(h{4},taskbaseline{2},'png'); saveas(h{5},tasktopoplotO2Hb{2},'png'); saveas(h{6},tasktopoplotHHb{2},'png'); 
+    saveas(h{7},taskbaseline{3},'png'); saveas(h{8},tasktopoplotO2Hb{3},'png'); saveas(h{9},tasktopoplotHHb{3},'png');
+    saveas(h{10},taskbaseline{4},'png'); saveas(h{11},tasktopoplotO2Hb{4},'png'); saveas(h{12},tasktopoplotHHb{4},'png'); 
 
-    % Statistical testing 
-    cd(results_path);
-    if not(isfolder('statistics'))
-       mkdir('statistics')
-    end
+    %% Statistical testing per subject 
     cd(fullfile(results_path,['sub-',char(sub)],'statistics'));
     for i=1:4 % loop over the 4 conditions
       [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs, 'nirs', layout, i, taskname{i}, char(sub), char(rec));
     end
        
-    % Insert hemodynamic responses in a matrix of all subjects
-    x_allsubjects_allconditions(:, :, :, subject) = x_allconditions; 
-    y_allsubjects_allconditions(:, :, :, :, subject) = y_allconditions; 
+    %% Timelock analysis per subject
+    for con = 1:length(conditions) % 4 conditions
+        cfg = [];
+        cfg.trials = find(nirs.trialinfo(:,1) == conditions(con)); % average the data for given task
+        nirs_TL{con} = ft_timelockanalysis(cfg, nirs);
+    end
+    cd(fullfile(results_path, ['sub-',char(sub)]));
+    save('nirs_TL.mat', 'nirs_TL');
+    
+    %% Baseline correction per subject
+    for con = 1:length(conditions)
+        cfg = [];
+        cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
+        nirs_TLblc{con} = ft_timelockbaseline(cfg, nirs_TL{con});
+    end
+    cd(fullfile(results_path, ['sub-',char(sub)]));
+    save('nirs_TLblc.mat','nirs_TLblc');
     
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
@@ -71,63 +79,84 @@ for subject = 1:size(subrec, 1)
 end
 
 %% Average the hemodynamic responses over all subjects
-x_avgsubjects_allconditions = mean(x_allsubjects_allconditions, 4); 
-y_avgsubjects_allconditions = mean(y_allsubjects_allconditions, 5);
+% Store baseline and timelockanalysis data of all subjects into one cell array
+clear nirs_all 
+for subject = 1:size(subrec, 1)
+    sub = subrec(subject, 1);
+    rec = subrec(subject, 2);
+    for con = 1:length(conditions)
+        cd()
+        load(fullfile(results_path, ['sub-',char(sub)], 'nirs_TLblc'));
+        nirs_all{con}{subject} = nirs_TLblc{con};
+    end 
+end
+ 
+% Average over all subjects (for each condition seperately)
+for con = 1:length(conditions)
+    cfg = [];
+    subsavg{con} = ft_timelockgrandaverage(cfg, nirs_all{con}{:});
+end
+cd(results_path);
+save('subsavg.mat', 'subsavg');
 
-% For each condition
-for condition=1:size(x_avgsubjects_allconditions, 3)
-    f=1;
-
-    % Select the channels that are both in data and layout
-    data_labels=nirs.label;
-    for i=1:length(data_labels)
-        tmp = strsplit(data_labels{i});
-        data_labels{i}=tmp{1};
+%% Plot averaged data
+% Separate O2Hb and HHb channels
+for con = 1:length(conditions)
+    cfg = [];
+    cfg.channel = '* [O2Hb]';
+    nirs_TLO2Hb{con} = ft_selectdata(cfg, subsavg{con});
+    
+    % rename labels such that they have the same name as HHb channels
+    for i = 1:length(nirs_TLO2Hb{con}.label)
+        tmp = strsplit(nirs_TLO2Hb{con}.label{i});
+        nirs_TLO2Hb{con}.label{i}=tmp{1};
     end
-    % Take the subselection of channels that is contained
-    [selchan, sellay] = match_str(data_labels, layout.label);
-
-    % Plot the data for the selected condition
-    chanWidth=layout.width(sellay)*2;
-    chanHeight=layout.height(sellay)*2;
-    chanX=layout.pos(sellay,1);
-    chanY=layout.pos(sellay,2);
-    chanLabel  = layout.label(sellay);
-    xlim=[-20 20];
-    ylim=[-0.5 1];
-    xmin=xlim(1);
-    xmax=xlim(2);
-    ymin=ylim(1);
-    ymax=ylim(2);
-    h{f}=figure; f=f+1;
-    for c=1:2:length(selchan)
-        xval=x_avgsubjects_allconditions(:, :, condition);
-        yval=y_avgsubjects_allconditions(:, :, selchan(c), condition);
-        hold on;
-        ft_plot_vector(xval, yval, 'width', chanWidth(c), 'height', chanHeight(c), 'hpos', chanX(c), 'vpos', chanY(c), 'hlim', [xmin xmax], 'vlim', [ymin ymax], 'color', 'rb','linewidth', 1, 'axis', 'yes');
+    cd(results_path);
+    save('nirs_TLO2Hb.mat','nirs_TLO2Hb');
+    
+    % the same for HHb channels
+    cfg = [];
+    cfg.channel = '* [HHb]';
+    nirs_TLHHb{con} = ft_preprocessing(cfg, subsavg{con});
+    for i=1:length(nirs_TLHHb{con}.label)
+        tmp = strsplit(nirs_TLHHb{con}.label{i});
+        nirs_TLHHb{con}.label{i}=tmp{1};
     end
-    title(char(taskname{condition}))
-    
-    % Plot the layout, labels and outline
-    ft_plot_layout(layout, 'box', 'no', 'label', 'yes', 'outline', 'yes',...
-        'point', 'no', 'mask', 'yes', 'fontsize', 8, 'labelyoffset',...
-        1.4*median(layout.height/2), 'labelalignh', 'center', 'chanindx',...
-        find(~ismember(layout.label, {'COMNT', 'SCALE'})), 'interpreter',...
-        'none');
+    cd(results_path);
+    save('nirs_TLHHb.mat','nirs_TLHHb');
+end
 
-    % Plot scale
-    l = find(strcmp(layout.label, 'SCALE'));
-    x = layout.pos(l,1);
-    y = layout.pos(l,2);
-    plotScales([xmin xmax], [ymin ymax], x, y, chanWidth(1), chanHeight(1));
-    
-    % Save figure
-    set(gcf, 'Position', get(0, 'Screensize'));
-    savetitle = strcat(char(taskname{condition}), '_avgsubs_hemodynamicresponse');
-    savetitle = savetitle(find(~isspace(savetitle)));
-    savetitle = lower(savetitle);
-    saveas(gcf, fullfile(results_path, savetitle),'png');
-    
+% Plot both (O2Hb and HHB) on the layout
+cfg = [];
+cfg.showlabels = 'yes';
+cfg.layout = layout;
+cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
+cfg.linecolor = 'rbrbmcmc'; % O2Hb is showed in red (cued) and magenta (uncued), HHb in blue (cued) and cyan (uncued)
+cfg.linestyle = {'--', '--', '-', '-', ':', ':', '-.', '-.'}; 
+cfg.comment = 'dual cued is dashed line, single cued is solid line, dual uncued is dotted line and single uncued is a dashed dot line';
+figure;
+ft_multiplotER(cfg, nirs_TLO2Hb{1}, nirs_TLHHb{1}, nirs_TLO2Hb{2}, nirs_TLHHb{2}, nirs_TLO2Hb{3}, nirs_TLHHb{3}, nirs_TLO2Hb{4}, nirs_TLHHb{4});
+cd(results_path);
+saveas(gcf, '_avg_timelock.png');
+
+% Plot for each task separately
+for con = 1:length(conditions)
+    cfg = [];
+    cfg.showlabels = 'yes';
+    cfg.layout = layout;
+    cfg.showoutline = 'yes';
+    cfg.interactive = 'yes'; % this allows to select a subplot and interact with it
+    cfg.linecolor = 'rb'; % O2Hb is showed in red, HHb in blue
+    figure; 
+    title(taskname{con}); 
+    ft_multiplotER(cfg, nirs_TLO2Hb{con}, nirs_TLHHb{con})
+    saveas(gcf, [char(taskname{con}) '_avg_timelock.png']);
+end
+
+%% Average statistical testing
+cd(fullfile(results_path));
+for i = 1:4 % loop over the 4 conditions
+  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(subsavg{i}, 'subsavg', layout, i, taskname{i});
 end
 
 disp('This was the end of individual subjects.');
