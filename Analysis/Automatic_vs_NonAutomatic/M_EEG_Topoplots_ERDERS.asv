@@ -8,9 +8,14 @@ laptop = 'laptopMariana';
 eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
-%%
-% subrec = ["28" "04"; "02" "02"];
-subrec = ["02" "02"];
+
+subrec = ["28" "04"; "02" "02"];
+
+% List of the 30 channels present in the cap.
+list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
+    "FC5"; "FC1"; "FC2"; "FC6"; "T7"; "C3"; "Cz"; "C4"; "T8"; "CP5";...
+    "CP1"; "CP2"; "CP6"; "P7"; "P3"; "Pz"; "P4"; "P8"; "POz"; "O1";...
+    "Oz"; "O2"];
 
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
@@ -27,12 +32,71 @@ for subject = 1:size(subrec, 1)
     EEG_AutoCued = EEG_divided.EEG_AutoCue;
     EEG_NonAutoCued = EEG_divided.EEG_NonAutoCue;
     
+    %% Auto Uncued.
+
+    event_samp  = [EEG_AutoUncued.event.latency];
+    startBaseline = find(strcmp({EEG_AutoUncued.event.type}, 'boundary')==1);
+    startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
+    endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
+    
+    % Remove any extra boundaries.
+    startBaseline = removeExtraBoundaries(startBaseline, startTask);
+
+    % Get the power spectrum density (PSD) averaged over all trials.
+    % For the baseline.
+    [power_base_theta, power_base_alpha, power_base_beta,...
+        power_base_gamma, freq_base_theta, freq_base_alpha,...
+        freq_base_beta, freq_base_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startBaseline, startTask);
+    % For the task.
+    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+        freq_alpha, freq_beta, freq_gamma] =...
+        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
+        startTask, endTask);
+    
+    % Calculate the ERD/ERS for each of the frequency bands above.
+    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
+    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
+    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
+    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
+
+    % Topographic distribution of the frequency bands over the head
+    % (topoplot).
+    figure;
+    subplot(2, 2, 1);
+    text(-0.13, 0.7, 'Theta', 'FontSize', 18);
+    topoplot(ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 2);
+    text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
+    topoplot(ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 3);
+    text(-0.1, 0.7, 'Beta', 'FontSize', 18)
+    topoplot(ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    subplot(2, 2, 4);
+    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
+    topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+    colorbar;
+    
+    % Compensate for removed channels.
+    ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_AutoUncued, list_channels);
+    ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_AutoUncued, list_channels);
+    ERD_ERS_beta = compensateRemovedChannels(ERD_ERS_beta, EEG_AutoUncued, list_channels);
+    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_AutoUncued, list_channels);
+    
+    % Save the values onto a allSubjects variable.
+    autouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
+    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
+    autouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
+    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
+    
      %% Non-Auto Uncued.
 
     event_samp  = [EEG_NonAutoUncued.event.latency];
     startBaseline = find(strcmp({EEG_NonAutoUncued.event.type}, 'boundary')==1);
-%    startBaseline(12) = [];
-%    startBaseline(1) = [];
     startTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
     endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
     
@@ -76,6 +140,12 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    % Compensate for removed channels.
+    ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_NonAutoUncued, list_channels);
+    ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_NonAutoUncued, list_channels);
+    ERD_ERS_beta = compensateRemovedChannels(ERD_ERS_beta, EEG_NonAutoUncued, list_channels);
+    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_NonAutoUncued, list_channels);
     
     % Save the values onto a allSubjects variable.
     nonautouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
@@ -132,66 +202,17 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    % Compensate for removed channels.
+    ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_AutoCued, list_channels);
+    ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_AutoCued, list_channels);
+    ERD_ERS_beta = compensateRemovedChannels(ERD_ERS_beta, EEG_AutoCued, list_channels);
+    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_AutoCued, list_channels);
+    
     % Save the values onto a allSubjects variable.
     autocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
     autocued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
     autocued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
     autocued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
-    
-    %% Auto Uncued.
-
-    event_samp  = [EEG_AutoUncued.event.latency];
-    startBaseline = find(strcmp({EEG_AutoUncued.event.type}, 'boundary')==1);
-    startTask = find(strcmp({EEG_AutoUncued.event.type}, 's1703')==1);
-    endTask = find(strcmp({EEG_AutoUncued.event.type}, 's1711')==1);
-    
-    % Remove any extra boundaries.
-    startBaseline = removeExtraBoundaries(startBaseline, startTask);
-
-    % Get the power spectrum density (PSD) averaged over all trials.
-    % For the baseline.
-    [power_base_theta, power_base_alpha, power_base_beta,...
-        power_base_gamma, freq_base_theta, freq_base_alpha,...
-        freq_base_beta, freq_base_gamma] =...
-        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
-        startBaseline, startTask);
-    % For the task.
-    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
-        freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrials(EEG_AutoUncued, event_samp,...
-        startTask, endTask);
-    
-    % Calculate the ERD/ERS for each of the frequency bands above.
-    ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
-    ERD_ERS_alpha = (power_alpha - power_base_alpha)./power_base_alpha; 
-    ERD_ERS_beta = (power_beta - power_base_beta)./power_base_beta; 
-    ERD_ERS_gamma = (power_gamma - power_base_gamma)./power_base_gamma; 
-
-    % Topographic distribution of the frequency bands over the head
-    % (topoplot).
-    figure;
-    subplot(2, 2, 1);
-    text(-0.13, 0.7, 'Theta', 'FontSize', 18);
-    topoplot(ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 2);
-    text(-0.13, 0.7, 'Alpha', 'FontSize', 18)
-    topoplot(ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 3);
-    text(-0.1, 0.7, 'Beta', 'FontSize', 18)
-    topoplot(ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    subplot(2, 2, 4);
-    text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
-    topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
-    colorbar;
-    
-    % Save the values onto a allSubjects variable.
-    autouncued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
-    autouncued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
-    autouncued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
-    autouncued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
     %% Non-Auto Cued.
 
@@ -242,6 +263,12 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    % Compensate for removed channels.
+    ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_NonAutoCued, list_channels);
+    ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_NonAutoCued, list_channels);
+    ERD_ERS_beta = compensateRemovedChannels(ERD_ERS_beta, EEG_NonAutoCued, list_channels);
+    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_NonAutoCued);
+    
     % Save the values onto a allSubjects variable.
     nonautocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
     nonautocued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
@@ -257,25 +284,25 @@ end
 
 % Get the power spectrum density (PSD) averaged over all subjects.
 % Auto Uncued.
-autouncued_ERD_ERS_theta = mean(autouncued_ERD_ERS_theta_allSubjects, 2);
-autouncued_ERD_ERS_alpha = mean(autouncued_ERD_ERS_alpha_allSubjects, 2);
-autouncued_ERD_ERS_beta = mean(autouncued_ERD_ERS_beta_allSubjects, 2);
-autouncued_ERD_ERS_gamma = mean(autouncued_ERD_ERS_gamma_allSubjects, 2);
+autouncued_ERD_ERS_theta = mean(autouncued_ERD_ERS_theta_allSubjects, 2, 'omitnan');
+autouncued_ERD_ERS_alpha = mean(autouncued_ERD_ERS_alpha_allSubjects, 2, 'omitnan');
+autouncued_ERD_ERS_beta = mean(autouncued_ERD_ERS_beta_allSubjects, 2, 'omitnan');
+autouncued_ERD_ERS_gamma = mean(autouncued_ERD_ERS_gamma_allSubjects, 2, 'omitnan');
 % Non-Auto Uncued.
-nonautouncued_ERD_ERS_theta = mean(nonautouncued_ERD_ERS_theta_allSubjects, 2);
-nonautouncued_ERD_ERS_alpha = mean(nonautouncued_ERD_ERS_alpha_allSubjects, 2);
-nonautouncued_ERD_ERS_beta = mean(nonautouncued_ERD_ERS_beta_allSubjects, 2);
-nonautouncued_ERD_ERS_gamma = mean(nonautouncued_ERD_ERS_gamma_allSubjects, 2);
+nonautouncued_ERD_ERS_theta = mean(nonautouncued_ERD_ERS_theta_allSubjects, 2, 'omitnan');
+nonautouncued_ERD_ERS_alpha = mean(nonautouncued_ERD_ERS_alpha_allSubjects, 2, 'omitnan');
+nonautouncued_ERD_ERS_beta = mean(nonautouncued_ERD_ERS_beta_allSubjects, 2, 'omitnan');
+nonautouncued_ERD_ERS_gamma = mean(nonautouncued_ERD_ERS_gamma_allSubjects, 2, 'omitnan');
 % Auto Cued.
-autocued_ERD_ERS_theta = mean(autocued_ERD_ERS_theta_allSubjects, 2);
-autocued_ERD_ERS_alpha = mean(autocued_ERD_ERS_alpha_allSubjects, 2);
-autocued_ERD_ERS_beta = mean(autocued_ERD_ERS_beta_allSubjects, 2);
-autocued_ERD_ERS_gamma = mean(autocued_ERD_ERS_gamma_allSubjects, 2);
+autocued_ERD_ERS_theta = mean(autocued_ERD_ERS_theta_allSubjects, 2, 'omitnan');
+autocued_ERD_ERS_alpha = mean(autocued_ERD_ERS_alpha_allSubjects, 2, 'omitnan');
+autocued_ERD_ERS_beta = mean(autocued_ERD_ERS_beta_allSubjects, 2, 'omitnan');
+autocued_ERD_ERS_gamma = mean(autocued_ERD_ERS_gamma_allSubjects, 2, 'omitnan');
 % Non-Auto Cued.
-nonautocued_ERD_ERS_theta = mean(nonautocued_ERD_ERS_theta_allSubjects, 2);
-nonautocued_ERD_ERS_alpha = mean(nonautocued_ERD_ERS_alpha_allSubjects, 2);
-nonautocued_ERD_ERS_beta = mean(nonautocued_ERD_ERS_beta_allSubjects, 2);
-nonautocued_ERD_ERS_gamma = mean(nonautocued_ERD_ERS_gamma_allSubjects, 2);
+nonautocued_ERD_ERS_theta = mean(nonautocued_ERD_ERS_theta_allSubjects, 2, 'omitnan');
+nonautocued_ERD_ERS_alpha = mean(nonautocued_ERD_ERS_alpha_allSubjects, 2, 'omitnan');
+nonautocued_ERD_ERS_beta = mean(nonautocued_ERD_ERS_beta_allSubjects, 2, 'omitnan');
+nonautocued_ERD_ERS_gamma = mean(nonautocued_ERD_ERS_gamma_allSubjects, 2, 'omitnan');
 
 % Topographic distribution of the frequency bands over the head
 % (topoplot).
@@ -375,47 +402,6 @@ saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
 
-%%
-
-list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
-    "FC5"; "FC1"; "FC2"; "FC6"; "T7"; "C3"; "Cz"; "C4"; "T8"; "CP5";...
-    "CP1"; "CP2"; "CP6"; "P7"; "P3"; "Pz"; "P4"; "P8"; "POz"; "O1";...
-    "Oz"; "O2"];
-list_present = zeros(30, 1);
-
-if size(power_alpha, 1)~=30
-    new_power_alpha = zeros(30, 1);
-    new_power_alpha(1:size(power_alpha, 1), 1) = power_alpha;
-    channels_present = EEG_AutoCued.chanlocs;
-    for i=1:size(list_channels, 1)
-        for j=1:size(channels_present, 2)
-            if convertCharsToStrings(channels_present(j).labels) == list_channels(i)
-                list_present(i) = 1;
-                break;
-            end
-        end
-    end
-    
-    numMissing=0;
-    
-    for k=1:size(list_present, 1)
-        disp(k)
-        if list_present(k)==0
-            numMissing = numMissing+1;
-            new_power_alpha(k) = NaN;
-            for x=k+1:size(power_alpha, 1)       
-                new_power_alpha(x)=power_alpha(x-numMissing);
-            end
-        end
-    end
-    
-    new_power_alpha()
-   
-end
-
-
-
-
 %% Functions
 
 % Eliminate boundary points which are not followed by a start of task.
@@ -505,5 +491,51 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     power_alpha = mean(power_alpha_allTrials, 2);
     power_beta = mean(power_beta_allTrials, 2);
     power_gamma = mean(power_gamma_allTrials, 2);
+
+end
+
+% Add NaN in the lines where channels were removed during pre-processing.
+function power_array_out = compensateRemovedChannels(power_array_in, EEG, list_channels)
+
+% Array to see which channels are missing.
+list_present = zeros(30, 1);
+
+% If there are less than 30 channels.
+if size(power_array_in, 1)~=30
+    
+    % Initialize new power array.
+    power_array_out = zeros(30, 1);
+    power_array_out(1:size(power_array_in, 1), 1) = power_array_in;
+    % Get the channels present in the signal.
+    channels_present = EEG.chanlocs;
+    % Go through the lists of channels supposed to be present and channels
+    % actually present and mark them as 1 if present and as 0 if not
+    % present.
+    for i=1:size(list_channels, 1)
+        for j=1:size(channels_present, 2)
+            if convertCharsToStrings(channels_present(j).labels) == list_channels(i)
+                list_present(i) = 1;
+                break;
+            end
+        end
+    end
+    
+    numMissing=0;
+    % For the non-present channels, put NaN value in them and update the
+    % rest of the values.
+    for k=1:size(list_present, 1)
+        if list_present(k)==0
+            numMissing = numMissing+1;
+            power_array_out(k) = NaN;
+            for x=k+1:size(power_array_in, 1)       
+                power_array_out(x)=power_array_in(x-numMissing);
+            end
+        end
+    end
+    power_array_out(30:-1:30-numMissing+1, 1) =...
+        power_array_in(size(power_array_in,1):-1:size(power_array_in, 1)-numMissing+1);
+else
+    power_array_out = power_array_in;
+end
 
 end
