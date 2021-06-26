@@ -291,12 +291,9 @@ save(['sub-',sub,'_rec-',rec_nirs,'_nirs_epoch.mat'], 'nirs_epoch');
 databrowser_nirs(nirs_epoch);
 
 %% NIRS: Remove bad channels - Inspect the raw data visually
-% Replaces data of bad channels with nans
-
 % Show channels with low SCI
 addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
 cfg = [];
-%cfg.keepchannel = 'nan'; 
 nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_epoch);
 
 % Show names of bad channels
@@ -311,7 +308,6 @@ databrowser_nirs(nirs_epoch, 'bad_chan', bad_nirschannels);
 
 % Reject bad channels and trials visually 
 cfg = [];
-%cfg.keepchannel = 'nan';
 cfg.method = 'summary';
 nirs_reject = ft_rejectvisual(cfg, nirs_sci);
 
