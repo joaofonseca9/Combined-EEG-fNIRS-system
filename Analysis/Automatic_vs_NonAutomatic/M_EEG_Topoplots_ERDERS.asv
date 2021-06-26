@@ -389,10 +389,6 @@ function array_boundaries = removeExtraBoundaries(array_boundaries,...
 end
 
 % Loop through the power from the individual trials and average them.
-% From the trial data, calculate the power over each frequency band for all
-% electrodes.
-% Theta - 4 to 8 Hz; Alpha - 8 to 13 Hz; Beta - 13 to 32 Hz; Gamma - 32 to
-% 48 Hz.
 function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     freq_alpha, freq_beta, freq_gamma] =...
     calculateAveragePowerAllTrials(EEG, event_samp, startTask, endTask)
