@@ -267,7 +267,7 @@ for subject = 1:size(subrec, 1)
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_NonAutoCued, list_channels);
     ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_NonAutoCued, list_channels);
     ERD_ERS_beta = compensateRemovedChannels(ERD_ERS_beta, EEG_NonAutoCued, list_channels);
-    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_NonAutoCued);
+    ERD_ERS_gamma = compensateRemovedChannels(ERD_ERS_gamma, EEG_NonAutoCued, list_channels);
     
     % Save the values onto a allSubjects variable.
     nonautocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
@@ -401,6 +401,30 @@ saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
+disp('Press any key to move on to the statistical analysis.');
+pause;
+close all;
+
+%% Statistical analysis
+
+% Theta band.
+auto_theta = [autocued_ERD_ERS_theta autocued_ERD_ERS_theta];
+groups = {'Auto Uncued'; 'Auto Cued'};
+% [p, tbl, stats] = anova1(auto_F7, groups, 'on');
+% 
+% % Non-Auto Uncued vs Cued for F7.
+% nonauto_F7 = [nonautouncued_power_F7 nonautocued_power_F7];
+% groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+% [p, tbl, stats] = anova1(nonauto_F7, groups, 'on');
+% 
+% % All.
+% F7 = [autouncued_power_F7 autocued_power_F7 nonautouncued_power_F7 nonautocued_power_F7];
+% groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+% [p, tbl, stats] = anova1(F7, groups, 'off');
+% multcompare(stats);
+% 
+% disp('F7');
+% pause;
 
 %% Functions
 

@@ -401,6 +401,91 @@ saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
+disp('Press any key to move on to the statistical analysis.');
+pause;
+close all;
+
+%% Statistical analysis
+
+% Auto Uncued vs Cued for Theta Band.
+auto_theta = [autouncued_ERD_ERS_theta autocued_ERD_ERS_theta];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_theta, groups, 'on');
+
+% Non-Auto Uncued vs Cued for Theta Band.
+nonauto_theta = [nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_theta];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_theta, groups, 'on');
+
+% All for Theta Band.
+theta = [autouncued_ERD_ERS_theta autocued_ERD_ERS_theta...
+    nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_theta];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(theta, groups, 'off');
+multcompare(stats);
+
+disp('Theta');
+pause;
+
+% Auto Uncued vs Cued for Alpha Band.
+auto_alpha = [autouncued_ERD_ERS_alpha autocued_ERD_ERS_alpha];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_alpha, groups, 'on');
+
+% Non-Auto Uncued vs Cued for Alpha Band.
+nonauto_alpha = [nonautouncued_ERD_ERS_alpha nonautocued_ERD_ERS_alpha];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_alpha, groups, 'on');
+
+% All for Alpha Band.
+alpha = [autouncued_ERD_ERS_alpha autocued_ERD_ERS_alpha...
+    nonautouncued_ERD_ERS_alpha nonautocued_ERD_ERS_alpha];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(alpha, groups, 'off');
+multcompare(stats);
+
+disp('Alpha');
+pause;
+
+% Auto Uncued vs Cued for Beta Band.
+auto_beta = [autouncued_ERD_ERS_beta autocued_ERD_ERS_beta];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_beta, groups, 'on');
+
+% Non-Auto Uncued vs Cued for Beta Band.
+nonauto_beta = [nonautouncued_ERD_ERS_beta nonautocued_ERD_ERS_beta];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_beta, groups, 'on');
+
+% All for Beta Band.
+beta = [autouncued_ERD_ERS_beta autocued_ERD_ERS_beta...
+    nonautouncued_ERD_ERS_beta nonautocued_ERD_ERS_beta];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(beta, groups, 'off');
+multcompare(stats);
+
+disp('Beta');
+pause;
+
+% Auto Uncued vs Cued for Gamma Band.
+auto_gamma = [autouncued_ERD_ERS_gamma autocued_ERD_ERS_gamma];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_gamma, groups, 'on');
+
+% Non-Auto Uncued vs Cued for Gamma Band.
+nonauto_gamma = [nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_gamma];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_gamma, groups, 'on');
+
+% All for Gamma Band.
+gamma = [autouncued_ERD_ERS_gamma autocued_ERD_ERS_gamma...
+    nonautouncued_ERD_ERS_gamma nonautocued_ERD_ERS_gamma];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(gamma, groups, 'off');
+multcompare(stats);
+
+disp('Gamma');
+pause;
 
 %% Functions
 

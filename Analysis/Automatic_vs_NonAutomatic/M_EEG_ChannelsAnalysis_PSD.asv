@@ -271,8 +271,103 @@ saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
+disp('Press any key to move on to the statistical analysis.');
+pause;
+close all;
+
+%% Statistical analysis
+
+% Auto Uncued vs Cued for F7.
+auto_F7 = [autouncued_power_F7 autocued_power_F7];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_F7, groups, 'on');
+
+% Non-Auto Uncued vs Cued for F7.
+nonauto_F7 = [nonautouncued_power_F7 nonautocued_power_F7];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_F7, groups, 'on');
+
+% All.
+F7 = [autouncued_power_F7 autocued_power_F7 nonautouncued_power_F7 nonautocued_power_F7];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(F7, groups, 'off');
+multcompare(stats);
+
+disp('F7');
+pause;
+
+% Auto Uncued vs Cued for F8.
+auto_F8 = [autouncued_power_F8 autocued_power_F8];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_F8, groups, 'on');
+
+% Non-Auto Uncued vs Cued for F8.
+nonauto_F8 = [nonautouncued_power_F8 nonautocued_power_F8];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_F8, groups, 'on');
+
+% All.
+F8 = [autouncued_power_F8 autocued_power_F8 nonautouncued_power_F8 nonautocued_power_F8];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(F8, groups, 'off');
+multcompare(stats);
+
+disp('F8');
+pause;
+
+% Auto Uncued vs Cued for AFFz.
+auto_AFFz = [autouncued_power_AFFz autocued_power_AFFz];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_AFFz, groups, 'on');
+
+% Non-Auto Uncued vs Cued for AFFz.
+nonauto_AFFz = [nonautouncued_power_AFFz nonautocued_power_AFFz];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_AFFz, groups, 'on');
+
+% All.
+AFFz = [autouncued_power_AFFz autocued_power_AFFz nonautouncued_power_AFFz nonautocued_power_AFFz];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(AFFz, groups, 'off');
+multcompare(stats);
+
+disp('AFFz');
+pause;
+
+% Auto Uncued vs Cued for FC1.
+auto_FC1 = [autouncued_power_FC1 autocued_power_FC1];
+groups = {'Auto Uncued'; 'Auto Cued'};
+[p, tbl, stats] = anova1(auto_FC1, groups, 'on');
+
+% Non-Auto Uncued vs Cued for FC1.
+nonauto_FC1 = [nonautouncued_power_FC1 nonautocued_power_FC1];
+groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(nonauto_FC1, groups, 'on');
+
+% All.
+FC1 = [autouncued_power_FC1 autocued_power_FC1 nonautouncued_power_FC1 nonautocued_power_FC1];
+groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
+[p, tbl, stats] = anova1(FC1, groups, 'off');
+multcompare(stats);
+disp('FC1');
+pause;
+
+%%
+
+a = mean(autouncued_power_allSubjects, 1, 'omitnan');
+
+b = mean(autocued_power_allSubjects, 1, 'omitnan');
+
+a_F7 = a(1, F7_loc, :);
+b_F7 = b(1, F7_loc, :);
 
 %% Functions
+
+function th = getThresholdOfTrial(power)
+
+    th = mean(power, 1) + 3*std(power);
+
+end
 
 % Loop through the power from the individual trials and average them.
 function [power, freq] = calculateAveragePowerAllTrials(EEG, event_samp,...
