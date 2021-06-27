@@ -8,7 +8,7 @@ addpath (fullfile(pwd,'..')) %add the path with analysis scripts
 laptop = 'laptopJoao';
 [mainpath_in, ~, eeglab_path] = addFolders(laptop);
 
-mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Validation Data\Combined';
+mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Combined-EEG-fNIRS-system\Analysis\Validation';
 if ~isfolder(fullfile(mainpath_out,'Fig_CHECK_erp'))
     mkdir(fullfile(mainpath_out,'Fig_CHECK_erp'));
 end
@@ -23,12 +23,12 @@ subject_eeg_only=[{'03','04','10','11','12',}];
 chans       = {'Fp1';'Fpz';'Fp2';'F7';'F3';'AFFz';'F4';'F8';'FC5';'FC1';'FC2';'FC6';'T7';'C3';'Cz';'C4';'T8';'CP5';'CP1';'CP2';'CP6';'P7';'P3';'Pz';'P4';'P8';'POz';'O1';'Oz';'O2'};
 time        = -0.1 : 1/1024 : 0.4;
 
-fig_erp     = fullfile([mainpath_outfig,'ALL_VEP.jpg']);
-fig_topo    = fullfile([mainpath_outfig,'ALL_VEPtopo.jpg']);
+fig_erp     = fullfile(mainpath_outfig,'ALL_VEP.jpg');
+fig_topo    = fullfile(mainpath_outfig,'ALL_VEPtopo.jpg');
 
 %% CHECK - ERP
 
-for iSub = 1:size(subject,1)
+for iSub = 1:length(subject)
     %% Load and collect subject data
     
     % load data
@@ -202,6 +202,7 @@ clear grid_comb grid_eeg_only nrpix_sig nrix_total
 
 % plot topoplot with significant regions
 PermTopoplot (permN1, permP1, eeg_onlyN1, combN1, eeg_onlyP1, combP1, chanlocs, xmesh, ymesh, 15, 'raw');
+saveas(gcf, 'Fig_CHECK_erp/Topoplots_raw_data.jpg');
 
 %% permutation testing: standardized data
 
@@ -240,6 +241,7 @@ clear grid_comb grid_eeg_only nrpix_sig nrix_total
 % plot topoplot with significant regions
 PermTopoplot (permN1std, permP1std, eeg_onlyN1std, combN1std, eeg_onlyP1std, combP1std, chanlocs, xmesh, ymesh, 16, 'std');
 
+saveas(gcf, 'Fig_CHECK_erp/Topoplots_standard_data.jpg');
 % %% permutation testing: normalized data
 % 
 % % eeg_only-N1 VS comb-N1
