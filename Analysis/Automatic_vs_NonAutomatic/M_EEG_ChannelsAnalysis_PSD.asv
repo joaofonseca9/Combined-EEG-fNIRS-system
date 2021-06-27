@@ -246,7 +246,6 @@ xline(13); hold on;
 xline(32); hold off;
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
-set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F7_PowervsFreq'),'png');
 
 % F8.
@@ -266,7 +265,6 @@ xline(13); hold on;
 xline(32); hold off;
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
-set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F8_PowervsFreq'),'png');
 
 % FC1.
@@ -286,7 +284,6 @@ xline(13); hold on;
 xline(32); hold off;
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
-set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
 
 % FC2.
@@ -306,48 +303,7 @@ xline(13); hold on;
 xline(32); hold off;
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'FC2_PowervsFreq'),'png');
-
-% Cz.
-autouncued_power_Cz = autouncued_power(:, Cz_loc);
-autocued_power_Cz = autocued_power(:, Cz_loc);
-nonautouncued_power_Cz = nonautouncued_power(:, Cz_loc);
-nonautocued_power_Cz = nonautocued_power(:, Cz_loc);
-
-figure; title('Cz');
-plot(freq, autouncued_power_Cz); hold on;
-plot(freq, autocued_power_Cz); hold on;
-plot(freq, nonautouncued_power_Cz); hold on;
-plot(freq, nonautocued_power_Cz); hold on;
-xline(4); hold on;
-xline(8); hold on;
-xline(13); hold on;
-xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
-
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'Cz_PowervsFreq'),'png');
-    
-% C3.
-autouncued_power_C3 = autouncued_power(:, C3_loc);
-autocued_power_C3 = autocued_power(:, C3_loc);
-nonautouncued_power_C3 = nonautouncued_power(:, C3_loc);
-nonautocued_power_C3 = nonautocued_power(:, C3_loc);
-
-figure; title('C3');
-plot(freq, autouncued_power_C3); hold on;
-plot(freq, autocued_power_C3); hold on;
-plot(freq, nonautouncued_power_C3); hold on;
-plot(freq, nonautocued_power_C3); hold on;
-xline(4); hold on;
-xline(8); hold on;
-xline(13); hold on;
-xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
-
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'C3_PowervsFreq'),'png');
+saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
