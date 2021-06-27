@@ -407,82 +407,166 @@ close all;
 
 %% Statistical analysis
 
-% Auto Uncued vs Cued for Theta Band.
+%% Theta Band.
+
+% Auto Uncued vs Cued.
 auto_theta = [autouncued_ERD_ERS_theta autocued_ERD_ERS_theta];
 groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_theta, groups, 'on');
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_theta = adtest(autouncued_ERD_ERS_theta);
+h_autocued_theta = adtest(autocued_ERD_ERS_theta);
+% If normally distributed - ANOVA test.
+if h_autouncued_theta==0 && h_autocued_theta==0
+    [p, tbl, stats] = anova1(auto_theta, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(auto_theta, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
-% Non-Auto Uncued vs Cued for Theta Band.
+% Non-Auto Uncued vs Cued.
 nonauto_theta = [nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_theta];
 groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_theta, groups, 'on');
-
-% All for Theta Band.
-theta = [autouncued_ERD_ERS_theta autocued_ERD_ERS_theta...
-    nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_theta];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(theta, groups, 'off');
-multcompare(stats);
+% Test the hypothesis that the data is normaly distributed.
+h_nonautouncued_theta = adtest(nonautouncued_ERD_ERS_theta);
+h_nonautocued_theta = adtest(nonautocued_ERD_ERS_theta);
+% If normally distributed - ANOVA test.
+if h_nonautouncued_theta==0 && h_nonautocued_theta==0
+    [p, tbl, stats] = anova1(nonauto_theta, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(nonauto_theta, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
 disp('Theta');
 pause;
 
-% Auto Uncued vs Cued for Alpha Band.
+%% Alpha Band.
+
+% Auto Uncued vs Cued.
 auto_alpha = [autouncued_ERD_ERS_alpha autocued_ERD_ERS_alpha];
 groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_alpha, groups, 'on');
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_alpha = adtest(autouncued_ERD_ERS_alpha);
+h_autocued_alpha = adtest(autocued_ERD_ERS_alpha);
+% If normally distributed - ANOVA test.
+if h_autouncued_alpha==0 && h_autocued_alpha==0
+    [p, tbl, stats] = anova1(auto_alpha, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(auto_alpha, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
-% Non-Auto Uncued vs Cued for Alpha Band.
+% Non-Auto Uncued vs Cued.
 nonauto_alpha = [nonautouncued_ERD_ERS_alpha nonautocued_ERD_ERS_alpha];
 groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_alpha, groups, 'on');
-
-% All for Alpha Band.
-alpha = [autouncued_ERD_ERS_alpha autocued_ERD_ERS_alpha...
-    nonautouncued_ERD_ERS_alpha nonautocued_ERD_ERS_alpha];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(alpha, groups, 'off');
-multcompare(stats);
+% Test the hypothesis that the data is normaly distributed.
+h_nonautouncued_alpha = adtest(nonautouncued_ERD_ERS_alpha);
+h_nonautocued_alpha = adtest(nonautocued_ERD_ERS_alpha);
+% If normally distributed - ANOVA test.
+if h_nonautouncued_alpha==0 && h_nonautocued_alpha==0
+    [p, tbl, stats] = anova1(nonauto_alpha, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(nonauto_alpha, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
 disp('Alpha');
 pause;
 
-% Auto Uncued vs Cued for Beta Band.
+%% Beta Band.
+
+% Auto Uncued vs Cued.
 auto_beta = [autouncued_ERD_ERS_beta autocued_ERD_ERS_beta];
 groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_beta, groups, 'on');
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_beta = adtest(autouncued_ERD_ERS_beta);
+h_autocued_beta = adtest(autocued_ERD_ERS_beta);
+% If normally distributed - ANOVA test.
+if h_autouncued_beta==0 && h_autocued_beta==0
+    [p, tbl, stats] = anova1(auto_beta, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(auto_beta, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
-% Non-Auto Uncued vs Cued for Beta Band.
+% Non-Auto Uncued vs Cued.
 nonauto_beta = [nonautouncued_ERD_ERS_beta nonautocued_ERD_ERS_beta];
 groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_beta, groups, 'on');
-
-% All for Beta Band.
-beta = [autouncued_ERD_ERS_beta autocued_ERD_ERS_beta...
-    nonautouncued_ERD_ERS_beta nonautocued_ERD_ERS_beta];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(beta, groups, 'off');
-multcompare(stats);
+% Test the hypothesis that the data is normaly distributed.
+h_nonautouncued_beta = adtest(nonautouncued_ERD_ERS_beta);
+h_nonautocued_beta = adtest(nonautocued_ERD_ERS_beta);
+% If normally distributed - ANOVA test.
+if h_nonautouncued_beta==0 && h_nonautocued_beta==0
+    [p, tbl, stats] = anova1(nonauto_beta, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(nonauto_beta, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
 disp('Beta');
 pause;
 
-% Auto Uncued vs Cued for Gamma Band.
+%% Gamma Band.
+
+% Auto Uncued vs Cued.
 auto_gamma = [autouncued_ERD_ERS_gamma autocued_ERD_ERS_gamma];
 groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_gamma, groups, 'on');
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_gamma = adtest(autouncued_ERD_ERS_gamma);
+h_autocued_gamma = adtest(autocued_ERD_ERS_gamma);
+% If normally distributed - ANOVA test.
+if h_autouncued_gamma==0 && h_autocued_gamma==0
+    [p, tbl, stats] = anova1(auto_gamma, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(auto_gamma, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
-% Non-Auto Uncued vs Cued for Gamma Band.
-nonauto_gamma = [nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_gamma];
+% Non-Auto Uncued vs Cued.
+nonauto_gamma = [nonautouncued_ERD_ERS_gamma nonautocued_ERD_ERS_gamma];
 groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_gamma, groups, 'on');
-
-% All for Gamma Band.
-gamma = [autouncued_ERD_ERS_gamma autocued_ERD_ERS_gamma...
-    nonautouncued_ERD_ERS_gamma nonautocued_ERD_ERS_gamma];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(gamma, groups, 'off');
-multcompare(stats);
+% Test the hypothesis that the data is normaly distributed.
+h_nonautouncued_gamma = adtest(nonautouncued_ERD_ERS_gamma);
+h_nonautocued_gamma = adtest(nonautocued_ERD_ERS_gamma);
+% If normally distributed - ANOVA test.
+if h_nonautouncued_gamma==0 && h_nonautocued_gamma==0
+    [p, tbl, stats] = anova1(nonauto_gamma, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(nonauto_gamma, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
 disp('Gamma');
 pause;
