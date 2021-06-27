@@ -355,81 +355,47 @@ disp('Press any key to move on to the statistical analysis.');
 pause;
 close all;
 
-%% Statistical analysis
+%% Statistical analysis.
 
-% Auto Uncued vs Cued for F7.
+%% F7.
+
+% Auto Uncued vs Cued.
 auto_F7 = [autouncued_power_F7 autocued_power_F7];
 groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_F7, groups, 'on');
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_F7 = adtest(autouncued_power_F7);
+h_autocued_F7 = adtest(autocued_power_F7);
+% If normally distributed - ANOVA test.
+if h_autouncued_F7==0 && h_autocued_F7==0
+    [p, tbl, stats] = anova1(auto_F7, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(auto_F7, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
-% Non-Auto Uncued vs Cued for F7.
+% Non-Auto Uncued vs Non-Cued.
 nonauto_F7 = [nonautouncued_power_F7 nonautocued_power_F7];
-groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_F7, groups, 'on');
-
-% All.
-F7 = [autouncued_power_F7 autocued_power_F7 nonautouncued_power_F7 nonautocued_power_F7];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(F7, groups, 'off');
-multcompare(stats);
+groups = {'Auto Uncued'; 'Auto Cued'};
+% Test the hypothesis that the data is normaly distributed.
+h_autouncued_F7 = adtest(nonautouncued_power_F7);
+h_nonautocued_F7 = adtest(nonautocued_power_F7);
+% If normally distributed - ANOVA test.
+if h_nonautouncued_F7==0 && h_nonautocued_F7==0
+    [p, tbl, stats] = anova1(nonauto_F7, groups, 'on');
+    figure;
+    multcompare(stats);
+% If not normally distributed - Friedman's test. 
+else
+    [p, tbl, stats] = friedman(nonauto_F7, 2, 'on');
+    figure;
+    multcompare(stats);
+end
 
 disp('F7');
-pause;
-
-% Auto Uncued vs Cued for F8.
-auto_F8 = [autouncued_power_F8 autocued_power_F8];
-groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_F8, groups, 'on');
-
-% Non-Auto Uncued vs Cued for F8.
-nonauto_F8 = [nonautouncued_power_F8 nonautocued_power_F8];
-groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_F8, groups, 'on');
-
-% All.
-F8 = [autouncued_power_F8 autocued_power_F8 nonautouncued_power_F8 nonautocued_power_F8];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(F8, groups, 'off');
-multcompare(stats);
-
-disp('F8');
-pause;
-
-% Auto Uncued vs Cued for AFFz.
-auto_AFFz = [autouncued_power_AFFz autocued_power_AFFz];
-groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_AFFz, groups, 'on');
-
-% Non-Auto Uncued vs Cued for AFFz.
-nonauto_AFFz = [nonautouncued_power_AFFz nonautocued_power_AFFz];
-groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_AFFz, groups, 'on');
-
-% All.
-AFFz = [autouncued_power_AFFz autocued_power_AFFz nonautouncued_power_AFFz nonautocued_power_AFFz];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(AFFz, groups, 'off');
-multcompare(stats);
-
-disp('AFFz');
-pause;
-
-% Auto Uncued vs Cued for FC1.
-auto_FC1 = [autouncued_power_FC1 autocued_power_FC1];
-groups = {'Auto Uncued'; 'Auto Cued'};
-[p, tbl, stats] = anova1(auto_FC1, groups, 'on');
-
-% Non-Auto Uncued vs Cued for FC1.
-nonauto_FC1 = [nonautouncued_power_FC1 nonautocued_power_FC1];
-groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(nonauto_FC1, groups, 'on');
-
-% All.
-FC1 = [autouncued_power_FC1 autocued_power_FC1 nonautouncued_power_FC1 nonautocued_power_FC1];
-groups = {'Auto Uncued'; 'Auto Cued'; 'Non-Auto Uncued'; 'Non-Auto Cued'};
-[p, tbl, stats] = anova1(FC1, groups, 'off');
-multcompare(stats);
-disp('FC1');
 pause;
 
 %%
