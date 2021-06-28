@@ -11,11 +11,9 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-
-sub='64';
-rec_nirs='01';
-rec_eeg='01';
-
+sub='02';
+rec_nirs='02';
+rec_eeg='02';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -241,6 +239,9 @@ cd(nirspre_path);
 cfg = [];
 cfg.dataset = oxyfile;
 nirs_events = ft_read_event(cfg.dataset, 'chanindx', -1, 'type', 'event'); % filter out ADC channels (chanindx=-1) and other kind of events ('type'=event)
+if strcmp(sub,'02')
+    nirs_events(1302:1305)=[];
+end
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'], 'nirs_events')
 
 % % Select only 0-3000 seconds(to get rid of NaNs)
@@ -380,6 +381,65 @@ cfg.length = length(nirs_reg.time{1})/length(nirs_reg.trialinfo)/nirs_reg.fsampl
 nirs_new = ft_redefinetrial(cfg, nirs_reg);
 nirs_new.trialinfo = nirs_reject.trialinfo;
 nirs_new.sampleinfo = nirs_reg.sampleinfo;
+nirs_new.time = nirs_reject.time;
+
+if strcmp(sub,'02')
+    nirs_new.trial{1,80}=zeros(44,292);
+end
+
+% Get times in trials right
+for i = 1:length(nirs_new.trial)-1
+    if    length(nirs_new.trial{1,i})~=length(nirs_reject.trial{1,i})    
+        
+    for j = 1:abs(length(nirs_new.trial{1,i})-length(nirs_reject.trial{1,i}))
+        while length(nirs_new.trial{1,i})~=length(nirs_reject.trial{1,i})
+            if length(nirs_new.trial{1,i})-length(nirs_reject.trial{1,i}) > 0
+                s = nirs_new.trial{1,i+1}(:,i);
+                nirs_new.trial{1,i+1}=[nirs_new.trial{1,i+1} s];
+                nirs_new.trial{1,i+1}(:,i) = nirs_new.trial{1,i}(:,abs(length(nirs_new.trial{1,i})-length(nirs_reject.trial{1,i}))+1-j);
+                nirs_new.trial{1,i}(:,abs(length(nirs_new.trial{1,i})-length(nirs_reject.trial{1,i}))+1-j) = [];
+            else
+                if length(nirs_new.trial{1,i+1}) >=length(nirs_new.trial)
+                           
+                s = nirs_new.trial{1,i+1}(:,i);
+                nirs_new.trial{1,i}=[nirs_new.trial{1,i} s];
+                nirs_new.trial{1,i+1}(:,1) = [];
+                else
+                s = nirs_new.trial{1,i+2}(:,i);
+                nirs_new.trial{1,i+1}=[nirs_new.trial{1,i+1} s];
+                nirs_new.trial{1,i+2}(:,1) = [];
+                
+                s = nirs_new.trial{1,i+1}(:,i);
+                nirs_new.trial{1,i}=[nirs_new.trial{1,i} s];
+                nirs_new.trial{1,i+1}(:,1) = [];
+                end
+            end
+        end
+    end
+    end
+end
+
+% d1=abs(length(nirs_reg.trial{1,1})-length(nirs_new.trial{1,80}));
+% d2=abs(length(nirs_reject.trial{1,80})-length(nirs_new.trial{1,80}));
+% for i = length(nirs_new.trial{1,80}):length(nirs_reject.trial{1,80})
+%     for j = d1:d1+d2
+%         nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
+%     end
+% end
+
+if strcmp(sub,'02')
+    for i = 1:293
+    nirs_new.trial{1,80}(:,1)=[];
+    i=i+1;
+    end
+    d1=abs(length(nirs_reg.trial{1,1})-293);
+    d2=abs(length(nirs_reject.trial{1,80})-size(nirs_new.trial{1,80},2));
+    for i = size(nirs_new.trial{1,80},2):length(nirs_reject.trial{1,80})
+        for j = d1:d1+d2
+            nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
+        end
+    end
+end
 
 % Visualize
 databrowser_nirs(nirs_new)
@@ -413,7 +473,8 @@ cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all?
 nirs_preprocessed = ft_nirs_transform_ODs(cfg, nirs_lpf);
 nirs_preprocessed.sampleinfo = nirs_reject.sampleinfo;
 nirs_preprocessed.hdr = nirs_reject.hdr;
-nirs_preprocessed.time = nirs_reject.time;
+%nirs_preprocessed.time = nirs_reject.time;
+
 cd(nirspre_path);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
 
