@@ -54,7 +54,7 @@ for subject = 1:size(subrec, 1)
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrialsEpoched(EEG_AutoUncued, event_samp,...
-        startTask, endTask, keypresses);
+        startTask, endTask);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -100,7 +100,6 @@ for subject = 1:size(subrec, 1)
     startBaseline = find(strcmp({EEG_NonAutoUncued.event.type}, 'boundary')==1);
     startTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1705')==1);
     endTask = find(strcmp({EEG_NonAutoUncued.event.type}, 's1713')==1);
-    keypresses = find(strcmp({EEG_NonAutoUncued.event.type}, 's1777')==1);
     
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
     
@@ -109,13 +108,13 @@ for subject = 1:size(subrec, 1)
     [power_base_theta, power_base_alpha, power_base_beta,...
         power_base_gamma, freq_base_theta, freq_base_alpha,...
         freq_base_beta, freq_base_gamma] =...
-        calculateAveragePowerAllTrialsBaseline(EEG_NonAutoUncued,...
-        event_samp, startBaseline, startTask);
+        calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
+        startBaseline, startTask);
     % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrialsEpoched(EEG_NonAutoUncued,
-        event_samp, startTask, endTask, keypresses);
+        calculateAveragePowerAllTrials(EEG_NonAutoUncued, event_samp,...
+        startTask, endTask);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -161,7 +160,6 @@ for subject = 1:size(subrec, 1)
     startBaseline = find(strcmp({EEG_AutoCued.event.type}, 'boundary')==1);
     startTask = find(strcmp({EEG_AutoCued.event.type}, 's1702')==1);
     endTask = find(strcmp({EEG_AutoCued.event.type}, 's1710')==1);
-    keypresses = find(strcmp({EEG_AutoCued.event.type}, 's1777')==1);
     
     % Remove any extra boundaries.
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
@@ -171,13 +169,13 @@ for subject = 1:size(subrec, 1)
     [power_base_theta, power_base_alpha, power_base_beta,...
         power_base_gamma, freq_base_theta, freq_base_alpha,...
         freq_base_beta, freq_base_gamma] =...
-        calculateAveragePowerAllTrialsBaseline(EEG_AutoCued, event_samp,...
+        calculateAveragePowerAllTrials(EEG_AutoCued, event_samp,...
         startBaseline, startTask);
     % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrialsEpoched(EEG_AutoCued, event_samp,...
-        startTask, endTask, keypresses);
+        calculateAveragePowerAllTrials(EEG_AutoCued, event_samp,...
+        startTask, endTask);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -223,7 +221,6 @@ for subject = 1:size(subrec, 1)
     startBaseline = find(strcmp({EEG_NonAutoCued.event.type}, 'boundary')==1);
     startTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1704')==1);
     endTask = find(strcmp({EEG_NonAutoCued.event.type}, 's1712')==1);
-    keypresses = find(strcmp({EEG_NonAutoCued.event.type}, 's1777')==1);
     
     % Remove any extra boundaries.
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
@@ -233,13 +230,13 @@ for subject = 1:size(subrec, 1)
     [power_base_theta, power_base_alpha, power_base_beta,...
         power_base_gamma, freq_base_theta, freq_base_alpha,...
         freq_base_beta, freq_base_gamma] =...
-        calculateAveragePowerAllTrialsBaseline(EEG_NonAutoCued,...
-        event_samp, startBaseline, startTask);
+        calculateAveragePowerAllTrials(EEG_NonAutoCued, event_samp,...
+        startBaseline, startTask);
     % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrialsEpoched(EEG_NonAutoCued,...
-        event_samp, startTask, endTask, keypresses);
+        calculateAveragePowerAllTrials(EEG_NonAutoCued, event_samp,...
+        startTask, endTask);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -675,17 +672,10 @@ end
 % 48 Hz.
 function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     freq_alpha, freq_beta, freq_gamma] =...
-    calculateAveragePowerAllTrialsEpoched(EEG, event_samp,...
+    calculateAveragePowerAllTrialsBaselineEpoched(EEG, event_samp,...
     startTask, endTask, keypresses)
 
     for trial=1:length(startTask)
-        
-        if trial==1
-            size_power_theta_allEpochs = 1;
-            size_power_alpha_allEpochs = 1;
-            size_power_beta_allEpochs = 1;
-            size_power_gamma_allEpochs = 1;
-        end
     
         % Get the beggining and the end of the trial.
         title = char(strcat('Trial_', string(trial)));
@@ -693,16 +683,15 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         endTask_times = event_samp(endTask(trial));
         
         % Get the keypresses within that trial.
-        keypresses_trial = keypresses(keypresses > startTask(trial)...
-            & keypresses > endTask(trial));
+        keypresses_trial = keypresses(keypresses > startTask_times...
+            & keypresses > endTask_times);
         keypresses_times = event_samp(keypresses_trial);
 
         % Epoch the data into the different keypresses.
         for epoch = 1:length(keypresses_times)
-            
              EEG_epoch = pop_select(EEG, 'point',...
-                 [keypresses_times(epoch)-floor(0.8*EEG.srate)...
-                 keypresses_times(epoch)+floor(0.8*EEG.srate)]);
+                 [keypresses_times(epoch)-floor(0.8*EEG_AutoCued.srate)...
+                 keypresses_times(epoch)+floor(0.8*EEG_AutoCued.srate)]);
              epoch_data = EEG_epoch.data;    
         
             % Using a sliding Hann window.
@@ -742,7 +731,7 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
                 % Increase indices and window (increase sliding window with
                 % 0.5*fs).
                 window_id = window_id + 1;
-                window = window+0.5*EEG_epoch.srate;
+                window = window+0.5*EEG_trial.srate;
             end
         
             % Change frequency variable for frequencies of interest.
@@ -756,29 +745,19 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
             power_alpha_oneEpoch = mean(mean(pow_alpha,3,'omitnan'));
             power_beta_oneEpoch = mean(mean(pow_beta,3,'omitnan'));
             power_gamma_oneEpoch = mean(mean(pow_gamma,3,'omitnan'));
-            
-            % Add to all epochs array.        
-            power_theta_allEpochs(:, size_power_theta_allEpochs) =...
-                power_theta_oneEpoch;
-            power_alpha_allEpochs(:, size_power_alpha_allEpochs) =...
-                power_alpha_oneEpoch;
-            power_beta_allEpochs(:, size_power_beta_allEpochs) =...
-                power_beta_oneEpoch;
-            power_gamma_allEpochs(:, size_power_gamma_allEpochs) =...
-                power_gamma_oneEpoch;
-            
-            size_power_theta_allEpochs = size(power_theta_allEpochs, 2)+1;
-            size_power_alpha_allEpochs = size(power_theta_allEpochs, 2)+1;
-            size_power_beta_allEpochs = size(power_theta_allEpochs, 2)+1;
-            size_power_gamma_allEpochs = size(power_theta_allEpochs, 2)+1;
+
+            power_theta_allEpochs(:, trial) = power_theta_oneTrial;
+            power_alpha_allEpochs(:, trial) = power_alpha_oneTrial;
+            power_beta_allEpochs(:, trial) = power_beta_oneTrial;
+            power_gamma_allEpochs(:, trial) = power_gamma_oneTrial;
     
-        end
+    end
     
-        % Take the average of every epoch.
-        power_theta = mean(power_theta_allEpochs, 2);
-        power_alpha = mean(power_alpha_allEpochs, 2);
-        power_beta = mean(power_beta_allEpochs, 2);
-        power_gamma = mean(power_gamma_allEpochs, 2);
+    % Take the average of every trials.
+    power_theta = mean(power_theta_allTrials, 2);
+    power_alpha = mean(power_alpha_allTrials, 2);
+    power_beta = mean(power_beta_allTrials, 2);
+    power_gamma = mean(power_gamma_allTrials, 2);
 
     end
 end
