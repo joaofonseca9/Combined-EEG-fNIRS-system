@@ -1,6 +1,6 @@
 clear all; close all; clc;
 %% Settings
-
+addpath(fullfile(pwd,'..'))
 % add path to correct folders and open eeglab
 laptop = 'laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
@@ -10,7 +10,7 @@ subject=[{'64','28'}];
 
 chans       = {'Fp1';'Fpz';'Fp2';'F7';'F3';'AFFz';'F4';'F8';'FC5';'FC1';'FC2';'FC6';'T7';'C3';'Cz';'C4';'T8';'CP5';'CP1';'CP2';'CP6';'P7';'P3';'Pz';'P4';'P8';'POz';'O1';'Oz';'O2'};
 time        = -0.1 : 1/1024 : 0.4;
-for iSub = 2:length(subject)
+for iSub = 1:length(subject)
     sub = char(subject(iSub));
     switch sub
         case '28'
@@ -187,13 +187,13 @@ file.allsubresults=fullfile([mainpath_out,'sub-',sub,'\ResultsMatrix\sub-',sub,'
 save(file.allsubresults_ERP,'allERP');
 save(file.allsubresults,'allGFP');
 %% Plot mean per channel over subjects + mean and std of GFPt
-GFP1 = mean(allGFP,1) + 2*std(allGFP,[],1);
-GFP2 = mean(allGFP,1) - 2*std(allGFP,[],1);
+GFP1 = mean(allGFP,1,'omitnan') + 2*std(allGFP,[],1,'omitnan');
+GFP2 = mean(allGFP,1,'omitnan') - 2*std(allGFP,[],1,'omitnan');
 figure;
 
 subplot(1,2,1); plot(time,mean(allERP,3,'omitnan'),'b');
 subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFP1,fliplr(GFP2)],'b','LineStyle','none');
-set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP,1),'b','LineWidth',1.5); 
+set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP,1,'omitnan'),'b','LineWidth',1.5); 
 
 
 subplot(1,2,1); set(gca,'FontSize',11); box on;
@@ -211,7 +211,7 @@ saveas(gcf, 'mean per channel over subjects + mean and std of GFPt.jpg');
 %% find main VEP components 
 % find the main VEP components in the average GFPt 
 % average GFPt and VEP over subjects
-avgGFP = mean(allGFP,1);
+avgGFP = mean(allGFP,1,'omitnan');
 
 avgERP = mean(allERP,3, 'omitnan');
 
@@ -256,24 +256,24 @@ NOnrm.topo = avgERPnrm(:,N0.loc);    P150nrm.topo = avgERPnrm(:,P150.loc);
 
 load('chanlocs.mat')
 
-% use topoplot to obtain grid (pixels) per subject 
-for iSub = 1:size(subject,1)
-    figure(100); title('EEG'); [~,grid(:,:,iSub),~,xmesh,ymesh] = topoplot(allERP(:,N0.loc,iSub), chanlocs);
-    close Figure 100
-end
- clear grid
-for iSub = 1:size(subject,1)
-    figure(100); title('EEG'); [~,grid(:,:,iSub),~,~,~] = topoplot(allERP(:,P150.loc,iSub), chanlocs);
-    close Figure 100
-end
+% % use topoplot to obtain grid (pixels) per subject 
+% for iSub = 1:size(subject,1)
+%     figure(100); title('EEG'); [~,grid(:,:,iSub),~,xmesh,ymesh] = topoplot(allERP(:,N0.loc,iSub), chanlocs);
+%     close Figure 100
+% end
+%  clear grid
+% for iSub = 1:size(subject,1)
+%     figure(100); title('EEG'); [~,grid(:,:,iSub),~,~,~] = topoplot(allERP(:,P150.loc,iSub), chanlocs);
+%     close Figure 100
+% end
 clear grid
 PermTopoplot(N0, P150, chanlocs, 100, 'raw');
 
-saveas(gcf, 'Topoplots_raw_data.jpg');
+saveas(gcf, 'Fig_KEY_erp/Topoplots_raw_data.jpg');
 
 %% Plotting: standardized data
 
-% use topoplot to obtain grid (pixels) per subject 
+use topoplot to obtain grid (pixels) per subject 
 for iSub = 1:size(subject,1)
     figure(101); title('EEG'); 
     [~,grid(:,:,iSub),~,~,~] = topoplot(allERPstd(:,N0.loc,iSub), chanlocs);
@@ -281,14 +281,14 @@ for iSub = 1:size(subject,1)
 end
  clear grid
 for iSub = 1:size(subject,1)
-    figure(100); title('EEG'); 
+    figure(101); title('EEG'); 
     [~,grid(:,:,iSub),~,~,~] = topoplot(allERPstd(:,P150.loc,iSub), chanlocs);
     close Figure 101
 end
 
 PermTopoplot(N0std, P150std, chanlocs, 101, 'raw');
 
-saveas(gcf, 'Topoplots_standardized_data.jpg');
+saveas(gcf, 'Fig_KEY_erp/Topoplots_standardized_data.jpg');
 %% HELPER FUNCTIONS
 
 function [EEG_key]=extractKeyTrials(EEG)
@@ -318,7 +318,7 @@ function [amp, badchans] = BadChansAmp50(EEG, checkBadChan)
 
     badchans = [];
     % average absolute amplitude per channel
-    chanavg = mean(abs(EEG.data),2);
+    chanavg = mean(abs(EEG.data),2,'omitnan');
     % get channels with amplitude above threshold
     amp = find((chanavg>50) | (chanavg<1));
     
@@ -378,7 +378,7 @@ function [badchans] = BadChansAmpPow (data, EEG, checkBadChan)
     % calculate channel average over trials, calculate channel threshold
     % (mean+2xSD) and find channels above threshold
     
-    chanavg = mean(abs(data),[2 3]);
+    chanavg = mean(abs(data),[2 3],'omitnan');
     chanth  = mean(abs(data),'all') + 2*std(abs(data),[],'all');
     amp = (chanavg > chanth)';
     % figure

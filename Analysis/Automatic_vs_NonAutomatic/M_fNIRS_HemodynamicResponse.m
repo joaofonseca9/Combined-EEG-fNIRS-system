@@ -7,7 +7,7 @@ laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Hemodynamic Response';
 
-subrec = ["04" "01"];
+subrec = ["28" "02"];
 
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
@@ -17,10 +17,6 @@ for subject = 1:size(subrec, 1)
     % Load the subject's fNIRS signals.
     load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
         char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat']);
-    load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
-        char(sub), '_rec-', char(rec), '_nirs_epoch.mat']);
-    nirs_preprocessed.trialinfo = nirs_epoch.trialinfo;
-    nirs_preprocessed.sampleinfo = nirs_epoch.sampleinfo;
     
     % Load the layout of the optode's template.
     load(fullfile(mainpath_out,['sub-',char(sub)],'3d','layout.mat'), 'layout');
@@ -57,7 +53,7 @@ yval_avgsubjects_allconditions = mean(yval_allsubjects_allconditions, 5);
 for con=1:size(xval_avgsubjects_allconditions, 3)
     f=1;
 
-    % Aelect the channels that are both in data and layout.
+    % Select the channels that are both in data and layout.
     data_labels=nirs.label;
     for i=1:length(data_labels)
         tmp = strsplit(data_labels{i});
