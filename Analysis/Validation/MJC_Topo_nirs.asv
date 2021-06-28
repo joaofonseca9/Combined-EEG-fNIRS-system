@@ -57,8 +57,8 @@ for iSub = 1:size(subject,2)
     
     for task=1:8 %There are 4 tasks (handauto, handnonauto, footauto, footnonauto)
         cfg               = [];
-        cfg.trials        = find(nirs_preprocessed.trialinfo(:,1)==task); % Average the data for given task
-        data_TL{task} = ft_timelockanalysis(cfg, nirs_preprocessed);
+        cfg.trials        = find(data_O2Hb.trialinfo(:,1)==task); % Average the data for given task
+        data_TL{task} = ft_timelockanalysis(cfg, data_O2Hb);
     end
     save(fullfile(sub_dir,'nirs','data_TL.mat'), 'data_TL');
 
@@ -75,12 +75,12 @@ for iSub = 1:size(subject,2)
     for task=1:4
         cfg=[];
         cfg.channel='*[O2Hb]';
-        data_O2Hb{task}=ft_selectdata(cfg, data_TL_blc{task});
-        data_O2Hb{task}.label=data_labels(contains(data_TL_blc{task}.label, '[O2Hb]'));
-        for ii=1:length(data_TL_blc{task}.label)
-            label=data_TL_blc{task}.label{ii};
+        data_O2Hb=ft_selectdata(cfg, nirs_preprocessed);
+        data_O2Hb.label=data_labels(contains(nirs_preprocessed.label, '[O2Hb]'));
+        for ii=1:length(data_O2Hb.label)
+            label=data_O2Hb.label{ii};
             label=label(1:end-7);
-            data_O2Hb{task}.label{ii}=label;
+            data_O2Hb.label{ii}=label;
         end
     end
     
@@ -91,10 +91,10 @@ for iSub = 1:size(subject,2)
     cfg.marker   = 'labels';
      % Choose the time window over which you want to average
     for task=1:8
-        cfg.xlim     = [data_O2Hb{task}.time(1)+10+5 data_O2Hb{task}.time(1)+10+10];
+        cfg.xlim     = [data_TL_blc{task}.time(1)+10+5 data_TL_blc{task}.time(1)+10+10];
         figure;
         title(task_label{task})
-        ft_topoplotER(cfg, data_O2Hb{task});
+        ft_topoplotER(cfg, data_TL_blc{task});
         saveas(gcf,fullfile(fig_dir,['sub-',sub,'_topoplot_',task_label{task},'.jpg']))
     end
     
