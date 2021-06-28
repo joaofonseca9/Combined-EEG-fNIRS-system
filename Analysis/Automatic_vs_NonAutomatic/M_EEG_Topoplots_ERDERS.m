@@ -361,8 +361,8 @@ topoplot(autouncued_ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptsla
 colorbar;
 
 % Save figure.
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'autouncued_erders'),'png');
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, fullfile(results_path, 'autouncued_erders'),'png');
 
 % Non-Auto Uncued.
 figure;
@@ -384,8 +384,8 @@ topoplot(nonautouncued_ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 
 colorbar;
 
 % Save figure.
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'nonautouncued_erders'),'png');
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, fullfile(results_path, 'nonautouncued_erders'),'png');
 
 % Auto Cued.
 figure;
@@ -407,8 +407,8 @@ topoplot(autocued_ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels
 colorbar;
 
 % Save figure.
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'autocued_erders'),'png');
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, fullfile(results_path, 'autocued_erders'),'png');
 
 % Non-Auto Cued.
 figure;
@@ -430,8 +430,149 @@ topoplot(nonautocued_ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'pts
 colorbar;
 
 % Save figure.
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
+
+%% Auto Uncued vs Cued.
+
+% Theta.
+figure;
+subplot(1, 2, 1); title('Auto Uncued - Theta');
+topoplot(autouncued_ERD_ERS_theta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Auto Cued - Theta');
+topoplot(autocued_ERD_ERS_theta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'nonautocued_erders'),'png');
+saveas(gcf, fullfile(results_path, 'auto_erders_theta'),'png');
+
+% Alpha.
+figure;
+subplot(1, 2, 1); title('Auto Uncued - Alpha');
+topoplot(autouncued_ERD_ERS_alpha, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Auto Cued - Alpha');
+topoplot(autocued_ERD_ERS_alpha, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'auto_erders_alpha'),'png');
+
+% Beta.
+figure;
+subplot(1, 2, 1); title('Auto Uncued - Beta');
+topoplot(autouncued_ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+c1 = colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Auto Cued - Beta');
+topoplot(autocued_ERD_ERS_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+c2 = colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'auto_erders_beta'),'png');
+
+% Gamma.
+figure;
+subplot(1, 2, 1); title('Auto Uncued - Gamma');
+topoplot(autouncued_ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+c1 = colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Auto Cued - Gamma');
+topoplot(autocued_ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+c2 = colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'auto_erders_gamma'),'png');
+
+%% Non-Auto Uncued vs Cued.
+
+% Theta.
+figure;
+subplot(1, 2, 1); title('Non-Auto Uncued - Theta');
+topoplot(nonautouncued_ERD_ERS_theta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Non-Auto Cued - Theta');
+topoplot(nonautocued_ERD_ERS_theta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonauto_erders_theta'),'png');
+
+% Alpha.
+figure;
+subplot(1, 2, 1); title('Non-Auto Uncued - Alpha');
+topoplot(nonautouncued_ERD_ERS_alpha, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Non-Auto Cued - Alpha');
+topoplot(nonautocued_ERD_ERS_alpha, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonauto_erders_alpha'),'png');
+
+% Beta.
+figure;
+subplot(1, 2, 1); title('Non-Auto Uncued - Beta');
+topoplot(nonautouncued_ERD_ERS_beta, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+c1 = colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Non-Auto Cued - Beta');
+topoplot(nonautocued_ERD_ERS_beta, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+c2 = colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonauto_erders_beta'),'png');
+
+% Gamma.
+figure;
+subplot(1, 2, 1); title('Non-Auto Uncued - Gamma');
+topoplot(nonautouncued_ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
+ax(1) = gca;
+c1 = colorbar;
+caxlim(1,:) = caxis;
+subplot(1, 2, 2);  title('Non-Auto Cued - Gamma');
+topoplot(nonautocued_ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
+ax(2) = gca;
+c2 = colorbar; 
+caxlim(2,:) = caxis;
+set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'nonauto_erders_gamma'),'png');
+
 
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
@@ -688,9 +829,9 @@ for trial=1:length(startTask)
             end
         end
         % Increase indices and window (increase sliding window with
-        % 0.5*fs).
+        % 0.25*fs).
         window_id = window_id + 1;
-        window = window+0.5*EEG_trial.srate;
+        window = window+0.25*EEG_trial.srate;
     end
     
     % Change frequency variable for frequencies of interest.
@@ -759,7 +900,7 @@ for trial=1:length(startTask)
         
         % Using a sliding Hann window.
         window_id = 1;
-        window = 1:1*EEG_epoch.srate;
+        window = 1:0.5*EEG_epoch.srate;
         while window(end) <= size(epoch_data, 2)
             % Select the data of this specific window [channel x time].
             data_window = epoch_data(:, window);

@@ -286,7 +286,6 @@ plot(freq, autouncued_power_F7); hold on;
 plot(freq, autocued_power_F7); hold on;
 plot(freq, nonautouncued_power_F7); hold on;
 plot(freq, nonautocued_power_F7); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -306,7 +305,6 @@ plot(freq, autouncued_power_F8); hold on;
 plot(freq, autocued_power_F8); hold on;
 plot(freq, nonautouncued_power_F8); hold on;
 plot(freq, nonautocued_power_F8); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -326,7 +324,6 @@ plot(freq, autouncued_power_FC1); hold on;
 plot(freq, autocued_power_FC1); hold on;
 plot(freq, nonautouncued_power_FC1); hold on;
 plot(freq, nonautocued_power_FC1); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -346,7 +343,6 @@ plot(freq, autouncued_power_FC2); hold on;
 plot(freq, autocued_power_FC2); hold on;
 plot(freq, nonautouncued_power_FC2); hold on;
 plot(freq, nonautocued_power_FC2); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -366,7 +362,6 @@ plot(freq, autouncued_power_Cz); hold on;
 plot(freq, autocued_power_Cz); hold on;
 plot(freq, nonautouncued_power_Cz); hold on;
 plot(freq, nonautocued_power_Cz); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -386,7 +381,6 @@ plot(freq, autouncued_power_C3); hold on;
 plot(freq, autocued_power_C3); hold on;
 plot(freq, nonautouncued_power_C3); hold on;
 plot(freq, nonautocued_power_C3); hold on;
-xline(4); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
@@ -531,6 +525,7 @@ for trial=1:length(startTask)
 power = mean(power_allEpochs, 3, 'omitnan');
 
 end
+end
 
 % From the trial data, calculate the power over the frequencies of the signal
 % for all electrodes.
@@ -539,7 +534,7 @@ function [power, freq] =...
 
 % Using a sliding Hann window.
 window_id = 1;
-window = 1:1*EEG_epoch.srate;
+window = 1:0.5*EEG_epoch.srate;
 while window(end) <= size(epoch_data, 2)
     % Select the data of this specific window [channel x time].
     data_window = epoch_data(:, window);
@@ -552,20 +547,20 @@ while window(end) <= size(epoch_data, 2)
             2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
         
         % Save the power for the frequencies of  the signal.
-        pow(:, channel, window_id) = P((f(:,1)>=1 & f(:,1)<=48),1);
+        pow(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=48),1);
     end
     
     % Increase indices and window (increase sliding window with
-    % 0.5*fs).
+    % 0.25*fs).
     window_id = window_id + 1;
-    window = window+0.5*EEG_trial.srate;
+    window = window+0.25*EEG_epoch.srate;
 end
 
 % Average power per channel over windows.
 power = mean(pow, 3);
 
 % Change frequency variable for frequencies of the signal.
-freq = f(f(:,1)>=1 & f(:,1)<=48);
+freq = f(f(:,1)>=4 & f(:,1)<=48);
 
 % For the bad channels, give NaN value.
 for channel = 1:size(data_window, 1)
