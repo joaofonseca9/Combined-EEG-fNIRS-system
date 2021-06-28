@@ -48,7 +48,7 @@ for subject = 1:size(subrec, 1)
     
     % Make the changes by hand.
     [events_autodual, events_nonautodual] =...
-    byHandChanges(sub, events_autodual, events_nonautodual);
+        byHandChanges(sub, events_autodual, events_nonautodual);
     
     %% Automatic sequence.
     % Check if counting answers from automatic sequence were correct.
