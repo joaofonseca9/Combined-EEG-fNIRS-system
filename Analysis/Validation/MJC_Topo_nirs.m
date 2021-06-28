@@ -9,7 +9,7 @@ mainpath_in=fullfile(mainpath_in,'pre-processed');
 mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\processed';
 
 % select ID number and cap
-subject=[{'28'}];
+subject=[{'64','28'}];
 subject_nirs_only=[{'03','04','10','11','12',}];
 
 
@@ -48,17 +48,17 @@ for iSub = 1:size(subject,2)
     
     
     %% 3. Visualize data 
-%     h=multiplot_condition(data_O2Hb, layout, [1:8], task_label, ....
-%         'baseline', [-10 0], 'trials', false, 'topoplot', 'yes');
+%     h=multiplot_condition(nirs_preprocessed, layout, [1:8], task_label, ....
+%         'baseline', [-10 0], 'trials', true, 'topoplot', 'yes');
 
     %% 4. Timelock analysis + baselinecorrection
     % these steps are necessary for the multisubject_averaging script!
     % a) timelock
     
-    for task=1:8 %There are 4 tasks (handauto, handnonauto, footauto, footnonauto)
+    for task=1:8 %There are 8 tasks
         cfg               = [];
         cfg.trials        = find(nirs_preprocessed.trialinfo(:,1)==task); % Average the data for given task
-        data_TL{task} = ft_timelockanalysis(cfg, nirs_preprocessed);
+        data_TL{task}     = ft_timelockanalysis(cfg, nirs_preprocessed);
     end
     save(fullfile(sub_dir,'nirs','data_TL.mat'), 'data_TL');
 
@@ -72,13 +72,13 @@ for iSub = 1:size(subject,2)
     
     %% 5. Take the HbO activity only
     data_labels=nirs_preprocessed.label;
-    for task=1:4
+    for task=1:8
         cfg=[];
         cfg.channel='*[O2Hb]';
         data_O2Hb{task}=ft_selectdata(cfg, data_TL_blc{task});
         data_O2Hb{task}.label=data_labels(contains(data_TL_blc{task}.label, '[O2Hb]'));
-        for ii=1:length(data_TL_blc{task}.label)
-            label=data_TL_blc{task}.label{ii};
+        for ii=1:length(data_O2Hb{task}.label)
+            label=data_O2Hb{task}.label{ii};
             label=label(1:end-7);
             data_O2Hb{task}.label{ii}=label;
         end
@@ -91,7 +91,7 @@ for iSub = 1:size(subject,2)
     cfg.marker   = 'labels';
      % Choose the time window over which you want to average
     for task=1:8
-        cfg.xlim     = [data_O2Hb{task}.time(1)+10+5 data_O2Hb{task}.time(1)+10+10];
+        cfg.xlim     = [5 10];
         figure;
         title(task_label{task})
         ft_topoplotER(cfg, data_O2Hb{task});

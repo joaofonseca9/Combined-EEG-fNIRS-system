@@ -154,9 +154,9 @@ end
 
 
 %% 5. Statistical testing
-con_names={'finger auto',  'finger nonauto', 'foot auto', 'foot nonauto'};
-for i=1:4 % loop over the 4 conditions
-  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(grandavg{i}, 'grandavg', layout, i, con_names{i});
+cap_names={'nirs only',  'combined'};
+for i=1:2 % loop over the 4 conditions
+  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(grandavg{i}, 'grandavg', layout, i, cap_names{i});
 end
 %% 6. Statistical analysis (not finished yet! still trying things out) 
 
@@ -173,7 +173,7 @@ cfg.statistic   = 'ft_statfun_depsamplesT';
 cfg.alpha       = 0.05;
 cfg.correctm    = 'no';
 
-Nsub = 17;
+Nsub = 2;
 cfg.design(1,1:2*Nsub)  = [ones(1,Nsub) 2*ones(1,Nsub)];
 cfg.design(2,1:2*Nsub)  = [1:Nsub 1:Nsub];
 cfg.ivar                = 1; % the 1st row in cfg.design contains the independent variable
@@ -186,48 +186,39 @@ chan = 7;
 time = [-10 20];
 
 % find the time points for the effect of interest in the grand average data
-timesel_fingerauto = find(grandavg{1}.time >= time(1) & grandavg{1}.time <= time(2));
-timesel_fingernonauto  = find(grandavg{2}.time >= time(1) & grandavg{2}.time <= time(2));
-timesel_footauto = find(grandavg{3}.time >= time(1) & grandavg{3}.time <= time(2));
-timesel_footnonauto  = find(grandavg{4}.time >= time(1) & grandavg{4}.time <= time(2));
+timesel_nirs_only = find(grandavg{1}.time >= time(1) & grandavg{1}.time <= time(2));
+timesel_combined  = find(grandavg{2}.time >= time(1) & grandavg{2}.time <= time(2));
+
 
 % select the individual subject data from the time points and calculate the mean
 for isub = 1:17
-    valuesFA(isub) = mean(data_all{1}{isub}.avg(chan,timesel_fingerauto));
-    valuesFNA(isub)  = mean(data_all{2}{isub}.avg(chan,timesel_fingernonauto));
-    valuesFOA(isub) = mean(data_all{3}{isub}.avg(chan,timesel_fingerauto));
-    valuesFONA(isub)  = mean(data_all{4}{isub}.avg(chan,timesel_fingernonauto)); 
+    values_nirs_only(isub) = mean(data_all{1}{isub}.avg(chan,timesel_nirs_only));
+    values_combined(isub)  = mean(data_all{2}{isub}.avg(chan,timesel_combined));
 end
 
 % plot to see the effect in each subject
-M = [valuesFA(:) valuesFNA(:)];
+M = [values_nirs_only(:) values_combined(:)];
 figure; plot(M', 'o-'); xlim([0.5 2.5])
 %legend({'subj1', 'subj2', 'subj3', 'subj4', 'subj5', 'subj6', ...
         %'subj7', 'subj8', 'subj9', 'subj10'}, 'location', 'EastOutside');
 
-FAminFNA = valuesFA - valuesFNA;
-FOAminFONA = valuesFOA - valuesFONA;
-FAminFOA = valuesFA - valuesFOA;
-[h,p,ci,stats] = ttest(FAminFNA, 0, 0.05) % H0: mean = 0, alpha 0.05
-[h,p,ci,stats] = ttest(FOAminFONA, 0, 0.05)
-[h,p,ci,stats] = ttest(FAminFOA, 0, 0.05)
+subtraction = values_nirs_only - values_combined;
+[h,p,ci,stats] = ttest(subtraction, 0, 0.05) % H0: mean = 0, alpha 0.05
 
 
 %loop over channels
 time = [-10 20];
-timesel_fingerauto = find(grandavg{1}.time >= time(1) & grandavg{1}.time <= time(2));
-timesel_fingernonauto  = find(grandavg{2}.time >= time(1) & grandavg{2}.time <= time(2));
-timesel_footauto = find(grandavg{3}.time >= time(1) & grandavg{3}.time <= time(2));
-timesel_footnonauto = find(grandavg{4}.time >= time(1) & grandavg{4}.time <= time(2));
+timesel_nirs_only = find(grandavg{1}.time >= time(1) & grandavg{1}.time <= time(2));
+timesel_combined  = find(grandavg{2}.time >= time(1) & grandavg{2}.time <= time(2));
 clear h p
 
 %FAminFNA = zeros(1,17);
-FAminFOA = zeros(1,17);
+FAminFOA = zeros(1,length(subject_comb));
 
-for iChan = 1:8
-    for isub = 1:17
+for iChan = 1:2
+    for isub = 1:length(subject_comb)
         FAminFOA(isub) = ...
-            mean(data_all{1}{isub}.avg(iChan,timesel_fingerauto)) - ...
+            mean(data_all{1}{isub}.avg(iChan,timesel_nirs_only)) - ...
             mean(data_all{3}{isub}.avg(iChan,timesel_footauto));
     end
 
