@@ -32,6 +32,9 @@ for subject = 1:size(subrec, 1)
     EEG_AutoCued = EEG_divided.EEG_AutoCue;
     EEG_NonAutoCued = EEG_divided.EEG_NonAutoCue;
     
+    % Calculate threshold to eliminate noisy epochs.
+    th = calculateThreshold(EEG_divided);
+    
     %% Auto Uncued.
 
     event_samp  = [EEG_AutoUncued.event.latency];
@@ -54,7 +57,7 @@ for subject = 1:size(subrec, 1)
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrialsEpoched(EEG_AutoUncued, event_samp,...
-        startTask, endTask, keypresses);
+        startTask, endTask, keypresses, th);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -114,8 +117,8 @@ for subject = 1:size(subrec, 1)
     % For the task.
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
-        calculateAveragePowerAllTrialsEpoched(EEG_NonAutoUncued,
-        event_samp, startTask, endTask, keypresses);
+        calculateAveragePowerAllTrialsEpoched(EEG_NonAutoUncued,...
+        event_samp, startTask, endTask, keypresses, th);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -177,7 +180,7 @@ for subject = 1:size(subrec, 1)
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrialsEpoched(EEG_AutoCued, event_samp,...
-        startTask, endTask, keypresses);
+        startTask, endTask, keypresses, th);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -239,7 +242,7 @@ for subject = 1:size(subrec, 1)
     [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerAllTrialsEpoched(EEG_NonAutoCued,...
-        event_samp, startTask, endTask, keypresses);
+        event_samp, startTask, endTask, keypresses, th);
     
     % Calculate the ERD/ERS for each of the frequency bands above.
     ERD_ERS_theta = (power_theta - power_base_theta)./power_base_theta; 
@@ -597,74 +600,74 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     calculateAveragePowerAllTrialsBaseline(EEG, event_samp, startTask,...
     endTask)
 
-    for trial=1:length(startTask)
+for trial=1:length(startTask)
     
-        title = char(strcat('Trial_', string(trial)));
-        startTask_times = event_samp(startTask(trial));
-        endTask_times = event_samp(endTask(trial));
-
-        EEG_trial = pop_select(EEG, 'point', [startTask_times endTask_times]);
-        trial_data = EEG_trial.data;        
+    title = char(strcat('Trial_', string(trial)));
+    startTask_times = event_samp(startTask(trial));
+    endTask_times = event_samp(endTask(trial));
+    
+    EEG_trial = pop_select(EEG, 'point', [startTask_times endTask_times]);
+    trial_data = EEG_trial.data;
+    
+    % Using a sliding Hann window.
+    window_id = 1;
+    window = 1:1*EEG_trial.srate;
+    while window(end) <= size(trial_data, 2)
+        % Select the data of this specific window [channel x time].
+        data_window = trial_data(:, window);
         
-        % Using a sliding Hann window.
-        window_id = 1;
-        window = 1:1*EEG_trial.srate;
-        while window(end) <= size(trial_data, 2)
-            % Select the data of this specific window [channel x time].
-            data_window = trial_data(:, window);
-            
-            % Channel loop.
-            for channel = 1:size(data_window, 1)
-                % If window is NOT removed because of badchannel (=NaN)
-                if isempty(find(isnan(data_window(channel, :))))
-                    % Calculate PSD
-                    [P, f] = periodogram(data_window(channel, :),...
-                        hann(size(data_window, 2)),...
-                        2^(2 + nextpow2(size(data_window, 2))), EEG_trial.srate);
-                    % Save the power for the frequencies of interest in the
-                    % different pow variables (all windows will be saved
-                    % here)
-                    pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
-                    pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
-                    pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
-                    pow_gamma(:, channel, window_id) = P((f(:,1)>=32 & f(:,1)<=48),1);
-                else
-                    pow_theta(:, channel, window_id) = NaN;
-                    pow_alpha(:, channel, window_id) = NaN;
-                    pow_beta(:, channel, window_id) = NaN;
-                    pow_gamma(:, channel, window_id) = NaN;
-                end
+        % Channel loop.
+        for channel = 1:size(data_window, 1)
+            % If window is NOT removed because of badchannel (=NaN)
+            if isempty(find(isnan(data_window(channel, :))))
+                % Calculate PSD
+                [P, f] = periodogram(data_window(channel, :),...
+                    hann(size(data_window, 2)),...
+                    2^(2 + nextpow2(size(data_window, 2))), EEG_trial.srate);
+                % Save the power for the frequencies of interest in the
+                % different pow variables (all windows will be saved
+                % here)
+                pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
+                pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
+                pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
+                pow_gamma(:, channel, window_id) = P((f(:,1)>=32 & f(:,1)<=48),1);
+            else
+                pow_theta(:, channel, window_id) = NaN;
+                pow_alpha(:, channel, window_id) = NaN;
+                pow_beta(:, channel, window_id) = NaN;
+                pow_gamma(:, channel, window_id) = NaN;
             end
-            % Increase indices and window (increase sliding window with
-            % 0.5*fs).
-            window_id = window_id + 1;
-            window = window+0.5*EEG_trial.srate;
         end
-        
-        % Change frequency variable for frequencies of interest.
-        freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
-        freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
-        freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
-        freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
-        % Average power per channel over windows and then average over the
-        % different channels.
-        power_theta_oneTrial = mean(mean(pow_theta,3,'omitnan'));
-        power_alpha_oneTrial = mean(mean(pow_alpha,3,'omitnan'));
-        power_beta_oneTrial = mean(mean(pow_beta,3,'omitnan'));
-        power_gamma_oneTrial = mean(mean(pow_gamma,3,'omitnan'));
-
-        power_theta_allTrials(:, trial) = power_theta_oneTrial;
-        power_alpha_allTrials(:, trial) = power_alpha_oneTrial;
-        power_beta_allTrials(:, trial) = power_beta_oneTrial;
-        power_gamma_allTrials(:, trial) = power_gamma_oneTrial;
-    
+        % Increase indices and window (increase sliding window with
+        % 0.5*fs).
+        window_id = window_id + 1;
+        window = window+0.5*EEG_trial.srate;
     end
     
-    % Take the average of every trials.
-    power_theta = mean(power_theta_allTrials, 2);
-    power_alpha = mean(power_alpha_allTrials, 2);
-    power_beta = mean(power_beta_allTrials, 2);
-    power_gamma = mean(power_gamma_allTrials, 2);
+    % Change frequency variable for frequencies of interest.
+    freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
+    freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
+    freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
+    freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
+    % Average power per channel over windows and then average over the
+    % different channels.
+    power_theta_oneTrial = mean(mean(pow_theta,3,'omitnan'));
+    power_alpha_oneTrial = mean(mean(pow_alpha,3,'omitnan'));
+    power_beta_oneTrial = mean(mean(pow_beta,3,'omitnan'));
+    power_gamma_oneTrial = mean(mean(pow_gamma,3,'omitnan'));
+    
+    power_theta_allTrials(:, trial) = power_theta_oneTrial;
+    power_alpha_allTrials(:, trial) = power_alpha_oneTrial;
+    power_beta_allTrials(:, trial) = power_beta_oneTrial;
+    power_gamma_allTrials(:, trial) = power_gamma_oneTrial;
+    
+end
+
+% Take the average of every trials.
+power_theta = mean(power_theta_allTrials, 2);
+power_alpha = mean(power_alpha_allTrials, 2);
+power_beta = mean(power_beta_allTrials, 2);
+power_gamma = mean(power_gamma_allTrials, 2);
 
 end
 
@@ -676,7 +679,7 @@ end
 function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
     freq_alpha, freq_beta, freq_gamma] =...
     calculateAveragePowerAllTrialsEpoched(EEG, event_samp,...
-    startTask, endTask, keypresses)
+    startTask, endTask, keypresses, th)
 
     for trial=1:length(startTask)
         
@@ -714,58 +717,71 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
             
                 % Channel loop.
                 for channel = 1:size(data_window, 1)
-                    % If window is NOT removed because of badchannel (=NaN)
-                    if isempty(find(isnan(data_window(channel, :))))
-                        % Calculate PSD
-                        [P, f] = periodogram(data_window(channel, :),...
-                            hann(size(data_window, 2)),...
-                            2^(2 + nextpow2(size(data_window, 2))),...
-                            EEG_epoch.srate);
-                        % Save the power for the frequencies of interest in the
-                        % different pow variables (all windows will be saved
-                        % here)
-                        pow_theta(:, channel, window_id) =...
-                            P((f(:,1)>=4 & f(:,1)<=8),1);
-                        pow_alpha(:, channel, window_id) =...
-                            P((f(:,1)>=8 & f(:,1)<=13),1);
-                        pow_beta(:, channel, window_id) =...
-                            P((f(:,1)>=13 & f(:,1)<=32),1);
-                        pow_gamma(:, channel, window_id) =...
-                            P((f(:,1)>=32 & f(:,1)<=48),1);
-                    else
-                        pow_theta(:, channel, window_id) = NaN;
-                        pow_alpha(:, channel, window_id) = NaN;
-                        pow_beta(:, channel, window_id) = NaN;
-                        pow_gamma(:, channel, window_id) = NaN;
-                    end
+                    % Calculate PSD
+                    [P, f] = periodogram(data_window(channel, :),...
+                        hann(size(data_window, 2)),...
+                        2^(2 + nextpow2(size(data_window, 2))),...
+                        EEG_epoch.srate);
+                    
+                    % Save the power for the frequencies of interest in the
+                    % different pow variables (all windows will be saved
+                    % here).
+                    pow_theta(:, channel, window_id) =...
+                        P((f(:,1)>=4 & f(:,1)<=8),1);
+                    pow_alpha(:, channel, window_id) =...
+                        P((f(:,1)>=8 & f(:,1)<=13),1);
+                    pow_beta(:, channel, window_id) =...
+                        P((f(:,1)>=13 & f(:,1)<=32),1);
+                    pow_gamma(:, channel, window_id) =...
+                        P((f(:,1)>=32 & f(:,1)<=48),1);
+                    pow_all(:, channel, window_id) =...
+                        P((f(:,1)>=1 & f(:,1)<=48),1);   
                 end
+              
                 % Increase indices and window (increase sliding window with
                 % 0.5*fs).
                 window_id = window_id + 1;
                 window = window+0.5*EEG_epoch.srate;
             end
-        
+            
+            % Average power per channel over windows.
+            pow_theta = mean(pow_theta, 3);
+            pow_alpha = mean(pow_alpha, 3);
+            pow_beta = mean(pow_beta, 3);
+            pow_gamma = mean(pow_gamma, 3);
+            pow_all = mean(pow_all, 3);
+            
             % Change frequency variable for frequencies of interest.
             freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
             freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
             freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
             freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
-            % Average power per channel over windows and then average over the
-            % different channels.
-            power_theta_oneEpoch = mean(mean(pow_theta,3,'omitnan'));
-            power_alpha_oneEpoch = mean(mean(pow_alpha,3,'omitnan'));
-            power_beta_oneEpoch = mean(mean(pow_beta,3,'omitnan'));
-            power_gamma_oneEpoch = mean(mean(pow_gamma,3,'omitnan'));
+            
+            % Average power over the different frequencies.
+            power_theta_oneEpoch = mean(pow_theta);
+            power_alpha_oneEpoch = mean(pow_alpha);
+            power_beta_oneEpoch = mean(pow_beta);
+            power_gamma_oneEpoch = mean(pow_gamma); 
+            
+            % For the bad channels, give NaN value.
+            for channel = 1:size(data_window, 1)
+                if  pow_all(channel) > th(channel)
+                    power_theta_oneEpoch(channel) = NaN;
+                    power_alpha_oneEpoch(channel) = NaN;
+                    power_beta_oneEpoch(channel) = NaN;
+                    power_gamma_oneEpoch(channel) = NaN;   
+                end
+            end
             
             % Add to all epochs array.        
             power_theta_allEpochs(:, size_power_theta_allEpochs) =...
-                power_theta_oneEpoch;
+                power_theta_oneEpoch';
             power_alpha_allEpochs(:, size_power_alpha_allEpochs) =...
-                power_alpha_oneEpoch;
+                power_alpha_oneEpoch';
             power_beta_allEpochs(:, size_power_beta_allEpochs) =...
-                power_beta_oneEpoch;
+                power_beta_oneEpoch';
             power_gamma_allEpochs(:, size_power_gamma_allEpochs) =...
-                power_gamma_oneEpoch;
+                power_gamma_oneEpoch';
             
             size_power_theta_allEpochs = size(power_theta_allEpochs, 2)+1;
             size_power_alpha_allEpochs = size(power_theta_allEpochs, 2)+1;
@@ -775,10 +791,10 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
         end
     
         % Take the average of every epoch.
-        power_theta = mean(power_theta_allEpochs, 2);
-        power_alpha = mean(power_alpha_allEpochs, 2);
-        power_beta = mean(power_beta_allEpochs, 2);
-        power_gamma = mean(power_gamma_allEpochs, 2);
+        power_theta = mean(power_theta_allEpochs, 2, 'omitnan');
+        power_alpha = mean(power_alpha_allEpochs, 2, 'omitnan');
+        power_beta = mean(power_beta_allEpochs, 2, 'omitnan');
+        power_gamma = mean(power_gamma_allEpochs, 2, 'omitnan');
 
     end
 end
