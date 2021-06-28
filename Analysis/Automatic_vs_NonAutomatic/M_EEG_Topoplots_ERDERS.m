@@ -753,8 +753,8 @@ for trial=1:length(startTask)
     for epoch = 1:length(keypresses_times)
         
         EEG_epoch = pop_select(EEG, 'point',...
-            [keypresses_times(epoch)-floor(0.8*EEG.srate)...
-            keypresses_times(epoch)+floor(0.8*EEG.srate)]);
+            [keypresses_times(epoch)-floor(0.4*EEG.srate)...
+            keypresses_times(epoch)+ceil(0.4*EEG.srate)]);
         epoch_data = EEG_epoch.data;
         
         % Using a sliding Hann window.
