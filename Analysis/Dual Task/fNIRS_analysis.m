@@ -11,7 +11,7 @@ results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Anal
 ft_defaults;
 [~, ftpath] = ft_version;
 
-subrec = ["28" "02"; "64" "01"];
+subrec = ["28" "02";"64" "01";"02" "02"];
 conditions = [3 4 7 8];
 
 %% Load data + processing per subject
@@ -78,6 +78,8 @@ for subject = 1:size(subrec, 1)
     close all;
 end
 
+disp('This was the end of individual subjects.');
+
 %% Average the hemodynamic responses over all subjects
 % Store baseline and timelockanalysis data of all subjects into one cell array
 clear nirs_all 
@@ -137,7 +139,7 @@ cfg.comment = 'dual cued is dashed line, single cued is solid line, dual uncued 
 figure;
 ft_multiplotER(cfg, nirs_TLO2Hb{1}, nirs_TLHHb{1}, nirs_TLO2Hb{2}, nirs_TLHHb{2}, nirs_TLO2Hb{3}, nirs_TLHHb{3}, nirs_TLO2Hb{4}, nirs_TLHHb{4});
 cd(results_path);
-saveas(gcf, '_avg_timelock.png');
+saveas(gcf, 'avg_timelock.png');
 
 % Plot for each task separately
 for con = 1:length(conditions)
@@ -153,12 +155,5 @@ for con = 1:length(conditions)
     saveas(gcf, [char(taskname{con}) '_avg_timelock.png']);
 end
 
-%% Average statistical testing
-cd(fullfile(results_path));
-for i = 1:4 % loop over the 4 conditions
-  [stat_O2Hb, stat_HHb] = statistics_withinsubjects(subsavg{i}, 'subsavg', layout, i, taskname{i});
-end
-
-disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
 

@@ -33,8 +33,8 @@ chan = ft_getopt(varargin, 'channel', {});
 baseline=ft_getopt(varargin, 'baseline', [-10 0]);
 xlimit=ft_getopt(varargin, 'xlimit', [-10 20]);
 ylimit=ft_getopt(varargin, 'ylim', [-3 5]);
-taskstatisticsO2Hb = {['sub-',sub,'_rec-',rec,'_autodualcued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_autosinglecued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautodualcued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautosinglecued_statisticsO2Hb'],['sub-',sub,'_rec-',rec,'_autodualuncued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_autosingleuncued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautodualuncued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_nonautosingleuncued_statisticsO2Hb']};
-taskstatisticsHHb = {['sub-',sub,'_rec-',rec,'_autodualcued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_autosinglecued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_nonautodualcued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_nonautosinglecued_statisticsHHb'],['sub-',sub,'_rec-',rec,'_autodualuncued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_autosingleuncued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_nonautodualuncued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_nonautosingleuncued_statisticsHHb']};
+taskstatisticsO2Hb = {['sub-',sub,'_rec-',rec,'_dualcued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_singlecued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_dualuncued_statisticsO2Hb'], ['sub-',sub,'_rec-',rec,'_singleuncued_statisticsO2Hb']};
+taskstatisticsHHb = {['sub-',sub,'_rec-',rec,'_dualcued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_singlecued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_dualuncued_statisticsHHb'], ['sub-',sub,'_rec-',rec,'_singleuncued_statisticsHHb']};
   
 
 %% apply baseline correction 
