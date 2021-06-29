@@ -142,6 +142,7 @@ for con=1:length(conditions)
         h{f}=figure; f=f+1;
         ft_topoplotER(cfg, data_O2Hb);
         title(sprintf('Topoplot average O2Hb during %s [%d to %d sec]', condition_names{con}, cfg.xlim(1), cfg.xlim(2)));
+        colorbar;
         
         % select HHb channels and remove [HHb] label
         cfg=[];
@@ -157,7 +158,8 @@ for con=1:length(conditions)
         h{f}=figure; f=f+1;
         ft_topoplotER(cfg, data_HHb);
         title(sprintf('Topoplot average HHb during %s [%d to %d sec]', condition_names{con}, cfg.xlim(1), cfg.xlim(2)));
-    
+        colorbar;
+        
     end
 end
 
