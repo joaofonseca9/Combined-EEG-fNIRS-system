@@ -337,7 +337,6 @@ plot(freq, nonautocued_power_F7); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -357,7 +356,6 @@ plot(freq, nonautocued_power_F8); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -377,7 +375,6 @@ plot(freq, nonautocued_power_FC1); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -397,7 +394,6 @@ plot(freq, nonautocued_power_FC2); hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
 set(gcf, 'Position', get(0, 'Screensize'));
