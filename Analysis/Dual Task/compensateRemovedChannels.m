@@ -1,4 +1,4 @@
-function power_array_out = compensateRemovedChannels(power_array_in, EEG, list_channels)
+function power_array_out = compensateRemovedChannels(power_array_in, EEG, list_channels, sub)
 % Add NaN in the lines where channels were removed during pre-processing.
 
 % Array to see which channels are missing.
@@ -8,8 +8,8 @@ list_present = zeros(30, 1);
 if size(power_array_in, 1)~=30
     
     % Initialize new power array.
-    power_array_out = zeros(size(power_array_in));
-    power_array_out(:, 1:size(power_array_in, 2)) = power_array_in;
+    power_array_out = zeros(30, 1);
+    power_array_out(1:size(power_array_in, 1), 1) = power_array_in;
     % Get the channels present in the signal.
     channels_present = EEG.chanlocs;
     % Go through the lists of channels supposed to be present and channels
@@ -30,16 +30,18 @@ if size(power_array_in, 1)~=30
     for k=1:size(list_present, 1)
         if list_present(k)==0
             numMissing = numMissing+1;
-            power_array_out(:, k) = NaN;
-            for x=k+1:size(power_array_in, 2)       
-                power_array_out(:, x)=power_array_in(:, x-numMissing);
+            power_array_out(k) = NaN;
+            for x=k+1:size(power_array_in, 1)
+                power_array_out(x)=power_array_in(x-numMissing);
             end
         end
     end
-    power_array_out(:, 30:-1:30-numMissing+1) =...
-        power_array_in(:, size(power_array_in,2):-1:size(power_array_in, 2)-numMissing+1);
+    power_array_out(30:-1:30-numMissing+1, 1) =...
+        power_array_in(size(power_array_in,1):-1:size(power_array_in, 1)-numMissing+1);
 else
     power_array_out = power_array_in;
 end
-
+if sub == "64"
+    power_array_out(1)=[];
+end
 end
