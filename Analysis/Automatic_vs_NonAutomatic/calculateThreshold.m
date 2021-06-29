@@ -37,7 +37,7 @@ for trial=1:length(startTask)
         % Channel loop.
         for channel = 1:size(data_window, 1)
             % If window is NOT removed because of badchannel (=NaN)
-            if isempty(find(isnan(data_window(channel, :))))
+%            if isempty(find(isnan(data_window(channel, :))))
                 % Calculate PSD
                 [P, f] = periodogram(data_window(channel, :),...
                     hann(size(data_window, 2)),...
@@ -45,9 +45,9 @@ for trial=1:length(startTask)
                 % Save the power for frequencies in between 1 and 48
                 % Hz.
                 pow(:, channel, window_id) = P((f(:,1)>=1 & f(:,1)<=48),1);
-            else
-                pow(:, channel, window_id) = NaN;
-            end
+%             else
+%                 pow(:, channel, window_id) = NaN;
+%             end
         end
         % Increase indices and window (increase sliding window with
         % 0.5*fs).
@@ -56,7 +56,8 @@ for trial=1:length(startTask)
     end
     
     % Average power per channel over windows.
-    power = mean(pow, 3, 'omitnan');
+%     power = mean(pow, 3, 'omitnan');
+    power = mean(pow, 3);
     
     power_all(:, :, size_power) = power;
     size_power = size(power_all, 3)+1;

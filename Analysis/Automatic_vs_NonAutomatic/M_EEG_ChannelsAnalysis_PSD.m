@@ -533,9 +533,9 @@ function [power, freq] =...
     calculatePowerPerTrial(EEG_epoch, epoch_data, th)
 
 % Using a sliding Hann window.
-window_id = 1;
-window = 1:0.5*EEG_epoch.srate;
-while window(end) <= size(epoch_data, 2)
+% window_id = 1;
+window = 1:0.8*EEG_epoch.srate;
+% while window(end) <= size(epoch_data, 2)
     % Select the data of this specific window [channel x time].
     data_window = epoch_data(:, window);
     
@@ -547,17 +547,19 @@ while window(end) <= size(epoch_data, 2)
             2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
         
         % Save the power for the frequencies of  the signal.
-        pow(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=48),1);
-    end
+%         pow(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=48),1);
+        pow(:, channel) = P((f(:,1)>=4 & f(:,1)<=48),1);
+ %   end
     
     % Increase indices and window (increase sliding window with
     % 0.25*fs).
-    window_id = window_id + 1;
-    window = window+0.25*EEG_epoch.srate;
+    % window_id = window_id + 1;
+    % window = window+0.25*EEG_epoch.srate;
 end
 
 % Average power per channel over windows.
-power = mean(pow, 3);
+% power = mean(pow, 3);
+power = pow;
 
 % Change frequency variable for frequencies of the signal.
 freq = f(f(:,1)>=4 & f(:,1)<=48);
