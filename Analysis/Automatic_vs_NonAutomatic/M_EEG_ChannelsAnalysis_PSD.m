@@ -440,11 +440,14 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'C3_PowervsFreq'),'png');
+
 % P3.
-autouncued_power_P3 = autouncued_power_allSubjects(:, P3_loc);
-autocued_power_P3 = autocued_power_allSubjects(:, P3_loc);
-nonautouncued_power_P3 = nonautouncued_power_allSubjects(:, P3_loc);
-nonautocued_power_P3 = nonautocued_power_allSubjects(:, P3_loc);
+autouncued_power_P3 = autouncued_power(:, P3_loc);
+autocued_power_P3 = autocued_power(:, P3_loc);
+nonautouncued_power_P3 = nonautouncued_power(:, P3_loc);
+nonautocued_power_P3 = nonautocued_power(:, P3_loc);
 
 figure; title('P3');
 plot(freq, autouncued_power_P3); hold on;
@@ -457,11 +460,14 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'P3_PowervsFreq'),'png');
+
 % P4.
-autouncued_power_P4 = autouncued_power_allSubjects(:, P4_loc);
-autocued_power_P4 = autocued_power_allSubjects(:, P4_loc);
-nonautouncued_power_P4 = nonautouncued_power_allSubjects(:, P4_loc);
-nonautocued_power_P4 = nonautocued_power_allSubjects(:, P4_loc);
+autouncued_power_P4 = autouncued_power(:, P4_loc);
+autocued_power_P4 = autocued_power(:, P4_loc);
+nonautouncued_power_P4 = nonautouncued_power(:, P4_loc);
+nonautocued_power_P4 = nonautocued_power(:, P4_loc);
 
 figure; title('P4');
 plot(freq, autouncued_power_P4); hold on;
@@ -475,7 +481,7 @@ xlim([4 48]);
 legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
 
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, fullfile(results_path, 'C3_PowervsFreq'),'png');
+saveas(gcf, fullfile(results_path, 'P4_PowervsFreq'),'png');
 
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
