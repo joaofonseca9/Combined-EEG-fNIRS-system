@@ -25,8 +25,8 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         addpath(eeglab_path);
         
         % add fieldtrip
-        addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip');
-        addpath('C:\Users\maria\OneDrive\Documentos\GitHub\fieldtrip\utilities');
+        addpath('C:\Program Files\MATLAB\R2021a\toolbox\fieldtrip-20210614');
+        rmpath('C:\Program Files\MATLAB\R2021a\toolbox\mbc\mbcmodels');
         
         % set paths for the input and output data
         mainpath_in='C:\Users\maria\Universidade do Porto\João Pedro Barbosa Fonseca - Internship\Experiment\Data\Exp';

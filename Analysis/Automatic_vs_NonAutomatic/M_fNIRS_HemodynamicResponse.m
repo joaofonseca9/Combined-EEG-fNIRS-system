@@ -49,8 +49,8 @@ for subject = 1:size(subrec, 1)
     
     %% Statistical testing per subject 
     cd(fullfile(results_path, ['Sub-',char(sub)], 'Statistics'));
-    for i=1:4
-      [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs, 'nirs', layout, i, taskname{i}, char(sub), char(rec));
+    for i=2:2:8
+      [stat_O2Hb, stat_HHb, h] = statistics_withinsubjects(nirs, 'nirs', layout, i, taskname{i}, char(sub), char(rec));
     end
     
     %% Timelock analysis per subject
