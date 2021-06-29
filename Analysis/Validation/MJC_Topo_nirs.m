@@ -9,8 +9,8 @@ mainpath_in=fullfile(mainpath_in,'pre-processed');
 mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\processed';
 
 % select ID number and cap
-subject=[{'64','28'}];
-subject_nirs_only=[{'03','04','10','11','12',}];
+subject=[{'02','64','28'}];
+subject_nirs_only=[{'03','04','10'}];%,'11','12',}];
 
 
 for iSub = 1:size(subject,2)
@@ -48,8 +48,8 @@ for iSub = 1:size(subject,2)
     
     
     %% 3. Visualize data 
-%     h=multiplot_condition(nirs_preprocessed, layout, [1:8], task_label, ....
-%         'baseline', [-10 0], 'trials', true, 'topoplot', 'yes');
+    h=multiplot_condition(nirs_preprocessed, layout, [1:8], task_label, ....
+        'baseline', [-10 0], 'trials', true, 'topoplot', 'yes');
 
     %% 4. Timelock analysis + baselinecorrection
     % these steps are necessary for the multisubject_averaging script!
@@ -92,6 +92,7 @@ for iSub = 1:size(subject,2)
      % Choose the time window over which you want to average
     for task=1:8
         cfg.xlim     = [5 10];
+        cfg.zlim     = [ ];
         figure;
         title(task_label{task})
         ft_topoplotER(cfg, data_O2Hb{task});

@@ -124,23 +124,23 @@ for cap=1:2
     save(fullfile(val_dir,'data_TL_HHb.mat'),'data_TL_HHb');
 end
 
-%% e) Topoplots for each cap
+%e) Topoplots for each cap
 capname={'NIRS', 'COMBINED'};
 cfg          = [];
 cfg.layout   = layout;
 cfg.marker   = 'labels';
-cfg.ylim     = [-0.2 0.2];
-cfg.xlim     = [5 10];
-cfg.zlim     = cfg.ylim/2;
+cfg.ylim     = [-0.2 0.2]
  % Choose the time window over which you want to average
 for cap=1:2
+    cfg.xlim     = [5 10];
+    
     figure;
     title(capname{cap})
     ft_topoplotER(cfg, data_TL_O2Hb{cap});
-    saveas(gcf,fullfile(fig_dir,['topoplot_',capname{cap},'.jpg']))
+    saveas(gcf,fullfile(fig_dir,['sub-',sub,'_topoplot_',capname{cap},'.jpg']))
 end
 
-%% f) Plot both on the lay-out
+% f) Plot both on the lay-out
 cfg                   = [];
 cfg.showlabels        = 'yes';
 cfg.layout            = layout;

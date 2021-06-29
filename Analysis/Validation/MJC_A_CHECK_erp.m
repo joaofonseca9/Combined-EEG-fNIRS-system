@@ -7,7 +7,7 @@ laptop = 'laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 % select ID number and cap
-subject=[{'28','64'}];
+subject=[{'02','28','64'}];
 
 
 for iSub = 1:length(subject)
@@ -17,6 +17,8 @@ for iSub = 1:length(subject)
             rec='04';
         case '64'
             rec='01';
+        case '02'
+            rec='02';
     end
     
     eeglab;
@@ -170,7 +172,8 @@ for iSub = 1:length(subject)
     subplot(1,2,2); set(gca,'FontSize',11); box on;
     ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
     xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k');  title('GFPt');
-
+    
+    saveas(gcf,['Fig_CHECK_erp/sub-',sub,'_checkVEP.jpg'])
     clc; clearvars -except laptop subject iSub mainpath_out;
 end
 

@@ -173,7 +173,7 @@ for iSub = 1:size(subject,2)
     close Figure 100
 end
 % permutation testing
-figure, title('N1 peak - Raw Data')
+figure, title('N1 peak
 [permN1.zmap, permN1.zmapTH, permN1.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 
 % percentage of significant pixels 
@@ -190,8 +190,6 @@ for iSub = 1:size(subject,2)
     figure(100); subplot(122); title('eeg only cap'); [~,grid_eeg_only(:,:,iSub),~,~,~] = topoplot(allVEP.eeg_only(:,eeg_onlyP1.loc,iSub), chanlocs);
     close Figure 100
 end
-
-figure, title('P1 peak - Raw Data')
 % permutation testing
 [permP1.zmap, permP1.zmapTH, permP1.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 
@@ -215,8 +213,6 @@ for iSub = 1:size(subject,2)
     figure(100); subplot(122); title('eeg only cap'); [~,grid_eeg_only(:,:,iSub),~,~,~] = topoplot(allVEPstd.eeg_only(:,eeg_onlyN1.loc,iSub), chanlocs);
     close Figure 100
 end
-
-figure, title('N1 peak - Standardized Data')
 % permutation testing
 [permN1std.zmap, permN1std.zmapTH, permN1std.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 % percentage of pixels significant
@@ -233,10 +229,6 @@ for iSub = 1:size(subject,2)
     figure(100); subplot(122); title('eeg only cap'); [~,grid_eeg_only(:,:,iSub),~,~,~] = topoplot(allVEPstd.eeg_only(:,eeg_onlyP1.loc,iSub), chanlocs);
     close Figure 100
 end
-
-
-
-figure, title('P1 peak - Standardized Data')
 % permutation testing
 [permP1std.zmap, permP1std.zmapTH, permP1std.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 % percentage of pixels significant
@@ -377,12 +369,12 @@ end
 function PermTopoplot (permN1, permP1, eeg_onlyN1, combN1, eeg_onlyP1, combP1, chanlocs, xmesh, ymesh, fignr, type)
 
     figure(fignr); 
-    subplot(221); title('N1: eeg only cap'); hold on;
+    subplot(221); title('N1: eeg_only-EEG'); hold on;
     topoplot(eeg_onlyN1.topo, chanlocs, 'electrodes','off','numcontour',0);
     ax(1) = gca; axis on; hold on;
     contour(xmesh,ymesh,permN1.zmapTHmcc,1,'k','LineWidth',1); 
     axis off; c1 = colorbar; caxlim(1,:) = caxis; 
-    subplot(222); title('N1: combined cap'); hold on;
+    subplot(222); title('N1: comb-EEG'); hold on;
     topoplot(combN1.topo, chanlocs, 'electrodes','off','numcontour',0);
     ax(2) = gca; axis on; hold on;
     contour(xmesh,ymesh,permN1.zmapTHmcc,1,'k','LineWidth',1); 
@@ -393,12 +385,12 @@ function PermTopoplot (permN1, permP1, eeg_onlyN1, combN1, eeg_onlyP1, combP1, c
     c2.Ticks = [-floor(max(caxlim(:,2))) 0 floor(max(caxlim(:,2)))]; 
     clear caxlim
     
-    subplot(223); title('P1: eeg only cap'); hold on;
+    subplot(223); title('P1: eeg_only-EEG'); hold on;
     topoplot(eeg_onlyP1.topo, chanlocs, 'electrodes','off','numcontour',0);
     ax(1) = gca; axis on; hold on;
     contour(xmesh,ymesh,permP1.zmapTHmcc,1,'k','LineWidth',1); 
     axis off; c3 = colorbar; caxlim(1,:) = caxis; 
-    subplot(224); title('P1: combined cap'); hold on;
+    subplot(224); title('P1: comb-EEG'); hold on;
     topoplot(combP1.topo, chanlocs, 'electrodes','off','numcontour',0);
     ax(2) = gca; axis on; hold on;
     contour(xmesh,ymesh,permP1.zmapTHmcc,1,'k','LineWidth',1); 
