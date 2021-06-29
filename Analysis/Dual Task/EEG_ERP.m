@@ -10,13 +10,15 @@ results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Anal
 
 eeglab;
 
-subrec = ["28" "04"];
+subrec = ["28" "04";"64" "01"; "02" "02"];
 
 % List of the 30 channels in the cap
 list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
     "FC5"; "FC1"; "FC2"; "FC6"; "T7"; "C3"; "Cz"; "C4"; "T8"; "CP5";...
     "CP1"; "CP2"; "CP6"; "P7"; "P3"; "Pz"; "P4"; "P8"; "POz"; "O1";...
     "Oz"; "O2"];
+
+taskname = {'Dual Uncued', 'Single Unued', 'Dual Cued', 'Single Cued'};
 
 %% Load data + processing per subject
 % Go through all subjects
@@ -152,22 +154,37 @@ for subject = 1:size(subrec, 1)
     % Average over trials, use omit NaNs (bad channels within trials)
     ERP = mean(EEG.conditions{1,i}.datatrials,3,'omitnan');
     
-    %% Define structure for ERP
-    EEG.conditions{1,i}.ERP.data = EEG.conditions{1,i}.datatrials;
-    EEG.conditions{1,i}.ERP.ERP = ERP;
-    EEG.conditions{1,i}.ERP.time = EEG.conditions{1,i}.timetrials;
-    EEG.conditions{1,i}.ERP.chans = {EEG.conditions{1,i}.chanlocs.labels};
-    EEG.conditions{1,i}.ERPBAD.chans = {EEG.conditions{1,i}.chanlocs.labels};
-    EEG.conditions{1,i}.ERPBAD.badchans = EEG.conditions{1,i}.badchan;
-    EEG.conditions{1,i}.ERPBAD.badtrial = EEG.conditions{1,i}.badtrial; 
+    %% Global field power in time domain (GFPt)
+    % calculate difference between two channels, per time point 
+    % take the sum of the differences, per time point
+    % gives the GFPt over time
+    [GFPt]  = globalFieldPotential(ERP);
     
-    end
+    %% Plotting
+    figure
+    subplot(1,2,1); plot(time,mean(ERP,3,'omitnan'),'b');
+    subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFPt,fliplr(GFPt)],'b','LineStyle','none');
+    set(h1,'FaceAlpha',0.4); plot(time,GFPt,'r','LineWidth',1.5);
     
-    % Save the values onto a allSubjects variable
-    dualuncued_erp_allSubjects(:, subject) = EEG.conditions{1,1};
-    singleuncued_erp_allSubjects(:, subject) = EEG.conditions{1,2};
-    dualcued_erp_allSubjects(:, subject) = EEG.conditions{1,3};
-    singlecued_erp_allSubjects(:, subject) = EEG.conditions{1,4};
+    subplot(1,2,1); set(gca,'FontSize',11); box on;
+    ylabel('Potential (\muV)','FontSize',14); title('ERP','FontSize',14); ylim([-6 6])
+    xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k');xlabel('Time (s)','FontSize',14);
+    subplot(1,2,2); set(gca,'FontSize',11); box on;
+    ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
+    xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k');  title('GFPt');
+    
+    
+    %% Save structure per subject per condition
+    ERPdual{i}.data        = EEG.conditions{1,i}.datatrials;
+    ERPdual{i}.ERP         = ERP;
+    ERPdual{i}.GFPt        = GFPt;
+    ERPdual{i}.time        = EEG.conditions{1,i}.timetrials;
+    ERPdual{i}.chans       = {EEG.conditions{1,i}.chanlocs.labels};
+    ERPdual{i}.condition = EEG.conditions{1,i};
+       
+    save(fullfile(results_path, ['sub-',char(sub)],['ERP_',taskname{1,i}]));
+    
+    end 
     
     disp(['ERP processing done for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
@@ -175,27 +192,78 @@ for subject = 1:size(subrec, 1)
     close all; clc; 
   
 end
+disp('This was the end of individual subjects.');
 
-%% Topoplot of averaged ERP for all subjects per condition
-% Average ERPS of all subjects
-dualuncued_avgerp_allSubjects = mean(dualuncued_erp_allSubjects.ERP.ERP,1, 'omitnan');
-singleuncued_avgerp_allSubjects = mean(singleuncued_erp_allSubjects.ERP.ERP,1, 'omitnan');
-dualcued_avgerp_allSubjects = mean(dualcued_erp_allSubjects.ERP.ERP,1, 'omitnan');
-singlecued_avgerp_allSubjects = mean(singlecued_erp_allSubjects.ERP.ERP,1, 'omitnan');
+%% Collect ERP of all subjects 
+for subject = 1:size(subrec, 1)
+    sub = subrec(subject, 1);
+    rec = subrec(subject, 2);
+   
+    for i = 1:length(EEG.conditions)
+        % Collect ERP of all subjects [chan x time x subject]
+        allERP{1,i}.ERPdual = zeros(length(ERPdual{1,i}.chans),length(ERPdual{1,i}.ERP));
+    
+        for chan = 1:length(list_channels)
+            loc = find(strcmp(list_channels(chan), ERPdual{1,i}.chans));
+            if ~isempty(loc);        allERP{1,i}.ERPdual(chan,:,subject) = ERPdual{1,i}.ERP(loc,:);
+            elseif isempty(loc);     allERP{1,i}.ERPdual(chan,:,subject) = NaN;
+            end
+            clear loc
+        end
+
+        % Collect GFPt of all subjects [subject x time]
+        allGFP{i}.ERPdual{i}(subject,:) = ERPdual{i}.GFPt;
+        
+        clear ERPdual{i}
+    end
+end
+
+%% Plot mean per channel and condition over subjects + mean and std of GFPt
+time = -0.2 : 1/1024 : 0.6;
+   
+for i = 1:length(EEG.conditions)
+    ERPdualGFP1 = mean(allGFP{i}.ERPdual{i},1) + 2*std(allGFP{i}.ERPdual{i},[],1);
+    ERPdualGFP2 = mean(allGFP{i}.ERPdual{i},1) - 2*std(allGFP{i}.ERPdual{i},[],1);
+    
+    figure; 
+    subplot(2,1,1); plot(time,mean(allERP{i}.ERPdual,3,'omitnan'),'b');
+    subplot(2,1,2); hold on; h1 = fill([time,fliplr(time)], [ERPdualGFP1,fliplr(ERPdualGFP2)],'b','LineStyle','none');
+    set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP{i}.ERPdual{i},1),'b','LineWidth',1.5); 
+    
+    subplot(2,1,1); set(gca,'FontSize',11); box on;
+    ylabel('Potential (\muV)','FontSize',14); title('ERP for ',taskname{i},'FontSize',14); ylim([-6 6])
+    xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k'); 
+    subplot(2,1,2); set(gca,'FontSize',11); box on;
+    ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
+    xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k'); 
+    set(gcf,'Position',[400 420 1325 420]);
+
+    clear ERPdualGFP1 ERPdualGFP2 h1
+
+    saveas(gcf,fullfile(results_path, sprintf('ALLERP_%s.png',taskname{1,i})));
+end
+
+%% Topoplot of main ERP components per condition
+load('chanlocs.mat')
+
+for i = 1:length(EEG.conditions)
+% Find the main ERP components in the average GFPt 
+% Average GFPt and ERP over subjects
+avgGFP{i}.ERPdual{i} = mean(allGFP{i}.ERPdual{i},1);
+avgERP{i}.ERPdual{i} = mean(allERP{i}.ERPdual,3, 'omitnan');
+
+% Get main component P3: 0.25-0.5s (P300 peak)
+[ERPdualP3{i}.loc, ERPdualP3{i}.time, ERPdualP3{i}.amp] = get_mainVEPcomponents (time, avgGFP{i}.ERPdual{i}, [0.25 0.5]);
 
 figure; 
-axh(1) = subplot(2,2,1);     topoplot(dualuncued_avgerp_allSubjects, EEG_DU.chanlocs,'electrodes','off');   colorbar; caxlim(1,:) = caxis; set(gca,'FontSize',9);
-axh(2) = subplot(2,2,2);     topoplot(singleuncued_avgerp_allSubjects, EEG_SU.chanlocs,'electrodes','off');   colorbar; caxlim(2,:) = caxis; set(gca,'FontSize',9);
-axh(3) = subplot(2,2,3);     topoplot(dualcued_avgerp_allSubjects, EEG_DC.chanlocs,'electrodes','off');   colorbar; caxlim(3,:) = caxis; set(gca,'FontSize',9);
-axh(4) = subplot(2,2,4);     topoplot(singlecued_avgerp_allSubjects, EEG_SC.chanlocs,'electrodes','off');   colorbar; caxlim(4,:) = caxis; set(gca,'FontSize',9);
+axh = subplot(1,1,1);
+topoplot(avgERP{i}.ERPdual{i}(:,ERPdualP3{i}.loc), chanlocs,'electrodes','off');   colorbar; caxlim(1,:) = caxis; set(gca,'FontSize',9);
   
 set(axh,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]);
 set(gcf,'Position',[590 470 470 320]);
 
-saveas(gcf,fullfile([results_path,'ALLERP_topo.jpg']));
+saveas(gcf,fullfile(results_path, sprintf('ALLERPtopoplot_%s.png',taskname{1,i})));
 
-figure; 
-pop_timtopo(dualuncued_erp_allSubjects);
-pop_timtopo(singleuncued_erp_allSubjects);
-pop_timtopo(dualcued_erp_allSubjects);
-pop_timtopo(singlecued_erp_allSubjects);
+end
+
+disp('These are the results for the average of all subjects.');
