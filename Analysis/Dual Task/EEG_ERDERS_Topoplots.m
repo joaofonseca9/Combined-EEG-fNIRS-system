@@ -6,7 +6,7 @@ addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNI
 addpath('C:\Users\catar\OneDrive - Universidade do Porto\Twente\Combined-EEG-fNIRS-system\Analysis\Dual Task');
 laptop = 'laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
-results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Analysis\nirs';
+results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Analysis\eeg\erders';
 
 eeglab;
 
@@ -26,7 +26,7 @@ for subject = 1:size(subrec, 1)
   
     % Load EEG preprocessed signal
     load([mainpath_in, '\pre-processed\sub-', char(sub), '\eeg\sub-',...
-        char(sub), '_rec-', char(rec), '_eeg_divided.mat'], 'eeg_divided');
+        char(sub), '_rec-', char(rec), '_eeg_divided.mat'], 'EEG_divided');
     
     % Separate into the four different tasks
     EEG_DualUncued = EEG_divided.EEG_NonAutoDualNoCue;
@@ -37,8 +37,8 @@ for subject = 1:size(subrec, 1)
     %% Dual Uncued: ERD/ERS
     event_samp  = [EEG_DualUncued.event.latency];
     startBaseline = find(strcmp({EEG_DualUncued.event.type}, 'boundary')==1);
-    startTask = find(strcmp({EEG_DualUncued.event.type}, 's1709')==1);
-    endTask = find(strcmp({EEG_DualUncued.event.type}, 's1799')==1);
+    startTask = find(strcmp({EEG_DualUncued.event.type}, 's1798')==1);
+    endTask = find(strcmp({EEG_DualUncued.event.type}, 's1717')==1);
    
     % Remove any extra boundaries
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
@@ -155,8 +155,8 @@ for subject = 1:size(subrec, 1)
     %% Dual Cued: ERD/ERS
     event_samp  = [EEG_DualCued.event.latency];
     startBaseline = find(strcmp({EEG_DualCued.event.type}, 'boundary')==1);
-    startTask = find(strcmp({EEG_DualCued.event.type}, 's1708')==1);
-    endTask = find(strcmp({EEG_DualCued.event.type}, 's1799')==1);
+    startTask = find(strcmp({EEG_DualCued.event.type}, 's1798')==1);
+    endTask = find(strcmp({EEG_DualCued.event.type}, 's1701')==1);
 
     % Remove any extra boundaries
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
@@ -215,7 +215,7 @@ for subject = 1:size(subrec, 1)
     event_samp  = [EEG_SingleCued.event.latency];
     startBaseline = find(strcmp({EEG_SingleCued.event.type}, 'boundary')==1);
     startTask = find(strcmp({EEG_SingleCued.event.type}, 's1704')==1);
-    endTask = find(strcmp({EEG_SingleCued.event.type}, 's1712')==1);
+    endTask = find(strcmp({EEG_SingleCued.event.type}, 's1701')==1);
 
     % Remove any extra boundaries
     startBaseline = removeExtraBoundaries(startBaseline, startTask);
