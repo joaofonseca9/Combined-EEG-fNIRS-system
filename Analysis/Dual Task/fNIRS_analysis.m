@@ -128,7 +128,23 @@ for con = 1:length(conditions)
     save('nirs_TLHHb.mat','nirs_TLHHb');
 end
 
-% Plot both (O2Hb and HHB) on the layout
+%% Topoplots for each condition
+cfg          = [];
+cfg.layout   = layout;
+cfg.marker   = 'labels';
+cfg.ylim     = [-0.2 0.2];
+cfg.xlim     = [5 10];
+cfg.zlim     = cfg.ylim/2;
+% Choose the time window over which you want to average
+for con=1:4
+    figure;
+    title(taskname{con})
+    ft_topoplotER(cfg, nirs_TLO2Hb{con});
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf,fullfile(results_path,['topoplot_',taskname{con},'.png']))
+end
+
+%% Plot both (O2Hb and HHB) on the layout
 cfg = [];
 cfg.showlabels = 'yes';
 cfg.layout = layout;
