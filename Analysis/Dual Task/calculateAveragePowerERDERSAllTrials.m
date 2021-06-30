@@ -9,7 +9,6 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
 
 for trial=1:length(startTask)
     
-title = char(strcat('Trial_', string(trial)));
 startTask_times = event_samp(startTask(trial));
 endTask_times = event_samp(endTask(trial));
 

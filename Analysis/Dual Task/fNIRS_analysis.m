@@ -37,7 +37,7 @@ for subject = 1:size(subrec, 1)
     h = multiplot_condition(nirs, layout, conditions, taskname,...
         'baseline', [-10 0], 'trials', false, 'topoplot', 'yes', 'ylim',...
         [-0.2 0.2]);
-    taskbaseline = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_baseline'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_baseline']};
+    taskbaseline = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_timelock'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_timelock']};
     tasktopoplotO2Hb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_topoplotO2Hb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_topoplotO2Hb']};
     tasktopoplotHHb = {['sub-',char(sub),'_rec-',char(rec),'_dualcued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singlecued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_dualuncued_topoplotHHb'], ['sub-',char(sub),'_rec-',char(rec),'_singleuncued_topoplotHHb']};
     
@@ -74,7 +74,7 @@ for subject = 1:size(subrec, 1)
     
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all;
 end
 
