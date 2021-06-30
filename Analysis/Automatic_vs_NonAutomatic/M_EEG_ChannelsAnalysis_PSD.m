@@ -358,7 +358,7 @@ std_nonautocued_power = std(nonautocued_power_allSubjects, 0, 3, 'omitnan');
 
 %% Plot the PSD for specific channels.
 
-% F7.
+%% F7.
 autouncued_power_F7 = autouncued_power(:, F7_loc);
 autocued_power_F7 = autocued_power(:, F7_loc);
 nonautouncued_power_F7 = nonautouncued_power(:, F7_loc);
@@ -369,21 +369,54 @@ std_nonautouncued_power_F7 = std_nonautouncued_power(:, F7_loc);
 std_nonautocued_power_F7 = std_nonautocued_power(:, F7_loc);
 
 figure; title('F7');
-H(1) = shadedErrorBar(freq, autouncued_power_F7, std_autouncued_power_F7, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_F7, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_F7, std_autocued_power_F7, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_F7 - std_autouncued_power_F7);...
+    flipud(autouncued_power_F7 + std_autouncued_power_F7)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_F7, std_nonautouncued_power_F7, 'lineProps', '-g');
+plot(freq, autocued_power_F7, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_F7, std_nonautocued_power_F7, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_F7 - std_autocued_power_F7);...
+    flipud(autocued_power_F7 + std_autocued_power_F7)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_F7, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_F7 - std_nonautouncued_power_F7);...
+    flipud(nonautouncued_power_F7 + std_nonautouncued_power_F7)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_F7, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_F7 - std_nonautocued_power_F7);...
+    flipud(nonautocued_power_F7 + std_nonautocued_power_F7)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F7_PowervsFreq'),'png');
@@ -399,21 +432,54 @@ std_nonautouncued_power_F8 = std_nonautouncued_power(:, F8_loc);
 std_nonautocued_power_F8 = std_nonautocued_power(:, F8_loc);
 
 figure; title('F8');
-H(1) = shadedErrorBar(freq, autouncued_power_F8, std_autouncued_power_F8, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_F8, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_F8, std_autocued_power_F8, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_F8 - std_autouncued_power_F8);...
+    flipud(autouncued_power_F8 + std_autouncued_power_F8)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_F8, std_nonautouncued_power_F8, 'lineProps', '-g');
+plot(freq, autocued_power_F8, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_F7, std_nonautocued_power_F8, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_F8 - std_autocued_power_F8);...
+    flipud(autocued_power_F8 + std_autocued_power_F8)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_F8, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_F8 - std_nonautouncued_power_F8);...
+    flipud(nonautouncued_power_F8 + std_nonautouncued_power_F8)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_F8, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_F8 - std_nonautocued_power_F8);...
+    flipud(nonautocued_power_F8 + std_nonautocued_power_F8)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F8_PowervsFreq'),'png');
@@ -429,21 +495,54 @@ std_nonautouncued_power_FC1 = std_nonautouncued_power(:, FC1_loc);
 std_nonautocued_power_FC1 = std_nonautocued_power(:, FC1_loc);
 
 figure; title('FC1');
-H(1) = shadedErrorBar(freq, autouncued_power_FC1, std_autouncued_power_FC1, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_FC1, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_FC1, std_autocued_power_FC1, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_FC1 - std_autouncued_power_FC1);...
+    flipud(autouncued_power_FC1 + std_autouncued_power_FC1)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_FC1, std_nonautouncued_power_FC1, 'lineProps', '-g');
+plot(freq, autocued_power_FC1, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_FC1, std_nonautocued_power_FC1, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_FC1 - std_autocued_power_FC1);...
+    flipud(autocued_power_FC1 + std_autocued_power_FC1)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_FC1, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_FC1 - std_nonautouncued_power_FC1);...
+    flipud(nonautouncued_power_FC1 + std_nonautouncued_power_FC1)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_FC1, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_FC1 - std_nonautocued_power_FC1);...
+    flipud(nonautocued_power_FC1 + std_nonautocued_power_FC1)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
@@ -459,21 +558,54 @@ std_nonautouncued_power_FC2 = std_nonautouncued_power(:, FC2_loc);
 std_nonautocued_power_FC2 = std_nonautocued_power(:, FC2_loc);
 
 figure; title('FC2');
-H(1) = shadedErrorBar(freq, autouncued_power_FC2, std_autouncued_power_FC2, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_FC2, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_FC2, std_autocued_power_FC2, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_FC2 - std_autouncued_power_FC2);...
+    flipud(autouncued_power_FC2 + std_autouncued_power_FC2)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_FC2, std_nonautouncued_power_FC2, 'lineProps', '-g');
+plot(freq, autocued_power_FC2, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_FC2, std_nonautocued_power_FC2, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_FC2 - std_autocued_power_FC2);...
+    flipud(autocued_power_FC2 + std_autocued_power_FC2)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_FC2, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_FC2 - std_nonautouncued_power_FC2);...
+    flipud(nonautouncued_power_FC2 + std_nonautouncued_power_FC2)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_FC2, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_FC2 - std_nonautocued_power_FC2);...
+    flipud(nonautocued_power_FC2 + std_nonautocued_power_FC2)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'FC2_PowervsFreq'),'png');
@@ -489,21 +621,54 @@ std_nonautouncued_power_Cz = std_nonautouncued_power(:, Cz_loc);
 std_nonautocued_power_Cz = std_nonautocued_power(:, Cz_loc);
 
 figure; title('Cz');
-H(1) = shadedErrorBar(freq, autouncued_power_Cz, std_autouncued_power_Cz, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_Cz, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_Cz, std_autocued_power_Cz, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_Cz - std_autouncued_power_Cz);...
+    flipud(autouncued_power_Cz + std_autouncued_power_Cz)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_Cz, std_nonautouncued_power_Cz, 'lineProps', '-g');
+plot(freq, autocued_power_Cz, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_Cz, std_nonautocued_power_Cz, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_Cz - std_autocued_power_Cz);...
+    flipud(autocued_power_Cz + std_autocued_power_Cz)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_Cz, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_Cz - std_nonautouncued_power_Cz);...
+    flipud(nonautouncued_power_Cz + std_nonautouncued_power_Cz)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_Cz, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_Cz - std_nonautocued_power_Cz);...
+    flipud(nonautocued_power_Cz + std_nonautocued_power_Cz)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'Cz_PowervsFreq'),'png');
@@ -519,21 +684,54 @@ std_nonautouncued_power_C3 = std_nonautouncued_power(:, C3_loc);
 std_nonautocued_power_C3 = std_nonautocued_power(:, C3_loc);
 
 figure; title('C3');
-H(1) = shadedErrorBar(freq, autouncued_power_C3, std_autouncued_power_C3, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_C3, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_C3, std_autocued_power_C3, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_C3 - std_autouncued_power_C3);...
+    flipud(autouncued_power_C3 + std_autouncued_power_C3)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_C3, std_nonautouncued_power_C3, 'lineProps', '-g');
+plot(freq, autocued_power_C3, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_C3, std_nonautocued_power_C3, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_C3 - std_autocued_power_C3);...
+    flipud(autocued_power_C3 + std_autocued_power_C3)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_C3, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_C3 - std_nonautouncued_power_C3);...
+    flipud(nonautouncued_power_C3 + std_nonautouncued_power_C3)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_C3, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_C3 - std_nonautocued_power_C3);...
+    flipud(nonautocued_power_C3 + std_nonautocued_power_C3)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'C3_PowervsFreq'),'png');
@@ -549,21 +747,54 @@ std_nonautouncued_power_P3 = std_nonautouncued_power(:, P3_loc);
 std_nonautocued_power_P3 = std_nonautocued_power(:, P3_loc);
 
 figure; title('P3');
-H(1) = shadedErrorBar(freq, autouncued_power_P3, std_autouncued_power_P3, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_P3, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_P3, std_autocued_power_P3, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_P3 - std_autouncued_power_P3);...
+    flipud(autouncued_power_P3 + std_autouncued_power_P3)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_P3, std_nonautouncued_power_P3, 'lineProps', '-g');
+plot(freq, autocued_power_P3, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_P3, std_nonautocued_power_P3, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_P3 - std_autocued_power_P3);...
+    flipud(autocued_power_P3 + std_autocued_power_P3)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_P3, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_P3 - std_nonautouncued_power_P3);...
+    flipud(nonautouncued_power_P3 + std_nonautouncued_power_P3)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_P3, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_P3 - std_nonautocued_power_P3);...
+    flipud(nonautocued_power_P3 + std_nonautocued_power_P3)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'P3_PowervsFreq'),'png');
@@ -579,21 +810,54 @@ std_nonautouncued_power_P4 = std_nonautouncued_power(:, P4_loc);
 std_nonautocued_power_P4 = std_nonautocued_power(:, P4_loc);
 
 figure; title('P4');
-H(1) = shadedErrorBar(freq, autouncued_power_P4, std_autouncued_power_P4, 'lineProps', '-b');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_P4, '-b', 'LineWidth', 1.5); 
 hold on;
-H(2) = shadedErrorBar(freq, autocued_power_P4, std_autocued_power_P4, 'lineProps', '-y');
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_P4 - std_autouncued_power_P4);...
+    flipud(autouncued_power_P4 + std_autouncued_power_P4)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
 hold on;
-H(3) = shadedErrorBar(freq, nonautouncued_power_P4, std_nonautouncued_power_P4, 'lineProps', '-g');
+plot(freq, autocued_power_P4, '-y', 'LineWidth', 1.5);
 hold on;
-H(4) = shadedErrorBar(freq, nonautocued_power_P4, std_nonautocued_power_P4, 'lineProps', '-r');
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_P4 - std_autocued_power_P4);...
+    flipud(autocued_power_P4 + std_autocued_power_P4)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
 hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
 xlim([4 48]);
-legend([H(1).mainLine, H(2).mainLine, H(3).mainLine, H(4).mainLine],...
-    'Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued',...
-    'Location', 'Northeast');
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_P4, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_P4 - std_nonautouncued_power_P4);...
+    flipud(nonautouncued_power_P4 + std_nonautouncued_power_P4)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_P4, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_P4 - std_nonautocued_power_P4);...
+    flipud(nonautocued_power_P4 + std_nonautocued_power_P4)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'P4_PowervsFreq'),'png');
@@ -671,7 +935,7 @@ std.nonautocued_power_P4 = std_nonautocued_power_P4;
 allsubs.std = std;
 
 % Save the struct from all subs.
-save(strcat(results_path, '\erders_allsubs.mat'), 'allsubs')
+save(strcat(results_path, '\psd_allsubs.mat'), 'allsubs')
 
 %% Functions
 
