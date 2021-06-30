@@ -18,7 +18,7 @@ list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
     "CP1"; "CP2"; "CP6"; "P7"; "P3"; "Pz"; "P4"; "P8"; "POz"; "O1";...
     "Oz"; "O2"];
 
-taskname = {'Dual Uncued', 'Single Unued', 'Dual Cued', 'Single Cued'};
+taskname = {'Dual Uncued', 'Single Uncued', 'Dual Cued', 'Single Cued'};
 
 %% Load data + processing per subject
 % Go through all subjects
@@ -226,14 +226,14 @@ for i = 1:length(EEG.conditions)
     ERPdualGFP2 = mean(allGFP{i}.ERPdual{i},1) - 2*std(allGFP{i}.ERPdual{i},[],1);
     
     figure; 
-    subplot(2,1,1); plot(time,mean(allERP{i}.ERPdual,3,'omitnan'),'b');
-    subplot(2,1,2); hold on; h1 = fill([time,fliplr(time)], [ERPdualGFP1,fliplr(ERPdualGFP2)],'b','LineStyle','none');
+    subplot(1,2,1); plot(time,mean(allERP{i}.ERPdual,3,'omitnan'),'b');
+    subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [ERPdualGFP1,fliplr(ERPdualGFP2)],'b','LineStyle','none');
     set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP{i}.ERPdual{i},1),'b','LineWidth',1.5); 
     
-    subplot(2,1,1); set(gca,'FontSize',11); box on;
+    subplot(1,2,1); set(gca,'FontSize',11); box on;
     ylabel('Potential (\muV)','FontSize',14); title('ERP for ',taskname{i},'FontSize',14); ylim([-6 6])
     xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k'); 
-    subplot(2,1,2); set(gca,'FontSize',11); box on;
+    subplot(1,2,2); set(gca,'FontSize',11); box on;
     ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
     xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k'); 
     set(gcf,'Position',[400 420 1325 420]);
