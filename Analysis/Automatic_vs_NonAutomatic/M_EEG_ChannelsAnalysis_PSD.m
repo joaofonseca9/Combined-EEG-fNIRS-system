@@ -2,6 +2,7 @@
 
 clear; clc; close all;
 addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis\Automatic_vs_NonAutomatic');
 
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
@@ -124,10 +125,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_F7 = nonautocued_power_allSubjects(:, F7_loc, subject);
     
     figure; title('F7');
-    plot(freq, autouncued_power_F7); hold on;
-    plot(freq, autocued_power_F7); hold on;
-    plot(freq, nonautouncued_power_F7); hold on;
-    plot(freq, nonautocued_power_F7); hold on;
+    plot(freq, autouncued_power_F7, '-b'); hold on;
+    plot(freq, autocued_power_F7, '-y'); hold on;
+    plot(freq, nonautouncued_power_F7, '-g'); hold on;
+    plot(freq, nonautocued_power_F7, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -150,10 +151,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_F8 = nonautocued_power_allSubjects(:, F8_loc, subject);
     
     figure; title('F8');
-    plot(freq, autouncued_power_F8); hold on;
-    plot(freq, autocued_power_F8); hold on;
-    plot(freq, nonautouncued_power_F8); hold on;
-    plot(freq, nonautocued_power_F8); hold on;
+    plot(freq, autouncued_power_F8, '-b'); hold on;
+    plot(freq, autocued_power_F8, '-y'); hold on;
+    plot(freq, nonautouncued_power_F8, '-g'); hold on;
+    plot(freq, nonautocued_power_F8, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -176,10 +177,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_FC1 = nonautocued_power_allSubjects(:, FC1_loc, subject);
     
     figure; title('FC1');
-    plot(freq, autouncued_power_FC1); hold on;
-    plot(freq, autocued_power_FC1); hold on;
-    plot(freq, nonautouncued_power_FC1); hold on;
-    plot(freq, nonautocued_power_FC1); hold on;
+    plot(freq, autouncued_power_FC1, '-b'); hold on;
+    plot(freq, autocued_power_FC1, '-y'); hold on;
+    plot(freq, nonautouncued_power_FC1, '-g'); hold on;
+    plot(freq, nonautocued_power_FC1, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -202,10 +203,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_FC2 = nonautocued_power_allSubjects(:, FC2_loc, subject);
     
     figure; title('FC2');
-    plot(freq, autouncued_power_FC2); hold on;
-    plot(freq, autocued_power_FC2); hold on;
-    plot(freq, nonautouncued_power_FC2); hold on;
-    plot(freq, nonautocued_power_FC2); hold on;
+    plot(freq, autouncued_power_FC2, '-b'); hold on;
+    plot(freq, autocued_power_FC2, '-y'); hold on;
+    plot(freq, nonautouncued_power_FC2, '-g'); hold on;
+    plot(freq, nonautocued_power_FC2, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -228,10 +229,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_Cz = nonautocued_power_allSubjects(:, Cz_loc, subject);
     
     figure; title('Cz');
-    plot(freq, autouncued_power_Cz); hold on;
-    plot(freq, autocued_power_Cz); hold on;
-    plot(freq, nonautouncued_power_Cz); hold on;
-    plot(freq, nonautocued_power_Cz); hold on;
+    plot(freq, autouncued_power_Cz, '-b'); hold on;
+    plot(freq, autocued_power_Cz, '-y'); hold on;
+    plot(freq, nonautouncued_power_Cz, '-g'); hold on;
+    plot(freq, nonautocued_power_Cz, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -254,10 +255,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_C3 = nonautocued_power_allSubjects(:, C3_loc, subject);
     
     figure; title('C3');
-    plot(freq, autouncued_power_C3); hold on;
-    plot(freq, autocued_power_C3); hold on;
-    plot(freq, nonautouncued_power_C3); hold on;
-    plot(freq, nonautocued_power_C3); hold on;
+    plot(freq, autouncued_power_C3, '-b'); hold on;
+    plot(freq, autocued_power_C3, '-y'); hold on;
+    plot(freq, nonautouncued_power_C3, '-g'); hold on;
+    plot(freq, nonautocued_power_C3, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -280,10 +281,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_P3 = nonautocued_power_allSubjects(:, P3_loc, subject);
     
     figure; title('P3');
-    plot(freq, autouncued_power_P3); hold on;
-    plot(freq, autocued_power_P3); hold on;
-    plot(freq, nonautouncued_power_P3); hold on;
-    plot(freq, nonautocued_power_P3); hold on;
+    plot(freq, autouncued_power_P3, '-b'); hold on;
+    plot(freq, autocued_power_P3, '-y'); hold on;
+    plot(freq, nonautouncued_power_P3, '-g'); hold on;
+    plot(freq, nonautocued_power_P3, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -306,10 +307,10 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_P4 = nonautocued_power_allSubjects(:, P4_loc, subject);
     
     figure; title('P4');
-    plot(freq, autouncued_power_P4); hold on;
-    plot(freq, autocued_power_P4); hold on;
-    plot(freq, nonautouncued_power_P4); hold on;
-    plot(freq, nonautocued_power_P4); hold on;
+    plot(freq, autouncued_power_P4, '-b'); hold on;
+    plot(freq, autocued_power_P4, '-y'); hold on;
+    plot(freq, nonautouncued_power_P4, '-g'); hold on;
+    plot(freq, nonautocued_power_P4, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
@@ -684,13 +685,9 @@ for trial=1:length(startTask)
         size_power_allEpochs = 1;
     end
     
-    title = char(strcat('Trial_', string(trial)));
-    startTask_times = event_samp(startTask(trial));
-    endTask_times = event_samp(endTask(trial));
-    
     % Get the keypresses within that trial.
     keypresses_trial = keypresses(keypresses > startTask(trial)...
-        & keypresses > endTask(trial));
+        & keypresses < endTask(trial));
     keypresses_times = event_samp(keypresses_trial);
     
     % Epoch the data into the different keypresses.
@@ -700,59 +697,49 @@ for trial=1:length(startTask)
             [keypresses_times(epoch)-floor(0.4*EEG.srate)...
             keypresses_times(epoch)+ceil(0.4*EEG.srate)]);
         epoch_data = EEG_epoch.data;
-    
-        [power_oneEpoch, freq] = calculatePowerPerTrial(EEG_epoch,...
+        
+        [power_oneEpoch, freq] = calculatePowerPerEpoch(EEG_epoch,...
             epoch_data, th);
-    
+        
         power_allEpochs(:, :, size_power_allEpochs) = power_oneEpoch;
         size_power_allEpochs = size_power_allEpochs+1;
-    
+        
     end
+    
+end
 
 % Take the average of every epoch.
 power = mean(power_allEpochs, 3, 'omitnan');
 
 end
-end
 
 % From the trial data, calculate the power over the frequencies of the signal
 % for all electrodes.
 function [power, freq] =...
-    calculatePowerPerTrial(EEG_epoch, epoch_data, th)
+    calculatePowerPerEpoch(EEG_epoch, epoch_data, th)
 
-% Using a sliding Hann window.
-% window_id = 1;
+% Using a Hann window.
 window = 1:0.8*EEG_epoch.srate;
-% while window(end) <= size(epoch_data, 2)
-    % Select the data of this specific window [channel x time].
-    data_window = epoch_data(:, window);
-    
-    % Channel loop.
-    for channel = 1:size(data_window, 1)
-        % Calculate PSD
-        [P, f] = periodogram(data_window(channel, :),...
-            hann(size(data_window, 2)),...
-            2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
-        
-        % Save the power for the frequencies of  the signal.
-%         pow(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=48),1);
-        pow(:, channel) = P((f(:,1)>=4 & f(:,1)<=48),1);
- %   end
-    
-    % Increase indices and window (increase sliding window with
-    % 0.25*fs).
-    % window_id = window_id + 1;
-    % window = window+0.25*EEG_epoch.srate;
-end
+% Select the data of this specific window [channel x time].
+data_window = epoch_data(:, window);
 
-% Average power per channel over windows.
-% power = mean(pow, 3);
-power = pow;
+% Channel loop.
+for channel = 1:size(data_window, 1)
+    % Calculate PSD
+    [P, f] = periodogram(data_window(channel, :),...
+        hann(size(data_window, 2)),...
+        2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
+    
+    % Save the power for the frequencies of  the signal.
+    pow(:, channel) = P((f(:,1)>=4 & f(:,1)<=48),1);
+    
+end
 
 % Change frequency variable for frequencies of the signal.
 freq = f(f(:,1)>=4 & f(:,1)<=48);
 
 % For the bad channels, give NaN value.
+power = pow;
 for channel = 1:size(data_window, 1)
     if  pow(channel) > th(channel)
         power(:, channel) = NaN;
