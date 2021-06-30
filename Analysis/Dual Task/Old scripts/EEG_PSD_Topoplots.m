@@ -10,7 +10,7 @@ results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Anal
 
 eeglab;
 
-subrec = ["28" "04"];
+subrec = ["64" "01";"28" "04";"02" "02"];
 
 %% Load data + processing per subject
 % Go through all subjects
@@ -30,7 +30,7 @@ for subject = 1:size(subrec, 1)
     
     %% Dual Uncued: PSD
     event_samp  = [EEG_DualUncued.event.latency];
-    startTask = find(strcmp({EEG_DualUncued.event.type}, 's1798')==1);
+    startTask = find(strcmp({EEG_DualUncued.event.type}, 's1709')==1);
     endTask = find(strcmp({EEG_DualUncued.event.type}, 's1717')==1);
 
     % Get the PSD averaged over all trials
@@ -58,6 +58,23 @@ for subject = 1:size(subrec, 1)
     topoplot(power_gamma, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    if sub == "64"
+       power_theta(31,:)=[]; 
+       power_alpha(31,:)=[]; 
+       power_beta(31,:)=[]; 
+       power_gamma(31,:)=[]; 
+    end
+    if sub == "02"
+       power_theta(30,:)=0; 
+       power_alpha(30,:)=0; 
+       power_beta(30,:)=0; 
+       power_gamma(30,:)=0; 
+       power_theta(29,:)=0; 
+       power_alpha(29,:)=0; 
+       power_beta(29,:)=0; 
+       power_gamma(29,:)=0; 
+    end
+    
     % Save the values onto a allSubjects variable
     dualuncued_power_theta_allSubjects(:, subject) = power_theta;
     dualuncued_power_alpha_allSubjects(:, subject) = power_alpha;
@@ -70,7 +87,7 @@ for subject = 1:size(subrec, 1)
     endTask = find(strcmp({EEG_SingleUncued.event.type}, 's1713')==1);
     
     % Get the PSD averaged over all trials
-    [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
+    [power_theta, power_alpha, power_beta, power_gamma, ~,...
         freq_alpha, freq_beta, freq_gamma] =...
         calculateAveragePowerBandsAllTrials(EEG_SingleUncued, event_samp,...
         startTask, endTask);
@@ -94,6 +111,24 @@ for subject = 1:size(subrec, 1)
     topoplot(power_gamma, EEG_SingleUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    if sub == "64"
+       power_theta(31,:)=[]; 
+       power_alpha(31,:)=[]; 
+       power_beta(31,:)=[]; 
+       power_gamma(31,:)=[]; 
+    end
+    
+    if sub == "02"
+       power_theta(30,:)=0; 
+       power_alpha(30,:)=0; 
+       power_beta(30,:)=0; 
+       power_gamma(30,:)=0; 
+       power_theta(29,:)=0; 
+       power_alpha(29,:)=0; 
+       power_beta(29,:)=0; 
+       power_gamma(29,:)=0; 
+    end
+    
     % Save the values onto a allSubjects variable
     singleuncued_power_theta_allSubjects(:, subject) = power_theta;
     singleuncued_power_alpha_allSubjects(:, subject) = power_alpha;
@@ -102,7 +137,7 @@ for subject = 1:size(subrec, 1)
     
     %% Dual Cued: PSD
     event_samp  = [EEG_DualCued.event.latency];
-    startTask = find(strcmp({EEG_DualCued.event.type}, 's1798')==1);
+    startTask = find(strcmp({EEG_DualCued.event.type}, 's1708')==1);
     endTask = find(strcmp({EEG_DualCued.event.type}, 's1701')==1);
 
     % Get the PSD averaged over all trials
@@ -129,6 +164,24 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(power_gamma, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    if sub == "64"
+       power_theta(31,:)=[]; 
+       power_alpha(31,:)=[]; 
+       power_beta(31,:)=[]; 
+       power_gamma(31,:)=[]; 
+    end
+    
+    if sub == "02"
+       power_theta(30,:)=0; 
+       power_alpha(30,:)=0; 
+       power_beta(30,:)=0; 
+       power_gamma(30,:)=0; 
+       power_theta(29,:)=0; 
+       power_alpha(29,:)=0; 
+       power_beta(29,:)=0; 
+       power_gamma(29,:)=0; 
+    end
     
     % Save the values onto a allSubjects variable
     dualcued_power_theta_allSubjects(:, subject) = power_theta;
@@ -166,6 +219,24 @@ for subject = 1:size(subrec, 1)
     topoplot(power_gamma, EEG_SingleCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    if sub == "64"
+       power_theta(31,:)=[]; 
+       power_alpha(31,:)=[]; 
+       power_beta(31,:)=[]; 
+       power_gamma(31,:)=[]; 
+    end
+    
+    if sub == "02"
+       power_theta(30,:)=0; 
+       power_alpha(30,:)=0; 
+       power_beta(30,:)=0; 
+       power_gamma(30,:)=0; 
+       power_theta(29,:)=0; 
+       power_alpha(29,:)=0; 
+       power_beta(29,:)=0; 
+       power_gamma(29,:)=0; 
+    end
+    
     % Save the values onto a allSubjects variable
     singlecued_power_theta_allSubjects(:, subject) = power_theta;
     singlecued_power_alpha_allSubjects(:, subject) = power_alpha;
@@ -174,10 +245,11 @@ for subject = 1:size(subrec, 1)
     
     disp(['These are the topoplots for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all;
     
 end
+disp('This was the end of individual subjects.');
 
 %% Get the PSD averaged over all subjects
 % Dual Uncued
@@ -224,6 +296,9 @@ text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(dualuncued_power_gamma, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'dualuncued_psdtopoplot'),'png');
+
 % Single Uncued
 figure;
 subplot(2, 2, 1);
@@ -242,6 +317,9 @@ subplot(2, 2, 4);
 text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(singleuncued_power_gamma, EEG_SingleUncued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'singleuncued_psdtopoplot'),'png');
 
 % Dual Cued
 figure;
@@ -262,6 +340,9 @@ text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(dualcued_power_gamma, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'dualcued_psdtopoplot'),'png');
+
 % Single Cued
 figure;
 subplot(2, 2, 1);
@@ -281,5 +362,7 @@ text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
 topoplot(singlecued_power_gamma, EEG_SingleCued.chanlocs, 'electrodes', 'ptslabels');
 colorbar;
 
-disp('This was the end of individual subjects.');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'singlecued_psdtopoplot'),'png');
+
 disp('These are the topoplots for the average of all subjects.');
