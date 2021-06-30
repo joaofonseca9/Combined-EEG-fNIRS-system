@@ -89,6 +89,9 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['sub-', char(sub)], 'dualuncued_erders'),'png');
+    
     % Compensate for removed channels
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_DualUncued, list_channels, sub);
     ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_DualUncued, list_channels, sub);
@@ -159,6 +162,9 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_SingleUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['sub-', char(sub)], 'singleuncued_erders'),'png');
+    
     % Compensate for removed channels
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_SingleUncued, list_channels, sub);
     ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_SingleUncued, list_channels, sub);
@@ -224,6 +230,9 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(ERD_ERS_gamma, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['sub-', char(sub)], 'dualcued_erders'),'png');
     
     % Compensate for removed channels
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_DualCued, list_channels, sub);
@@ -295,6 +304,9 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(ERD_ERS_gamma, EEG_SingleCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['sub-', char(sub)], 'singlecued_erders'),'png');
     
     % Compensate for removed channels
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_SingleCued, list_channels, sub);
@@ -478,12 +490,12 @@ figure;
 subplot(1, 2, 1); title('Dual Uncued - Beta');
 topoplot(dualuncued_ERD_ERS_beta, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Dual Cued - Beta');
 topoplot(dualcued_ERD_ERS_beta, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -495,12 +507,12 @@ figure;
 subplot(1, 2, 1); title('Dual Uncued - Gamma');
 topoplot(dualuncued_ERD_ERS_gamma, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Dual Cued - Gamma');
 topoplot(dualcued_ERD_ERS_gamma, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -547,12 +559,12 @@ figure;
 subplot(1, 2, 1); title('Dual Uncued - Beta');
 topoplot(dualuncued_ERD_ERS_beta, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Single Uncued - Beta');
 topoplot(singleuncued_ERD_ERS_beta, EEG_SingleUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -564,12 +576,12 @@ figure;
 subplot(1, 2, 1); title('Dual Uncued - Gamma');
 topoplot(dualuncued_ERD_ERS_gamma, EEG_DualUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Single Uncued - Gamma');
 topoplot(singleuncued_ERD_ERS_gamma, EEG_SingleUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -616,12 +628,12 @@ figure;
 subplot(1, 2, 1); title('Dual Cued - Beta');
 topoplot(dualcued_ERD_ERS_beta, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Single Cued - Beta');
 topoplot(singlecued_ERD_ERS_beta, EEG_SingleCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -633,12 +645,12 @@ figure;
 subplot(1, 2, 1); title('Dual Cued - Gamma');
 topoplot(dualcued_ERD_ERS_gamma, EEG_DualCued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Single Cued - Gamma');
 topoplot(singlecued_ERD_ERS_gamma, EEG_SingleCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 

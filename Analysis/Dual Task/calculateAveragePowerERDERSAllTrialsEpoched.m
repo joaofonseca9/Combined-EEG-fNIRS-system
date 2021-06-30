@@ -23,7 +23,7 @@ endTask_times = event_samp(endTask(trial));
 
 % Get the keypresses within that trial
 keypresses_trial = keypresses(keypresses > startTask(trial)...
-    & keypresses > endTask(trial));
+    & keypresses < endTask(trial));
 keypresses_times = event_samp(keypresses_trial);
 
 % Epoch the data into the different keypresses
@@ -61,45 +61,46 @@ for epoch = 1:length(keypresses_times)
                 P((f(:,1)>=32 & f(:,1)<=48),1);
          pow_all(:, channel) =...
                 P((f(:,1)>=1 & f(:,1)<=48),1);
+    end
+    
+    % Average power over the different frequencies
+    power_theta_oneEpoch = mean(pow_theta);
+    power_alpha_oneEpoch = mean(pow_alpha);
+    power_beta_oneEpoch = mean(pow_beta);
+    power_gamma_oneEpoch = mean(pow_gamma);
+    
+    % For the bad channels, give NaN value
+    for channel = 1:size(data_window, 1)
+        if  pow_all(channel) > th(channel)
+            power_theta_oneEpoch(channel) = NaN;
+            power_alpha_oneEpoch(channel) = NaN;
+            power_beta_oneEpoch(channel) = NaN;
+            power_gamma_oneEpoch(channel) = NaN;
         end
-end
+    end
+    
+    % Add to all epochs array.
+    power_theta_allEpochs(:, size_power_theta_allEpochs) =...
+        power_theta_oneEpoch';
+    power_alpha_allEpochs(:, size_power_alpha_allEpochs) =...
+        power_alpha_oneEpoch';
+    power_beta_allEpochs(:, size_power_beta_allEpochs) =...
+        power_beta_oneEpoch';
+    power_gamma_allEpochs(:, size_power_gamma_allEpochs) =...
+        power_gamma_oneEpoch';
+    
+    size_power_theta_allEpochs = size(power_theta_allEpochs, 2)+1;
+    size_power_alpha_allEpochs = size(power_theta_allEpochs, 2)+1;
+    size_power_beta_allEpochs = size(power_theta_allEpochs, 2)+1;
+    size_power_gamma_allEpochs = size(power_theta_allEpochs, 2)+1;
+    
+    end
 
 % Change frequency variable for frequencies of interest
 freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
 freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
 freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
 freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
-
-% Average power over the different frequencies
-power_theta_oneEpoch = mean(pow_theta);
-power_alpha_oneEpoch = mean(pow_alpha);
-power_beta_oneEpoch = mean(pow_beta);
-power_gamma_oneEpoch = mean(pow_gamma);
-
-% For the bad channels, give NaN value
-for channel = 1:size(data_window, 1)
-    if  pow_all(channel) > th(channel)
-       power_theta_oneEpoch(channel) = NaN;
-       power_alpha_oneEpoch(channel) = NaN;
-       power_beta_oneEpoch(channel) = NaN;
-       power_gamma_oneEpoch(channel) = NaN;
-    end
-end
-
-% Add to all epochs array.
-power_theta_allEpochs(:, size_power_theta_allEpochs) =...
-    power_theta_oneEpoch';
-power_alpha_allEpochs(:, size_power_alpha_allEpochs) =...
-    power_alpha_oneEpoch';
-power_beta_allEpochs(:, size_power_beta_allEpochs) =...
-    power_beta_oneEpoch';
-power_gamma_allEpochs(:, size_power_gamma_allEpochs) =...
-    power_gamma_oneEpoch';
-
-size_power_theta_allEpochs = size(power_theta_allEpochs, 2)+1;
-size_power_alpha_allEpochs = size(power_theta_allEpochs, 2)+1;
-size_power_beta_allEpochs = size(power_theta_allEpochs, 2)+1;
-size_power_gamma_allEpochs = size(power_theta_allEpochs, 2)+1;
 
 end
 
