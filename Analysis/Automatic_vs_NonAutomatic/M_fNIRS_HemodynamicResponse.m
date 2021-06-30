@@ -11,8 +11,6 @@ addpath(analysis_path);
 
 subrec = ["28" "02"; "02" "02"];
 conditions = [2 4 6 8];
-conditions_names = ["Auto Cued", "Non-Auto Cued", "Auto Uncued",...
-    "Non-Auto Uncued"];
 
 % Loop through every subject.
 for subject = 1:size(subrec, 1)
@@ -77,7 +75,7 @@ for subject = 1:size(subrec, 1)
     
     %% Timelock analysis per subject
     cd(fullfile(results_path, ['Sub-',char(sub)], 'Timelock Analysis'));
-    for con = 1:4 % 4 conditions
+    for con = 1:4
         cfg = [];
         cfg.trials = find(nirs.trialinfo(:,1) == conditions(con)); % average the data for given task
         nirs_TL{con} = ft_timelockanalysis(cfg, nirs);
@@ -87,7 +85,8 @@ for subject = 1:size(subrec, 1)
     %% Timelock analysis for baseline.
     for con = 1:length(conditions)
         cfg = [];
-        cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
+        % Define the amount of seconds you want to use for the baseline.
+        cfg.baseline = [-10 0]; 
         nirs_TLblc{con} = ft_timelockbaseline(cfg, nirs_TL{con});
     end
     save('nirs_TLblc.mat','nirs_TLblc');
@@ -100,8 +99,9 @@ for subject = 1:size(subrec, 1)
 end
 
 %% Average the hemodynamic responses over all subjects.
-% Store baseline and timelockanalysis data of all subjects into one cell
+% Store baseline and timelock analysis data of all subjects into one cell
 % array.
+
 clear nirs_all
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
@@ -338,12 +338,6 @@ for con = 1:length(conditions)
     
 end
 
-
-
-
-
-
-
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
 
@@ -375,27 +369,4 @@ for i=1:length(nirs_input.trialinfo)
     end
 end
 
-end
-
-function plotScales(hlim, vlim, hpos, vpos, width, height)
-
-% the placement of all elements is identical
-placement = {'hpos', hpos, 'vpos', vpos, 'width', width, 'height', height, 'hlim', hlim, 'vlim', vlim};
-
-ft_plot_box([hlim vlim], placement{:}, 'edgecolor', 'k');
-
-if hlim(1)<=0 && hlim(2)>=0
-    ft_plot_line([0 0], vlim, placement{:}, 'color', 'k');
-    ft_plot_text(0, vlim(1), '0  ', placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'middle', 'FontSize', 8);
-end
-
-if vlim(1)<=0 && vlim(2)>=0
-    ft_plot_line(hlim, [0 0], placement{:}, 'color', 'k');
-    ft_plot_text(hlim(1), 0, '0  ', placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'middle', 'FontSize', 8);
-end
-
-ft_plot_text(hlim(1), vlim(1), [num2str(hlim(1), 3) ' '], placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'top',    'FontSize', 8);
-ft_plot_text(hlim(2), vlim(1), [num2str(hlim(2), 3) ' '], placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom', 'FontSize', 8);
-ft_plot_text(hlim(1), vlim(1), [num2str(vlim(1), 3) ' '], placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'bottom', 'FontSize', 8);
-ft_plot_text(hlim(1), vlim(2), [num2str(vlim(2), 3) ' '], placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'top',    'FontSize', 8);
 end
