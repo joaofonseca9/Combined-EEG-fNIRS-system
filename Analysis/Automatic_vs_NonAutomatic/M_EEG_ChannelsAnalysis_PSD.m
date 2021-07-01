@@ -2,6 +2,7 @@
 
 clear; clc; close all;
 addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis\Automatic_vs_NonAutomatic');
 
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
@@ -112,6 +113,8 @@ for subject = 1:size(subrec, 1)
     FC2_loc = find(contains(locs, 'FC2'));
     Cz_loc = find(contains(locs, 'Cz'));
     C3_loc = find(contains(locs, 'C3'));
+    P3_loc = find(contains(locs, 'P3'));
+    P4_loc = find(contains(locs, 'P4'));
     
     %% Get the values of power for the specific channels and plot them.
     
@@ -122,15 +125,18 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_F7 = nonautocued_power_allSubjects(:, F7_loc, subject);
     
     figure; title('F7');
-    plot(freq, autouncued_power_F7); hold on;
-    plot(freq, autocued_power_F7); hold on;
-    plot(freq, nonautouncued_power_F7); hold on;
-    plot(freq, nonautocued_power_F7); hold on;
+    plot(freq, autouncued_power_F7, '-b'); hold on;
+    plot(freq, autocued_power_F7, '-y'); hold on;
+    plot(freq, nonautouncued_power_F7, '-g'); hold on;
+    plot(freq, nonautocued_power_F7, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'F7'),'png');
     
     % Save the values onto a subject struct.
     s.autouncued_power_F7 = autouncued_power_F7;
@@ -145,15 +151,18 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_F8 = nonautocued_power_allSubjects(:, F8_loc, subject);
     
     figure; title('F8');
-    plot(freq, autouncued_power_F8); hold on;
-    plot(freq, autocued_power_F8); hold on;
-    plot(freq, nonautouncued_power_F8); hold on;
-    plot(freq, nonautocued_power_F8); hold on;
+    plot(freq, autouncued_power_F8, '-b'); hold on;
+    plot(freq, autocued_power_F8, '-y'); hold on;
+    plot(freq, nonautouncued_power_F8, '-g'); hold on;
+    plot(freq, nonautocued_power_F8, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'F8'),'png');
     
     % Save the values onto a subject struct.
     s.autouncued_power_F8 = autouncued_power_F8;
@@ -168,15 +177,18 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_FC1 = nonautocued_power_allSubjects(:, FC1_loc, subject);
     
     figure; title('FC1');
-    plot(freq, autouncued_power_FC1); hold on;
-    plot(freq, autocued_power_FC1); hold on;
-    plot(freq, nonautouncued_power_FC1); hold on;
-    plot(freq, nonautocued_power_FC1); hold on;
+    plot(freq, autouncued_power_FC1, '-b'); hold on;
+    plot(freq, autocued_power_FC1, '-y'); hold on;
+    plot(freq, nonautouncued_power_FC1, '-g'); hold on;
+    plot(freq, nonautocued_power_FC1, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'FC1'),'png');
     
     % Save the values onto a subject struct.
     s.autouncued_power_FC1 = autouncued_power_FC1;
@@ -191,15 +203,18 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_FC2 = nonautocued_power_allSubjects(:, FC2_loc, subject);
     
     figure; title('FC2');
-    plot(freq, autouncued_power_FC2); hold on;
-    plot(freq, autocued_power_FC2); hold on;
-    plot(freq, nonautouncued_power_FC2); hold on;
-    plot(freq, nonautocued_power_FC2); hold on;
+    plot(freq, autouncued_power_FC2, '-b'); hold on;
+    plot(freq, autocued_power_FC2, '-y'); hold on;
+    plot(freq, nonautouncued_power_FC2, '-g'); hold on;
+    plot(freq, nonautocued_power_FC2, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'FC2'),'png');
     
     % Save the values onto a subject struct.
     s.autouncued_power_FC2 = autouncued_power_FC2;
@@ -214,15 +229,18 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_Cz = nonautocued_power_allSubjects(:, Cz_loc, subject);
     
     figure; title('Cz');
-    plot(freq, autouncued_power_Cz); hold on;
-    plot(freq, autocued_power_Cz); hold on;
-    plot(freq, nonautouncued_power_Cz); hold on;
-    plot(freq, nonautocued_power_Cz); hold on;
+    plot(freq, autouncued_power_Cz, '-b'); hold on;
+    plot(freq, autocued_power_Cz, '-y'); hold on;
+    plot(freq, nonautouncued_power_Cz, '-g'); hold on;
+    plot(freq, nonautocued_power_Cz, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'Cz'),'png');
     
     % Save the values onto a subject struct.
     s.autouncued_power_Cz = autouncued_power_Cz;
@@ -237,21 +255,76 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_C3 = nonautocued_power_allSubjects(:, C3_loc, subject);
     
     figure; title('C3');
-    plot(freq, autouncued_power_C3); hold on;
-    plot(freq, autocued_power_C3); hold on;
-    plot(freq, nonautouncued_power_C3); hold on;
-    plot(freq, nonautocued_power_C3); hold on;
+    plot(freq, autouncued_power_C3, '-b'); hold on;
+    plot(freq, autocued_power_C3, '-y'); hold on;
+    plot(freq, nonautouncued_power_C3, '-g'); hold on;
+    plot(freq, nonautocued_power_C3, '-r'); hold on;
     xline(4); hold on;
     xline(8); hold on;
     xline(13); hold on;
     xline(32); hold off;
     legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'C3'),'png');
+    
     % Save the values onto a subject struct.
     s.autouncued_power_C3 = autouncued_power_C3;
     s.autocued_power_C3 = autocued_power_C3;
     s.nonautouncued_power_C3 = nonautouncued_power_C3;
     s.nonautocued_power_C3 = nonautocued_power_C3;
+    
+    % P3.
+    autouncued_power_P3 = autouncued_power_allSubjects(:, P3_loc, subject);
+    autocued_power_P3 = autocued_power_allSubjects(:, P3_loc, subject);
+    nonautouncued_power_P3 = nonautouncued_power_allSubjects(:, P3_loc, subject);
+    nonautocued_power_P3 = nonautocued_power_allSubjects(:, P3_loc, subject);
+    
+    figure; title('P3');
+    plot(freq, autouncued_power_P3, '-b'); hold on;
+    plot(freq, autocued_power_P3, '-y'); hold on;
+    plot(freq, nonautouncued_power_P3, '-g'); hold on;
+    plot(freq, nonautocued_power_P3, '-r'); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'P3'),'png');
+    
+    % Save the values onto a subject struct.
+    s.autouncued_power_P3 = autouncued_power_P3;
+    s.autocued_power_P3 = autocued_power_P3;
+    s.nonautouncued_power_P3 = nonautouncued_power_P3;
+    s.nonautocued_power_P3 = nonautocued_power_P3;
+    
+    % P4.
+    autouncued_power_P4 = autouncued_power_allSubjects(:, P4_loc, subject);
+    autocued_power_P4 = autocued_power_allSubjects(:, P4_loc, subject);
+    nonautouncued_power_P4 = nonautouncued_power_allSubjects(:, P4_loc, subject);
+    nonautocued_power_P4 = nonautocued_power_allSubjects(:, P4_loc, subject);
+    
+    figure; title('P4');
+    plot(freq, autouncued_power_P4, '-b'); hold on;
+    plot(freq, autocued_power_P4, '-y'); hold on;
+    plot(freq, nonautouncued_power_P4, '-g'); hold on;
+    plot(freq, nonautocued_power_P4, '-r'); hold on;
+    xline(4); hold on;
+    xline(8); hold on;
+    xline(13); hold on;
+    xline(32); hold off;
+    legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'P4'),'png');
+    
+    % Save the values onto a subject struct.
+    s.autouncued_power_P4 = autouncued_power_P4;
+    s.autocued_power_P4 = autocued_power_P4;
+    s.nonautouncued_power_P4 = nonautouncued_power_P4;
+    s.nonautocued_power_P4 = nonautocued_power_P4;
     
     % Add struct of current subject to all subjects struct.
     allsubs.(genvarname(strcat('sub', char(sub)))) = s;
@@ -273,23 +346,77 @@ autocued_power = mean(autocued_power_allSubjects, 3, 'omitnan');
 % Non-Auto Cued.
 nonautocued_power = mean(nonautocued_power_allSubjects, 3, 'omitnan');
 
+% Get the standard deviation over all subjects.
+% Auto Uncued.
+std_autouncued_power = std(autouncued_power_allSubjects, 0, 3, 'omitnan');
+% Non-Auto Uncued.
+std_nonautouncued_power = std(nonautouncued_power_allSubjects, 0, 3, 'omitnan');
+% Auto Cued.
+std_autocued_power = std(autocued_power_allSubjects, 0, 3, 'omitnan');
+% Non-Auto Cued.
+std_nonautocued_power = std(nonautocued_power_allSubjects, 0, 3, 'omitnan');
+
 %% Plot the PSD for specific channels.
 
-% F7.
+%% F7.
 autouncued_power_F7 = autouncued_power(:, F7_loc);
 autocued_power_F7 = autocued_power(:, F7_loc);
 nonautouncued_power_F7 = nonautouncued_power(:, F7_loc);
 nonautocued_power_F7 = nonautocued_power(:, F7_loc);
+std_autouncued_power_F7 = std_autouncued_power(:, F7_loc);
+std_autocued_power_F7 = std_autocued_power(:, F7_loc);
+std_nonautouncued_power_F7 = std_nonautouncued_power(:, F7_loc);
+std_nonautocued_power_F7 = std_nonautocued_power(:, F7_loc);
 
 figure; title('F7');
-plot(freq, autouncued_power_F7); hold on;
-plot(freq, autocued_power_F7); hold on;
-plot(freq, nonautouncued_power_F7); hold on;
-plot(freq, nonautocued_power_F7); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_F7, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_F7 - std_autouncued_power_F7);...
+    flipud(autouncued_power_F7 + std_autouncued_power_F7)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_F7, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_F7 - std_autocued_power_F7);...
+    flipud(autocued_power_F7 + std_autocued_power_F7)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_F7, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_F7 - std_nonautouncued_power_F7);...
+    flipud(nonautouncued_power_F7 + std_nonautouncued_power_F7)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_F7, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_F7 - std_nonautocued_power_F7);...
+    flipud(nonautocued_power_F7 + std_nonautocued_power_F7)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F7_PowervsFreq'),'png');
@@ -299,16 +426,60 @@ autouncued_power_F8 = autouncued_power(:, F8_loc);
 autocued_power_F8 = autocued_power(:, F8_loc);
 nonautouncued_power_F8 = nonautouncued_power(:, F8_loc);
 nonautocued_power_F8 = nonautocued_power(:, F8_loc);
+std_autouncued_power_F8 = std_autouncued_power(:, F8_loc);
+std_autocued_power_F8 = std_autocued_power(:, F8_loc);
+std_nonautouncued_power_F8 = std_nonautouncued_power(:, F8_loc);
+std_nonautocued_power_F8 = std_nonautocued_power(:, F8_loc);
 
 figure; title('F8');
-plot(freq, autouncued_power_F8); hold on;
-plot(freq, autocued_power_F8); hold on;
-plot(freq, nonautouncued_power_F8); hold on;
-plot(freq, nonautocued_power_F8); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_F8, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_F8 - std_autouncued_power_F8);...
+    flipud(autouncued_power_F8 + std_autouncued_power_F8)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_F8, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_F8 - std_autocued_power_F8);...
+    flipud(autocued_power_F8 + std_autocued_power_F8)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_F8, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_F8 - std_nonautouncued_power_F8);...
+    flipud(nonautouncued_power_F8 + std_nonautouncued_power_F8)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_F8, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_F8 - std_nonautocued_power_F8);...
+    flipud(nonautocued_power_F8 + std_nonautocued_power_F8)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'F8_PowervsFreq'),'png');
@@ -318,16 +489,60 @@ autouncued_power_FC1 = autouncued_power(:, FC1_loc);
 autocued_power_FC1 = autocued_power(:, FC1_loc);
 nonautouncued_power_FC1 = nonautouncued_power(:, FC1_loc);
 nonautocued_power_FC1 = nonautocued_power(:, FC1_loc);
+std_autouncued_power_FC1 = std_autouncued_power(:, FC1_loc);
+std_autocued_power_FC1 = std_autocued_power(:, FC1_loc);
+std_nonautouncued_power_FC1 = std_nonautouncued_power(:, FC1_loc);
+std_nonautocued_power_FC1 = std_nonautocued_power(:, FC1_loc);
 
 figure; title('FC1');
-plot(freq, autouncued_power_FC1); hold on;
-plot(freq, autocued_power_FC1); hold on;
-plot(freq, nonautouncued_power_FC1); hold on;
-plot(freq, nonautocued_power_FC1); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_FC1, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_FC1 - std_autouncued_power_FC1);...
+    flipud(autouncued_power_FC1 + std_autouncued_power_FC1)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_FC1, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_FC1 - std_autocued_power_FC1);...
+    flipud(autocued_power_FC1 + std_autocued_power_FC1)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_FC1, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_FC1 - std_nonautouncued_power_FC1);...
+    flipud(nonautouncued_power_FC1 + std_nonautouncued_power_FC1)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_FC1, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_FC1 - std_nonautocued_power_FC1);...
+    flipud(nonautocued_power_FC1 + std_nonautocued_power_FC1)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'FC1_PowervsFreq'),'png');
@@ -337,16 +552,60 @@ autouncued_power_FC2 = autouncued_power(:, FC2_loc);
 autocued_power_FC2 = autocued_power(:, FC2_loc);
 nonautouncued_power_FC2 = nonautouncued_power(:, FC2_loc);
 nonautocued_power_FC2 = nonautocued_power(:, FC2_loc);
+std_autouncued_power_FC2 = std_autouncued_power(:, FC2_loc);
+std_autocued_power_FC2 = std_autocued_power(:, FC2_loc);
+std_nonautouncued_power_FC2 = std_nonautouncued_power(:, FC2_loc);
+std_nonautocued_power_FC2 = std_nonautocued_power(:, FC2_loc);
 
 figure; title('FC2');
-plot(freq, autouncued_power_FC2); hold on;
-plot(freq, autocued_power_FC2); hold on;
-plot(freq, nonautouncued_power_FC2); hold on;
-plot(freq, nonautocued_power_FC2); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_FC2, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_FC2 - std_autouncued_power_FC2);...
+    flipud(autouncued_power_FC2 + std_autouncued_power_FC2)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_FC2, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_FC2 - std_autocued_power_FC2);...
+    flipud(autocued_power_FC2 + std_autocued_power_FC2)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_FC2, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_FC2 - std_nonautouncued_power_FC2);...
+    flipud(nonautouncued_power_FC2 + std_nonautouncued_power_FC2)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_FC2, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_FC2 - std_nonautocued_power_FC2);...
+    flipud(nonautocued_power_FC2 + std_nonautocued_power_FC2)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'FC2_PowervsFreq'),'png');
@@ -356,16 +615,60 @@ autouncued_power_Cz = autouncued_power(:, Cz_loc);
 autocued_power_Cz = autocued_power(:, Cz_loc);
 nonautouncued_power_Cz = nonautouncued_power(:, Cz_loc);
 nonautocued_power_Cz = nonautocued_power(:, Cz_loc);
+std_autouncued_power_Cz = std_autouncued_power(:, Cz_loc);
+std_autocued_power_Cz = std_autocued_power(:, Cz_loc);
+std_nonautouncued_power_Cz = std_nonautouncued_power(:, Cz_loc);
+std_nonautocued_power_Cz = std_nonautocued_power(:, Cz_loc);
 
 figure; title('Cz');
-plot(freq, autouncued_power_Cz); hold on;
-plot(freq, autocued_power_Cz); hold on;
-plot(freq, nonautouncued_power_Cz); hold on;
-plot(freq, nonautocued_power_Cz); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_Cz, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_Cz - std_autouncued_power_Cz);...
+    flipud(autouncued_power_Cz + std_autouncued_power_Cz)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_Cz, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_Cz - std_autocued_power_Cz);...
+    flipud(autocued_power_Cz + std_autocued_power_Cz)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_Cz, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_Cz - std_nonautouncued_power_Cz);...
+    flipud(nonautouncued_power_Cz + std_nonautouncued_power_Cz)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_Cz, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_Cz - std_nonautocued_power_Cz);...
+    flipud(nonautocued_power_Cz + std_nonautocued_power_Cz)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'Cz_PowervsFreq'),'png');
@@ -375,25 +678,192 @@ autouncued_power_C3 = autouncued_power(:, C3_loc);
 autocued_power_C3 = autocued_power(:, C3_loc);
 nonautouncued_power_C3 = nonautouncued_power(:, C3_loc);
 nonautocued_power_C3 = nonautocued_power(:, C3_loc);
+std_autouncued_power_C3 = std_autouncued_power(:, C3_loc);
+std_autocued_power_C3 = std_autocued_power(:, C3_loc);
+std_nonautouncued_power_C3 = std_nonautouncued_power(:, C3_loc);
+std_nonautocued_power_C3 = std_nonautocued_power(:, C3_loc);
 
 figure; title('C3');
-plot(freq, autouncued_power_C3); hold on;
-plot(freq, autocued_power_C3); hold on;
-plot(freq, nonautouncued_power_C3); hold on;
-plot(freq, nonautocued_power_C3); hold on;
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_C3, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_C3 - std_autouncued_power_C3);...
+    flipud(autouncued_power_C3 + std_autouncued_power_C3)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_C3, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_C3 - std_autocued_power_C3);...
+    flipud(autocued_power_C3 + std_autocued_power_C3)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
 xline(8); hold on;
 xline(13); hold on;
 xline(32); hold off;
-legend('Auto Uncued','Auto Cued', 'Non-Auto Uncued', 'Non-Auto Cued');
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_C3, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_C3 - std_nonautouncued_power_C3);...
+    flipud(nonautouncued_power_C3 + std_nonautouncued_power_C3)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_C3, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_C3 - std_nonautocued_power_C3);...
+    flipud(nonautocued_power_C3 + std_nonautocued_power_C3)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'C3_PowervsFreq'),'png');
 
+% P3.
+autouncued_power_P3 = autouncued_power(:, P3_loc);
+autocued_power_P3 = autocued_power(:, P3_loc);
+nonautouncued_power_P3 = nonautouncued_power(:, P3_loc);
+nonautocued_power_P3 = nonautocued_power(:, P3_loc);
+std_autouncued_power_P3 = std_autouncued_power(:, P3_loc);
+std_autocued_power_P3 = std_autocued_power(:, P3_loc);
+std_nonautouncued_power_P3 = std_nonautouncued_power(:, P3_loc);
+std_nonautocued_power_P3 = std_nonautocued_power(:, P3_loc);
+
+figure; title('P3');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_P3, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_P3 - std_autouncued_power_P3);...
+    flipud(autouncued_power_P3 + std_autouncued_power_P3)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_P3, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_P3 - std_autocued_power_P3);...
+    flipud(autocued_power_P3 + std_autocued_power_P3)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_P3, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_P3 - std_nonautouncued_power_P3);...
+    flipud(nonautouncued_power_P3 + std_nonautouncued_power_P3)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_P3, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_P3 - std_nonautocued_power_P3);...
+    flipud(nonautocued_power_P3 + std_nonautocued_power_P3)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'P3_PowervsFreq'),'png');
+
+% P4.
+autouncued_power_P4 = autouncued_power(:, P4_loc);
+autocued_power_P4 = autocued_power(:, P4_loc);
+nonautouncued_power_P4 = nonautouncued_power(:, P4_loc);
+nonautocued_power_P4 = nonautocued_power(:, P4_loc);
+std_autouncued_power_P4 = std_autouncued_power(:, P4_loc);
+std_autocued_power_P4 = std_autocued_power(:, P4_loc);
+std_nonautouncued_power_P4 = std_nonautouncued_power(:, P4_loc);
+std_nonautocued_power_P4 = std_nonautocued_power(:, P4_loc);
+
+figure; title('P4');
+tiledlayout(1, 2);
+% Automatic sequence.
+ax1 = nexttile;
+plot(freq, autouncued_power_P4, '-b', 'LineWidth', 1.5); 
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(autouncued_power_P4 - std_autouncued_power_P4);...
+    flipud(autouncued_power_P4 + std_autouncued_power_P4)], 'b',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, autocued_power_P4, '-y', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(autocued_power_P4 - std_autocued_power_P4);...
+    flipud(autocued_power_P4 + std_autocued_power_P4)], 'y',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Auto Uncued', '', 'Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+% Non-automatic sequence.
+ax2 = nexttile;
+plot(freq, nonautouncued_power_P4, '-g', 'LineWidth', 1.5);
+hold on;
+h1 = patch([freq; flipud(freq)],...
+    [(nonautouncued_power_P4 - std_nonautouncued_power_P4);...
+    flipud(nonautouncued_power_P4 + std_nonautouncued_power_P4)], 'g',...
+    'LineStyle', 'none'); set(h1,'FaceAlpha',0.2);
+hold on;
+plot(freq, nonautocued_power_P4, '-r', 'LineWidth', 1.5);
+hold on;
+h2 = patch([freq; flipud(freq)],...
+    [(nonautocued_power_P4 - std_nonautocued_power_P4);...
+    flipud(nonautocued_power_P4 + std_nonautocued_power_P4)], 'r',...
+    'LineStyle', 'none'); set(h2,'FaceAlpha',0.2);
+hold on;
+xline(8); hold on;
+xline(13); hold on;
+xline(32); hold off;
+xlim([4 48]);
+legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
+xlabel('Frequency (Hz)');
+ylabel('PSD');
+linkaxes([ax1 ax2],'y')
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, fullfile(results_path, 'P4_PowervsFreq'),'png');
+
 disp('This was the end of individual subjects.');
 disp('These are the results for the average of all subjects.');
-disp('Press any key to move on to the statistical analysis.');
-pause;
-close all;
 
 %% Save the values onto all subs struct.
 avg.autouncued_power_F7 = autouncued_power_F7;
@@ -420,69 +890,52 @@ avg.autouncued_power_C3 = autouncued_power_C3;
 avg.autocued_power_C3 = autocued_power_C3;
 avg.nonautouncued_power_C3 = nonautouncued_power_C3;
 avg.nonautocued_power_C3 = nonautocued_power_C3;
+avg.autouncued_power_P3 = autouncued_power_P3;
+avg.autocued_power_P3 = autocued_power_P3;
+avg.nonautouncued_power_P3 = nonautouncued_power_P3;
+avg.nonautocued_power_P3 = nonautocued_power_P3;
+avg.autouncued_power_P4 = autouncued_power_P4;
+avg.autocued_power_P4 = autocued_power_P4;
+avg.nonautouncued_power_P4 = nonautouncued_power_P4;
+avg.nonautocued_power_P4 = nonautocued_power_P4;
 allsubs.avg = avg;
 
-% Save the struct from all subs.
-save(strcat(results_path, '\erders_allsubs.mat'), 'allsubs')
+std.autouncued_power_F7 = std_autouncued_power_F7;
+std.autocued_power_F7 = std_autocued_power_F7;
+std.nonautouncued_power_F7 = std_nonautouncued_power_F7;
+std.nonautocued_power_F7 = std_nonautocued_power_F7;
+std.autouncued_power_F8 = std_autouncued_power_F8;
+std.autocued_power_F8 = std_autocued_power_F8;
+std.nonautouncued_power_F8 = std_nonautouncued_power_F8;
+std.nonautocued_power_F8 = std_nonautocued_power_F8;
+std.autouncued_power_FC1 = std_autouncued_power_FC1;
+std.autocued_power_FC1 = std_autocued_power_FC1;
+std.nonautouncued_power_FC1 = std_nonautouncued_power_FC1;
+std.nonautocued_power_FC1 = std_nonautocued_power_FC1;
+std.autouncued_power_FC2 = std_autouncued_power_FC2;
+std.autocued_power_FC2 = std_autocued_power_FC2;
+std.nonautouncued_power_FC2 = std_nonautouncued_power_FC2;
+std.nonautocued_power_FC2 = std_nonautocued_power_FC2;
+std.autouncued_power_Cz = std_autouncued_power_Cz;
+std.autocued_power_Cz = std_autocued_power_Cz;
+std.nonautouncued_power_Cz = std_nonautouncued_power_Cz;
+std.nonautocued_power_Cz = std_nonautocued_power_Cz;
+std.autouncued_power_C3 = std_autouncued_power_C3;
+std.autocued_power_C3 = std_autocued_power_C3;
+std.nonautouncued_power_C3 = std_nonautouncued_power_C3;
+std.nonautocued_power_C3 = std_nonautocued_power_C3;
+std.autouncued_power_P3 = std_autouncued_power_P3;
+std.autocued_power_P3 = std_autocued_power_P3;
+std.nonautouncued_power_P3 = std_nonautouncued_power_P3;
+std.nonautocued_power_P3 = std_nonautocued_power_P3;
+std.autouncued_power_P4 = std_autouncued_power_P4;
+std.autocued_power_P4 = std_autocued_power_P4;
+std.nonautouncued_power_P4 = std_nonautouncued_power_P4;
+std.nonautocued_power_P4 = std_nonautocued_power_P4;
+allsubs.std = std;
 
-% %% Statistical analysis.
-%
-% %% F7.
-%
-% % Auto Uncued vs Cued.
-% auto_F7 = [autouncued_power_F7 autocued_power_F7];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_F7 = adtest(autouncued_power_F7);
-% h_autocued_F7 = adtest(autocued_power_F7);
-% % If normally distributed - ANOVA test.
-% if h_autouncued_F7==0 && h_autocued_F7==0
-%     [p, tbl, stats] = anova1(auto_F7, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(auto_F7, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% % Non-Auto Uncued vs Non-Cued.
-% nonauto_F7 = [nonautouncued_power_F7 nonautocued_power_F7];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_F7 = adtest(nonautouncued_power_F7);
-% h_nonautocued_F7 = adtest(nonautocued_power_F7);
-% % If normally distributed - ANOVA test.
-% if h_nonautouncued_F7==0 && h_nonautocued_F7==0
-%     [p, tbl, stats] = anova1(nonauto_F7, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(nonauto_F7, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% disp('F7');
-% pause;
-%
-% %%
-%
-% % a = mean(autouncued_power_allSubjects, 1, 'omitnan');
-% % b = mean(autocued_power_allSubjects, 1, 'omitnan');
-% %
-% % a_F7 = a(1, F8_loc, :);
-% % b_F7 = b(1, F8_loc, :);
-% %
-% % a_F7_final = [a_F7(1, 1, 1); a_F7(1, 1, 2)];
-% % b_F7_final = [b_F7(1, 1, 1); b_F7(1, 1, 2)];
-% %
-% % % Auto Uncued vs Cued for F7.
-% % auto_F7 = [a_F7_final b_F7_final];
-% % groups = {'Auto Uncued'; 'Auto Cued'};
-% % [p, tbl, stats] = anova1(auto_F7, groups, 'on');
+% Save the struct from all subs.
+save(strcat(results_path, '\psd_allsubs.mat'), 'allsubs')
 
 %% Functions
 
@@ -496,13 +949,9 @@ for trial=1:length(startTask)
         size_power_allEpochs = 1;
     end
     
-    title = char(strcat('Trial_', string(trial)));
-    startTask_times = event_samp(startTask(trial));
-    endTask_times = event_samp(endTask(trial));
-    
     % Get the keypresses within that trial.
     keypresses_trial = keypresses(keypresses > startTask(trial)...
-        & keypresses > endTask(trial));
+        & keypresses < endTask(trial));
     keypresses_times = event_samp(keypresses_trial);
     
     % Epoch the data into the different keypresses.
@@ -512,59 +961,49 @@ for trial=1:length(startTask)
             [keypresses_times(epoch)-floor(0.4*EEG.srate)...
             keypresses_times(epoch)+ceil(0.4*EEG.srate)]);
         epoch_data = EEG_epoch.data;
-    
-        [power_oneEpoch, freq] = calculatePowerPerTrial(EEG_epoch,...
+        
+        [power_oneEpoch, freq] = calculatePowerPerEpoch(EEG_epoch,...
             epoch_data, th);
-    
+        
         power_allEpochs(:, :, size_power_allEpochs) = power_oneEpoch;
         size_power_allEpochs = size_power_allEpochs+1;
-    
+        
     end
+    
+end
 
 % Take the average of every epoch.
 power = mean(power_allEpochs, 3, 'omitnan');
 
 end
-end
 
 % From the trial data, calculate the power over the frequencies of the signal
 % for all electrodes.
 function [power, freq] =...
-    calculatePowerPerTrial(EEG_epoch, epoch_data, th)
+    calculatePowerPerEpoch(EEG_epoch, epoch_data, th)
 
-% Using a sliding Hann window.
-% window_id = 1;
+% Using a Hann window.
 window = 1:0.8*EEG_epoch.srate;
-% while window(end) <= size(epoch_data, 2)
-    % Select the data of this specific window [channel x time].
-    data_window = epoch_data(:, window);
-    
-    % Channel loop.
-    for channel = 1:size(data_window, 1)
-        % Calculate PSD
-        [P, f] = periodogram(data_window(channel, :),...
-            hann(size(data_window, 2)),...
-            2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
-        
-        % Save the power for the frequencies of  the signal.
-%         pow(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=48),1);
-        pow(:, channel) = P((f(:,1)>=4 & f(:,1)<=48),1);
- %   end
-    
-    % Increase indices and window (increase sliding window with
-    % 0.25*fs).
-    % window_id = window_id + 1;
-    % window = window+0.25*EEG_epoch.srate;
-end
+% Select the data of this specific window [channel x time].
+data_window = epoch_data(:, window);
 
-% Average power per channel over windows.
-% power = mean(pow, 3);
-power = pow;
+% Channel loop.
+for channel = 1:size(data_window, 1)
+    % Calculate PSD
+    [P, f] = periodogram(data_window(channel, :),...
+        hann(size(data_window, 2)),...
+        2^(2 + nextpow2(size(data_window, 2))), EEG_epoch.srate);
+    
+    % Save the power for the frequencies of  the signal.
+    pow(:, channel) = P((f(:,1)>=4 & f(:,1)<=48),1);
+    
+end
 
 % Change frequency variable for frequencies of the signal.
 freq = f(f(:,1)>=4 & f(:,1)<=48);
 
 % For the bad channels, give NaN value.
+power = pow;
 for channel = 1:size(data_window, 1)
     if  pow(channel) > th(channel)
         power(:, channel) = NaN;

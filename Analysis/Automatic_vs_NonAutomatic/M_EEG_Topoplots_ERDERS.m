@@ -85,6 +85,9 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'autouncued_erders'),'png');
+    
     % Compensate for removed channels.
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_AutoUncued, list_channels);
     ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_AutoUncued, list_channels);
@@ -151,6 +154,9 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(ERD_ERS_gamma, EEG_NonAutoUncued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'nonautouncued_erders'),'png');
     
     % Compensate for removed channels.
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_NonAutoUncued, list_channels);
@@ -220,6 +226,9 @@ for subject = 1:size(subrec, 1)
     topoplot(ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'autocued_erders'),'png');
+    
     % Compensate for removed channels.
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_AutoCued, list_channels);
     ERD_ERS_alpha = compensateRemovedChannels(ERD_ERS_alpha, EEG_AutoCued, list_channels);
@@ -287,6 +296,9 @@ for subject = 1:size(subrec, 1)
     text(-0.2, 0.7, 'Gamma', 'FontSize', 18)
     topoplot(ERD_ERS_gamma, EEG_NonAutoCued.chanlocs, 'electrodes', 'ptslabels');
     colorbar;
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, fullfile(results_path, ['Sub-', char(sub)], 'nonautocued_erders'),'png');
     
     % Compensate for removed channels.
     ERD_ERS_theta = compensateRemovedChannels(ERD_ERS_theta, EEG_NonAutoCued, list_channels);
@@ -474,12 +486,12 @@ figure;
 subplot(1, 2, 1); title('Auto Uncued - Beta');
 topoplot(autouncued_ERD_ERS_beta, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Auto Cued - Beta');
 topoplot(autocued_ERD_ERS_beta, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -491,12 +503,12 @@ figure;
 subplot(1, 2, 1); title('Auto Uncued - Gamma');
 topoplot(autouncued_ERD_ERS_gamma, EEG_AutoUncued.chanlocs, 'electrodes', 'ptslabels');
 ax(1) = gca;
-c1 = colorbar;
+colorbar;
 caxlim(1,:) = caxis;
 subplot(1, 2, 2);  title('Auto Cued - Gamma');
 topoplot(autocued_ERD_ERS_gamma, EEG_AutoCued.chanlocs, 'electrodes', 'ptslabels');
 ax(2) = gca;
-c2 = colorbar; 
+colorbar; 
 caxlim(2,:) = caxis;
 set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 
@@ -573,12 +585,8 @@ set(ax, 'clim', [-max(caxlim(:,2)) max(caxlim(:,2))]);
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, fullfile(results_path, 'nonauto_erders_gamma'),'png');
 
-
 disp('This was the end of individual subjects.');
 disp('These are the topoplots for the average of all subjects.');
-disp('Press any key to move on to the statistical analysis.');
-pause;
-close all;
 
 %% Save values onto all subs struct.
 avg.autouncued_ERD_ERS_theta = autouncued_ERD_ERS_theta;
@@ -601,172 +609,6 @@ allsubs.avg = avg;
 
 % Save the struct from all subs.
 save(strcat(results_path, '\erders_allsubs.mat'), 'allsubs')
-
-% %% Statistical analysis
-%
-% %% Theta Band.
-%
-% % Auto Uncued vs Cued.
-% auto_theta = [autouncued_ERD_ERS_theta autocued_ERD_ERS_theta];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_theta = adtest(autouncued_ERD_ERS_theta);
-% h_autocued_theta = adtest(autocued_ERD_ERS_theta);
-% % If normally distributed - ANOVA test.
-% if h_autouncued_theta==0 && h_autocued_theta==0
-%     [p, tbl, stats] = anova1(auto_theta, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(auto_theta, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% % Non-Auto Uncued vs Cued.
-% nonauto_theta = [nonautouncued_ERD_ERS_theta nonautocued_ERD_ERS_theta];
-% groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_nonautouncued_theta = adtest(nonautouncued_ERD_ERS_theta);
-% h_nonautocued_theta = adtest(nonautocued_ERD_ERS_theta);
-% % If normally distributed - ANOVA test.
-% if h_nonautouncued_theta==0 && h_nonautocued_theta==0
-%     [p, tbl, stats] = anova1(nonauto_theta, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(nonauto_theta, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% disp('Theta');
-% pause;
-%
-% %% Alpha Band.
-%
-% % Auto Uncued vs Cued.
-% auto_alpha = [autouncued_ERD_ERS_alpha autocued_ERD_ERS_alpha];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_alpha = adtest(autouncued_ERD_ERS_alpha);
-% h_autocued_alpha = adtest(autocued_ERD_ERS_alpha);
-% % If normally distributed - ANOVA test.
-% if h_autouncued_alpha==0 && h_autocued_alpha==0
-%     [p, tbl, stats] = anova1(auto_alpha, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(auto_alpha, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% % Non-Auto Uncued vs Cued.
-% nonauto_alpha = [nonautouncued_ERD_ERS_alpha nonautocued_ERD_ERS_alpha];
-% groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_nonautouncued_alpha = adtest(nonautouncued_ERD_ERS_alpha);
-% h_nonautocued_alpha = adtest(nonautocued_ERD_ERS_alpha);
-% % If normally distributed - ANOVA test.
-% if h_nonautouncued_alpha==0 && h_nonautocued_alpha==0
-%     [p, tbl, stats] = anova1(nonauto_alpha, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(nonauto_alpha, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% disp('Alpha');
-% pause;
-%
-% %% Beta Band.
-%
-% % Auto Uncued vs Cued.
-% auto_beta = [autouncued_ERD_ERS_beta autocued_ERD_ERS_beta];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_beta = adtest(autouncued_ERD_ERS_beta);
-% h_autocued_beta = adtest(autocued_ERD_ERS_beta);
-% % If normally distributed - ANOVA test.
-% if h_autouncued_beta==0 && h_autocued_beta==0
-%     [p, tbl, stats] = anova1(auto_beta, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(auto_beta, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% % Non-Auto Uncued vs Cued.
-% nonauto_beta = [nonautouncued_ERD_ERS_beta nonautocued_ERD_ERS_beta];
-% groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_nonautouncued_beta = adtest(nonautouncued_ERD_ERS_beta);
-% h_nonautocued_beta = adtest(nonautocued_ERD_ERS_beta);
-% % If normally distributed - ANOVA test.
-% if h_nonautouncued_beta==0 && h_nonautocued_beta==0
-%     [p, tbl, stats] = anova1(nonauto_beta, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(nonauto_beta, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% disp('Beta');
-% pause;
-%
-% %% Gamma Band.
-%
-% % Auto Uncued vs Cued.
-% auto_gamma = [autouncued_ERD_ERS_gamma autocued_ERD_ERS_gamma];
-% groups = {'Auto Uncued'; 'Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_autouncued_gamma = adtest(autouncued_ERD_ERS_gamma);
-% h_autocued_gamma = adtest(autocued_ERD_ERS_gamma);
-% % If normally distributed - ANOVA test.
-% if h_autouncued_gamma==0 && h_autocued_gamma==0
-%     [p, tbl, stats] = anova1(auto_gamma, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(auto_gamma, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% % Non-Auto Uncued vs Cued.
-% nonauto_gamma = [nonautouncued_ERD_ERS_gamma nonautocued_ERD_ERS_gamma];
-% groups = {'Non-Auto Uncued'; 'Non-Auto Cued'};
-% % Test the hypothesis that the data is normaly distributed.
-% h_nonautouncued_gamma = adtest(nonautouncued_ERD_ERS_gamma);
-% h_nonautocued_gamma = adtest(nonautocued_ERD_ERS_gamma);
-% % If normally distributed - ANOVA test.
-% if h_nonautouncued_gamma==0 && h_nonautocued_gamma==0
-%     [p, tbl, stats] = anova1(nonauto_gamma, groups, 'on');
-%     figure;
-%     multcompare(stats);
-% % If not normally distributed - Friedman's test.
-% else
-%     [p, tbl, stats] = friedman(nonauto_gamma, 2, 'on');
-%     figure;
-%     multcompare(stats);
-% end
-%
-% disp('Gamma');
-% pause;
 
 %% Functions
 
@@ -792,7 +634,6 @@ function [power_theta, power_alpha, power_beta, power_gamma, freq_theta,...
 
 for trial=1:length(startTask)
     
-    title = char(strcat('Trial_', string(trial)));
     startTask_times = event_samp(startTask(trial));
     endTask_times = event_samp(endTask(trial));
     
@@ -808,25 +649,17 @@ for trial=1:length(startTask)
         
         % Channel loop.
         for channel = 1:size(data_window, 1)
-            % If window is NOT removed because of badchannel (=NaN)
-%             if isempty(find(isnan(data_window(channel, :))))
-                % Calculate PSD
-                [P, f] = periodogram(data_window(channel, :),...
-                    hann(size(data_window, 2)),...
-                    2^(2 + nextpow2(size(data_window, 2))), EEG_trial.srate);
-                % Save the power for the frequencies of interest in the
-                % different pow variables (all windows will be saved
-                % here)
-                pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
-                pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
-                pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
-                pow_gamma(:, channel, window_id) = P((f(:,1)>=32 & f(:,1)<=48),1);
-%             else
-%                 pow_theta(:, channel, window_id) = NaN;
-%                 pow_alpha(:, channel, window_id) = NaN;
-%                 pow_beta(:, channel, window_id) = NaN;
-%                 pow_gamma(:, channel, window_id) = NaN;
-%             end
+            % Calculate PSD
+            [P, f] = periodogram(data_window(channel, :),...
+                hann(size(data_window, 2)),...
+                2^(2 + nextpow2(size(data_window, 2))), EEG_trial.srate);
+            % Save the power for the frequencies of interest in the
+            % different pow variables (all windows will be saved
+            % here)
+            pow_theta(:, channel, window_id) = P((f(:,1)>=4 & f(:,1)<=8),1);
+            pow_alpha(:, channel, window_id) = P((f(:,1)>=8 & f(:,1)<=13),1);
+            pow_beta(:, channel, window_id) = P((f(:,1)>=13 & f(:,1)<=32),1);
+            pow_gamma(:, channel, window_id) = P((f(:,1)>=32 & f(:,1)<=48),1);
         end
         % Increase indices and window (increase sliding window with
         % 0.5*fs).
@@ -841,10 +674,6 @@ for trial=1:length(startTask)
     freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
     % Average power per channel over windows and then average over the
     % different channels.
-%     power_theta_oneTrial = mean(mean(pow_theta,3,'omitnan'));
-%     power_alpha_oneTrial = mean(mean(pow_alpha,3,'omitnan'));
-%     power_beta_oneTrial = mean(mean(pow_beta,3,'omitnan'));
-%     power_gamma_oneTrial = mean(mean(pow_gamma,3,'omitnan'));
     power_theta_oneTrial = mean(mean(pow_theta,3));
     power_alpha_oneTrial = mean(mean(pow_alpha,3));
     power_beta_oneTrial = mean(mean(pow_beta,3));
@@ -884,14 +713,9 @@ for trial=1:length(startTask)
         size_power_gamma_allEpochs = 1;
     end
     
-    % Get the beggining and the end of the trial.
-    title = char(strcat('Trial_', string(trial)));
-    startTask_times = event_samp(startTask(trial));
-    endTask_times = event_samp(endTask(trial));
-    
     % Get the keypresses within that trial.
     keypresses_trial = keypresses(keypresses > startTask(trial)...
-        & keypresses > endTask(trial));
+        & keypresses < endTask(trial));
     keypresses_times = event_samp(keypresses_trial);
     
     % Epoch the data into the different keypresses.
@@ -902,64 +726,33 @@ for trial=1:length(startTask)
             keypresses_times(epoch)+ceil(0.4*EEG.srate)]);
         epoch_data = EEG_epoch.data;
         
-        % Using a sliding Hann window.
-%         window_id = 1;
+        % Using a Hann window.
         window = 1:0.8*EEG_epoch.srate;
-%         while window(end) <= size(epoch_data, 2)
-            % Select the data of this specific window [channel x time].
-            data_window = epoch_data(:, window);
+        % Select the data of this specific window [channel x time].
+        data_window = epoch_data(:, window);
+        
+        % Channel loop.
+        for channel = 1:size(data_window, 1)
+            % Calculate PSD
+            [P, f] = periodogram(data_window(channel, :),...
+                hann(size(data_window, 2)),...
+                2^(2 + nextpow2(size(data_window, 2))),...
+                EEG_epoch.srate);
             
-            % Channel loop.
-            for channel = 1:size(data_window, 1)
-                % Calculate PSD
-                [P, f] = periodogram(data_window(channel, :),...
-                    hann(size(data_window, 2)),...
-                    2^(2 + nextpow2(size(data_window, 2))),...
-                    EEG_epoch.srate);
-                
-                % Save the power for the frequencies of interest in the
-                % different pow variables (all windows will be saved
-                % here).
-%                 pow_theta(:, channel, window_id) =...
-%                     P((f(:,1)>=4 & f(:,1)<=8),1);
-%                 pow_alpha(:, channel, window_id) =...
-%                     P((f(:,1)>=8 & f(:,1)<=13),1);
-%                 pow_beta(:, channel, window_id) =...
-%                     P((f(:,1)>=13 & f(:,1)<=32),1);
-%                 pow_gamma(:, channel, window_id) =...
-%                     P((f(:,1)>=32 & f(:,1)<=48),1);
-%                 pow_all(:, channel, window_id) =...
-%                     P((f(:,1)>=1 & f(:,1)<=48),1);
-                    pow_theta(:, channel) =...
-                    P((f(:,1)>=4 & f(:,1)<=8),1);
-                pow_alpha(:, channel) =...
-                    P((f(:,1)>=8 & f(:,1)<=13),1);
-                pow_beta(:, channel) =...
-                    P((f(:,1)>=13 & f(:,1)<=32),1);
-                pow_gamma(:, channel) =...
-                    P((f(:,1)>=32 & f(:,1)<=48),1);
-                pow_all(:, channel) =...
-                    P((f(:,1)>=1 & f(:,1)<=48),1);
-            end
-            
-            % Increase indices and window (increase sliding window with
-            % 0.5*fs).
-%             window_id = window_id + 1;
-%             window = window+0.25*EEG_epoch.srate;
+            % Save the power for the frequencies of interest in the
+            % different pow variables (all windows will be saved
+            % here).
+            pow_theta(:, channel) =...
+                P((f(:,1)>=4 & f(:,1)<=8),1);
+            pow_alpha(:, channel) =...
+                P((f(:,1)>=8 & f(:,1)<=13),1);
+            pow_beta(:, channel) =...
+                P((f(:,1)>=13 & f(:,1)<=32),1);
+            pow_gamma(:, channel) =...
+                P((f(:,1)>=32 & f(:,1)<=48),1);
+            pow_all(:, channel) =...
+                P((f(:,1)>=1 & f(:,1)<=48),1);
         end
-        
-        % Average power per channel over windows.
-%         pow_theta = mean(pow_theta, 3);
-%         pow_alpha = mean(pow_alpha, 3);
-%         pow_beta = mean(pow_beta, 3);
-%         pow_gamma = mean(pow_gamma, 3);
-%         pow_all = mean(pow_all, 3);
-        
-        % Change frequency variable for frequencies of interest.
-        freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
-        freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
-        freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
-        freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
         
         % Average power over the different frequencies.
         power_theta_oneEpoch = mean(pow_theta);
@@ -994,14 +787,21 @@ for trial=1:length(startTask)
         
     end
     
-    % Take the average of every epoch.
-    power_theta = mean(power_theta_allEpochs, 2, 'omitnan');
-    power_alpha = mean(power_alpha_allEpochs, 2, 'omitnan');
-    power_beta = mean(power_beta_allEpochs, 2, 'omitnan');
-    power_gamma = mean(power_gamma_allEpochs, 2, 'omitnan');
+    % Change frequency variable for frequencies of interest.
+    freq_theta = f(f(:,1)>=4 & f(:,1)<=8);
+    freq_alpha = f(f(:,1)>=8 & f(:,1)<=13);
+    freq_beta = f(f(:,1)>=13 & f(:,1)<=32);
+    freq_gamma = f(f(:,1)>=32 & f(:,1)<=48);
     
 end
-%end
+
+% Take the average of every epoch.
+power_theta = mean(power_theta_allEpochs, 2, 'omitnan');
+power_alpha = mean(power_alpha_allEpochs, 2, 'omitnan');
+power_beta = mean(power_beta_allEpochs, 2, 'omitnan');
+power_gamma = mean(power_gamma_allEpochs, 2, 'omitnan');
+
+end
 
 % Add NaN in the lines where channels were removed during pre-processing.
 function power_array_out = compensateRemovedChannels(power_array_in, EEG, list_channels)

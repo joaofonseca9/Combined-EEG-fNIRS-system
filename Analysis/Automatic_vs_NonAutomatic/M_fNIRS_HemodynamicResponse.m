@@ -33,7 +33,7 @@ for subject = 1:size(subrec, 1)
     % Get the baseline and topoplot of all conditions for the subject
     taskname = {'Auto Cued', 'Non-Auto Cued', 'Auto Uncued',...
         'Non-Auto Uncued'};
-    h = multiplot_condition(nirs, layout, [2 4 6 8], taskname,...
+    h = multiplot_condition_modified(nirs, layout, [2 4 6 8], taskname,...
         'baseline', [-10 0], 'trials', false, 'topoplot', 'yes',...
         'ylim', [-0.5 1]);
     taskbaseline = {['sub-', char(sub), '_rec-',char(rec),...
@@ -75,7 +75,7 @@ for subject = 1:size(subrec, 1)
     
     %% Timelock analysis per subject
     cd(fullfile(results_path, ['Sub-',char(sub)], 'Timelock Analysis'));
-    for con = 1:4 % 4 conditions
+    for con = 1:4
         cfg = [];
         cfg.trials = find(nirs.trialinfo(:,1) == conditions(con)); % average the data for given task
         nirs_TL{con} = ft_timelockanalysis(cfg, nirs);
@@ -85,7 +85,8 @@ for subject = 1:size(subrec, 1)
     %% Timelock analysis for baseline.
     for con = 1:length(conditions)
         cfg = [];
-        cfg.baseline = [-10 0]; % define the amount of seconds you want to use for the baseline
+        % Define the amount of seconds you want to use for the baseline.
+        cfg.baseline = [-10 0]; 
         nirs_TLblc{con} = ft_timelockbaseline(cfg, nirs_TL{con});
     end
     save('nirs_TLblc.mat','nirs_TLblc');
@@ -98,8 +99,9 @@ for subject = 1:size(subrec, 1)
 end
 
 %% Average the hemodynamic responses over all subjects.
-% Store baseline and timelockanalysis data of all subjects into one cell
+% Store baseline and timelock analysis data of all subjects into one cell
 % array.
+
 clear nirs_all
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
@@ -163,6 +165,8 @@ ft_multiplotER(cfg, nirs_TLO2Hb{1}, nirs_TLHHb{1}, nirs_TLO2Hb{2},...
     nirs_TLHHb{2}, nirs_TLO2Hb{3}, nirs_TLHHb{3}, nirs_TLO2Hb{4},...
     nirs_TLHHb{4});
 cd(results_path);
+
+set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, 'avg_timelock.png');
 
 % Plot for each task separately.
@@ -170,7 +174,6 @@ for con = 1:length(conditions)
     cfg = [];
     cfg.showlabels = 'yes';
     cfg.layout = layout;
-    cfg.showoutline = 'yes';
     % This allows to select a subplot and interact with it.
     cfg.interactive = 'yes';
     % O2Hb is showed in red, HHb in blue.
@@ -178,7 +181,161 @@ for con = 1:length(conditions)
     figure;
     title(taskname{con});
     ft_multiplotER(cfg, nirs_TLO2Hb{con}, nirs_TLHHb{con})
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_avg_timelock.png']);
+end
+
+%% Extract channels belonging to the specific regions.
+
+cd(fullfile(results_path, 'Areas'));
+
+% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12.
+cfg = [];
+cfg.channel = {'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx9-Tx13',...
+    'Rx9-Tx12', 'Rx11-Tx12'};
+nirs_HbO2_DLPFC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
+nirs_HbO2_DLPFC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
+nirs_HbO2_DLPFC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
+nirs_HbO2_DLPFC{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
+nirs_Hb_DLPFC{1} = ft_selectdata(cfg, nirs_TLHHb{1});
+nirs_Hb_DLPFC{2} = ft_selectdata(cfg, nirs_TLHHb{2});
+nirs_Hb_DLPFC{3} = ft_selectdata(cfg, nirs_TLHHb{3});
+nirs_Hb_DLPFC{4} = ft_selectdata(cfg, nirs_TLHHb{4});
+
+save('nirs_HbO2_DLPFC.mat', 'nirs_HbO2_DLPFC');
+save('nirs_Hb_DLPFC.mat', 'nirs_Hb_DLPFC');
+
+% PMC/SMA: Rx4-Tx5, Rx3-Tx5, Rx4-Tx4.
+cfg = [];
+cfg.channel = {'Rx4-Tx5', 'Rx3-Tx5', 'Rx4-Tx4'};
+nirs_HbO2_SMA{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
+nirs_HbO2_SMA{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
+nirs_HbO2_SMA{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
+nirs_HbO2_SMA{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
+nirs_Hb_SMA{1} = ft_selectdata(cfg, nirs_TLHHb{1});
+nirs_Hb_SMA{2} = ft_selectdata(cfg, nirs_TLHHb{2});
+nirs_Hb_SMA{3} = ft_selectdata(cfg, nirs_TLHHb{3});
+nirs_Hb_SMA{4} = ft_selectdata(cfg, nirs_TLHHb{4});
+
+save('nirs_HbO2_SMA.mat', 'nirs_HbO2_SMA');
+save('nirs_Hb_SMA.mat', 'nirs_Hb_SMA');
+
+% M1: Rx3-Tx2, Rx1-Tx2, Rx3-Tx3, Rx1-Tx3, Rx2-Tx4, Rx2-Tx3.
+cfg = [];
+cfg.channel = {'Rx3-Tx2', 'Rx1-Tx2', 'Rx3-Tx3', 'Rx1-Tx3', 'Rx2-Tx4',...
+    'Rx2-Tx3'};
+nirs_HbO2_M1{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
+nirs_HbO2_M1{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
+nirs_HbO2_M1{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
+nirs_HbO2_M1{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
+nirs_Hb_M1{1} = ft_selectdata(cfg, nirs_TLHHb{1});
+nirs_Hb_M1{2} = ft_selectdata(cfg, nirs_TLHHb{2});
+nirs_Hb_M1{3} = ft_selectdata(cfg, nirs_TLHHb{3});
+nirs_Hb_M1{4} = ft_selectdata(cfg, nirs_TLHHb{4});
+
+save('nirs_HbO2_M1.mat', 'nirs_HbO2_M1');
+save('nirs_Hb_M1.mat', 'nirs_Hb_M1');
+
+% PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
+cfg = [];
+cfg.channel = {'Rx3-Tx2', 'Rx1-Tx2', 'Rx3-Tx3', 'Rx1-Tx3', 'Rx2-Tx4',...
+    'Rx2-Tx3'};
+nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
+nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
+nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
+nirs_HbO2_PPC{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
+nirs_Hb_PPC{1} = ft_selectdata(cfg, nirs_TLHHb{1});
+nirs_Hb_PPC{2} = ft_selectdata(cfg, nirs_TLHHb{2});
+nirs_Hb_PPC{3} = ft_selectdata(cfg, nirs_TLHHb{3});
+nirs_Hb_PPC{4} = ft_selectdata(cfg, nirs_TLHHb{4});
+
+save('nirs_HbO2_PPC.mat', 'nirs_HbO2_PPC');
+save('nirs_Hb_PPC.mat', 'nirs_Hb_PPC');
+
+%% Average the responses over all channels of specific regions and plot them.
+% DLPFC.
+for con = 1:length(conditions)
+    regionsavg_HbO2_DLPFC{con} = mean(nirs_HbO2_DLPFC{con}.avg, 1);
+    regionsavg_Hb_DLPFC{con} = mean(nirs_Hb_DLPFC{con}.avg, 1);
+    
+    figure; title(char(taskname{con}));
+    plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r');
+    hold on;
+    plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b');
+    hold on;
+    xline(0);
+    hold off;
+    legend('Hb02', 'Hb');
+    xlim([-10 20]);
+    ylim([-0.4 0.4])
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, [char(taskname{con}) '_DLPFC.png']);
+    
+end
+
+% SMA.
+for con = 1:length(conditions)
+    regionsavg_HbO2_SMA{con} = mean(nirs_HbO2_SMA{con}.avg, 1);
+    regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
+    
+    figure; title(char(taskname{con}));
+    plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r');
+    hold on;
+    plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b');
+    hold on;
+    xline(0);
+    hold off;
+    legend('Hb02', 'Hb');
+    xlim([-5 20]);
+    ylim([-0.2 0.25])
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, [char(taskname{con}) '_SMA.png']);
+    
+end
+
+% M1.
+for con = 1:length(conditions)
+    regionsavg_HbO2_M1{con} = mean(nirs_HbO2_M1{con}.avg, 1);
+    regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
+    
+    figure; title(char(taskname{con}));
+    plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r');
+    hold on;
+    plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b');
+    hold on;
+    xline(0);
+    hold off;
+    legend('Hb02', 'Hb');
+    xlim([-5 20]);
+    ylim([-0.15 0.2])
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, [char(taskname{con}) '_M1.png']);
+    
+end
+
+% PPC.
+for con = 1:length(conditions)
+    regionsavg_HbO2_PPC{con} = mean(nirs_HbO2_PPC{con}.avg, 1);
+    regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
+    
+    figure; title(char(taskname{con}));
+    plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r');
+    hold on;
+    plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b');
+    hold on;
+    xline(0);
+    hold off;
+    legend('Hb02', 'Hb');
+    xlim([-5 20]);
+    ylim([-0.1 0.15])
+    
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, [char(taskname{con}) '_PPC.png']);
+    
 end
 
 disp('This was the end of individual subjects.');
@@ -212,27 +369,4 @@ for i=1:length(nirs_input.trialinfo)
     end
 end
 
-end
-
-function plotScales(hlim, vlim, hpos, vpos, width, height)
-
-% the placement of all elements is identical
-placement = {'hpos', hpos, 'vpos', vpos, 'width', width, 'height', height, 'hlim', hlim, 'vlim', vlim};
-
-ft_plot_box([hlim vlim], placement{:}, 'edgecolor', 'k');
-
-if hlim(1)<=0 && hlim(2)>=0
-    ft_plot_line([0 0], vlim, placement{:}, 'color', 'k');
-    ft_plot_text(0, vlim(1), '0  ', placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'middle', 'FontSize', 8);
-end
-
-if vlim(1)<=0 && vlim(2)>=0
-    ft_plot_line(hlim, [0 0], placement{:}, 'color', 'k');
-    ft_plot_text(hlim(1), 0, '0  ', placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'middle', 'FontSize', 8);
-end
-
-ft_plot_text(hlim(1), vlim(1), [num2str(hlim(1), 3) ' '], placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'top',    'FontSize', 8);
-ft_plot_text(hlim(2), vlim(1), [num2str(hlim(2), 3) ' '], placement{:}, 'rotation', 90, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom', 'FontSize', 8);
-ft_plot_text(hlim(1), vlim(1), [num2str(vlim(1), 3) ' '], placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'bottom', 'FontSize', 8);
-ft_plot_text(hlim(1), vlim(2), [num2str(vlim(2), 3) ' '], placement{:}, 'HorizontalAlignment', 'Right', 'VerticalAlignment', 'top',    'FontSize', 8);
 end
