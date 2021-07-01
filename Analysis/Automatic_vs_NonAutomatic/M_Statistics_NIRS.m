@@ -63,6 +63,11 @@ end
 
 cfg = [];
 avg_autocued_DLPFC = ft_timelockgrandaverage(cfg, nirs_autocued_DLPFC{:});
+avg_autouncued_DLPFC = ft_timelockgrandaverage(cfg, nirs_autouncued_DLPFC{:});
+
+%%
+cfg = [];
+avg_HbO2_DLPFC = ft_timelockgrandaverage(cfg, nirs_HbO2_DLPFC{:});
 
 %% T-TEST.
 
@@ -84,7 +89,7 @@ cfg.design(2,1:2*Nsub)  = [1:Nsub 1:Nsub];
 cfg.ivar                = 1; % the 1st row in cfg.design contains the independent variable
 cfg.uvar                = 2; % the 2nd row in cfg.design contains the subject number
 
-stat = ft_timelockstatistics(cfg, nirs_autocued_DLPFC(:));   % don't forget the {:}!
+stat = ft_timelockstatistics(cfg, avg_HbO2_DLPFC{1}(:), avg_HbO2_DLPFC{3}(:));   % don't forget the {:}!
 
 %% Functions.
 function [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc)

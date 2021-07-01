@@ -11,9 +11,9 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='02';
-rec_nirs='02';
-rec_eeg='02';
+sub='76';
+rec_nirs='01';
+rec_eeg='01';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
