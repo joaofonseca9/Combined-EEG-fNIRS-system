@@ -33,10 +33,14 @@ for iSub = 1:length(subject)
     
     % load data
     ID = char(subject(iSub));
-    load([mainpath_in,'\processed\sub-',ID,'\ResultsMatrix\sub-',ID,'_checkVEP.mat']); comb = CHECKerp; clear CHECKerp;
+    load([mainpath_in,'\processed\sub-',ID,'\ResultsMatrix\sub-',ID,'_checkVEP.mat']); 
+    comb = CHECKerp; 
+    clear CHECKerp;
     
     ID_eeg_only= char(subject_eeg_only(iSub));
-    load(['C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Validation Data\EEG\ID',ID_eeg_only,'checkVEP_eegonly.mat']); eeg_only = CHECKerp; clear CHECKerp;
+    load(['C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Validation Data\EEG\ID',ID_eeg_only,'checkVEP_eegonly.mat']); 
+    eeg_only = CHECKerp; 
+    clear CHECKerp;
     
     % collect VEP of all subjects [chan x time x subject]
     for iChan = 1:length(chans)
@@ -55,33 +59,11 @@ for iSub = 1:length(subject)
     allGFP.eeg_only(iSub,:) = eeg_only.GFPt;
     allGFP.comb(iSub,:) = comb.GFPt;
     
-    %% Root Mean Square Deviation (RMSD) - Fiedler (2015)
-    for iL = 1:length(comb.GFPt)
-        D(iL) = (eeg_only.GFPt(iL)-comb.GFPt(iL)).^2;
-    end
-    RMSD(iSub,1) = sqrt(sum(D)/length(comb.GFPt));    
     
-    %% Spearman's rank Correlation (COR) - Fiedler (2015)
-    for iL = 1:length(comb.GFPt)
-        Dg(iL) = eeg_only.GFPt(iL)-mean(eeg_only.GFPt);
-        Dd(iL) = comb.GFPt(iL)-mean(comb.GFPt);
-    end
-    COR(iSub,1) = sum(Dg.*Dd) / sqrt( sum(Dg.^2).*sum(Dd.^2) ); 
     
     clear D Dg Dd comb eeg_only
 end
 
-%% test for normality of COR and RMSD
-
-[~,NormalDistr.COR]   = kstest(COR);
-[~,NormalDistr.RMSD]  = kstest(RMSD);
-
-%% average RMSD and COR
-
-RES.RMSD(1,1)   = mean(RMSD);
-RES.RMSD(1,2)   = 2*std(RMSD);
-RES.COR(1,1)    = mean(COR);
-RES.COR(1,2)    = 2*std(COR);
 
 %% plot mean per channel over subjects + mean and std of GFPt
 
@@ -123,7 +105,7 @@ avgGFP.comb = mean(allGFP.comb,1);
 avgVEP.eeg_only = mean(allVEP.eeg_only,3, 'omitnan');
 avgVEP.comb = mean(allVEP.comb,3, 'omitnan');
 
-% get main component N1: 0.11-0.13s (N75 peak)
+% get main component N1: 0.11-0.13s (N1 peak)
 [eeg_onlyN1.loc, eeg_onlyN1.time, eeg_onlyN1.amp] = get_mainVEPcomponents (time, avgGFP.eeg_only, [0.11 0.13]);
 [combN1.loc, combN1.time, combN1.amp] = get_mainVEPcomponents (time, avgGFP.comb, [0.11 0.13]);
 
@@ -146,6 +128,31 @@ allVEPnrm.comb = (allVEP.comb - min(allVEP.comb,1,'omitnan')) ./ (max(allVEP.com
 % > average normalized VEP
 avgVEPnrm.eeg_only = mean(allVEPnrm.eeg_only,3, 'omitnan');
 avgVEPnrm.comb = mean(allVEPnrm.comb,3, 'omitnan');
+
+%% Root Mean Square Deviation (RMSD) - Fiedler (2015)
+for iL = 1:length(avgGFP.comb)
+    D(iL) = (avgGFP.eeg_only(iL)-avgGFP.comb(iL)).^2;
+end
+RMSD = sqrt(sum(D)/length(avgGFP.comb));    
+
+%% Spearman's rank Correlation (COR) - Fiedler (2015)
+for iL = 1:length(avgGFP.comb)
+    Dg(iL) = avgGFP.eeg_only(iL)-mean(avgGFP.eeg_only);
+    Dd(iL) = avgGFP.comb(iL)-mean(avgGFP.comb);
+end
+COR = sum(Dg.*Dd) / sqrt( sum(Dg.^2).*sum(Dd.^2) ); 
+
+    % %% test for normality of COR and RMSD
+% 
+% [~,NormalDistr.COR]   = kstest(COR);
+% [~,NormalDistr.RMSD]  = kstest(RMSD);
+% 
+% %% average RMSD and COR
+% 
+% RES.RMSD(1,1)   = mean(RMSD);
+% RES.RMSD(1,2)   = 2*std(RMSD);
+% RES.COR(1,1)    = mean(COR);
+% RES.COR(1,2)    = 2*std(COR);
 
 %% data for topoplot of main VEP components, average over subjects
 
@@ -173,7 +180,7 @@ for iSub = 1:size(subject,2)
     close Figure 100
 end
 % permutation testing
-figure, title('N1 peak - Raw Data')
+% figure, title('N1 peak - Raw Data')
 [permN1.zmap, permN1.zmapTH, permN1.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 
 % percentage of significant pixels 
@@ -191,7 +198,7 @@ for iSub = 1:size(subject,2)
     close Figure 100
 end
 
-figure, title('P1 peak - Raw Data')
+% figure, title('P1 peak - Raw Data')
 % permutation testing
 [permP1.zmap, permP1.zmapTH, permP1.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 
@@ -216,7 +223,7 @@ for iSub = 1:size(subject,2)
     close Figure 100
 end
 
-figure, title('N1 peak - Standardized Data')
+% figure, title('N1 peak - Standardized Data')
 % permutation testing
 [permN1std.zmap, permN1std.zmapTH, permN1std.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 % percentage of pixels significant
@@ -236,7 +243,7 @@ end
 
 
 
-figure, title('P1 peak - Standardized Data')
+% figure, title('P1 peak - Standardized Data')
 % permutation testing
 [permP1std.zmap, permP1std.zmapTH, permP1std.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
 % percentage of pixels significant
@@ -250,10 +257,10 @@ clear grid_comb grid_eeg_only nrpix_sig nrix_total
 PermTopoplot (permN1std, permP1std, eeg_onlyN1std, combN1std, eeg_onlyP1std, combP1std, chanlocs, xmesh, ymesh, 16, 'std');
 
 saveas(gcf, 'Fig_CHECK_erp/Topoplots_standard_data.jpg');
-% %% permutation testing: normalized data
-% 
-% % eeg_only-N1 VS comb-N1
-% % use topoplot to obtain grid (pixels) per subject 
+%% permutation testing: normalized data
+
+% eeg_only-N1 VS comb-N1
+% use topoplot to obtain grid (pixels) per subject 
 % for iSub = 1:size(subject,2)
 %     figure(100); subplot(121); title('combEEG'); [~,grid_comb(:,:,iSub),~,~,~] = topoplot(allVEPnrm.comb(:,combN1.loc,iSub), chanlocs);
 %     figure(100); subplot(122); title('eeg_onlyEEG'); [~,grid_eeg_only(:,:,iSub),~,~,~] = topoplot(allVEPnrm.eeg_only(:,eeg_onlyN1.loc,iSub), chanlocs);
@@ -286,7 +293,14 @@ saveas(gcf, 'Fig_CHECK_erp/Topoplots_standard_data.jpg');
 % 
 % % plot topoplot with significant regions
 % PermTopoplot (permN1nrm, permP1nrm, eeg_onlyN1nrm, combN1nrm, eeg_onlyP1nrm, combP1nrm, chanlocs, xmesh, ymesh, 17, 'nrm');
+% saveas(gcf, 'Fig_CHECK_erp/Topoplots_normalized_data.jpg');
 
+
+fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+fprintf('Statistics: \n')
+fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n \n')
+fprintf('RMSD: %d \n', RMSD)
+fprintf('Spearman´s rank correlation: %d \n', COR)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

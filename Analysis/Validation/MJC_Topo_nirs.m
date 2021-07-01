@@ -9,13 +9,13 @@ mainpath_in=fullfile(mainpath_in,'pre-processed');
 mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\processed';
 
 % select ID number and cap
-subject=[{'02','64','28'}];
+subjects=[{'02','64','28'}];
 subject_nirs_only=[{'03','04','10'}];%,'11','12',}];
 
 
-for iSub = 1:size(subject,2)
+for iSub = 1:size(subjects,2)
     %% 1. Info
-    sub = char(subject(iSub));
+    sub = char(subjects(iSub));
     
     load(fullfile(mainpath_in,['sub-',sub],'3d','layout.mat'));
     sub_dir=fullfile(mainpath_out,['sub-',sub]);
@@ -67,10 +67,11 @@ for iSub = 1:size(subject,2)
         cfg                 = [];
         cfg.baseline        = [-10 0]; % define the amount of seconds you want to use for the baseline
         data_TL_blc{task}     = ft_timelockbaseline(cfg, data_TL{task});
+        data_all{task}{iSub}=data_TL_blc{task};
     end
     save(fullfile(sub_dir,'nirs','data_TL_blc.mat'),'data_TL_blc');
     
-    %% 5. Take the HbO activity only
+    %% 5. Separate HbO activity only
     data_labels=nirs_preprocessed.label;
     for task=1:8
         cfg=[];
@@ -85,14 +86,14 @@ for iSub = 1:size(subject,2)
     end
     
 
-    %% 6. Topoplot
+    %% 6. Topoplot - per subject
     cfg          = [];
     cfg.layout   = layout;
     cfg.marker   = 'labels';
      % Choose the time window over which you want to average
     for task=1:8
         cfg.xlim     = [5 10];
-        cfg.zlim     = [ ];
+        cfg.zlim     = [-0.1 0.1];
         figure;
         title(task_label{task})
         ft_topoplotER(cfg, data_O2Hb{task});
@@ -101,3 +102,74 @@ for iSub = 1:size(subject,2)
     
     
 end
+
+
+%% TOPOPLOT FOR ALL SUBJECT
+for task=1:8
+    cfg=[];
+    grandavg{task}= ft_timelockgrandaverage(cfg, data_all{task}{:});
+end
+
+%% 5. Plot the data
+
+
+% d) Separate O2Hb and HHb channels (only for task 1, task 2 as been done)
+for task=1:8
+    cfg=[];
+    cfg.channel='* [O2Hb]';
+    data_TL_O2Hb{task}=ft_selectdata(cfg, grandavg{task});
+    % and rename labels such that they have the same name as HHb channels
+    for i=1:length(data_TL_O2Hb{task}.label)
+        tmp = strsplit(data_TL_O2Hb{task}.label{i});
+        data_TL_O2Hb{task}.label{i}=tmp{1};
+    end
+%     save(fullfile(val_dir,'data_TL_O2Hb.mat'),'data_TL_O2Hb');
+    
+    % The same for HHb channels
+    cfg=[];
+    cfg.channel='* [HHb]';
+    data_TL_HHb{task}=ft_preprocessing(cfg, grandavg{task});
+    for i=1:length(data_TL_HHb{task}.label)
+        tmp = strsplit(data_TL_HHb{task}.label{i});
+        data_TL_HHb{task}.label{i}=tmp{1};
+    end
+%     save(fullfile(val_dir,'data_TL_HHb.mat'),'data_TL_HHb');
+end
+
+%% e) Topoplots for each task
+task_label={'AutoDualCue','AutoSingleCue','NonAutoDualCue',...
+        'NonAutoSingleCue','AutoDualNoCue','AutoSingleNoCue',...
+        'NonAutoDualNoCue','NonAutoSingleNoCue'};
+cfg          = [];
+cfg.layout   = layout;
+cfg.marker   = 'labels';
+cfg.ylim     = [-0.2 0.2];
+cfg.xlim     = [5 10];
+cfg.zlim     = cfg.ylim/2;
+ % Choose the time window over which you want to average
+for task=1:8
+    figure;
+    title(task_label{task})
+    ft_topoplotER(cfg, data_TL_O2Hb{task});
+    saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_',task_label{task},'.jpg']))
+end
+
+%% f) Topoplots for total avg
+for task=1:8
+    cfg=[];
+    data_all= ft_timelockgrandaverage(cfg, data_TL_O2Hb{task});
+end
+
+cfg          = [];
+cfg.layout   = layout;
+cfg.marker   = 'labels';
+cfg.ylim     = [-0.2 0.2];
+cfg.xlim     = [5 10];
+cfg.zlim     = cfg.ylim/2;
+figure;
+title('All task averaged')
+ft_topoplotER(cfg, data_TL_O2Hb{task});
+
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_alltask_.jpg']))
+
+
