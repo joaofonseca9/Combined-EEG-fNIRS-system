@@ -134,7 +134,7 @@ for con = 1:length(conditions)
             nirs_TLblc{con}{subject}.avg(46, :) = NaN;
         end
         
-        cd(fullfile(results_path, ['Sub-',char(sub)], 'Timelock Analysis'));
+        cd(fullfile(results_path, 'Timelock Analysis'));
         save('nirs_TLblc.mat','nirs_TLblc');
     end
 end
@@ -302,15 +302,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_DLPFC{con} = mean(nirs_Hb_DLPFC{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r');
+    plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b');
+    plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-10 20]);
-    ylim([-0.4 0.4])
+    ylim([-0.3 0.3]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_DLPFC.png']);
@@ -323,15 +325,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r');
+    plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b');
+    plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.2 0.25])
+    ylim([-0.15 0.15]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_SMA.png']);
@@ -344,15 +348,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r');
+    plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b');
+    plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.15 0.2])
+    ylim([-0.1 0.1]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_M1.png']);
@@ -365,15 +371,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r');
+    plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b');
+    plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.1 0.15])
+    ylim([-0.15 0.15]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_PPC.png']);
