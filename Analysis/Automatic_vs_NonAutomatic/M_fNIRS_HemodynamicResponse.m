@@ -118,9 +118,6 @@ for subject = 1:size(subrec, 1)
         cd()
         load(fullfile(results_path, ['Sub-', char(sub)],...
             'Timelock Analysis\nirs_TLblc.mat'), 'nirs_TLblc');
-        % Compensate for removed channels.
-        nirs_Tlblc_compensated = compensateRemovedChannels(nirs_TLblc,...
-            list_channels);
         nirs_all{con}{subject} = nirs_TLblc{con};
     end
 end
@@ -202,10 +199,11 @@ end
 
 cd(fullfile(results_path, 'Areas'));
 
-% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12.
+% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12,
+% Rx11-Tx13.
 cfg = [];
 cfg.channel = {'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx9-Tx13',...
-    'Rx9-Tx12', 'Rx11-Tx12'};
+    'Rx9-Tx12', 'Rx11-Tx12', 'Rx11-Tx13'};
 nirs_HbO2_DLPFC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_DLPFC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_DLPFC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
@@ -251,8 +249,8 @@ save('nirs_Hb_M1.mat', 'nirs_Hb_M1');
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
 cfg = [];
-cfg.channel = {'Rx3-Tx2', 'Rx1-Tx2', 'Rx3-Tx3', 'Rx1-Tx3', 'Rx2-Tx4',...
-    'Rx2-Tx3'};
+cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx12-Tx15',...
+    'Rx10-Tx14', 'Rx12-Tx14'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
@@ -380,28 +378,5 @@ for i=1:length(nirs_input.trialinfo)
         numRemovedTrials = numRemovedTrials+1;
     end
 end
-
-end
-
-function nirs_Tlblc_compensated = compensateRemovedChannels(nirs_TLblc,...
-    list_channels)
-
-% Array to see which channels are missing.
-list_present = zeros(44, 1);
-
-% If there are less than 30 channels.
-if size(nirs_TLblc{1}.label, 1)<44
-    
-    % Loop through the conditions.
-    for con=1:4
-        % Initialize new power array.
-        nirs_Tlblc_compensated{con} = {}
-        
-        power_array_out = zeros(size(power_array_in));
-        power_array_out(:, 1:size(power_array_in, 2)) = power_array_in;
-    end
-    
-end
-
 
 end

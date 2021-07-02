@@ -9,7 +9,7 @@ eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
 
-subrec = ["28" "04"; "02" "02"];
+subrec = ["28" "04"; "02" "02"; "76" "2"];
 
 % List of the 30 channels present in the cap.
 list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
