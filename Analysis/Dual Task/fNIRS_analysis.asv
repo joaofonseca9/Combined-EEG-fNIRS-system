@@ -260,8 +260,8 @@ nirs_Hb_PPC{4} = ft_selectdata(cfg, nirs_TLHHb{4});
 save('nirs_HbO2_PPC.mat', 'nirs_HbO2_PPC');
 save('nirs_Hb_PPC.mat', 'nirs_Hb_PPC');
 
-%% Average the responses over all channels of specific regions and plot them
-% DLPFC
+%% Average the responses over all channels of specific regions and plot them.
+% DLPFC.
 for con = 1:length(conditions)
     regionsavg_HbO2_DLPFC{con} = mean(nirs_HbO2_DLPFC{con}.avg, 1);
     regionsavg_Hb_DLPFC{con} = mean(nirs_Hb_DLPFC{con}.avg, 1);
@@ -282,7 +282,7 @@ for con = 1:length(conditions)
     
 end
 
-% SMA
+% SMA.
 for con = 1:length(conditions)
     regionsavg_HbO2_SMA{con} = mean(nirs_HbO2_SMA{con}.avg, 1);
     regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
@@ -303,7 +303,7 @@ for con = 1:length(conditions)
     
 end
 
-% M1
+% M1.
 for con = 1:length(conditions)
     regionsavg_HbO2_M1{con} = mean(nirs_HbO2_M1{con}.avg, 1);
     regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
@@ -324,7 +324,7 @@ for con = 1:length(conditions)
     
 end
 
-% PPC
+% PPC.
 for con = 1:length(conditions)
     regionsavg_HbO2_PPC{con} = mean(nirs_HbO2_PPC{con}.avg, 1);
     regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
