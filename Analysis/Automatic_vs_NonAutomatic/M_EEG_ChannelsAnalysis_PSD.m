@@ -33,6 +33,24 @@ for subject = 1:size(subrec, 1)
     EEG_AutoCued = EEG_divided.EEG_AutoCue;
     EEG_NonAutoCued = EEG_divided.EEG_NonAutoCue;
     
+    % Get the locations of the channels of interest for the first subject
+    % since he has all the channels.
+    if subject==1
+        locs = {EEG_AutoCued.chanlocs.labels};
+        % DLPFC.
+        F7_loc = find(contains(locs, 'F7'));
+        F8_loc = find(contains(locs, 'F8'));
+        % SMA.
+        FC1_loc = find(contains(locs, 'FC1'));
+        FC2_loc = find(contains(locs, 'FC2'));
+        Cz_loc = find(contains(locs, 'Cz'));
+        % M1.
+        C3_loc = find(contains(locs, 'C3'));
+        % PPC.
+        P3_loc = find(contains(locs, 'P3'));
+        P4_loc = find(contains(locs, 'P4'));
+    end
+    
     % Calculate threshold to eliminate noisy epochs.
     th = calculateThreshold(EEG_divided);
     
@@ -46,7 +64,7 @@ for subject = 1:size(subrec, 1)
     % Get the power spectrum density (PSD) averaged over all trials.
     [power, freq] = calculateAveragePowerAllTrials(EEG_AutoUncued,...
         event_samp, startTask, endTask, keypresses, th);
-    
+   
     % Compensate for removed channels.
     power = compensateRemovedChannels(power, EEG_AutoUncued, list_channels);
     
@@ -103,22 +121,6 @@ for subject = 1:size(subrec, 1)
     
     % Save the values onto a allSubjects variable.
     nonautocued_power_allSubjects(:, :, subject) = power;
-    
-    %% Get the locations of the channels of interest.
-    
-    locs = {EEG_AutoCued.chanlocs.labels};
-    % DLPFC.
-    F7_loc = find(contains(locs, 'F7'));
-    F8_loc = find(contains(locs, 'F8'));
-    % SMA.
-    FC1_loc = find(contains(locs, 'FC1'));
-    FC2_loc = find(contains(locs, 'FC2'));
-    Cz_loc = find(contains(locs, 'Cz'));
-    % M1.
-    C3_loc = find(contains(locs, 'C3'));
-    % PPC.
-    P3_loc = find(contains(locs, 'P3'));
-    P4_loc = find(contains(locs, 'P4'));
     
     %% Get the values of power for the regions of interest and plot them.
     
