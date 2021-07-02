@@ -116,6 +116,8 @@ stat_nonauto_PPC = ft_timelockstatistics(cfg, nirs_nonautouncued_PPC{:},...
     nirs_nonautocued_PPC{:});
 stats.nonauto_PPC = stat_nonauto_PPC.prob;
 
+save(strcat(statistics_path, '\stats_nirs.mat'), 'stats');
+
 %% Functions.
 function [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc)
 % Separate O2Hb and HHb channels.
@@ -146,10 +148,11 @@ end
 function [nirs_HbO2_DLPFC, nirs_HbO2_SMA, nirs_HbO2_M1, nirs_HbO2_PPC] =...
     extractROIs(nirs_TLO2Hb)
 
-% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12.
+% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12,
+% Rx11-Tx13.
 cfg = [];
 cfg.channel = {'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx9-Tx13',...
-    'Rx9-Tx12', 'Rx11-Tx12'};
+    'Rx9-Tx12', 'Rx11-Tx12', 'Rx11-Tx13'};
 nirs_HbO2_DLPFC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_DLPFC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_DLPFC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
