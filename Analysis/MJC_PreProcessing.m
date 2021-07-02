@@ -2,8 +2,8 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-% laptop='laptopCatarina';
-laptop='laptopMariana';
+laptop='laptopCatarina';
+% laptop='laptopMariana';
 % laptop='laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
@@ -11,9 +11,9 @@ eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='76';
-rec_nirs='01';
-rec_eeg='01';
+sub='02';
+rec_nirs='02';
+rec_eeg='02';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -387,6 +387,10 @@ if strcmp(sub,'02')
     nirs_new.trial{1,80}=zeros(44,292);
 end
 
+if strcmp(sub,'76')
+    nirs_new.trial{1,80}=zeros(44,323);
+end
+
 % Get times in trials right
 for i = 1:length(nirs_new.trial)-1
     if    length(nirs_new.trial{1,i})~=length(nirs_reject.trial{1,i})    
@@ -419,14 +423,6 @@ for i = 1:length(nirs_new.trial)-1
     end
 end
 
-% d1=abs(length(nirs_reg.trial{1,1})-length(nirs_new.trial{1,80}));
-% d2=abs(length(nirs_reject.trial{1,80})-length(nirs_new.trial{1,80}));
-% for i = length(nirs_new.trial{1,80}):length(nirs_reject.trial{1,80})
-%     for j = d1:d1+d2
-%         nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
-%     end
-% end
-
 if strcmp(sub,'02')
     for i = 1:293
     nirs_new.trial{1,80}(:,1)=[];
@@ -435,6 +431,26 @@ if strcmp(sub,'02')
     d1=abs(length(nirs_reg.trial{1,1})-293);
     d2=abs(length(nirs_reject.trial{1,80})-size(nirs_new.trial{1,80},2));
     for i = size(nirs_new.trial{1,80},2):length(nirs_reject.trial{1,80})
+        for j = d1:d1+d2
+            nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
+        end
+    end
+elseif strcmp(sub,'76')
+     for i = 1:324
+    nirs_new.trial{1,80}(:,1)=[];
+    i=i+1;
+    end
+    d1=abs(length(nirs_reg.trial{1,1})-324);
+    d2=abs(length(nirs_reject.trial{1,80})-size(nirs_new.trial{1,80},2));
+    for i = size(nirs_new.trial{1,80},2):length(nirs_reject.trial{1,80})
+        for j = d1:d1+d2
+            nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
+        end
+    end
+else
+    d1=abs(length(nirs_reg.trial{1,1})-length(nirs_new.trial{1,80}));
+    d2=abs(length(nirs_reject.trial{1,80})-length(nirs_new.trial{1,80}));
+    for i = length(nirs_new.trial{1,80}):length(nirs_reject.trial{1,80})
         for j = d1:d1+d2
             nirs_new.trial{1,80}(:,i)=nirs_reg.trial{1,1}(:,j);
         end
