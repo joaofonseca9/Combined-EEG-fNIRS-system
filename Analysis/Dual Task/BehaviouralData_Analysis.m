@@ -8,7 +8,7 @@ laptop = 'laptopCatarina';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Analysis\behavioural';
 
-subrec = ["28" "04" "A"; "64" "01" "A"; "02" "02" "B"];
+subrec = ["28" "04" "A"; "64" "01" "A"; "02" "02" "B"; "76" "01" "B"];
 
 A = '243413412132';
 B = '413241423213';
