@@ -1,4 +1,4 @@
-%% Analysis of the EEG signals - separate channels.
+%% Analysis of the EEG signals - PSD.
 
 clear; clc; close all;
 addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
@@ -134,10 +134,10 @@ for subject = 1:size(subrec, 1)
     nonautouncued_power_F8 = nonautouncued_power_allSubjects(:, F8_loc, subject);
     nonautocued_power_F8 = nonautocued_power_allSubjects(:, F8_loc, subject);
     
-    autouncued_power_DLPFC = mean([autouncued_power_F7 autouncued_power_F8]);
-    autocued_power_DLPFC = mean([autocued_power_F7 autocued_power_F8]);
-    nonautouncued_power_DLPFC = mean([nonautouncued_power_F7 nonautouncued_power_F8]);
-    nonautocued_power_DLPFC = mean([nonautocued_power_F7 nonautocued_power_F8]);
+    autouncued_power_DLPFC = mean([autouncued_power_F7 autouncued_power_F8], 2);
+    autocued_power_DLPFC = mean([autocued_power_F7 autocued_power_F8], 2);
+    nonautouncued_power_DLPFC = mean([nonautouncued_power_F7 nonautouncued_power_F8], 2);
+    nonautocued_power_DLPFC = mean([nonautocued_power_F7 nonautocued_power_F8], 2);
     
     figure; title('DLPFC');
     plot(freq, autouncued_power_DLPFC, '-b'); hold on;
@@ -177,13 +177,13 @@ for subject = 1:size(subrec, 1)
     nonautocued_power_Cz = nonautocued_power_allSubjects(:, Cz_loc, subject);
     
     autouncued_power_SMA = mean([autouncued_power_FC1 autouncued_power_FC2...
-        autouncued_power_Cz]);
+        autouncued_power_Cz], 2);
     autocued_power_SMA = mean([autocued_power_FC1 autocued_power_FC2...
-        autocued_power_Cz]);
+        autocued_power_Cz], 2);
     nonautouncued_power_SMA = mean([nonautouncued_power_FC1 nonautouncued_power_FC2...
-        nonautouncued_power_Cz]);
+        nonautouncued_power_Cz], 2);
     nonautocued_power_SMA = mean([nonautocued_power_FC1 nonautocued_power_FC2...
-        nonautocued_power_Cz]);
+        nonautocued_power_Cz], 2);
     
     figure; title('SMA');
     plot(freq, autouncued_power_SMA, '-b'); hold on;
@@ -244,10 +244,10 @@ for subject = 1:size(subrec, 1)
     nonautouncued_power_P4 = nonautouncued_power_allSubjects(:, P4_loc, subject);
     nonautocued_power_P4 = nonautocued_power_allSubjects(:, P4_loc, subject);
     
-    autouncued_power_PPC = mean([autouncued_power_P3 autouncued_power_P4]);
-    autocued_power_PPC = mean([autocued_power_P3 autocued_power_P4]);
-    nonautouncued_power_PPC = mean([nonautouncued_power_P3 nonautouncued_power_P4]);
-    nonautocued_power_PPC = mean([nonautocued_power_P3 nonautocued_power_P4]);
+    autouncued_power_PPC = mean([autouncued_power_P3 autouncued_power_P4], 2);
+    autocued_power_PPC = mean([autocued_power_P3 autocued_power_P4], 2);
+    nonautouncued_power_PPC = mean([nonautouncued_power_P3 nonautouncued_power_P4], 2);
+    nonautocued_power_PPC = mean([nonautocued_power_P3 nonautocued_power_P4], 2);
     
     figure; title('PPC');
     plot(freq, autouncued_power_PPC, '-b'); hold on;
@@ -291,13 +291,13 @@ nonautocued_power = mean(nonautocued_power_allSubjects, 3, 'omitnan');
 
 % Get the standard deviation over all subjects.
 % Auto Uncued.
-std_autouncued_power = std(autouncued_power_allSubjects, 0, 3, 'omitnan');
+std_autouncued_power = std(autouncued_power_allSubjects, 1, 3, 'omitnan');
 % Non-Auto Uncued.
-std_nonautouncued_power = std(nonautouncued_power_allSubjects, 0, 3, 'omitnan');
+std_nonautouncued_power = std(nonautouncued_power_allSubjects, 1, 3, 'omitnan');
 % Auto Cued.
-std_autocued_power = std(autocued_power_allSubjects, 0, 3, 'omitnan');
+std_autocued_power = std(autocued_power_allSubjects, 1, 3, 'omitnan');
 % Non-Auto Cued.
-std_nonautocued_power = std(nonautocued_power_allSubjects, 0, 3, 'omitnan');
+std_nonautocued_power = std(nonautocued_power_allSubjects, 1, 3, 'omitnan');
 
 %% Plot the PSD for specific regions of interest.
 
@@ -320,14 +320,14 @@ std_autocued_power_F8 = std_autocued_power(:, F8_loc);
 std_nonautouncued_power_F8 = std_nonautouncued_power(:, F8_loc);
 std_nonautocued_power_F8 = std_nonautocued_power(:, F8_loc);
 
-autouncued_power_DLPFC = mean([autouncued_power_F7 autouncued_power_F8]);
-autocued_power_DLPFC = mean([autocued_power_F7 autocued_power_F8]);
-nonautouncued_power_DLPFC = mean([nonautouncued_power_F7 nonautouncued_power_F8]);
-nonautocued_power_DLPFC = mean([nonautocued_power_F7 nonautocued_power_F8]);
-std_autouncued_power_DLPFC = mean([std_autouncued_power_F7 std_autouncued_power_F8]);
-std_autocued_power_DLPFC = mean([std_autocued_power_F7 std_autocued_power_F8]);
-std_nonautouncued_power_DLPFC = mean([std_nonautouncued_power_F7 std_nonautouncued_power_F8]);
-std_nonautocued_power_DLPFC = mean([std_nonautocued_power_F7 std_nonautocued_power_F8]);
+autouncued_power_DLPFC = mean([autouncued_power_F7 autouncued_power_F8], 2);
+autocued_power_DLPFC = mean([autocued_power_F7 autocued_power_F8], 2);
+nonautouncued_power_DLPFC = mean([nonautouncued_power_F7 nonautouncued_power_F8], 2);
+nonautocued_power_DLPFC = mean([nonautocued_power_F7 nonautocued_power_F8], 2);
+std_autouncued_power_DLPFC = mean([std_autouncued_power_F7 std_autouncued_power_F8], 2);
+std_autocued_power_DLPFC = mean([std_autocued_power_F7 std_autocued_power_F8], 2);
+std_nonautouncued_power_DLPFC = mean([std_nonautouncued_power_F7 std_nonautouncued_power_F8], 2);
+std_nonautocued_power_DLPFC = mean([std_nonautocued_power_F7 std_nonautocued_power_F8], 2);
 
 figure; title('DLPFC');
 tiledlayout(1, 2);
@@ -411,21 +411,21 @@ std_nonautouncued_power_Cz = std_nonautouncued_power(:, Cz_loc);
 std_nonautocued_power_Cz = std_nonautocued_power(:, Cz_loc);
 
 autouncued_power_SMA = mean([autouncued_power_FC1 autouncued_power_FC2...
-    autouncued_power_Cz]);
+    autouncued_power_Cz], 2);
 autocued_power_SMA = mean([autocued_power_FC1 autocued_power_FC2...
-    autocued_power_Cz]);
+    autocued_power_Cz], 2);
 nonautouncued_power_SMA = mean([nonautouncued_power_FC1 nonautouncued_power_FC2...
-    nonautouncued_power_Cz]);
+    nonautouncued_power_Cz], 2);
 nonautocued_power_SMA = mean([nonautocued_power_FC1 nonautocued_power_FC2...
-    nonautocued_power_Cz]);
+    nonautocued_power_Cz], 2);
 std_autouncued_power_SMA = mean([std_autouncued_power_FC1 std_autouncued_power_FC2...
-    std_autouncued_power_Cz]);
+    std_autouncued_power_Cz], 2);
 std_autocued_power_SMA = mean([std_autocued_power_FC1 std_autocued_power_FC2...
-    std_autocued_power_Cz]);
+    std_autocued_power_Cz], 2);
 std_nonautouncued_power_SMA = mean([std_nonautouncued_power_FC1 std_nonautouncued_power_FC2...
-    std_nonautouncued_power_Cz]);
+    std_nonautouncued_power_Cz], 2);
 std_nonautocued_power_SMA = mean([std_nonautocued_power_FC1 std_nonautocued_power_FC2...
-    std_nonautocued_power_Cz]);
+    std_nonautocued_power_Cz], 2);
 
 figure; title('SMA');
 tiledlayout(1, 2);
@@ -562,14 +562,14 @@ std_autocued_power_P4 = std_autocued_power(:, P4_loc);
 std_nonautouncued_power_P4 = std_nonautouncued_power(:, P4_loc);
 std_nonautocued_power_P4 = std_nonautocued_power(:, P4_loc);
 
-autouncued_power_PPC = mean([autouncued_power_P3 autouncued_power_P4]);
-autocued_power_PPC = mean([autocued_power_P3 autocued_power_P4]);
-nonautouncued_power_PPC = mean([nonautouncued_power_P3 nonautouncued_power_P4]);
-nonautocued_power_PPC = mean([nonautocued_power_P3 nonautocued_power_P4]);
-std_autouncued_power_PPC = mean([std_autouncued_power_P3 std_autouncued_power_P4]);
-std_autocued_power_PPC = mean([std_autocued_power_P3 std_autocued_power_P4]);
-std_nonautouncued_power_PPC = mean([std_nonautouncued_power_P3 std_nonautouncued_power_P4]);
-std_nonautocued_power_PPC = mean([std_nonautocued_power_P3 std_nonautocued_power_P4]);
+autouncued_power_PPC = mean([autouncued_power_P3 autouncued_power_P4], 2);
+autocued_power_PPC = mean([autocued_power_P3 autocued_power_P4], 2);
+nonautouncued_power_PPC = mean([nonautouncued_power_P3 nonautouncued_power_P4], 2);
+nonautocued_power_PPC = mean([nonautocued_power_P3 nonautocued_power_P4], 2);
+std_autouncued_power_PPC = mean([std_autouncued_power_P3 std_autouncued_power_P4], 2);
+std_autocued_power_PPC = mean([std_autocued_power_P3 std_autocued_power_P4], 2);
+std_nonautouncued_power_PPC = mean([std_nonautouncued_power_P3 std_nonautouncued_power_P4], 2);
+std_nonautocued_power_PPC = mean([std_nonautocued_power_P3 std_nonautocued_power_P4], 2);
 
 figure; title('PPC');
 tiledlayout(1, 2);
