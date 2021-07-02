@@ -106,15 +106,15 @@ stats.nonauto_DLPFC = stat_nonauto_DLPFC.prob;
 % SMA.
 stat_nonauto_SMA = ft_timelockstatistics(cfg, nirs_nonautouncued_SMA{:},...
     nirs_nonautocued_SMA{:});
-stats.nonauto_SMA = stat_nonauto_SMA.prob;
+stats.nonauto_SMA = stat_auto_SMA.prob;
 % M1.
-stat_nonauto_M1 = ft_timelockstatistics(cfg, nirs_nonautouncued_M1{:},...
-    nirs_nonautocued_M1{:});
-stats.nonauto_M1 = stat_nonauto_M1.prob;
+stat_auto_M1 = ft_timelockstatistics(cfg, nirs_autouncued_M1{:},...
+    nirs_autocued_M1{:});
+stats.auto_M1 = stat_auto_M1.prob;
 % PPC.
-stat_nonauto_PPC = ft_timelockstatistics(cfg, nirs_nonautouncued_PPC{:},...
-    nirs_nonautocued_PPC{:});
-stats.nonauto_PPC = stat_nonauto_PPC.prob;
+stat_auto_PPC = ft_timelockstatistics(cfg, nirs_autouncued_PPC{:},...
+    nirs_autocued_PPC{:});
+stats.auto_PPC = stat_auto_PPC.prob;
 
 %% Functions.
 function [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc)
@@ -174,8 +174,8 @@ nirs_HbO2_M1{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
 cfg = [];
-cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx12-Tx15',...
-    'Rx10-Tx14', 'Rx12-Tx14'};
+cfg.channel = {'Rx3-Tx2', 'Rx1-Tx2', 'Rx3-Tx3', 'Rx1-Tx3', 'Rx2-Tx4',...
+    'Rx2-Tx3'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});

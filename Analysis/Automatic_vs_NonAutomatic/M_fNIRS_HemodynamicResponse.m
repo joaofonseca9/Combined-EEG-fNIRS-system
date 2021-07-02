@@ -9,7 +9,7 @@ results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Result
 analysis_path = 'C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis\Automatic_vs_NonAutomatic';
 addpath(analysis_path);
 
-subrec = ["28" "02"; "02" "02"];
+subrec = ["28" "02"; "02" "02"; "76" "01"];
 conditions = [2 4 6 8];
 
 % Loop through every subject.
@@ -28,6 +28,10 @@ for subject = 1:size(subrec, 1)
     % Keep only the trials of interest (Auto Cued, Non-Auto Cued, Auto
     % Uncued, Non-Auto Uncued).
     nirs = keepTrialsInterest(nirs_preprocessed);
+    
+    % Get the list of channels present in the first subject - contains all
+    % the possible channels
+    list_channels = nirs.label;
     
     %% Baseline correction + plots
     % Get the baseline and topoplot of all conditions for the subject
@@ -54,15 +58,19 @@ for subject = 1:size(subrec, 1)
     
     % Save figures.
     cd(fullfile(results_path, ['Sub-', char(sub)], 'Plots'));
+    set(h{1}, 'Position', get(0, 'Screensize'));
     saveas(h{1}, taskbaseline{1}, 'png'); 
     saveas(h{2}, tasktopoplotO2Hb{1}, 'png'); 
     saveas(h{3}, tasktopoplotHHb{1}, 'png');
+    set(h{4}, 'Position', get(0, 'Screensize'));
     saveas(h{4}, taskbaseline{2}, 'png'); 
     saveas(h{5}, tasktopoplotO2Hb{2}, 'png'); 
     saveas(h{6}, tasktopoplotHHb{2}, 'png');
+    set(h{7}, 'Position', get(0, 'Screensize'));
     saveas(h{7}, taskbaseline{3}, 'png'); 
     saveas(h{8}, tasktopoplotO2Hb{3}, 'png'); 
     saveas(h{9}, tasktopoplotHHb{3}, 'png');
+    set(h{10}, 'Position', get(0, 'Screensize'));
     saveas(h{10}, taskbaseline{4}, 'png'); 
     saveas(h{11}, tasktopoplotO2Hb{4}, 'png'); 
     saveas(h{12}, tasktopoplotHHb{4}, 'png');
@@ -110,6 +118,9 @@ for subject = 1:size(subrec, 1)
         cd()
         load(fullfile(results_path, ['Sub-', char(sub)],...
             'Timelock Analysis\nirs_TLblc.mat'), 'nirs_TLblc');
+        % Compensate for removed channels.
+        nirs_Tlblc_compensated = compensateRemovedChannels(nirs_TLblc,...
+            list_channels);
         nirs_all{con}{subject} = nirs_TLblc{con};
     end
 end
@@ -117,6 +128,7 @@ end
 % Average over all subjects (for each condition seperately)
 for con = 1:length(conditions)
     cfg = [];
+%     cfg.nanmean = 'yes';
     subsavg{con} = ft_timelockgrandaverage(cfg, nirs_all{con}{:});
 end
 cd(results_path);
@@ -368,5 +380,28 @@ for i=1:length(nirs_input.trialinfo)
         numRemovedTrials = numRemovedTrials+1;
     end
 end
+
+end
+
+function nirs_Tlblc_compensated = compensateRemovedChannels(nirs_TLblc,...
+    list_channels)
+
+% Array to see which channels are missing.
+list_present = zeros(44, 1);
+
+% If there are less than 30 channels.
+if size(nirs_TLblc{1}.label, 1)<44
+    
+    % Loop through the conditions.
+    for con=1:4
+        % Initialize new power array.
+        nirs_Tlblc_compensated{con} = {}
+        
+        power_array_out = zeros(size(power_array_in));
+        power_array_out(:, 1:size(power_array_in, 2)) = power_array_in;
+    end
+    
+end
+
 
 end
