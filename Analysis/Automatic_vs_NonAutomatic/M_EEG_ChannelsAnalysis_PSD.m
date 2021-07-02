@@ -159,7 +159,7 @@ for subject = 1:size(subrec, 1)
     s.autouncued_power_DLPFC = autouncued_power_DLPFC;
     s.autocued_power_DLPFC = autocued_power_DLPFC;
     s.nonautouncued_power_DLPFC = nonautouncued_power_DLPFC;
-    s.nonautocued_power_FDLPFC= nonautocued_power_DLPFC;
+    s.nonautocued_power_DLPFC= nonautocued_power_DLPFC;
     
     % SMA.
     
