@@ -89,21 +89,54 @@ for subject = 1:size(subrec, 1)
         nirs_TL{con} = ft_timelockanalysis(cfg, nirs);
     end
     save('nirs_TL.mat', 'nirs_TL');
-  
+    
     %% Timelock analysis for baseline.
     for con = 1:length(conditions)
         cfg = [];
         % Define the amount of seconds you want to use for the baseline.
-        cfg.baseline = [-10 0]; 
-        nirs_TLblc{con} = ft_timelockbaseline(cfg, nirs_TL{con});
+        cfg.baseline = [-10 0];
+        nirs_TLblc{con}{subject} = ft_timelockbaseline(cfg, nirs_TL{con});
     end
-    save('nirs_TLblc.mat','nirs_TLblc');
     
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all;
     
+end
+
+%% Compensate for removed channels.
+
+for con = 1:length(conditions)
+    
+    for subject = 1:size(subrec, 1)
+        
+        sub = subrec(subject, 1);
+        rec = subrec(subject, 2);
+        
+        if strcmp(sub, "02")
+            nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
+            nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
+            nirs_TLblc{con}{subject}.dof(1:46,...
+                1:length(nirs_TLblc{con}{subject}.time)) = 10;
+            nirs_TLblc{con}{subject}.avg =...
+                [nirs_TLblc{con}{subject}.avg((1:39-1), :);...
+                NaN(2, length(nirs_TLblc{con}{subject}.time));...
+                nirs_TLblc{con}{subject}.avg(39:end,:)];
+        end
+        
+        if strcmp(sub,"76")
+            nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
+            nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
+            nirs_TLblc{con}{subject}.dof(1:46,...
+                1:length(nirs_TLblc{con}{subject}.time)) = 10;
+            nirs_TLblc{con}{subject}.avg(45, :) = NaN;
+            nirs_TLblc{con}{subject}.avg(46, :) = NaN;
+        end
+        
+        cd(fullfile(results_path, ['Sub-',char(sub)], 'Timelock Analysis'));
+        save('nirs_TLblc.mat','nirs_TLblc');
+    end
 end
 
 %% Average the hemodynamic responses over all subjects.
@@ -118,14 +151,13 @@ for subject = 1:size(subrec, 1)
         cd()
         load(fullfile(results_path, ['Sub-', char(sub)],...
             'Timelock Analysis\nirs_TLblc.mat'), 'nirs_TLblc');
-        nirs_all{con}{subject} = nirs_TLblc{con};
+        nirs_all{con}{subject} = nirs_TLblc{con}{subject};
     end
 end
 
 % Average over all subjects (for each condition seperately)
 for con = 1:length(conditions)
     cfg = [];
-%     cfg.nanmean = 'yes';
     subsavg{con} = ft_timelockgrandaverage(cfg, nirs_all{con}{:});
 end
 cd(results_path);
