@@ -6,7 +6,7 @@ laptop = 'laptopJoao';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 
 % select ID number and cap
-subject=[{'64','28'}];
+subject=[{'02','28','64','76'}];
 
 chans       = {'Fp1';'Fpz';'Fp2';'F7';'F3';'AFFz';'F4';'F8';'FC5';'FC1';'FC2';'FC6';'T7';'C3';'Cz';'C4';'T8';'CP5';'CP1';'CP2';'CP6';'P7';'P3';'Pz';'P4';'P8';'POz';'O1';'Oz';'O2'};
 time        = -0.1 : 1/1024 : 0.4;
@@ -19,6 +19,8 @@ for iSub = 1:length(subject)
             rec='01';
         case '02'
             rec='02';
+        case '76'
+            rec='01';
     end
     eeglab;
     
@@ -170,41 +172,42 @@ for iSub = 1:length(subject)
     for iChan = 1:length(chans)
     loc = find(strcmp(chans(iChan), KEYerp.chans));
     if ~isempty(loc);        allERP(iChan,:,iSub) = KEYerp.ERP(loc,:);
-    elseif isempty(loc);     allERP(iChan,:,iSub) = NaN;
+    elseif isempty(loc);     allERP(iChan,1:length(KEYerp.ERP),iSub) = NaN;
     end
 
     end
 
     % collect GFPt of all subjects [subject x time]
     allGFP(iSub,:) = GFPt;
-
     
+    
+       
 end
 
 
-file.allsubresults_ERP=fullfile([mainpath_out,'sub-',sub,'\ResultsMatrix\sub-',sub,'_','allERP.mat']);
-file.allsubresults=fullfile([mainpath_out,'sub-',sub,'\ResultsMatrix\sub-',sub,'_','allGFP.mat']);
+file.allsubresults_ERP=fullfile(pwd,'all_keyERP.mat');
+file.allsubresults_GFP=fullfile(pwd,'all_keyGFP.mat');
 save(file.allsubresults_ERP,'allERP');
-save(file.allsubresults,'allGFP');
+save(file.allsubresults_GFP,'allGFP');
 %% Plot mean per channel over subjects + mean and std of GFPt
 GFP1 = mean(allGFP,1,'omitnan') + 2*std(allGFP,[],1,'omitnan');
 GFP2 = mean(allGFP,1,'omitnan') - 2*std(allGFP,[],1,'omitnan');
 figure;
-
+sgtitle('Mean per channel over subjects (Keypress)','FontSize',11);
 subplot(1,2,1); plot(time,mean(allERP,3,'omitnan'),'b');
-subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFP1,fliplr(GFP2)],'b','LineStyle','none');
-set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP,1,'omitnan'),'b','LineWidth',1.5); 
+subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFP1,fliplr(GFP2)],'r','LineStyle','none');
+set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP,1,'omitnan'),'r','LineWidth',1.5); 
 
 
 subplot(1,2,1); set(gca,'FontSize',11); box on;
-ylabel('Potential (\muV)','FontSize',14); title('Mean per channel over subjects (Keypress)','FontSize',11); ylim([-6 6])
+ylabel('Potential (\muV)','FontSize',14);xlabel('Time (s)','FontSize',14);  ylim([-6 6])
 xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k'); 
 
 subplot(1,2,2); set(gca,'FontSize',11); box on;
 ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
 xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k'); 
 
-saveas(gcf, 'mean per channel over subjects + mean and std of GFPt.jpg');
+saveas(gcf, 'Fig_KEY_erp/mean per channel over subjects + mean and std of GFPt.jpg');
 
 
 
@@ -273,7 +276,7 @@ saveas(gcf, 'Fig_KEY_erp/Topoplots_raw_data.jpg');
 
 %% Plotting: standardized data
 
-use topoplot to obtain grid (pixels) per subject 
+%use topoplot to obtain grid (pixels) per subject 
 for iSub = 1:size(subject,1)
     figure(101); title('EEG'); 
     [~,grid(:,:,iSub),~,~,~] = topoplot(allERPstd(:,N0.loc,iSub), chanlocs);
@@ -555,18 +558,14 @@ function PermTopoplot (N0, P150, chanlocs, fignr, type)
     ax(1) = gca; axis on; hold on;
 %     contour(xmesh,ymesh,permN0.zmapTHmcc,1,'k','LineWidth',1); 
     axis off; c1 = colorbar; caxlim(1,:) = caxis; 
-    
+    subplot(122); title('P150: Keypress-EEG'); hold on;
+    topoplot(P150.topo, chanlocs, 'electrodes','off','numcontour',0);
+    ax(2) = gca; axis on; hold on;
+%     contour(xmesh,ymesh,permP150.zmapTHmcc,1,'k','LineWidth',1); 
+    axis off; c2 = colorbar; caxlim(1,:) = caxis; 
 
     set(ax,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]); 
     c1.Ticks = [-round(max(caxlim(:,2)),1) round(max(caxlim(:,2)),1)]; 
-    clear caxlim
-    
-    subplot(122); title('P150: Keypress-EEG'); hold on;
-    topoplot(P150.topo, chanlocs, 'electrodes','off','numcontour',0);
-    ax(1) = gca; axis on; hold on;
-%     contour(xmesh,ymesh,permP150.zmapTHmcc,1,'k','LineWidth',1); 
-    axis off; c2 = colorbar; caxlim(1,:) = caxis; 
-  
 
     set(ax,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]); 
     c2.Ticks = [-round(max(caxlim(:,2)),1) round(max(caxlim(:,2)),1)]; 

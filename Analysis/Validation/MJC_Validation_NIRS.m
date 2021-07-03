@@ -21,8 +21,8 @@ if ~isfolder(val_dir)
     mkdir(val_dir);
 end
 %% select ID number and cap
-subjects_comb=[{'02','28','64'}];
-subject_nirs_only=[{'19','21','43'}];%,'43','69','84'
+subjects_comb=[{'02','28','64','76'}];
+subject_nirs_only=[{'19','21','43', '69'}];%,'84'
 
 
 
@@ -70,16 +70,19 @@ for iSub = 1:size(subjects_comb,2)
         cfg.trials        = find(nirs_preprocessed.trialinfo(:,1)==task); % Average the data for given task
         data_TL{task}     = ft_timelockanalysis(cfg, nirs_preprocessed);
     end
+    if ~isfolder(fullfile(mainpath_in_processed,['sub-',sub],'nirs','data_TL.mat'))
+        mkdir(fullfile(mainpath_in_processed,['sub-',sub],'nirs'));
+    end
     save(fullfile(mainpath_in_processed,['sub-',sub],'nirs','data_TL.mat'), 'data_TL');
 
     % b) apply a baseline correction
     for task=1:8
         cfg                 = [];
         cfg.baseline        = [-10 0]; % define the amount of seconds you want to use for the baseline
-        data_TL_blc{task}     = ft_timelockbaseline(cfg, data_TL{task});
-        data_all{task}{iSub}=data_TL_blc{task};
+        data_TL_blc_comb{task}     = ft_timelockbaseline(cfg, data_TL{task});
+%         data_all{task}{iSub}=data_TL_blc_eeg{task};
     end
-    save(fullfile(mainpath_in_processed,['sub-',sub],'nirs','data_TL_blc.mat'),'data_TL_blc');
+    save(fullfile(mainpath_in_processed,['sub-',sub],'nirs','data_TL_blc.mat'),'data_TL_blc_comb');
     
     %% 4. Get the average for uncued tasks
     cap=2;
@@ -88,7 +91,7 @@ for iSub = 1:size(subjects_comb,2)
     % Use only finger auto & non auto single no cue - task 6 and 8
     for task=uncued_tasks
         cfg=[];
-        data_all{cap}{iSub} = ft_timelockgrandaverage(cfg, data_TL_blc{task});
+        data_all{cap}{iSub} = ft_timelockgrandaverage(cfg, data_TL_blc_comb{task});
     end
         %     for task=uncued_tasks
 %         data_all{cap}{iSub}{task}=data_TL_blc{task};
@@ -167,7 +170,7 @@ for cap=1:2
     save(fullfile(val_dir,'data_TL_HHb.mat'),'data_TL_HHb');
 end
 
-% b) Topoplots for each cap
+%% b) Topoplots for each cap
 capname={'NIRS', 'COMBINED'};
 cfg          = [];
 
@@ -179,16 +182,13 @@ cfg.zlim     = cfg.ylim/2;
 for cap=1:2
     figure;
     cfg.title=capname{cap};
-    if cap==1
-        cfg.layout   = layout_nirs_only;
-    else
-        cfg.layout   = layout_combined;
-    end
+    cfg.layout   = layout_combined;
     ft_topoplotER(cfg, data_TL_O2Hb{cap});
     saveas(gcf,fullfile(fig_dir,['topoplot_',capname{cap},'.jpg']))
 end
 
-% c) Plot both on the lay-out
+%%  CHANNEL WISE COMPARISON
+
 
 %Labels gotten from data
 comb_channels=data_TL_O2Hb{2}.label;
@@ -198,75 +198,85 @@ comb_channels=data_TL_O2Hb{2}.label;
 
 nirs_channels=data_TL_O2Hb{1}.label;
 
-%Check which channels are closer to each other
+%% c) Check which channels are closer to each other
 distances=zeros(length(nirs_channels),length(comb_channels));
-for ii=1:length(nirs_channels)
-    chan_nirs_idx=find(contains(layout_nirs_only.label,nirs_channels(ii)));
-    chan_nirs_pos=layout_nirs_only.pos(chan_nirs_idx);
-    for jj=1:1:length(comb_channels)
-        chan_comb_idx=find(contains(layout_combined.label,comb_channels(jj)));
-        chan_comb_pos=layout_combined.pos(chan_comb_idx);
-        distances(ii,jj)=pdist([chan_nirs_pos;...
-            chan_comb_pos],'euclidean');
+
+%For each channel in the combined system, verify the next closest channel
+%in the nirs system, that is not NaN in the data
+for jj=1:1:length(comb_channels)
+    for ii=1:length(nirs_channels)
+        if ~isnan(data_TL_O2Hb{1}.avg(ii,:)) 
+            chan_nirs_idx=find(contains(layout_nirs_only.label,nirs_channels(ii)));
+            chan_nirs_pos=layout_nirs_only.pos(chan_nirs_idx);
+            chan_comb_idx=find(contains(layout_combined.label,comb_channels(jj))); %the index of the chan in the layout
+            chan_comb_pos=layout_combined.pos(chan_comb_idx);
+            distances(ii,jj)=pdist([chan_nirs_pos;...
+                chan_comb_pos],'euclidean');
+        else
+            distances(ii,jj)=1000;
+        end
     end
 end
-[min_dist,min_idx]=min(distances,[],2);
-idx_channels=find(min_dist==distances);
+[min_dist,min_idx]=min(distances,[],1);
+% idx_channels=find(min_dist==distances);
 
-
-% d. Plot most important channels
-
-for ii=1:size(distances,1)
-    nirs_only_channel = nirs_channels(ii);
-    comb_channel      = comb_channels(min_idx(ii));
-    
-    cfg                   = [];
-    cfg.title             = ['Combined - ',comb_channel...
-        ,' NIRS - ', nirs_only_channel];
-    cfg.showlabels        = 'yes';
-    cfg.interactive       = 'yes'; % this allows to select a subplot and interact with it
-    cfg.linecolor        = 'rbrbmcmc'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
-    cfg.linestyle = {'--', '--', '-', '-'}; % fingerauto is dashed line, fingernonauto is solid line, footauto is dotted line and footnonauto is a dotted stars line
-    cfg.comment = 'NIRS is dashed line, COMBINED is solid line';
-    %cfg.ylim = [-0.440 0.540];
-    cfg.channel = [nirs_only_channel, nirs_only_channel, comb_channel, comb_channel];
-%     cfg.figure = 'gcf';
-%     subplot(4,3,ii)
-    ft_singleplotER(cfg, data_TL_O2Hb{1}, data_TL_HHb{1}, data_TL_O2Hb{2}, data_TL_HHb{2});
-    saveas(gcf, ['Fig_Validation_NIRS/Combined_',comb_channel{1},'NIRS_', nirs_only_channel{1},'.jpg']);
-end
-
-% for ii=12:24
-%     nirs_only_channel = layout_nirs_only.label(ii);
-%     comb_channel      = layout_combined.label(min_idx(ii));
+%% d) singleplotER
+% for ii=1:size(distances,1)
+%     nirs_only_channel = nirs_channels(ii);
+%     comb_channel      = comb_channels(min_idx(ii));
 %     
 %     cfg                   = [];
-%     cfg.title             = ['Combined - ',comb_channel...
-%         ,'    NIRS - ', nirs_only_channel];
+%     cfg.title             = [' NIRS (dashed) - ', nirs_only_channel,...
+%         'Combined (solid) - ',comb_channel];
 %     cfg.showlabels        = 'yes';
-%     cfg.interactive       = 'yes'; % this allows to select a subplot and interact with it
-%     cfg.linecolor        = 'rbrbmcmc'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
+%     CFG.showlegend        = 'yes';
+%     cfg.linecolor        = 'rbrb'; 
 %     cfg.linestyle = {'--', '--', '-', '-'}; % fingerauto is dashed line, fingernonauto is solid line, footauto is dotted line and footnonauto is a dotted stars line
 %     cfg.comment = 'NIRS is dashed line, COMBINED is solid line';
 %     %cfg.ylim = [-0.440 0.540];
-%     cfg.channel = [ii, ii, min_idx(ii), min_idx(ii)];
-%     cfg.figure = 'gcf';
-%     subplot(4,3,ii/12)
-%     ft_singleplotER(cfg, data_TL_O2Hb{1}, data_TL_HHb{1}, data_TL_O2Hb{2}, data_TL_HHb{2});
+%     cfg.channel = [nirs_only_channel, nirs_only_channel, comb_channel, comb_channel];
+% %     cfg.figure = 'gcf';
+% %     subplot(4,3,ii)
+%     ft_singleplotER(cfg, data_TL_O2Hb{1}, data_TL_HHb{1},data_TL_O2Hb{2}, data_TL_HHb{2});
+% %     saveas(gcf, ['Fig_Validation_NIRS/Combined_',comb_channel{1},'NIRS_', nirs_only_channel{1},'.jpg']);
 % end
 
-%e) Plot all channels
+%% d) Manual plot
+for ii=1:length(min_idx)
+    nirs_only_channel = nirs_channels(min_idx(ii));
+    comb_channel      = comb_channels(ii);
+    
+    time=data_TL_HHb{1}.time;
+    figure;
+    
+    plot(time,data_TL_O2Hb{1}.avg(min_idx(ii),:),'r--')
+    title(sprintf(' NIRS - %s \n Combined - %s',nirs_only_channel{1}, comb_channel{1}))
+    hold on
+    plot(time,data_TL_HHb{1}.avg(min_idx(ii),:),'b--')
+    hold on
+    plot(time,data_TL_O2Hb{2}.avg(ii,1:length(time)),'r-')
+    hold on
+    plot(time,data_TL_HHb{2}.avg(ii,1:length(time)),'b-')
+%     lgd=legend('NIRS - HbO2', 'NIRS - HHb', 'Combined - HbO2', 'Combined -HHb','Orientation','horizontal','Position',[0.25 .8 0.05 0.1]);
+%     lgd.NumColumns = 2;
+    xlabel('Time (s)')
+    ylabel('Hemoglobin Activity')
+    hold off
+    saveas(gcf, ['Fig_Validation_NIRS/Combined_',comb_channel{1},'NIRS_', nirs_only_channel{1},'.jpg']);
+end
+
+%% e) Plot all channels, both on the lay-out
 cfg                   = [];
 cfg.showlabels        = 'yes';
 cfg.layout            = layout_combined;
 cfg.interactive       = 'yes'; % this allows to select a subplot and interact with it
-cfg.linecolor        = 'rbrbmcmc'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
+cfg.linecolor        = 'rbrb'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
 cfg.linestyle = {'--', '--', '-', '-'}; % fingerauto is dashed line, fingernonauto is solid line, footauto is dotted line and footnonauto is a dotted stars line
 cfg.comment = 'NIRS is dashed line, COMBINED is solid line';
 %cfg.ylim = [-0.440 0.540];
 ft_multiplotER(cfg, data_TL_O2Hb{1}, data_TL_HHb{1}, data_TL_O2Hb{2}, data_TL_HHb{2});
 
-% f) Plot for each cap seperately
+%% f) Plot for each cap seperately
 
 %taskshort={'complex', 'stroop'};
 for cap=1:2
