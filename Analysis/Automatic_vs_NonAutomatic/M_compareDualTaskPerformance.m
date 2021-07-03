@@ -7,7 +7,7 @@ laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Dual Task Performance';
 
-subrec = ["28" "04" "A"; "64" "01" "A"; "02" "02" "B"];
+subrec = ["28" "04" "A"; "64" "01" "A"; "02" "02" "B"; "76" "01" "B"];
 
 A = '243413412132';
 B = '413241423213';
@@ -157,18 +157,18 @@ end
 %% Average number of mistakes on letter counting for non-excluded participants.
 
 mean_autodual_finalAverageMistakes_cued = mean(array_autodual_finalAverageMistakes_cued);
-std_autodual_finalAverageMistakes_cued = std(array_autodual_finalAverageMistakes_cued);
+std_autodual_finalAverageMistakes_cued = std(array_autodual_finalAverageMistakes_cued, 1);
 mean_autodual_finalAverageMistakes_uncued = mean(array_autodual_finalAverageMistakes_uncued);
-std_autodual_finalAverageMistakes_uncued = std(array_autodual_finalAverageMistakes_uncued);
+std_autodual_finalAverageMistakes_uncued = std(array_autodual_finalAverageMistakes_uncued, 1);
 mean_autodual_finalAverageMistakes = mean([array_autodual_finalAverageMistakes_cued array_autodual_finalAverageMistakes_uncued]);
-std_autodual_finalAverageMistakes = std([array_autodual_finalAverageMistakes_cued array_autodual_finalAverageMistakes_uncued]);
+std_autodual_finalAverageMistakes = std([array_autodual_finalAverageMistakes_cued array_autodual_finalAverageMistakes_uncued], 1);
 
 mean_nonautodual_finalAverageMistakes_cued = mean(array_nonautodual_finalAverageMistakes_cued);
-std_nonautodual_finalAverageMistakes_cued = std(array_nonautodual_finalAverageMistakes_cued);
+std_nonautodual_finalAverageMistakes_cued = std(array_nonautodual_finalAverageMistakes_cued, 1);
 mean_nonautodual_finalAverageMistakes_uncued = mean(array_nonautodual_finalAverageMistakes_uncued);
-std_nonautodual_finalAverageMistakes_uncued = std(array_nonautodual_finalAverageMistakes_uncued);
+std_nonautodual_finalAverageMistakes_uncued = std(array_nonautodual_finalAverageMistakes_uncued, 1);
 mean_nonautodual_finalAverageMistakes = mean([array_nonautodual_finalAverageMistakes_cued array_nonautodual_finalAverageMistakes_uncued]);
-std_nonautodual_finalAverageMistakes = std([array_nonautodual_finalAverageMistakes_cued array_nonautodual_finalAverageMistakes_uncued]);
+std_nonautodual_finalAverageMistakes = std([array_nonautodual_finalAverageMistakes_cued array_nonautodual_finalAverageMistakes_uncued], 1);
 
 X1 = categorical({'Auto'; 'Non-Auto'});
 Y1 = [mean_autodual_finalAverageMistakes; mean_nonautodual_finalAverageMistakes];
@@ -181,7 +181,7 @@ b.CData(1,:) = [1 0.5 0.3];
 b.CData(2,:) = [0.5 1 0.5];
 ylim([0 1]);
 hold on;
-errorbar(X1, Y1, error1, error1);    
+errorbar(X1, Y1, error1);    
 hold off;
 
 saveas(gcf, fullfile(results_path,...
@@ -205,7 +205,7 @@ b.CData(1,:) = [1 0.67 0.52];
 b.CData(2,:) = [1 0.37 0.10];
 ylim([0 1]);
 hold on;
-errorbar(X2, Y2, error2, error2);    
+errorbar(X2, Y2, error2);    
 hold off;
 subplot(1, 2, 2);
 b = bar(X3, Y3, 0.4);
@@ -214,7 +214,7 @@ b.CData(1,:) = [0.71 1 0.71];
 b.CData(2,:) = [0.35 1 0.35];
 ylim([0 1]);
 hold on;
-errorbar(X3, Y3, error3, error3);    
+errorbar(X3, Y3, error3);    
 hold off;
 
 saveas(gcf, fullfile(results_path,...
@@ -223,18 +223,18 @@ saveas(gcf, fullfile(results_path,...
 %% Average number of incorrectly performed sequences for non-excluded participants.
 
 mean_autodual_finalIncorrectSequences_cued = mean(array_autodual_finalIncorrectSequences_cued);
-std_autodual_finalIncorrectSequences_cued = std(array_autodual_finalIncorrectSequences_cued);
+std_autodual_finalIncorrectSequences_cued = std(array_autodual_finalIncorrectSequences_cued, 1);
 mean_autodual_finalIncorrectSequences_uncued = mean(array_autodual_finalIncorrectSequences_uncued);
-std_autodual_finalIncorrectSequences_uncued = std(array_autodual_finalIncorrectSequences_uncued);
+std_autodual_finalIncorrectSequences_uncued = std(array_autodual_finalIncorrectSequences_uncued, 1);
 mean_autodual_finalIncorrectSequences = mean([array_autodual_finalIncorrectSequences_cued array_autodual_finalIncorrectSequences_uncued]);
-std_autodual_finalIncorrectSequences = std([array_autodual_finalIncorrectSequences_cued array_autodual_finalIncorrectSequences_uncued]);
+std_autodual_finalIncorrectSequences = std([array_autodual_finalIncorrectSequences_cued array_autodual_finalIncorrectSequences_uncued], 1);
 
 mean_nonautodual_finalIncorrectSequences_cued = mean(array_nonautodual_finalIncorrectSequences_cued);
-std_nonautodual_finalIncorrectSequences_cued = std(array_nonautodual_finalIncorrectSequences_cued);
+std_nonautodual_finalIncorrectSequences_cued = std(array_nonautodual_finalIncorrectSequences_cued, 1);
 mean_nonautodual_finalIncorrectSequences_uncued = mean(array_nonautodual_finalIncorrectSequences_uncued);
-std_nonautodual_finalIncorrectSequences_uncued = std(array_nonautodual_finalIncorrectSequences_uncued);
+std_nonautodual_finalIncorrectSequences_uncued = std(array_nonautodual_finalIncorrectSequences_uncued, 1);
 mean_nonautodual_finalIncorrectSequences = mean([array_nonautodual_finalIncorrectSequences_cued array_nonautodual_finalIncorrectSequences_uncued]);
-std_nonautodual_finalIncorrectSequences = std([array_nonautodual_finalIncorrectSequences_cued array_nonautodual_finalIncorrectSequences_uncued]);
+std_nonautodual_finalIncorrectSequences = std([array_nonautodual_finalIncorrectSequences_cued array_nonautodual_finalIncorrectSequences_uncued], 1);
 
 X1 = categorical({'Auto'; 'Non-Auto'});
 Y1 = [mean_autodual_finalIncorrectSequences; mean_nonautodual_finalIncorrectSequences];
@@ -247,7 +247,7 @@ b.CData(1,:) = [1 0.5 0.3];
 b.CData(2,:) = [0.5 1 0.5];
 ylim([0 1]);
 hold on;
-errorbar(X1, Y1, error1, error1);    
+errorbar(X1, Y1, error1);    
 hold off;
 
 saveas(gcf, fullfile(results_path,...
@@ -271,7 +271,7 @@ b.CData(1,:) = [1 0.67 0.52];
 b.CData(2,:) = [1 0.37 0.10];
 ylim([0 1]);
 hold on;
-errorbar(X2, Y2, error2, error2);    
+errorbar(X2, Y2, error2);    
 hold off;
 subplot(1, 2, 2);
 b = bar(X3, Y3, 0.4);
@@ -280,7 +280,7 @@ b.CData(1,:) = [0.71 1 0.71];
 b.CData(2,:) = [0.35 1 0.35];
 ylim([0 1]);
 hold on;
-errorbar(X3, Y3, error3, error3);    
+errorbar(X3, Y3, error3);    
 hold off;
 
 saveas(gcf, fullfile(results_path,...
@@ -289,18 +289,18 @@ saveas(gcf, fullfile(results_path,...
 %% Average delay of performing the sequence for non-excluded participants.
 
 mean_autodual_finalDelay_cued = mean(array_autodual_finalDelay_cued);
-std_autodual_finalDelay_cued = std(array_autodual_finalDelay_cued);
+std_autodual_finalDelay_cued = std(array_autodual_finalDelay_cued, 1);
 mean_autodual_finalDelay_uncued = mean(array_autodual_finalDelay_uncued);
-std_autodual_finalDelay_uncued = std(array_autodual_finalDelay_uncued);
+std_autodual_finalDelay_uncued = std(array_autodual_finalDelay_uncued, 1);
 mean_autodual_finalDelay = mean([array_autodual_finalDelay_cued array_autodual_finalDelay_uncued]);
-std_autodual_finalDelay = std([array_autodual_finalDelay_cued array_autodual_finalDelay_uncued]);
+std_autodual_finalDelay = std([array_autodual_finalDelay_cued array_autodual_finalDelay_uncued], 1);
 
 mean_nonautodual_finalDelay_cued = mean(array_nonautodual_finalDelay_cued);
-std_nonautodual_finalDelay_cued = std(array_nonautodual_finalDelay_cued);
+std_nonautodual_finalDelay_cued = std(array_nonautodual_finalDelay_cued, 1);
 mean_nonautodual_finalDelay_uncued = mean(array_nonautodual_finalDelay_uncued);
-std_nonautodual_finalDelay_uncued = std(array_nonautodual_finalDelay_uncued);
+std_nonautodual_finalDelay_uncued = std(array_nonautodual_finalDelay_uncued, 1);
 mean_nonautodual_finalDelay = mean([array_nonautodual_finalDelay_cued array_nonautodual_finalDelay_uncued]);
-std_nonautodual_finalDelay = std([array_nonautodual_finalDelay_cued array_nonautodual_finalDelay_uncued]);
+std_nonautodual_finalDelay = std([array_nonautodual_finalDelay_cued array_nonautodual_finalDelay_uncued], 1);
 
 X1 = categorical({'Auto'; 'Non-Auto'});
 Y1 = [mean_autodual_finalDelay; mean_nonautodual_finalDelay];
@@ -313,7 +313,7 @@ b.CData(1,:) = [1 0.5 0.3];
 b.CData(2,:) = [0.5 1 0.5];
 ylim([0 0.2]);
 hold on;
-errorbar(X1, Y1, error1, error1);    
+errorbar(X1, Y1, error1);    
 hold off;
 
 saveas(gcf, fullfile(results_path,...
@@ -337,7 +337,7 @@ b.CData(1,:) = [1 0.67 0.52];
 b.CData(2,:) = [1 0.37 0.10];
 ylim([0 0.2]);
 hold on;
-errorbar(X2, Y2, error2, error2);    
+errorbar(X2, Y2, error2);    
 hold off;
 subplot(1, 2, 2);
 b = bar(X3, Y3, 0.4);
@@ -346,7 +346,7 @@ b.CData(1,:) = [0.71 1 0.71];
 b.CData(2,:) = [0.35 1 0.35];
 ylim([0 0.2]);
 hold on;
-errorbar(X3, Y3, error3, error3);    
+errorbar(X3, Y3, error3);    
 hold off;
 
 saveas(gcf,fullfile(results_path,...
@@ -387,6 +387,14 @@ function [events_autodual, events_nonautodual] =...
         events_autodual.trial(5).stimuli.response = {'3'};
         events_autodual.trial(12).stimuli.response = {'3'};
         events_autodual.trial(17).stimuli.response = {'3'};
+    elseif sub=="76"
+        % Remove the first trial of auto dual because the subject started
+        % doing the sequence before the supposed time.
+        events_autodual.trial(1) = [];
+        % Letter counting answer's mistakes on auto dual.
+        events_autodual.trial(2).stimuli.response = {'2'};
+        % Letter counting answer's mistakes on non-auto dual.
+        events_nonautodual.trial(2).stimuli.response = {'3'};
     end
               
 end
@@ -422,8 +430,8 @@ for trial = 1:length(dual)
         dual_mistakes_uncued = dual_mistakes_uncued + 1;
     end
 end
-dual_averageMistakes_cued = dual_mistakes_cued/(length(dual)/2);
-dual_averageMistakes_uncued = dual_mistakes_uncued/(length(dual)/2);
+dual_averageMistakes_cued = dual_mistakes_cued/length(find([dual.cue] == 1));
+dual_averageMistakes_uncued = dual_mistakes_uncued/length(find([dual.cue] == 0));
 
 end
 
@@ -448,8 +456,8 @@ for trial = 1:length(dual)
         dual_incorrectSequences_uncued = dual_incorrectSequences_uncued + 1;
     end    
 end
-dual_incorrectSequences_cued = dual_incorrectSequences_cued/(length(dual)/2);
-dual_incorrectSequences_uncued = dual_incorrectSequences_uncued/(length(dual)/2);
+dual_incorrectSequences_cued = dual_incorrectSequences_cued/length(find([dual.cue] == 1));
+dual_incorrectSequences_uncued = dual_incorrectSequences_uncued/length(find([dual.cue] == 0));
 
 end
 
@@ -463,8 +471,8 @@ dual = events_dual.trial;
 delay_cued = 0;
 delay_uncued = 0;
 
-len_cued = length(dual)/2;
-len_uncued = length(dual)/2;
+len_cued = length(find([dual.cue] == 1));
+len_uncued = length(find([dual.cue] == 0));
     
 for trial = 1:length(dual)
     typed_sequence = events_dual.trial(trial).responses.value;

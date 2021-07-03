@@ -2,8 +2,8 @@ clear;
 close all;
 
 %% Specify where 3D model folder is saved
-% laptop='laptopCatarina';
-laptop='laptopJoao';
+laptop='laptopCatarina';
+% laptop='laptopJoao';
 % laptop='laptopMariana';
 [mainpath_in, mainpath_out] = addFolders(laptop);
 ft_defaults;

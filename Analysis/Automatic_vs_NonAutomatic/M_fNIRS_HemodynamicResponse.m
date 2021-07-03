@@ -9,7 +9,7 @@ results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Result
 analysis_path = 'C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis\Automatic_vs_NonAutomatic';
 addpath(analysis_path);
 
-subrec = ["28" "02"; "02" "02"];
+subrec = ["28" "02"; "02" "02"; "76" "01"];
 conditions = [2 4 6 8];
 
 % Loop through every subject.
@@ -28,6 +28,10 @@ for subject = 1:size(subrec, 1)
     % Keep only the trials of interest (Auto Cued, Non-Auto Cued, Auto
     % Uncued, Non-Auto Uncued).
     nirs = keepTrialsInterest(nirs_preprocessed);
+    
+    % Get the list of channels present in the first subject - contains all
+    % the possible channels
+    list_channels = nirs.label;
     
     %% Baseline correction + plots
     % Get the baseline and topoplot of all conditions for the subject
@@ -54,15 +58,19 @@ for subject = 1:size(subrec, 1)
     
     % Save figures.
     cd(fullfile(results_path, ['Sub-', char(sub)], 'Plots'));
+    set(h{1}, 'Position', get(0, 'Screensize'));
     saveas(h{1}, taskbaseline{1}, 'png'); 
     saveas(h{2}, tasktopoplotO2Hb{1}, 'png'); 
     saveas(h{3}, tasktopoplotHHb{1}, 'png');
+    set(h{4}, 'Position', get(0, 'Screensize'));
     saveas(h{4}, taskbaseline{2}, 'png'); 
     saveas(h{5}, tasktopoplotO2Hb{2}, 'png'); 
     saveas(h{6}, tasktopoplotHHb{2}, 'png');
+    set(h{7}, 'Position', get(0, 'Screensize'));
     saveas(h{7}, taskbaseline{3}, 'png'); 
     saveas(h{8}, tasktopoplotO2Hb{3}, 'png'); 
     saveas(h{9}, tasktopoplotHHb{3}, 'png');
+    set(h{10}, 'Position', get(0, 'Screensize'));
     saveas(h{10}, taskbaseline{4}, 'png'); 
     saveas(h{11}, tasktopoplotO2Hb{4}, 'png'); 
     saveas(h{12}, tasktopoplotHHb{4}, 'png');
@@ -81,21 +89,54 @@ for subject = 1:size(subrec, 1)
         nirs_TL{con} = ft_timelockanalysis(cfg, nirs);
     end
     save('nirs_TL.mat', 'nirs_TL');
-  
+    
     %% Timelock analysis for baseline.
     for con = 1:length(conditions)
         cfg = [];
         % Define the amount of seconds you want to use for the baseline.
-        cfg.baseline = [-10 0]; 
-        nirs_TLblc{con} = ft_timelockbaseline(cfg, nirs_TL{con});
+        cfg.baseline = [-10 0];
+        nirs_TLblc{con}{subject} = ft_timelockbaseline(cfg, nirs_TL{con});
     end
-    save('nirs_TLblc.mat','nirs_TLblc');
     
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all;
     
+end
+
+%% Compensate for removed channels.
+
+for con = 1:length(conditions)
+    
+    for subject = 1:size(subrec, 1)
+        
+        sub = subrec(subject, 1);
+        rec = subrec(subject, 2);
+        
+        if strcmp(sub, "02")
+            nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
+            nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
+            nirs_TLblc{con}{subject}.dof(1:46,...
+                1:length(nirs_TLblc{con}{subject}.time)) = 10;
+            nirs_TLblc{con}{subject}.avg =...
+                [nirs_TLblc{con}{subject}.avg((1:39-1), :);...
+                NaN(2, length(nirs_TLblc{con}{subject}.time));...
+                nirs_TLblc{con}{subject}.avg(39:end,:)];
+        end
+        
+        if strcmp(sub,"76")
+            nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
+            nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
+            nirs_TLblc{con}{subject}.dof(1:46,...
+                1:length(nirs_TLblc{con}{subject}.time)) = 10;
+            nirs_TLblc{con}{subject}.avg(45, :) = NaN;
+            nirs_TLblc{con}{subject}.avg(46, :) = NaN;
+        end
+        
+        cd(fullfile(results_path, 'Timelock Analysis'));
+        save('nirs_TLblc.mat','nirs_TLblc');
+    end
 end
 
 %% Average the hemodynamic responses over all subjects.
@@ -110,7 +151,7 @@ for subject = 1:size(subrec, 1)
         cd()
         load(fullfile(results_path, ['Sub-', char(sub)],...
             'Timelock Analysis\nirs_TLblc.mat'), 'nirs_TLblc');
-        nirs_all{con}{subject} = nirs_TLblc{con};
+        nirs_all{con}{subject} = nirs_TLblc{con}{subject};
     end
 end
 
@@ -190,10 +231,11 @@ end
 
 cd(fullfile(results_path, 'Areas'));
 
-% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12.
+% DLPFC: Rx5-Tx7, Rx5-Tx8, Rx7-Tx7, Rx7-Tx8, Rx9-Tx13, Rx9-Tx12, Rx11-Tx12,
+% Rx11-Tx13.
 cfg = [];
 cfg.channel = {'Rx5-Tx7', 'Rx5-Tx8', 'Rx7-Tx7', 'Rx7-Tx8', 'Rx9-Tx13',...
-    'Rx9-Tx12', 'Rx11-Tx12'};
+    'Rx9-Tx12', 'Rx11-Tx12', 'Rx11-Tx13'};
 nirs_HbO2_DLPFC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_DLPFC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_DLPFC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
@@ -239,8 +281,8 @@ save('nirs_Hb_M1.mat', 'nirs_Hb_M1');
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
 cfg = [];
-cfg.channel = {'Rx3-Tx2', 'Rx1-Tx2', 'Rx3-Tx3', 'Rx1-Tx3', 'Rx2-Tx4',...
-    'Rx2-Tx3'};
+cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx12-Tx15',...
+    'Rx10-Tx14', 'Rx12-Tx14'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
@@ -260,15 +302,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_DLPFC{con} = mean(nirs_Hb_DLPFC{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r');
+    plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b');
+    plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-10 20]);
-    ylim([-0.4 0.4])
+    ylim([-0.3 0.3]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_DLPFC.png']);
@@ -281,15 +325,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r');
+    plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b');
+    plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.2 0.25])
+    ylim([-0.15 0.15]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_SMA.png']);
@@ -302,15 +348,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r');
+    plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b');
+    plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.15 0.2])
+    ylim([-0.1 0.1]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_M1.png']);
@@ -323,15 +371,17 @@ for con = 1:length(conditions)
     regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
     
     figure; title(char(taskname{con}));
-    plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r');
+    plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r', 'LineWidth', 1);
     hold on;
-    plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b');
+    plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b', 'LineWidth', 1);
     hold on;
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim([-0.1 0.15])
+    ylim([-0.15 0.15]);
+    xlabel('Time (s)');
+    ylabel('Concentration');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_PPC.png']);

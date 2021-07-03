@@ -5,7 +5,7 @@ function [EEG_out] = MJC_rejectErrorMoments(EEG_in, sub)
 event_samp  = [EEG_in.event.latency];
 
 % Sub-02.
-if sub == '02'
+if sub == "02"
     
     % Reject all up until the start of the automaticity test.
     % Get the moment to start cutting.
@@ -134,6 +134,75 @@ if sub == '02'
         3487296 3489868]);
     EEG_out = EEG_aux;
     
+% Sub-76.
+elseif sub == "76"
+    
+    % Reject all up until the start of the second trial of the automaticity
+    % test.
+    % Get the moment to start cutting.
+    start_cut1 = 1;
+    % Get the moment to stop cutting.
+    startTask_autodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1706')==1));
+    startTask_autodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1707')==1));
+    startTask_autodual = sort([startTask_autodual_cued, startTask_autodual_uncued]);
+    end_cut1 = startTask_autodual(2);
+    
+    % Identify when to remove moment at the end of the automaticity test up
+    % until the beggining of the next task - in this case non-auto single.
+    % Get the moment to start cutting.
+    endTask_autodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1714')==1));
+    endTask_autodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1715')==1));
+    start_cut2 = max(max(endTask_autodual_cued, endTask_autodual_uncued));
+    % Get the moment to end cutting.
+    startTask_autosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1704')==1));
+    startTask_autosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1705')==1));
+    end_cut2 = min(min(startTask_autosingle_cued, startTask_autosingle_uncued));
+    
+    % Reject time between end of non-auto single and start of non-auto dual.
+    % Get the moment to start cutting.
+    endTask_nonautosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1712')==1));
+    endTask_nonautosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1713')==1));
+    start_cut3 = max(max(endTask_nonautosingle_cued, endTask_nonautosingle_uncued));
+    % Get the moment to stop cutting.
+    startTask_nonautodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1708')==1));
+    startTask_nonautodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1709')==1));
+    end_cut3 = min(min(startTask_nonautodual_cued, startTask_nonautodual_uncued));
+    
+    % Reject time between end of non-auto dual task up until the start of
+    % the auto single.
+    % Get the moment to start cutting.
+    endTask_nonautodual_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1716')==1));
+    endTask_nonautodual_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1717')==1));
+    start_cut4 = max(max(endTask_nonautodual_cued, endTask_nonautodual_uncued));
+    % Get the moment to end cutting.
+    startTask_autosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1702')==1));
+    startTask_autosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1703')==1));
+    end_cut4 = min(min(startTask_autosingle_cued, startTask_autosingle_uncued));
+    
+    % Reject time between end of auto single and start of checkerboard.
+    % Get the moment to start cutting.
+    endTask_autosingle_cued = event_samp(find(strcmp({EEG_in.event.type}, 's1710')==1));
+    endTask_autosingle_uncued = event_samp(find(strcmp({EEG_in.event.type}, 's1711')==1));
+    start_cut5 = max(max(endTask_autosingle_cued, endTask_autosingle_uncued));
+    % Get the moment to stop cutting.
+    startTask_checkerboard = event_samp(find(strcmp({EEG_in.event.type}, 's1555')==1));
+    end_cut5 = min(startTask_checkerboard);
+    
+    % Reject time between end of checkerboard and end of recording.
+    % Get the moment to start cutting.
+    endTask_checkerboard = event_samp(find(strcmp({EEG_in.event.type}, 's1500')==1));
+    start_cut6 = min(endTask_checkerboard);
+    % Get the moment to stop cutting.
+    end_cut6 = size(EEG_in.data, 2);
+
+[EEG_out] = eeg_eegrej(EEG_in,...
+    [start_cut1 end_cut1-23*EEG_in.srate;...
+    start_cut2+23*EEG_in.srate end_cut2-23*EEG_in.srate;...
+    start_cut3+23*EEG_in.srate end_cut3-23*EEG_in.srate;...
+    start_cut4+23*EEG_in.srate end_cut4-23*EEG_in.srate;...
+    start_cut5+23*EEG_in.srate end_cut5-3*EEG_in.srate;...
+    start_cut6+3*EEG_in.srate end_cut6]);
+
 else
     
     EEG_out = EEG_in;
@@ -159,5 +228,8 @@ EndBlock_AutomaticSequence_Dual_Cued = length(find(strcmp({EEG_out.event.type}, 
 EndBlock_AutomaticSequence_Dual_Uncued = length(find(strcmp({EEG_out.event.type}, 's1715')==1))
 EndBlock_NonAutomaticSequence_Dual_Cued = length(find(strcmp({EEG_out.event.type}, 's1716')==1))
 EndBlock_NonAutomaticSequence_Dual_Uncued = length(find(strcmp({EEG_out.event.type}, 's1717')==1))
+
+StartBlock_Checkerboard = length(find(strcmp({EEG_out.event.type}, 's1555')==1))
+EndBlock_Checkerboard = length(find(strcmp({EEG_out.event.type}, 's1500')==1))
 
 end
