@@ -161,90 +161,298 @@ for subject=1:size(subrec, 1)
     
 end
 
-%% Wilcoxon signed-rank test - automatic sequence.
+%% Automatic sequence.
+% Wilcoxon signed-rank test if not normally distributed.
+% T-test if normally distributed.
 
 % DLPFC.
-p = signrank(auto_DLPFC_theta(:, 1), auto_DLPFC_theta(:, 2));
+
+h = kstest(auto_DLPFC_theta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_DLPFC_theta(:, 1), auto_DLPFC_theta(:, 2));
+else
+    p = signrank(auto_DLPFC_theta(:, 1), auto_DLPFC_theta(:, 2));
+end
 stats_auto.auto_DLPFC_theta = p;
-p = signrank(auto_DLPFC_alpha(:, 1), auto_DLPFC_alpha(:, 2));
+
+h = kstest(auto_DLPFC_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(auto_DLPFC_alpha(:, 1), auto_DLPFC_alpha(:, 2));
+else
+    p = signrank(auto_DLPFC_alpha(:, 1), auto_DLPFC_alpha(:, 2));
+end
 stats_auto.auto_DLPFC_alpha = p;
-p = signrank(auto_DLPFC_beta(:, 1), auto_DLPFC_beta(:, 2));
+
+h = kstest(auto_DLPFC_beta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_DLPFC_beta(:, 1), auto_DLPFC_beta(:, 2));
+else
+    p = signrank(auto_DLPFC_beta(:, 1), auto_DLPFC_beta(:, 2));
+end
 stats_auto.auto_DLPFC_beta = p;
-p = signrank(auto_DLPFC_gamma(:, 1), auto_DLPFC_gamma(:, 2));
+
+h = kstest(auto_DLPFC_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(auto_DLPFC_gamma(:, 1), auto_DLPFC_gamma(:, 2));
+else
+    p = signrank(auto_DLPFC_gamma(:, 1), auto_DLPFC_gamma(:, 2));
+end
 stats_auto.auto_DLPFC_gamma = p;
 
+%%
+
 % SMA.
-p = signrank(auto_SMA_theta(:, 1), auto_SMA_theta(:, 2));
+
+h = kstest(auto_SMA_theta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_SMA_theta(:, 1), auto_SMA_theta(:, 2));
+else
+    p = signrank(auto_SMA_theta(:, 1), auto_SMA_theta(:, 2));
+end
 stats_auto.auto_SMA_theta = p;
-p = signrank(auto_SMA_alpha(:, 1), auto_SMA_alpha(:, 2));
+
+h = kstest(auto_SMA_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(auto_SMA_alpha(:, 1), auto_SMA_alpha(:, 2));
+else
+    p = signrank(auto_SMA_alpha(:, 1), auto_SMA_alpha(:, 2));
+end
 stats_auto.auto_SMA_alpha = p;
-p = signrank(auto_SMA_beta(:, 1), auto_SMA_beta(:, 2));
+
+h = kstest(auto_SMA_beta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_SMA_beta(:, 1), auto_SMA_beta(:, 2));
+else
+    p = signrank(auto_SMA_beta(:, 1), auto_SMA_beta(:, 2));
+end
 stats_auto.auto_SMA_beta = p;
-p = signrank(auto_SMA_gamma(:, 1), auto_SMA_gamma(:, 2));
+
+h = kstest(auto_SMA_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(auto_SMA_gamma(:, 1), auto_SMA_gamma(:, 2));
+else
+    p = signrank(auto_SMA_gamma(:, 1), auto_SMA_gamma(:, 2));
+end
 stats_auto.auto_SMA_gamma = p;
 
+%%
+
 % M1.
-p = signrank(auto_M1_theta(:, 1), auto_M1_theta(:, 2));
+
+h = kstest(auto_M1_theta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_M1_theta(:, 1), auto_M1_theta(:, 2));
+else
+    p = signrank(auto_M1_theta(:, 1), auto_M1_theta(:, 2));
+end
 stats_auto.auto_M1_theta = p;
-p = signrank(auto_M1_alpha(:, 1), auto_M1_alpha(:, 2));
+
+h = kstest(auto_M1_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(auto_M1_alpha(:, 1), auto_M1_alpha(:, 2));
+else
+    p = signrank(auto_M1_alpha(:, 1), auto_M1_alpha(:, 2));
+end
 stats_auto.auto_M1_alpha = p;
-p = signrank(auto_M1_beta(:, 1), auto_M1_beta(:, 2));
+
+h = kstest(auto_M1_beta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_M1_beta(:, 1), auto_M1_beta(:, 2));
+else
+    p = signrank(auto_M1_beta(:, 1), auto_M1_beta(:, 2));
+end
 stats_auto.auto_M1_beta = p;
-p = signrank(auto_M1_gamma(:, 1), auto_M1_gamma(:, 2));
+
+h = kstest(auto_M1_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(auto_M1_gamma(:, 1), auto_M1_gamma(:, 2));
+else
+    p = signrank(auto_M1_gamma(:, 1), auto_M1_gamma(:, 2));
+end
 stats_auto.auto_M1_gamma = p;
 
+%%
+
 % PPC.
-p = signrank(auto_PPC_theta(:, 1), auto_PPC_theta(:, 2));
+
+h = kstest(auto_PPC_theta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_PPC_theta(:, 1), auto_PPC_theta(:, 2));
+else
+    p = signrank(auto_PPC_theta(:, 1), auto_PPC_theta(:, 2));
+end
 stats_auto.auto_PPC_theta = p;
-p = signrank(auto_PPC_alpha(:, 1), auto_PPC_alpha(:, 2));
+
+h = kstest(auto_PPC_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(auto_PPC_alpha(:, 1), auto_PPC_alpha(:, 2));
+else
+    p = signrank(auto_PPC_alpha(:, 1), auto_PPC_alpha(:, 2));
+end
 stats_auto.auto_PPC_alpha = p;
-p = signrank(auto_PPC_beta(:, 1), auto_PPC_beta(:, 2));
+
+h = kstest(auto_PPC_beta)
+if h==0 % Normally distributed data.
+    p = ttest(auto_PPC_beta(:, 1), auto_PPC_beta(:, 2));
+else
+    p = signrank(auto_PPC_beta(:, 1), auto_PPC_beta(:, 2));
+end
 stats_auto.auto_PPC_beta = p;
-p = signrank(auto_PPC_gamma(:, 1), auto_PPC_gamma(:, 2));
+
+h = kstest(auto_PPC_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(auto_PPC_gamma(:, 1), auto_PPC_gamma(:, 2));
+else
+    p = signrank(auto_PPC_gamma(:, 1), auto_PPC_gamma(:, 2));
+end
 stats_auto.auto_PPC_gamma = p;
 
 stats.stats_auto = stats_auto;
 
-%% Wilcoxon signed-rank test - non-automatic sequence.
+%% Non-automatic sequence.
+% Wilcoxon signed-rank test if not normally distributed.
+% T-test if normally distributed.
 
 % DLPFC.
-p = signrank(nonauto_DLPFC_theta(:, 1), nonauto_DLPFC_theta(:, 2));
+
+h = kstest(nonauto_DLPFC_theta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_DLPFC_theta(:, 1), nonauto_DLPFC_theta(:, 2));
+else
+    p = signrank(nonauto_DLPFC_theta(:, 1), nonauto_DLPFC_theta(:, 2));
+end
 stats_nonauto.nonauto_DLPFC_theta = p;
-p = signrank(nonauto_DLPFC_alpha(:, 1), nonauto_DLPFC_alpha(:, 2));
+
+h = kstest(nonauto_DLPFC_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_DLPFC_alpha(:, 1), nonauto_DLPFC_alpha(:, 2));
+else
+    p = signrank(nonauto_DLPFC_alpha(:, 1), nonauto_DLPFC_alpha(:, 2));
+end
 stats_nonauto.nonauto_DLPFC_alpha = p;
-p = signrank(nonauto_DLPFC_beta(:, 1), nonauto_DLPFC_beta(:, 2));
+
+h = kstest(nonauto_DLPFC_beta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_DLPFC_beta(:, 1), nonauto_DLPFC_beta(:, 2));
+else
+    p = signrank(nonauto_DLPFC_beta(:, 1), nonauto_DLPFC_beta(:, 2));
+end
 stats_nonauto.nonauto_DLPFC_beta = p;
-p = signrank(nonauto_DLPFC_gamma(:, 1), nonauto_DLPFC_gamma(:, 2));
+
+h = kstest(nonauto_DLPFC_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_DLPFC_gamma(:, 1), nonauto_DLPFC_gamma(:, 2));
+else
+    p = signrank(nonauto_DLPFC_gamma(:, 1), nonauto_DLPFC_gamma(:, 2));
+end
 stats_nonauto.nonauto_DLPFC_gamma = p;
 
+%%
+
 % SMA.
-p = signrank(nonauto_SMA_theta(:, 1), nonauto_SMA_theta(:, 2));
+
+h = kstest(nonauto_SMA_theta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_SMA_theta(:, 1), nonauto_SMA_theta(:, 2));
+else
+    p = signrank(nonauto_SMA_theta(:, 1), nonauto_SMA_theta(:, 2));
+end
 stats_nonauto.nonauto_SMA_theta = p;
-p = signrank(nonauto_SMA_alpha(:, 1), nonauto_SMA_alpha(:, 2));
+
+h = kstest(nonauto_SMA_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_SMA_alpha(:, 1), nonauto_SMA_alpha(:, 2));
+else
+    p = signrank(nonauto_SMA_alpha(:, 1), nonauto_SMA_alpha(:, 2));
+end
 stats_nonauto.nonauto_SMA_alpha = p;
-p = signrank(nonauto_SMA_beta(:, 1), nonauto_SMA_beta(:, 2));
+
+h = kstest(nonauto_SMA_beta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_SMA_beta(:, 1), nonauto_SMA_beta(:, 2));
+else
+    p = signrank(nonauto_SMA_beta(:, 1), nonauto_SMA_beta(:, 2));
+end
 stats_nonauto.nonauto_SMA_beta = p;
-p = signrank(nonauto_SMA_gamma(:, 1), nonauto_SMA_gamma(:, 2));
+
+h = kstest(nonauto_SMA_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_SMA_gamma(:, 1), nonauto_SMA_gamma(:, 2));
+else
+    p = signrank(nonauto_SMA_gamma(:, 1), nonauto_SMA_gamma(:, 2));
+end
 stats_nonauto.nonauto_SMA_gamma = p;
 
+%%
+
 % M1.
-p = signrank(nonauto_M1_theta(:, 1), nonauto_M1_theta(:, 2));
+
+h = kstest(nonauto_M1_theta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_M1_theta(:, 1), nonauto_M1_theta(:, 2));
+else
+    p = signrank(nonauto_M1_theta(:, 1), nonauto_M1_theta(:, 2));
+end
 stats_nonauto.nonauto_M1_theta = p;
-p = signrank(nonauto_M1_alpha(:, 1), nonauto_M1_alpha(:, 2));
+
+h = kstest(nonauto_M1_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_M1_alpha(:, 1), nonauto_M1_alpha(:, 2));
+else
+    p = signrank(nonauto_M1_alpha(:, 1), nonauto_M1_alpha(:, 2));
+end
 stats_nonauto.nonauto_M1_alpha = p;
-p = signrank(nonauto_M1_beta(:, 1), nonauto_M1_beta(:, 2));
+
+h = kstest(nonauto_M1_beta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_M1_beta(:, 1), nonauto_M1_beta(:, 2));
+else
+    p = signrank(nonauto_M1_beta(:, 1), nonauto_M1_beta(:, 2));
+end
 stats_nonauto.nonauto_M1_beta = p;
-p = signrank(nonauto_M1_gamma(:, 1), nonauto_M1_gamma(:, 2));
+
+h = kstest(nonauto_M1_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_M1_gamma(:, 1), nonauto_M1_gamma(:, 2));
+else
+    p = signrank(nonauto_M1_gamma(:, 1), nonauto_M1_gamma(:, 2));
+end
 stats_nonauto.nonauto_M1_gamma = p;
 
+%%
+
 % PPC.
-p = signrank(nonauto_PPC_theta(:, 1), nonauto_PPC_theta(:, 2));
+
+h = kstest(nonauto_PPC_theta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_PPC_theta(:, 1), nonauto_PPC_theta(:, 2));
+else
+    p = signrank(nonauto_PPC_theta(:, 1), nonauto_PPC_theta(:, 2));
+end
 stats_nonauto.nonauto_PPC_theta = p;
-p = signrank(nonauto_PPC_alpha(:, 1), nonauto_PPC_alpha(:, 2));
+
+h = kstest(nonauto_PPC_alpha)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_PPC_alpha(:, 1), nonauto_PPC_alpha(:, 2));
+else
+    p = signrank(nonauto_PPC_alpha(:, 1), nonauto_PPC_alpha(:, 2));
+end
 stats_nonauto.nonauto_PPC_alpha = p;
-p = signrank(nonauto_PPC_beta(:, 1), nonauto_PPC_beta(:, 2));
+
+h = kstest(nonauto_PPC_beta)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_PPC_beta(:, 1), nonauto_PPC_beta(:, 2));
+else
+    p = signrank(nonauto_PPC_beta(:, 1), nonauto_PPC_beta(:, 2));
+end
 stats_nonauto.nonauto_PPC_beta = p;
-p = signrank(nonauto_PPC_gamma(:, 1), nonauto_PPC_gamma(:, 2));
+
+h = kstest(nonauto_PPC_gamma)
+if h==0 % Normally distributed data.
+    p = ttest(nonauto_PPC_gamma(:, 1), nonauto_PPC_gamma(:, 2));
+else
+    p = signrank(nonauto_PPC_gamma(:, 1), nonauto_PPC_gamma(:, 2));
+end
 stats_nonauto.nonauto_PPC_gamma = p;
 
 stats.stats_nonauto = stats_nonauto;
