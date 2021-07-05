@@ -10,7 +10,7 @@ results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Anal
 
 eeglab;
 
-subrec = ["28" "04";"64" "01"; "02" "02"];
+subrec = ["28" "04";"64" "01"; "02" "02";"76" "01"];
 
 % List of the 30 channels in the cap
 list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
@@ -40,24 +40,39 @@ for subject = 1:size(subrec, 1)
     EEG_DualCued = EEG_divided.EEG_NonAutoDualCue;
     EEG_SingleCued = EEG_divided.EEG_NonAutoCue;
     
-    % Create a new dataset in eeglab
+    %% Re-reference to M2 and create a new dataset in eeglab
     % Dual Uncued
-    [ALLEEG,EEG_DU,~] = pop_newset(ALLEEG, EEG_DualUncued, 1,'setname','eegdata','gui','off');
+    locs_DU = {EEG_DualUncued.chanlocs.labels};
+    M2_loc_DU = find(contains(locs_DU, 'M2'));
+    [EEG_DU] = pop_reref(EEG_DualUncued, M2_loc_DU);
+    [ALLEEG, EEG_DU, CURRENTSET] = pop_newset(ALLEEG, EEG_DU, 1,'setname','eegdata','gui','off');
     EEG_DU.data = double(EEG_DU.data);
     clear EEG_DualUncued; 
+    
     % Single Uncued
-    [ALLEEG,EEG_SU,~] = pop_newset(ALLEEG, EEG_SingleUncued, 1,'setname','eegdata','gui','off');
+    locs_SU = {EEG_SingleUncued.chanlocs.labels};
+    M2_loc_SU = find(contains(locs_SU, 'M2'));
+    [EEG_SU] = pop_reref(EEG_SingleUncued, M2_loc_SU);
+    [ALLEEG, EEG_SU, CURRENTSET] = pop_newset(ALLEEG, EEG_SU, 1,'setname','eegdata','gui','off');
     EEG_SU.data = double(EEG_SU.data);
     clear EEG_SingleUncued; 
+    
     % Dual Cued
-    [ALLEEG,EEG_DC,~] = pop_newset(ALLEEG, EEG_DualCued, 1,'setname','eegdata','gui','off');
+    locs_DC = {EEG_DualCued.chanlocs.labels};
+    M2_loc_DC = find(contains(locs_DC, 'M2'));
+    [EEG_DC] = pop_reref(EEG_DualCued, M2_loc_DC);
+    [ALLEEG, EEG_DC, CURRENTSET] = pop_newset(ALLEEG, EEG_DC, 1,'setname','eegdata','gui','off');
     EEG_DC.data = double(EEG_DC.data);
     clear EEG_DualCued; 
+    
     % Single Cued
-    [ALLEEG,EEG_SC,~] = pop_newset(ALLEEG, EEG_SingleCued, 1,'setname','eegdata','gui','off');
+    locs_SC = {EEG_SingleCued.chanlocs.labels};
+    M2_loc_SC = find(contains(locs_SC, 'M2'));
+    [EEG_SC] = pop_reref(EEG_SingleCued, M2_loc_SC);
+    [ALLEEG, EEG_SC, CURRENTSET] = pop_newset(ALLEEG, EEG_SC, 1,'setname','eegdata','gui','off');
     EEG_SC.data = double(EEG_SC.data);
     clear EEG_SingleCued; 
-    
+      
     EEG.conditions = {EEG_DU EEG_SU EEG_DC EEG_SC};
       
     for i = 1:length(EEG.conditions) % for each condition
@@ -188,7 +203,7 @@ for subject = 1:size(subrec, 1)
     
     disp(['ERP processing done for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all; clc; 
   
 end
@@ -219,8 +234,8 @@ for subject = 1:size(subrec, 1)
 end
 
 %% Plot mean per channel and condition over subjects + mean and std of GFPt
-time = -0.2 : 1/1024 : 0.6;
-   
+time = -0.1 : 1/1024 : 0.7;
+
 for i = 1:length(EEG.conditions)
     ERPdualGFP1 = mean(allGFP{i}.ERPdual{i},1) + 2*std(allGFP{i}.ERPdual{i},[],1);
     ERPdualGFP2 = mean(allGFP{i}.ERPdual{i},1) - 2*std(allGFP{i}.ERPdual{i},[],1);
@@ -231,11 +246,11 @@ for i = 1:length(EEG.conditions)
     set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP{i}.ERPdual{i},1),'b','LineWidth',1.5); 
     
     subplot(1,2,1); set(gca,'FontSize',11); box on;
-    ylabel('Potential (\muV)','FontSize',14); title('ERP for ',taskname{i},'FontSize',14); ylim([-6 6])
-    xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k'); 
+    ylabel('Potential (\muV)','FontSize',14); title('ERP for ',taskname{i},'FontSize',14); ylim([-3 3])
+    xticks([-0.1:0.1:0.7]); line([0 0],[-3 3],'Color','k'); 
     subplot(1,2,2); set(gca,'FontSize',11); box on;
-    ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
-    xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k'); 
+    ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 22])
+    xticks([-0.1:0.1:0.7]); yticks([0:10:20]); line([0 0],[-2 22],'Color','k'); 
     set(gcf,'Position',[400 420 1325 420]);
 
     clear ERPdualGFP1 ERPdualGFP2 h1
@@ -252,15 +267,30 @@ for i = 1:length(EEG.conditions)
 avgGFP{i}.ERPdual{i} = mean(allGFP{i}.ERPdual{i},1);
 avgERP{i}.ERPdual{i} = mean(allERP{i}.ERPdual,3, 'omitnan');
 
+% Get main component N0
+[ERPdualNO{i}.loc, ERPdualNO{i}.time, ERPdualNO{i}.amp] = get_mainVEPcomponents (time, avgGFP{i}.ERPdual{i}, [-0.02 0.03]);
+
 % Get main component P3: 0.25-0.5s (P300 peak)
-[ERPdualP3{i}.loc, ERPdualP3{i}.time, ERPdualP3{i}.amp] = get_mainVEPcomponents (time, avgGFP{i}.ERPdual{i}, [0.25 0.5]);
+[ERPdualP3{i}.loc, ERPdualP3{i}.time, ERPdualP3{i}.amp] = get_mainVEPcomponents (time, avgGFP{i}.ERPdual{i}, [0.25 0.4]);
 
 figure; 
-axh = subplot(1,1,1);
+subplot(1,2,1); title('N0'); hold on;
+topoplot(avgERP{i}.ERPdual{i}(:,ERPdualNO{i}.loc), chanlocs,'electrodes','off');   colorbar; caxlim(1,:) = caxis; set(gca,'FontSize',9);
+ax(1) = gca; axis on; hold on;
+axis off; c1 = colorbar; caxlim(1,:) = caxis; 
+set(ax,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]); 
+clear caxlim
+
+subplot(1,2,2); title('P300'); hold on;
 topoplot(avgERP{i}.ERPdual{i}(:,ERPdualP3{i}.loc), chanlocs,'electrodes','off');   colorbar; caxlim(1,:) = caxis; set(gca,'FontSize',9);
-  
-set(axh,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]);
-set(gcf,'Position',[590 470 470 320]);
+ax(1) = gca; axis on; hold on;
+axis off; c2 = colorbar; caxlim(1,:) = caxis; 
+set(ax,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]); 
+
+ylabel(c1,'Potential (\muV)','FontSize',9); 
+ylabel(c2,'Potential (\muV)','FontSize',9);
+
+set(gcf,'Position',[400 420 1325 420]);
 
 saveas(gcf,fullfile(results_path, sprintf('ALLERPtopoplot_%s.png',taskname{1,i})));
 
