@@ -9,11 +9,11 @@ mainpath_in=fullfile(mainpath_in,'pre-processed');
 mainpath_out = 'C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\processed';
 
 % select ID number and cap
-subjects=[{'02','64','28'}];
-subject_nirs_only=[{'03','04','10'}];%,'11','12',}];
+subjects=[{'02','64','28','76'}];
+subject_nirs_only=[{'03','04','10','11'}];
 
-
-for iSub = 1:size(subjects,2)
+%%
+for iSub = 3:size(subjects,2)
     %% 1. Info
     sub = char(subjects(iSub));
     
@@ -35,6 +35,8 @@ for iSub = 1:size(subjects,2)
             rec='01';
         case '02'
             rec='02';
+        case '76'
+            rec='01';
     end
     
     
@@ -123,7 +125,7 @@ for task=1:8
         tmp = strsplit(data_TL_O2Hb{task}.label{i});
         data_TL_O2Hb{task}.label{i}=tmp{1};
     end
-%     save(fullfile(val_dir,'data_TL_O2Hb.mat'),'data_TL_O2Hb');
+    save(fullfile('NIRS/','data_TL_O2Hb.mat'),'data_TL_O2Hb');
     
     % The same for HHb channels
     cfg=[];
@@ -133,7 +135,7 @@ for task=1:8
         tmp = strsplit(data_TL_HHb{task}.label{i});
         data_TL_HHb{task}.label{i}=tmp{1};
     end
-%     save(fullfile(val_dir,'data_TL_HHb.mat'),'data_TL_HHb');
+    save(fullfile('NIRS/','data_TL_HHb.mat'),'data_TL_HHb');
 end
 
 %% e) Topoplots for each task

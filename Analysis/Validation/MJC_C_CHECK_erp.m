@@ -15,8 +15,8 @@ end
 
 mainpath_outfig=fullfile(mainpath_out,'Fig_CHECK_erp');
 % select ID number and cap
-subject=[{'02','28','64'}];
-subject_eeg_only=[{'03','04','10'}];%,'11','12',}];
+subject=[{'02','28','64','76'}];
+subject_eeg_only=[{'03','04','10','11'}];
 
 %% General variables
 
@@ -187,6 +187,7 @@ end
 nrpix_total     = numel(grid_comb(:,:,1)) - sum(isnan(grid_comb(:,:,1)),'all');
 nrpix_sig       = sum(permN1.zmapTHmcc==1,'all');
 permN1.sigPix   = 100*nrpix_sig / nrpix_total; 
+saveas(gcf, 'Fig_CHECK_erp/zmap_N1 peak - Raw Data.jpg');
 
 clear grid_comb grid_eeg_only nrpix_sig nrix_total
 
@@ -201,6 +202,7 @@ end
 % figure, title('P1 peak - Raw Data')
 % permutation testing
 [permP1.zmap, permP1.zmapTH, permP1.zmapTHmcc] = Permutation_VEPcomponent (grid_comb, grid_eeg_only, xmesh, ymesh);
+saveas(gcf, 'Fig_CHECK_erp/zmap_P1 peak - Raw Data.jpg');
 
 % percentage of significant pixels 
 nrpix_total     = numel(grid_comb(:,:,1)) - sum(isnan(grid_comb(:,:,1)),'all');
@@ -230,6 +232,7 @@ end
 nrpix_total         = numel(grid_comb(:,:,1)) - sum(isnan(grid_comb(:,:,1)),'all');
 nrpix_sig           = sum(permN1std.zmapTHmcc==1,'all');
 permN1std.sigPix    = 100*nrpix_sig / nrpix_total; 
+saveas(gcf, 'Fig_CHECK_erp/zmap_N1 peak - Standardized Data.jpg');
 
 clear grid_comb grid_eeg_only nrpix_sig nrix_total 
 
@@ -250,6 +253,7 @@ end
 nrpix_total         = numel(grid_comb(:,:,1)) - sum(isnan(grid_comb(:,:,1)),'all');
 nrpix_sig           = sum(permP1std.zmapTHmcc==1,'all');
 permP1std.sigPix    = 100*nrpix_sig / nrpix_total; 
+saveas(gcf, 'Fig_CHECK_erp/zmap_P1 peak - Standardized Data.jpg');
 
 clear grid_comb grid_eeg_only nrpix_sig nrix_total
 
@@ -299,8 +303,8 @@ saveas(gcf, 'Fig_CHECK_erp/Topoplots_standard_data.jpg');
 fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
 fprintf('Statistics: \n')
 fprintf('%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n \n')
-fprintf('RMSD: %d \n', RMSD)
-fprintf('Spearman´s rank correlation: %d \n', COR)
+fprintf('RMSD: %f \n', RMSD)
+fprintf('Spearman´s rank correlation: %f \n', COR)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
