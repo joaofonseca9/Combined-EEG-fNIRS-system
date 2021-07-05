@@ -11,16 +11,20 @@ subrec = ["28" "02"; "02" "02"; "76" "01"];
 conditions = [2 4 6 8];
 taskname = {'Auto Cued', 'Non-Auto Cued', 'Auto Uncued', 'Non-Auto Uncued'};
 
+load(fullfile(results_path, 'nirs_TLblc.mat'), 'nirs_TLblc');
+%%
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);
     
-    % Load the subject's file.
-    load(fullfile(results_path, ['Sub-', char(sub)],...
-            'Timelock Analysis\nirs_TLblc.mat'), 'nirs_TLblc');
+    % Get the subject's file.
+    nirs_TLblc_sub{1} = nirs_TLblc{1}{subject};
+    nirs_TLblc_sub{2} = nirs_TLblc{2}{subject};
+    nirs_TLblc_sub{3} = nirs_TLblc{3}{subject};
+    nirs_TLblc_sub{4} = nirs_TLblc{4}{subject};
         
     % Separate Hb02 from Hb.    
-    [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc, subject);
+    [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc_sub);
     
     % Extract the different regions of interest: DLPFC, SMA, M1 and PPC.
     % Only for HbO2 signal.
@@ -71,6 +75,8 @@ cfg.method = 'analytic';
 cfg.statistic = 'ft_statfun_depsamplesT';
 cfg.alpha = 0.05;
 cfg.correctm = 'no';
+cfg.nanmean = 'yes';
+fg.latency = [5 10];
 
 Nsub = 3;
 cfg.design(1,1:2*Nsub)  = [ones(1,Nsub) 2*ones(1,Nsub)];
@@ -119,13 +125,13 @@ stats.nonauto_PPC = stat_nonauto_PPC.prob;
 save(strcat(statistics_path, '\stats_nirs.mat'), 'stats');
 
 %% Functions.
-function [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc, subject)
+function [nirs_TLO2Hb, nirs_TLHHb] = separateHbO2FromHb(conditions, nirs_TLblc)
 % Separate O2Hb and HHb channels.
 
 for con = 1:length(conditions)
     cfg = [];
     cfg.channel = '* [O2Hb]';
-    nirs_TLO2Hb{con} = ft_selectdata(cfg, nirs_TLblc{con}{subject});
+    nirs_TLO2Hb{con} = ft_selectdata(cfg, nirs_TLblc{con});
     
     % Rename labels such that they have the same name as HHb channels.
     for i = 1:length(nirs_TLO2Hb{con}.label)
@@ -136,7 +142,7 @@ for con = 1:length(conditions)
     % The same for HHb channels.
     cfg = [];
     cfg.channel = '* [HHb]';
-    nirs_TLHHb{con} = ft_preprocessing(cfg, nirs_TLblc{con}{subject});
+    nirs_TLHHb{con} = ft_preprocessing(cfg, nirs_TLblc{con});
     for i=1:length(nirs_TLHHb{con}.label)
         tmp = strsplit(nirs_TLHHb{con}.label{i});
         nirs_TLHHb{con}.label{i}=tmp{1};
@@ -176,8 +182,9 @@ nirs_HbO2_M1{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
 nirs_HbO2_M1{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
+% Rx12-Tx15 was exluced from all subs.
 cfg = [];
-cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9', 'Rx12-Tx15',...
+cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9',...
     'Rx10-Tx14', 'Rx12-Tx14'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});

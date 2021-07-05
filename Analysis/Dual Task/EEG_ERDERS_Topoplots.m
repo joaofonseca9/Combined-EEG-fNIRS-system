@@ -10,7 +10,7 @@ results_path = 'C:\Users\catar\OneDrive - Universidade do Porto\Twente\Data Anal
 
 eeglab;
 
-subrec = ["02" "02";"64" "01";"28" "04"];
+subrec = ["76" "01";"02" "02";"64" "01";"28" "04"];
 
 % List of the 30 channels in the cap
 list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
@@ -119,6 +119,8 @@ for subject = 1:size(subrec, 1)
    
     % Remove any extra boundaries
     if sub=="64"
+        startTask = [37 50];
+        endTask = [47 62];
         startBaseline = [27 48];
     else
         startBaseline = removeExtraBoundaries(startBaseline, startTask);
@@ -263,6 +265,7 @@ for subject = 1:size(subrec, 1)
     if sub=="64"
         startBaseline = [162];
         startTask = [164];
+        endTask = [177];
     else
         startBaseline = removeExtraBoundaries(startBaseline, startTask);
     end
@@ -331,7 +334,7 @@ for subject = 1:size(subrec, 1)
     
     disp(['These are the topoplots for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    pause;
+    %pause;
     close all;
     
 end
