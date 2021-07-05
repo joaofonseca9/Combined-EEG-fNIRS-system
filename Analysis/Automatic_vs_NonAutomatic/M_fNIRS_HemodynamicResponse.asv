@@ -360,10 +360,7 @@ save('nirs_Hb_PPC.mat', 'nirs_Hb_PPC');
 %% Average the responses over all channels of specific regions and plot them.
 % DLPFC.
 
-ylims{1} = [-0.25 0.15];
-ylims{2} = [-0.65 0.6];
-ylims{3} = [-0.25 0.15];
-ylims{4} = [-0.65 0.6];
+ylims(1) = [-]
 
 for con = 1:length(conditions)
     regionsavg_HbO2_DLPFC{con} = mean(nirs_HbO2_DLPFC{con}.avg, 1);
@@ -378,7 +375,7 @@ for con = 1:length(conditions)
     hold off;
     legend('Hb02', 'Hb');
     xlim([-10 20]);
-    ylim(ylims{con});
+    ylim([-0.3 0.3]);
     xlabel('Time (s)');
     ylabel('Concentration');
     
@@ -387,13 +384,8 @@ for con = 1:length(conditions)
     
 end
 
+%%
 % SMA.
-
-ylims{1} = [-0.15 0.2];
-ylims{2} = [-0.15 0.2];
-ylims{3} = [-0.15 0.2];
-ylims{4} = [-0.15 0.2];
-
 for con = 1:length(conditions)
     regionsavg_HbO2_SMA{con} = mean(nirs_HbO2_SMA{con}.avg, 1);
     regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
@@ -407,7 +399,7 @@ for con = 1:length(conditions)
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim(ylims{con});
+    ylim([-0.15 0.15]);
     xlabel('Time (s)');
     ylabel('Concentration');
     
@@ -417,12 +409,6 @@ for con = 1:length(conditions)
 end
 
 % M1.
-
-ylims{1} = [-0.1 0.15];
-ylims{2} = [-0.1 0.25];
-ylims{3} = [-0.1 0.15];
-ylims{4} = [-0.1 0.25];
-
 for con = 1:length(conditions)
     regionsavg_HbO2_M1{con} = mean(nirs_HbO2_M1{con}.avg, 1);
     regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
@@ -436,7 +422,7 @@ for con = 1:length(conditions)
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim(ylims{con});
+    ylim([-0.1 0.1]);
     xlabel('Time (s)');
     ylabel('Concentration');
     
@@ -446,12 +432,6 @@ for con = 1:length(conditions)
 end
 
 % PPC.
-
-ylims{1} = [-0.1 0.1];
-ylims{2} = [-0.1 0.2];
-ylims{3} = [-0.1 0.1];
-ylims{4} = [-0.1 0.2];
-
 for con = 1:length(conditions)
     regionsavg_HbO2_PPC{con} = mean(nirs_HbO2_PPC{con}.avg, 1);
     regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
@@ -465,7 +445,7 @@ for con = 1:length(conditions)
     hold off;
     legend('Hb02', 'Hb');
     xlim([-5 20]);
-    ylim(ylims{con});
+    ylim([-0.15 0.15]);
     xlabel('Time (s)');
     ylabel('Concentration');
     

@@ -1,6 +1,7 @@
 %% Statistic for ERD/ERS.
 
 clear; clc; close all;
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
 
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);

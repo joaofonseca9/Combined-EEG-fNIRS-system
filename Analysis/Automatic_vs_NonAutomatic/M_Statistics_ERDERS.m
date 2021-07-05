@@ -1,6 +1,7 @@
 %% Statistic for ERD/ERS.
 
 clear; clc; close all;
+addpath('C:\Users\maria\OneDrive\Documentos\GitHub\Combined-EEG-fNIRS-system\Analysis');
 
 laptop = 'laptopMariana';
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
@@ -204,7 +205,7 @@ end
 
 % Theta band.
 
-h = kstest(auto_theta_DLPFC)
+h = kstest(auto_theta_DLPFC(:, 1)-auto_theta_DLPFC(:, 2))
 if h==0 % Normally distributed data.
     [h, p] = ttest(auto_theta_DLPFC(:, 1), auto_theta_DLPFC(:, 2));
     stats_auto.auto_theta_DLPFC = p;
@@ -213,7 +214,7 @@ else
     stats_auto.auto_theta_DLPFC = p;
 end
 
-h = kstest(auto_theta_SMA)
+h = kstest(auto_theta_SMA(:, 1)-auto_theta_SMA(:, 2))
 if h==0 % Normally distributed data.
     [h, p] = ttest(auto_theta_SMA(:, 1), auto_theta_SMA(:, 2));
     stats_auto.auto_theta_SMA = p;
@@ -222,7 +223,7 @@ else
     stats_auto.auto_theta_SMA = p;
 end
 
-h = kstest(auto_theta_M1)
+h = kstest(auto_theta_M1(:, 1)-auto_theta_M1(:, 2))
 if h==0 % Normally distributed data.
     [h, p] = ttest(auto_theta_M1(:, 1), auto_theta_M1(:, 2));
     stats_auto.auto_theta_M1 = p;
@@ -231,7 +232,7 @@ else
     stats_auto.auto_theta_M1 = p;
 end
 
-h = kstest(auto_theta_PPC)
+h = kstest(auto_theta_PPC(:, 1)-auto_theta_PPC(:, 2))
 if h==0 % Normally distributed data.
     [h, p] = ttest(auto_theta_PPC(:, 1), auto_theta_PPC(:, 2));
     stats_auto.auto_theta_PPC = p;
