@@ -51,6 +51,8 @@ for iSub = 1:size(subjects_comb,2)
             rec='01';
         case '02'
             rec='02';
+        case '76'
+            rec='01';
     end
     
     
@@ -60,7 +62,8 @@ for iSub = 1:size(subjects_comb,2)
     %% 2. Load pre-processed data
     
     load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat']));
-    
+%     load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_lpf.mat']));
+%     nirs_preprocessed.trialinfo=nirs_lpf.trialinfo;
     %% 3. Timelock analysis + baselinecorrection
     % these steps are necessary for the multisubject_averaging script!
     % a) timelock
@@ -89,10 +92,8 @@ for iSub = 1:size(subjects_comb,2)
     load(fullfile(mainpath_in_processed,['sub-',sub],'nirs',['data_TL_blc.mat']));
     uncued_tasks=[6,8];
     % Use only finger auto & non auto single no cue - task 6 and 8
-    for task=uncued_tasks
-        cfg=[];
-        data_all{cap}{iSub} = ft_timelockgrandaverage(cfg, data_TL_blc_comb{task});
-    end
+    cfg=[];
+    data_all{cap}{iSub} = ft_timelockgrandaverage(cfg, data_TL_blc_comb{uncued_tasks});
         %     for task=uncued_tasks
 %         data_all{cap}{iSub}{task}=data_TL_blc{task};
 %     end
@@ -125,11 +126,9 @@ for s = 1:length(subject_nirs_only)
     save(fullfile(mainpath_in_nirsonly, ['sub-',subject_nirs_only{s}], 'data_TL_blc.mat'), 'data_TL_blc_nirs');
     
     % c) get average of the two tasks
-    for task=1:2
-        cfg=[];
-        data_all{cap}{s}=ft_timelockgrandaverage(cfg, data_TL_blc_nirs{task});
+    cfg=[];
+    data_all{cap}{s}=ft_timelockgrandaverage(cfg, data_TL_blc_nirs{1:2});
         %     load(fullfile(mainpath_in_nirsonly, ['sub-',subject_nirs_only{s}], 'data_TL_blc.mat'));
-    end
     
 end
  
@@ -182,7 +181,9 @@ cfg.zlim     = cfg.ylim/2;
 for cap=1:2
     figure;
     cfg.title=capname{cap};
-    cfg.layout   = layout_combined;
+    if cap==1,  cfg.layout            = layout_nirs_only;
+    else,       cfg.layout            = layout_combined; 
+    end
     ft_topoplotER(cfg, data_TL_O2Hb{cap});
     saveas(gcf,fullfile(fig_dir,['topoplot_',capname{cap},'.jpg']))
 end
@@ -246,29 +247,48 @@ for ii=1:length(min_idx)
     nirs_only_channel = nirs_channels(min_idx(ii));
     comb_channel      = comb_channels(ii);
     
+    
+    % Get time and data to be plotted
     time=data_TL_HHb{1}.time;
+    nirs_chan_data_hhb=data_TL_HHb{1}.avg(min_idx(ii),:);
+    nirs_chan_data_hbo2=data_TL_O2Hb{1}.avg(min_idx(ii),:);
+    comb_chan_data_hhb=data_TL_HHb{2}.avg(ii,1:length(time));
+    comb_chan_data_hbo2=data_TL_O2Hb{2}.avg(ii,1:length(time));
+    
+    % Calculate COR and RMSD
+%     [RMSD_hbo2,RMSD_hhb,COR_hbo2,COR_hhb]=rmsd_cor(nirs_chan_data_hbo2,...
+%         nirs_chan_data_hhb,comb_chan_data_hbo2,comb_chan_data_hhb);
     figure;
     
-    plot(time,data_TL_O2Hb{1}.avg(min_idx(ii),:),'r--')
+    plot(time,nirs_chan_data_hbo2,'r--')
+%     str=sprintf('RMSD HbO2: %f  RMSD HHb: %f \n COR HbO2: %f  COR HHb: %f',...
+%         RMSD_hbo2,RMSD_hhb,COR_hbo2,COR_hhb);
+%     txt=annotation('textbox', [0.2, 0.05, 0.3, 0.25], 'String', str);
+%     txt.EdgeColor='none';
     title(sprintf(' NIRS - %s \n Combined - %s',nirs_only_channel{1}, comb_channel{1}))
     hold on
-    plot(time,data_TL_HHb{1}.avg(min_idx(ii),:),'b--')
+    plot(time,nirs_chan_data_hhb,'b--')
     hold on
-    plot(time,data_TL_O2Hb{2}.avg(ii,1:length(time)),'r-')
+    plot(time,comb_chan_data_hbo2,'r-')
     hold on
-    plot(time,data_TL_HHb{2}.avg(ii,1:length(time)),'b-')
+    plot(time,comb_chan_data_hhb,'b-')
 %     lgd=legend('NIRS - HbO2', 'NIRS - HHb', 'Combined - HbO2', 'Combined -HHb','Orientation','horizontal','Position',[0.25 .8 0.05 0.1]);
 %     lgd.NumColumns = 2;
     xlabel('Time (s)')
-    ylabel('Hemoglobin Activity')
+    ylabel('Hemoglobin Concetration')
     hold off
     saveas(gcf, ['Fig_Validation_NIRS/Combined_',comb_channel{1},'NIRS_', nirs_only_channel{1},'.jpg']);
+    
+    
+   
 end
 
 %% e) Plot all channels, both on the lay-out
 cfg                   = [];
 cfg.showlabels        = 'yes';
-cfg.layout            = layout_combined;
+if cap==1,  cfg.layout            = layout_nirs_only;
+    else,       cfg.layout            = layout_combined; 
+    end
 cfg.interactive       = 'yes'; % this allows to select a subplot and interact with it
 cfg.linecolor        = 'rbrb'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
 cfg.linestyle = {'--', '--', '-', '-'}; % fingerauto is dashed line, fingernonauto is solid line, footauto is dotted line and footnonauto is a dotted stars line
@@ -371,7 +391,33 @@ end
 
 
 
+%% HELPER FUNCTIONS
+function [RMSD_hbo2,RMSD_hhb,COR_hbo2,COR_hhb]=rmsd_cor(nirs_chan_data_hbo2,nirs_chan_data_hhb,comb_chan_data_hbo2,comb_chan_data_hhb)
+ %% Root Mean Square Deviation (RMSD) - Fiedler (2015)
+    %HbO2
+    for iL = 1:length(nirs_chan_data_hbo2)
+        D(iL) = (nirs_chan_data_hbo2(iL)-comb_chan_data_hbo2(iL)).^2;
+    end
+    RMSD_hbo2 = sqrt(sum(D)/length(nirs_chan_data_hbo2));    
+    %HHb
+    for iL = 1:length(nirs_chan_data_hhb)
+        D(iL) = (nirs_chan_data_hhb(iL)-comb_chan_data_hhb(iL)).^2;
+    end
+    RMSD_hhb = sqrt(sum(D)/length(nirs_chan_data_hhb)); 
+    %% Spearman's rank Correlation (COR) - Fiedler (2015)
+    %HbO2
+    for iL = 1:length(nirs_chan_data_hbo2)
+        Dg(iL) = nirs_chan_data_hbo2(iL)-mean(nirs_chan_data_hbo2,'omitnan');
+        Dd(iL) = comb_chan_data_hbo2(iL)-mean(comb_chan_data_hbo2,'omitnan');
+    end
+    COR_hbo2 = sum(Dg.*Dd) / sqrt( sum(Dg.^2).*sum(Dd.^2) ); 
+    
+    %HHb
+    for iL = 1:length(nirs_chan_data_hbo2)
+        Dg(iL) = nirs_chan_data_hhb(iL)-mean(nirs_chan_data_hhb,'omitnan');
+        Dd(iL) = comb_chan_data_hhb(iL)-mean(comb_chan_data_hhb,'omitnan');
+    end
+    COR_hhb = sum(Dg.*Dd) / sqrt( sum(Dg.^2).*sum(Dd.^2) ); 
 
-
-
+end
 

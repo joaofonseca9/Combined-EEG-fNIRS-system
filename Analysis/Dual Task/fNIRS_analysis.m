@@ -48,12 +48,6 @@ for subject = 1:size(subrec, 1)
     saveas(h{7},taskbaseline{3},'png'); saveas(h{8},tasktopoplotO2Hb{3},'png'); saveas(h{9},tasktopoplotHHb{3},'png');
     saveas(h{10},taskbaseline{4},'png'); saveas(h{11},tasktopoplotO2Hb{4},'png'); saveas(h{12},tasktopoplotHHb{4},'png'); 
 
-    %% Statistical testing per subject 
-    cd(fullfile(results_path,['sub-',char(sub)],'statistics'));
-    for i=1:4 % loop over the 4 conditions
-      [stat_O2Hb, stat_HHb] = statistics_withinsubjects(nirs, 'nirs', layout, i, taskname{i}, char(sub), char(rec));
-    end
-       
     %% Timelock analysis per subject
     for con = 1:length(conditions) % 4 conditions
         cfg = [];

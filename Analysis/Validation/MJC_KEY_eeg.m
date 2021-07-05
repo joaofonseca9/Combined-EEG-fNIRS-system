@@ -225,8 +225,8 @@ N0_stop = 0.03;
 [N0.loc, N0.time, N0.amp] = get_mainVEPcomponents (time, avgGFP, [N0_start N0_stop]);
 
 % get main component P150
-P150_start = 0.05;
-P150_stop = 0.2;
+P150_start = 0.08;
+P150_stop = 0.120;
 [P150.loc, P150.time, P150.amp] = get_mainVEPcomponents (time, avgGFP, [P150_start P150_stop]);
 %% standardize VEP data within subject per cap
 
