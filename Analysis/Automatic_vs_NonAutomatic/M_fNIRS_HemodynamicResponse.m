@@ -18,7 +18,7 @@ for subject = 1:size(subrec, 1)
     rec = subrec(subject, 2);
     
     % Load the subject's fNIRS signals.
-    load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
+    load([mainpath_in, '\pre-processed-old\sub-', char(sub), '\nirs\sub-',...
         char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat']);
     
     % Load the layout of the optode's template.
@@ -100,7 +100,7 @@ for subject = 1:size(subrec, 1)
     
     disp(['These are the results for subject ', char(sub), '.']);
     disp('Press any key to move onto the next subject.');
-    % pause;
+    pause;
     close all;
     
 end
@@ -166,14 +166,6 @@ for con = 1:length(conditions)
                 NaN(2, length(nirs_TLblc{con}{subject}.time));...
                 nirs_TLblc{con}{subject}.avg(29:end,:);...
                 NaN(6, length(nirs_TLblc{con}{subject}.time))];
-%             nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
-%             nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
-%             nirs_TLblc{con}{subject}.dof(1:46,...
-%                 1:length(nirs_TLblc{con}{subject}.time)) = 10;
-%             nirs_TLblc{con}{subject}.avg =...
-%                 [nirs_TLblc{con}{subject}.avg((1:39-1), :);...
-%                 NaN(2, length(nirs_TLblc{con}{subject}.time));...
-%                 nirs_TLblc{con}{subject}.avg(39:end,:)];
         end
         
         if strcmp(sub,"76") && length(nirs_TLblc{con}{subject}.label)~=44
@@ -186,12 +178,6 @@ for con = 1:length(conditions)
                 NaN(2, length(nirs_TLblc{con}{subject}.time));...
                 nirs_TLblc{con}{subject}.avg(35:end,:);...
                 NaN(2, length(nirs_TLblc{con}{subject}.time))];
-%             nirs_TLblc{con}{subject}.label = nirs_TLblc{1}{1}.label;
-%             nirs_TLblc{con}{subject}.cfg = nirs_TLblc{1}{1}.cfg;
-%             nirs_TLblc{con}{subject}.dof(1:46,...
-%                 1:length(nirs_TLblc{con}{subject}.time)) = 10;
-%             nirs_TLblc{con}{subject}.avg(45, :) = NaN;
-%             nirs_TLblc{con}{subject}.avg(46, :) = NaN;
         end
         
         cd(fullfile(results_path));
@@ -380,7 +366,7 @@ for con = 1:length(conditions)
     xlim([-10 20]);
     ylim(ylims{con});
     xlabel('Time (s)');
-    ylabel('Concentration');
+    ylabel('Concentratio (\muM)');
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_DLPFC.png']);

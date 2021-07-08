@@ -12,7 +12,7 @@ conditions = [2 4 6 8];
 taskname = {'Auto Cued', 'Non-Auto Cued', 'Auto Uncued', 'Non-Auto Uncued'};
 
 load(fullfile(results_path, 'nirs_TLblc.mat'), 'nirs_TLblc');
-%%
+
 for subject = 1:size(subrec, 1)
     sub = subrec(subject, 1);
     rec = subrec(subject, 2);

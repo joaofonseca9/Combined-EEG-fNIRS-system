@@ -355,7 +355,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued', '', 'Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 % Non-automatic sequence.
 ax2 = nexttile;
 plot(freq, nonautouncued_power_DLPFC, '-g', 'LineWidth', 1.5);
@@ -378,7 +378,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -453,7 +453,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued', '', 'Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 % Non-automatic sequence.
 ax2 = nexttile;
 plot(freq, nonautouncued_power_SMA, '-g', 'LineWidth', 1.5);
@@ -476,7 +476,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -516,7 +516,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued', '', 'Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 % Non-automatic sequence.
 ax2 = nexttile;
 plot(freq, nonautouncued_power_M1, '-g', 'LineWidth', 1.5);
@@ -539,7 +539,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
@@ -597,7 +597,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Auto Uncued', '', 'Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 % Non-automatic sequence.
 ax2 = nexttile;
 plot(freq, nonautouncued_power_PPC, '-g', 'LineWidth', 1.5);
@@ -620,7 +620,7 @@ xline(32); hold off;
 xlim([4 48]);
 legend('Non-Auto Uncued', '', 'Non-Auto Cued', '');
 xlabel('Frequency (Hz)');
-ylabel('PSD');
+ylabel('PSD (\muV^2/Hz)');
 linkaxes([ax1 ax2],'y')
 
 set(gcf, 'Position', get(0, 'Screensize'));
