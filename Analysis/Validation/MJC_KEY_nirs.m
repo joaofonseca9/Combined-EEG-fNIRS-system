@@ -144,22 +144,17 @@ for task=1:8
 end
 
 %% e) Topoplots for each task
-% task_label={'AutoDualCue','AutoSingleCue','NonAutoDualCue',...
-%         'NonAutoSingleCue','AutoDualNoCue','AutoSingleNoCue',...
-%         'NonAutoDualNoCue','NonAutoSingleNoCue'};
-% cfg          = [];
-% cfg.layout   = layout;
-% cfg.marker   = 'labels';
-% cfg.ylim     = [-0.2 0.2];
-% cfg.xlim     = [5 10];
-% cfg.zlim     = cfg.ylim/2;
-%  % Choose the time window over which you want to average
-% for task=1:8
-%     figure;
-%     title(task_label{task})
-%     ft_topoplotER(cfg, data_TL_O2Hb{task});
-%     %saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_',task_label{task},'.jpg']))
-% end
+task_label={'AutoDualCue','AutoSingleCue','NonAutoDualCue',...
+        'NonAutoSingleCue','AutoDualNoCue','AutoSingleNoCue',...
+        'NonAutoDualNoCue','NonAutoSingleNoCue'};
+cfg          = []; cfg.layout   = layout; cfg.marker   = 'labels';
+cfg.ylim     = [-0.2 0.2]; cfg.xlim     = [5 10]; 
+ % Choose the time window over which you want to average
+for task=1:8
+    cfg.title=task_label{task}; 
+    ft_topoplotER(cfg,data_TL_O2Hb{task});
+    saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_',task_label{task},'.jpg']))
+end
 
 %% f) Topoplots for total avg
 
@@ -204,7 +199,7 @@ ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
 saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['hemoglobin_alltask_.jpg']))
 
 %%
-stdplot(grand_avg_HbO2,grand_avg_HHb)
+% stdplot(grand_avg_HbO2,grand_avg_HHb, cfg.title)
 %% Plot per region
 cfg                   = [];
 cfg.showlabels        = 'yes';
@@ -218,10 +213,10 @@ cfg.title             = 'Left dlPFC';
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
 saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
-% cfg.title             = 'Right dlPFC';
-% cfg.channel = {'Rx9-Tx12', 'Rx9-Tx13', 'Rx11-Tx12', 'Rx11-Tx13'};
-% ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-% saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+cfg.title             = 'Right dlPFC';
+cfg.channel = {'Rx9-Tx12', 'Rx9-Tx13', 'Rx11-Tx12', 'Rx11-Tx13'};
+ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'Left PPC';
 cfg.channel = {'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10'};
@@ -229,10 +224,10 @@ ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
 saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 % 
-% cfg.title             = 'Right PPC';
-% cfg.channel = {'Rx10-Tx14', 'Rx12-Tx14'};
-% ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-% saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+cfg.title             = 'Right PPC';
+cfg.channel = {'Rx10-Tx14', 'Rx12-Tx14'};
+ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'SMA_M1';
 cfg.channel = {'Rx4-Tx4', 'Rx4-Tx5', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2'...
@@ -256,14 +251,15 @@ saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_allta
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %HELPER FUNCTIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-function stdplot(grand_avg_HbO2,grand_avg_HHb)
+function stdplot(grand_avg_HbO2,grand_avg_HHb,figtitle)
 time=grand_avg_HbO2.time;
-avg1=mean(grand_avg_HbO2.avg,1,'omitnan') + 1*std(grand_avg_HbO2.avg,[],1,'omitnan');
-avg2=mean(grand_avg_HbO2.avg,1,'omitnan') - 1*std(grand_avg_HbO2.avg,[],1,'omitnan');
-figure,plot(time,mean(grand_avg_HbO2.avg,1,'omitnan'),'r');hold on; h1 = fill([time,fliplr(time)], [avg1,fliplr(avg2)],'r','LineStyle','none');
+avg1=nanmean(grand_avg_HbO2.avg,1) + 1*std(grand_avg_HbO2.avg,[],1);
+avg2=nanmean(grand_avg_HbO2.avg,1) - 1*std(grand_avg_HbO2.avg,[],1);
+figure,title(figtitle)
+plot(time,nanmean(grand_avg_HbO2.avg,1),'r');hold on; h1 = fill([time,fliplr(time)], [avg1,fliplr(avg2)],'r','LineStyle','none');
 set(h1,'FaceAlpha',0.4);
-avg1=mean(grand_avg_HHb.avg,1,'omitnan') + 1*std(grand_avg_HHb.avg,[],1,'omitnan');
-avg2=mean(grand_avg_HHb.avg,1,'omitnan') - 1*std(grand_avg_HHb.avg,[],1,'omitnan');
-plot(time,mean(grand_avg_HHb.avg,1,'omitnan'),'b');hold on; h2 = fill([time,fliplr(time)], [avg1,fliplr(avg2)],'b','LineStyle','none');
+avg1=nanmean(grand_avg_HHb.avg,1) + 1*std(grand_avg_HHb.avg,[],1);
+avg2=nanmean(grand_avg_HHb.avg,1) - 1*std(grand_avg_HHb.avg,[],1);
+plot(time,nanmean(grand_avg_HHb.avg,1),'b');hold on; h2 = fill([time,fliplr(time)], [avg1,fliplr(avg2)],'b','LineStyle','none');
 set(h2,'FaceAlpha',0.4);
 end

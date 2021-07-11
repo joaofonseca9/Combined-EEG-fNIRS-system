@@ -194,18 +194,13 @@ GFP1 = mean(allGFP,1,'omitnan') + 2*std(allGFP,[],1,'omitnan');
 GFP2 = mean(allGFP,1,'omitnan') - 2*std(allGFP,[],1,'omitnan');
 figure;
 sgtitle('Mean per channel over subjects (Keypress)','FontSize',11);
-subplot(1,2,1); plot(time,mean(allERP,3,'omitnan'),'b');
-subplot(1,2,2); hold on; h1 = fill([time,fliplr(time)], [GFP1,fliplr(GFP2)],'r','LineStyle','none');
-set(h1,'FaceAlpha',0.4); plot(time,mean(allGFP,1,'omitnan'),'r','LineWidth',1.5); 
+plot(time,mean(allERP,3,'omitnan'),'b');
 
 
-subplot(1,2,1); set(gca,'FontSize',11); box on;
+set(gca,'FontSize',11); box on;
 ylabel('Potential (\muV)','FontSize',14);xlabel('Time (s)','FontSize',14);  ylim([-6 6])
 xticks([-0.1:0.1:0.4]); yticks([-5:5:5]); line([0 0],[-6 6],'Color','k'); 
 
-subplot(1,2,2); set(gca,'FontSize',11); box on;
-ylabel('GFPt (\muV)','FontSize',14); xlabel('Time (s)','FontSize',14); ylim([-2 26])
-xticks([-0.1:0.1:0.4]); yticks([0:10:20]); line([0 0],[-2 25],'Color','k'); 
 
 saveas(gcf, 'Fig_KEY_erp/mean per channel over subjects + mean and std of GFPt.jpg');
 
@@ -224,10 +219,18 @@ N0_start = -0.02;
 N0_stop = 0.03;
 [N0.loc, N0.time, N0.amp] = get_mainVEPcomponents (time, avgGFP, [N0_start N0_stop]);
 
-% get main component P150
-P150_start = 0.08;
-P150_stop = 0.120;
-[P150.loc, P150.time, P150.amp] = get_mainVEPcomponents (time, avgGFP, [P150_start P150_stop]);
+% get main component P100
+P100_start = 0.08;
+P100_stop = 0.120;
+[P100.loc, P100.time, P100.amp] = get_mainVEPcomponents (time, avgGFP, [P100_start P100_stop]);
+
+%N10
+N10_start = -0.01;
+N10_stop = -0.01;
+[N10.loc, N10.time, N10.amp] = get_mainVEPcomponents (time, avgGFP, [N10_start N10_stop]);
+N10.loc=104;
+N10.time=time(N10.loc);
+N10.amp=max(avgGFP(N10.loc));
 %% standardize VEP data within subject per cap
 
 % standardize (x-meanX)/sdX
@@ -244,17 +247,17 @@ avgERPnrm = mean(allERPnrm,3, 'omitnan');
 
 %% data for topoplot of main VEP components, average over subjects
 
-% raw: get topoplot data of N0 and P150 peak
-N0.topo = avgERP(:,N0.loc);        P150.topo = avgERP(:,P150.loc);
-
-% std: get topoplot data of N0 and P150 standardized within subject and cap
-N0std.topo = avgERPstd(:,N0.loc);    P150std.topo = avgERPstd(:,P150.loc);
-
+% raw: get topoplot data of N0 and P100 peak
+N0.topo = avgERP(:,N0.loc);        P100.topo = avgERP(:,P100.loc);
+N10.topo = avgERP(:,N10.loc); 
+% std: get topoplot data of N0 and P100 standardized within subject and cap
+N0std.topo = avgERPstd(:,N0.loc);    P100std.topo = avgERPstd(:,P100.loc);
+N10std.topo = avgERPstd(:,N10.loc);
 
 % norm: get topoplot data of N1 and P1 normalized within subject and cap
-NOnrm.topo = avgERPnrm(:,N0.loc);    P150nrm.topo = avgERPnrm(:,P150.loc);
+NOnrm.topo = avgERPnrm(:,N0.loc);    P100nrm.topo = avgERPnrm(:,P100.loc);
 
-
+N10nrm.topo = avgERPnrm(:,N10.loc);
 %% Plotting: raw data
 
 load('chanlocs.mat')
@@ -266,13 +269,16 @@ load('chanlocs.mat')
 % end
 %  clear grid
 % for iSub = 1:size(subject,1)
-%     figure(100); title('EEG'); [~,grid(:,:,iSub),~,~,~] = topoplot(allERP(:,P150.loc,iSub), chanlocs);
+%     figure(100); title('EEG'); [~,grid(:,:,iSub),~,~,~] = topoplot(allERP(:,P100.loc,iSub), chanlocs);
 %     close Figure 100
 % end
 clear grid
-PermTopoplot(N0, P150, chanlocs, 100, 'raw');
+PermTopoplot(N0, P100, chanlocs, 100, 'raw');
 
 saveas(gcf, 'Fig_KEY_erp/Topoplots_raw_data.jpg');
+
+
+PermTopoplot(N10, P100, chanlocs, 100, 'raw');
 
 %% Plotting: standardized data
 
@@ -285,13 +291,16 @@ end
  clear grid
 for iSub = 1:size(subject,1)
     figure(101); title('EEG'); 
-    [~,grid(:,:,iSub),~,~,~] = topoplot(allERPstd(:,P150.loc,iSub), chanlocs);
+    [~,grid(:,:,iSub),~,~,~] = topoplot(allERPstd(:,P100.loc,iSub), chanlocs);
     close Figure 101
 end
 
-PermTopoplot(N0std, P150std, chanlocs, 101, 'raw');
+PermTopoplot(N0std, P100std, chanlocs, 101, 'std');
 
 saveas(gcf, 'Fig_KEY_erp/Topoplots_standardized_data.jpg');
+
+
+PermTopoplot(N10std, P100std, chanlocs, 101, 'std');
 %% HELPER FUNCTIONS
 
 function [EEG_key]=extractKeyTrials(EEG)
@@ -550,7 +559,7 @@ end
 
 
 %%
-function PermTopoplot (N0, P150, chanlocs, fignr, type)
+function PermTopoplot (N0, P100, chanlocs, fignr, type)
 
     figure(fignr); 
     subplot(121); title('N0: Keypress-EEG'); hold on;
@@ -558,10 +567,10 @@ function PermTopoplot (N0, P150, chanlocs, fignr, type)
     ax(1) = gca; axis on; hold on;
 %     contour(xmesh,ymesh,permN0.zmapTHmcc,1,'k','LineWidth',1); 
     axis off; c1 = colorbar; caxlim(1,:) = caxis; 
-    subplot(122); title('P150: Keypress-EEG'); hold on;
-    topoplot(P150.topo, chanlocs, 'electrodes','off','numcontour',0);
+    subplot(122); title('P100: Keypress-EEG'); hold on;
+    topoplot(P100.topo, chanlocs, 'electrodes','off','numcontour',0);
     ax(2) = gca; axis on; hold on;
-%     contour(xmesh,ymesh,permP150.zmapTHmcc,1,'k','LineWidth',1); 
+%     contour(xmesh,ymesh,permP100.zmapTHmcc,1,'k','LineWidth',1); 
     axis off; c2 = colorbar; caxlim(1,:) = caxis; 
 
     set(ax,'clim',[-max(caxlim(:,2)) max(caxlim(:,2))]); 

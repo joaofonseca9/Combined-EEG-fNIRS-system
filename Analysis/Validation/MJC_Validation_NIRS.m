@@ -182,7 +182,7 @@ for cap=1:2
     figure;
     cfg.title=capname{cap};
     if cap==1,  cfg.layout            = layout_nirs_only;
-    else,       cfg.layout            = layout_combined; 
+    else,       cfg.layout            = layout_nirs_only; 
     end
     ft_topoplotER(cfg, data_TL_O2Hb{cap});
     saveas(gcf,fullfile(fig_dir,['topoplot_',capname{cap},'.jpg']))
