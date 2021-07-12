@@ -2,15 +2,11 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
-<<<<<<< Updated upstream
+
 % laptop='laptopCatarina';
-% laptop='laptopMariana';
-laptop='laptopJoao';
-=======
-laptop='laptopCatarina';
-% laptop='laptopMariana';
+laptop='laptopMariana';
 % laptop='laptopJoao';
->>>>>>> Stashed changes
+
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
         
 eeglab;
@@ -346,13 +342,12 @@ cfg = [];
 cfg.method = 'OLS'; %ordinary least square
 cfg.verbose = true;
 cfg.nearest = false;
-<<<<<<< Updated upstream
+
 nirs_reg = shortchannel_regression(cfg, nirs_down);
 % save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
-=======
+
 nirs_reg = shortchannel_regression(cfg, nirs_reject);
 save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
->>>>>>> Stashed changes
 
 %% NIRS: Detrend and low-pass filtering
 % Detrend + low-pass filter (low-pass filter data below the frequency of 

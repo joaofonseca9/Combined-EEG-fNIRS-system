@@ -182,10 +182,9 @@ nirs_HbO2_M1{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
 nirs_HbO2_M1{4} = ft_selectdata(cfg, nirs_TLO2Hb{4});
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
-% Rx12-Tx15 was exluced from all subs.
 cfg = [];
 cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9',...
-    'Rx10-Tx14', 'Rx12-Tx14'};
+    'Rx10-Tx14', 'Rx12-Tx14', 'Rx12-Tx15'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});

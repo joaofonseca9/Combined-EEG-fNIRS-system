@@ -18,8 +18,9 @@ for subject = 1:size(subrec, 1)
     rec = subrec(subject, 2);
     
     % Load the subject's fNIRS signals.
-    load([mainpath_in, '\pre-processed-old\sub-', char(sub), '\nirs\sub-',...
-        char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat']);
+    load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
+        char(sub), '_rec-', char(rec), '_nirs_epoch.mat']);
+    nirs_preprocessed = nirs_epoch;
     
     % Load the layout of the optode's template.
     load(fullfile(mainpath_out,['sub-',char(sub)],'3d','layout.mat'),...
@@ -128,7 +129,8 @@ labels = {'Rx2-Tx4 [O2Hb]'; 'Rx2-Tx4 [HHb]';...
     'Rx11-Tx12 [O2Hb]'; 'Rx11-Tx12 [HHb]';...
     'Rx11-Tx13 [O2Hb]'; 'Rx11-Tx13 [HHb]';...
     'Rx10-Tx14 [O2Hb]'; 'Rx10-Tx14 [HHb]';...
-    'Rx12-Tx14 [O2Hb]'; 'Rx12-Tx14 [HHb]'};
+    'Rx12-Tx14 [O2Hb]'; 'Rx12-Tx14 [HHb]';...
+    'Rx12-Tx15 [O2Hb]'; 'Rx12-Tx15 [HHb]'};
 
 for con = 1:length(conditions)
     
@@ -137,47 +139,28 @@ for con = 1:length(conditions)
         sub = subrec(subject, 1);
         rec = subrec(subject, 2);
         
-        if strcmp(sub, "28") && length(nirs_TLblc{con}{subject}.label)~=44
+        if strcmp(sub, "02") && length(nirs_TLblc{con}{subject}.label)~=46
             nirs_TLblc{con}{subject}.label = labels;
             nirs_TLblc{con}{subject}.cfg.channel = labels;
-            nirs_TLblc{con}{subject}.dof(1:44,...
+            nirs_TLblc{con}{subject}.dof(1:46,...
                 1:length(nirs_TLblc{con}{subject}.time)) = 10;
             nirs_TLblc{con}{subject}.avg =...
-                [nirs_TLblc{con}{subject}.avg((1:5-1), :);...
+                [nirs_TLblc{con}{subject}.avg((1:20), :);...
+                NaN(2, length(nirs_TLblc{con}{subject}.time));...
+                nirs_TLblc{con}{subject}.avg(21:36, :);...
+                NaN(2, length(nirs_TLblc{con}{subject}.time));...
+                nirs_TLblc{con}{subject}.avg(37:end, :)];
+        end
+        
+        if strcmp(sub,"76") && length(nirs_TLblc{con}{subject}.label)~=46
+            nirs_TLblc{con}{subject}.label = labels;
+            nirs_TLblc{con}{subject}.cfg.channel = labels;
+            nirs_TLblc{con}{subject}.dof(1:46,...
+                1:length(nirs_TLblc{con}{subject}.time)) = 10;
+            nirs_TLblc{con}{subject}.avg =...
+                [nirs_TLblc{con}{subject}.avg((1:28), :);...
                 NaN(4, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg((5:17-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg((17:21-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg((21:25-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg((25:27-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg(27:end,:)];
-        end
-        
-        if strcmp(sub, "02") && length(nirs_TLblc{con}{subject}.label)~=44
-            nirs_TLblc{con}{subject}.label = labels;
-            nirs_TLblc{con}{subject}.cfg.channel = labels;
-            nirs_TLblc{con}{subject}.dof(1:44,...
-                1:length(nirs_TLblc{con}{subject}.time)) = 10;
-            nirs_TLblc{con}{subject}.avg =...
-                [nirs_TLblc{con}{subject}.avg((1:29-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg(29:end,:);...
-                NaN(6, length(nirs_TLblc{con}{subject}.time))];
-        end
-        
-        if strcmp(sub,"76") && length(nirs_TLblc{con}{subject}.label)~=44
-            nirs_TLblc{con}{subject}.label = labels;
-            nirs_TLblc{con}{subject}.cfg.channel = labels;
-            nirs_TLblc{con}{subject}.dof(1:44,...
-                1:length(nirs_TLblc{con}{subject}.time)) = 10;
-            nirs_TLblc{con}{subject}.avg =...
-                [nirs_TLblc{con}{subject}.avg((1:35-1), :);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time));...
-                nirs_TLblc{con}{subject}.avg(35:end,:);...
-                NaN(2, length(nirs_TLblc{con}{subject}.time))];
+                nirs_TLblc{con}{subject}.avg(29:end, :)];
         end
         
         cd(fullfile(results_path));
@@ -265,10 +248,10 @@ for con = 1:length(conditions)
     % O2Hb is showed in red, HHb in blue.
     cfg.linecolor = 'rb'; 
     cfg.xlim = [-5 20];
-    cfg.ylim = [-0.6 0.2];
+    cfg.ylim = [-0.5 0.5];
     figure;
+    ft_multiplotER(cfg, nirs_TLO2Hb{con}, nirs_TLHHb{con});
     title(taskname{con});
-    ft_multiplotER(cfg, nirs_TLO2Hb{con}, nirs_TLHHb{con})
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_avg_timelock.png']);
@@ -327,10 +310,9 @@ save('nirs_HbO2_M1.mat', 'nirs_HbO2_M1');
 save('nirs_Hb_M1.mat', 'nirs_Hb_M1');
 
 % PPC: Rx8-Tx10, Rx6-Tx9, Rx8-Tx9, Rx12-Tx15, Rx10-Tx14, Rx12-Tx14.
-% Rx12-Tx15 was eliminated in all subjects.
 cfg = [];
 cfg.channel = {'Rx8-Tx10', 'Rx6-Tx9', 'Rx8-Tx9',...
-    'Rx10-Tx14', 'Rx12-Tx14'};
+    'Rx10-Tx14', 'Rx12-Tx14', 'Rx12-Tx15'};
 nirs_HbO2_PPC{1} = ft_selectdata(cfg, nirs_TLO2Hb{1});
 nirs_HbO2_PPC{2} = ft_selectdata(cfg, nirs_TLO2Hb{2});
 nirs_HbO2_PPC{3} = ft_selectdata(cfg, nirs_TLO2Hb{3});
@@ -355,7 +337,7 @@ for con = 1:length(conditions)
     regionsavg_HbO2_DLPFC{con} = mean(nirs_HbO2_DLPFC{con}.avg, 1);
     regionsavg_Hb_DLPFC{con} = mean(nirs_Hb_DLPFC{con}.avg, 1);
     
-    figure; title(char(taskname{con}));
+    figure; 
     plot(nirs_HbO2_DLPFC{con}.time, regionsavg_HbO2_DLPFC{con}, 'r', 'LineWidth', 1);
     hold on;
     plot(nirs_Hb_DLPFC{con}.time, regionsavg_Hb_DLPFC{con}, 'b', 'LineWidth', 1);
@@ -363,10 +345,11 @@ for con = 1:length(conditions)
     xline(0);
     hold off;
     legend('Hb02', 'Hb');
-    xlim([-10 20]);
+    xlim([-5 20]);
     ylim(ylims{con});
     xlabel('Time (s)');
     ylabel('Concentratio (\muM)');
+    title(strcat(taskname{con}, ' - DLPFC'));
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_DLPFC.png']);
@@ -384,7 +367,7 @@ for con = 1:length(conditions)
     regionsavg_HbO2_SMA{con} = mean(nirs_HbO2_SMA{con}.avg, 1);
     regionsavg_Hb_SMA{con} = mean(nirs_Hb_SMA{con}.avg, 1);
     
-    figure; title(char(taskname{con}));
+    figure; 
     plot(nirs_HbO2_SMA{con}.time, regionsavg_HbO2_SMA{con}, 'r', 'LineWidth', 1);
     hold on;
     plot(nirs_Hb_SMA{con}.time, regionsavg_Hb_SMA{con}, 'b', 'LineWidth', 1);
@@ -395,7 +378,8 @@ for con = 1:length(conditions)
     xlim([-5 20]);
     ylim(ylims{con});
     xlabel('Time (s)');
-    ylabel('Concentration');
+    ylabel('Concentratio (\muM)');
+    title(strcat(taskname{con}, ' - SMA'));
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_SMA.png']);
@@ -413,7 +397,7 @@ for con = 1:length(conditions)
     regionsavg_HbO2_M1{con} = mean(nirs_HbO2_M1{con}.avg, 1);
     regionsavg_Hb_M1{con} = mean(nirs_Hb_M1{con}.avg, 1);
     
-    figure; title(char(taskname{con}));
+    figure; 
     plot(nirs_HbO2_M1{con}.time, regionsavg_HbO2_M1{con}, 'r', 'LineWidth', 1);
     hold on;
     plot(nirs_Hb_M1{con}.time, regionsavg_Hb_M1{con}, 'b', 'LineWidth', 1);
@@ -424,7 +408,8 @@ for con = 1:length(conditions)
     xlim([-5 20]);
     ylim(ylims{con});
     xlabel('Time (s)');
-    ylabel('Concentration');
+    ylabel('Concentratio (\muM)');
+    title(strcat(taskname{con}, ' - M1'));
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_M1.png']);
@@ -442,7 +427,7 @@ for con = 1:length(conditions)
     regionsavg_HbO2_PPC{con} = mean(nirs_HbO2_PPC{con}.avg, 1);
     regionsavg_Hb_PPC{con} = mean(nirs_Hb_PPC{con}.avg, 1);
     
-    figure; title(char(taskname{con}));
+    figure; 
     plot(nirs_HbO2_PPC{con}.time, regionsavg_HbO2_PPC{con}, 'r', 'LineWidth', 1);
     hold on;
     plot(nirs_Hb_PPC{con}.time, regionsavg_Hb_PPC{con}, 'b', 'LineWidth', 1);
@@ -453,7 +438,8 @@ for con = 1:length(conditions)
     xlim([-5 20]);
     ylim(ylims{con});
     xlabel('Time (s)');
-    ylabel('Concentration');
+    ylabel('Concentratio (\muM)');
+    title(strcat(taskname{con}, ' - PPC'));
     
     set(gcf, 'Position', get(0, 'Screensize'));
     saveas(gcf, [char(taskname{con}) '_PPC.png']);
