@@ -22,14 +22,14 @@ for subject = 1:size(subrec, 1)
   
     % Load fNIRS preprocessed signal
     load([mainpath_in, '\pre-processed\sub-', char(sub), '\nirs\sub-',...
-        char(sub), '_rec-', char(rec), '_nirs_preprocessed.mat'], 'nirs_preprocessed');
+        char(sub), '_rec-', char(rec), '_nirs_epoch.mat'], 'nirs_epoch');
        
     % Load layout 
     load(fullfile(mainpath_out,['sub-',char(sub)],'3d','layout.mat'), 'layout');
     
     % Keep the trials of interest (Dual Cued, Single Cued, Dual Uncued, Single
     % Uncued)
-    nirs = keepTrialsInterest(nirs_preprocessed);
+    nirs = keepTrialsInterest(nirs_epoch);
     
     %% Baseline correction (preprocessing) + topoplot (spatial representation) per subject
     % Get the baseline and topoplot of all conditions for the subject
@@ -83,54 +83,56 @@ for subject = 1:size(subrec, 1)
         
         nirs_TLblc{con}{subject}.dof(1:46,1:length(nirs_TLblc{con}{subject}.time)) = 10;
         
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:35-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(35:end,:)];
-        nirs_TLblc{con}{subject}.avg(43,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(44,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(45,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(46,:) = NaN;
+        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:29-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(29:end,:)];
+        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:31-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(31:end,:)];
+%         nirs_TLblc{con}{subject}.avg(43,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(44,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(45,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(46,:) = NaN;
         
     elseif strcmp(sub,"28")
         nirs_TLblc{con}{subject}.label = nirs_lpf.label;
         
         nirs_TLblc{con}{subject}.dof(1:46,1:length(nirs_TLblc{con}{subject}.time)) = 10;
         
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:5-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(5:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:7-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(7:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:21-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(21:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:27-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(27:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:33-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(33:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:37-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(37:end,:)];
-        nirs_TLblc{con}{subject}.avg(45,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(46,:) = NaN;
-        
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:5-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(5:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:7-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(7:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:21-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(21:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:27-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(27:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:33-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(33:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:37-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(37:end,:)];
+%         nirs_TLblc{con}{subject}.avg(45,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(46,:) = NaN;
+%         
     elseif strcmp(sub,"64")
         nirs_TLblc{con}{subject}.label = nirs_lpf.label;
         
         nirs_TLblc{con}{subject}.dof(1:46,1:length(nirs_TLblc{con}{subject}.time)) = 10;
         
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:21-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(21:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:23-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(23:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:29-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(29:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:33-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(33:end,:)];
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:37-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(37:end,:)];
-        nirs_TLblc{con}{subject}.avg(45,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(46,:) = NaN;
-        
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:21-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(21:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:23-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(23:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:29-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(29:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:33-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(33:end,:)];
+%         nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:37-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(37:end,:)];
+%         nirs_TLblc{con}{subject}.avg(45,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(46,:) = NaN;
+%         
     else 
         nirs_TLblc{con}{subject}.label = nirs_lpf.label;
         
         nirs_TLblc{con}{subject}.dof(1:46,1:length(nirs_TLblc{con}{subject}.time)) = 10;
         
-        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:29-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(29:end,:)];
-        nirs_TLblc{con}{subject}.avg(39,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(40,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(41,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(42,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(43,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(44,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(45,:) = NaN;
-        nirs_TLblc{con}{subject}.avg(46,:) = NaN;
-        
+        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:21-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(21:end,:)];
+        nirs_TLblc{con}{subject}.avg = [nirs_TLblc{con}{subject}.avg((1:39-1), :); NaN(2, length(nirs_TLblc{con}{subject}.time)); nirs_TLblc{con}{subject}.avg(39:end,:)];
+%         nirs_TLblc{con}{subject}.avg(39,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(40,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(41,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(42,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(43,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(44,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(45,:) = NaN;
+%         nirs_TLblc{con}{subject}.avg(46,:) = NaN;
+%         
     end
     
     cd(fullfile(results_path, ['sub-',char(sub)]));

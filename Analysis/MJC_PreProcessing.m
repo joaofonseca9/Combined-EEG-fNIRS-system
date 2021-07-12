@@ -2,18 +2,24 @@ clear all;
 close all;
 
 %% Initialize FieldTrip and EEGLAB
+<<<<<<< Updated upstream
 % laptop='laptopCatarina';
 % laptop='laptopMariana';
 laptop='laptopJoao';
+=======
+laptop='laptopCatarina';
+% laptop='laptopMariana';
+% laptop='laptopJoao';
+>>>>>>> Stashed changes
 [mainpath_in, mainpath_out, eeglab_path] = addFolders(laptop);
-
+        
 eeglab;
 ft_defaults;
 [~, ftpath] = ft_version;
 
-sub='76';
-rec_nirs='01';
-rec_eeg='01';
+sub='28';
+rec_nirs='02';
+rec_eeg='04';
 
 file_nirs = getFileNames(mainpath_out, sub, rec_nirs);
 file_eeg = getFileNames(mainpath_out, sub, rec_eeg);
@@ -65,8 +71,6 @@ else % If data has been loaded and the datasets created, load the structs
     load(fullfile(nirspre_path,['sub-',sub,'_rec-',rec_nirs,'_nirs_events.mat'])); % Avoids call to ft_readevents
     [EEG]  = pop_loadset(['sub-',sub,'_rec-',rec_eeg,'_eeg.set'],fullfile(sub_path,'eeg'));
 end
-
-
 
 %% Read stimuli results
 results = load(fullfile(sub_path, 'stim', ['results_sub-',sub,'_rec-',rec_eeg]));
@@ -290,6 +294,50 @@ save(['sub-',sub,'_rec-',rec_nirs,'_nirs_down.mat'], 'nirs_down');
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
+%% NIRS: Remove bad channels - Inspect the raw data visually
+% Show channels with low SCI
+addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
+
+cfg = [];
+cfg.keepchannel = 'nan';
+nirs_sci = ft_nirs_scalpcouplingindex(cfg, nirs_down);
+
+% Show names of bad channels
+idx = find(~ismember(nirs_down.label, nirs_sci.label));
+bad_nirschannels = nirs_down.label(idx);
+disp('The following channels are removed from the data set:');
+disp(bad_nirschannels);
+cd(nirspre_path);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_sci.mat'], 'nirs_sci');
+
+databrowser_nirs(nirs_down, 'bad_chan', bad_nirschannels);
+
+% Reject bad channels and trials visually 
+cfg = [];
+cfg.keepchannel = 'nan';
+cfg.method = 'summary';
+nirs_reject = ft_rejectvisual(cfg, nirs_sci);
+
+% Make sure that if one channel is rejected, the corresponding channel with
+% the other wavelength is rejected too
+nirschan_names = cellfun(@(x)(strsplit(x)), nirs_reject.label,'UniformOutput', false);
+nirschan_names = cellfun(@(x)(x{1}), nirschan_names, 'UniformOutput', false);
+idx = 1; keepnirschan = [];
+while idx<length(nirschan_names)-1
+  if  strcmp(nirschan_names{idx}, nirschan_names{idx+1})
+    keepnirschan = [keepnirschan idx idx+1];
+    idx = idx+2;
+  else
+    idx = idx+1;
+  end
+end
+cfg = [];
+cfg.channel = keepnirschan;
+nirs_reject = ft_selectdata(cfg, nirs_reject);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reject.mat'], 'nirs_reject');
+
+% Visualize
+databrowser_nirs(nirs_reject)
 
 %% NIRS: Short channel regression
 % Substact the closely located short channel data from the long channels 
@@ -298,8 +346,13 @@ cfg = [];
 cfg.method = 'OLS'; %ordinary least square
 cfg.verbose = true;
 cfg.nearest = false;
+<<<<<<< Updated upstream
 nirs_reg = shortchannel_regression(cfg, nirs_down);
 % save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
+=======
+nirs_reg = shortchannel_regression(cfg, nirs_reject);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_reg.mat'],'nirs_reg'); 
+>>>>>>> Stashed changes
 
 %% NIRS: Detrend and low-pass filtering
 % Detrend + low-pass filter (low-pass filter data below the frequency of 
@@ -323,6 +376,30 @@ databrowser_nirs(nirs_lpf);
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_lpf)
 
+%% NIRS: Transform optical densities to concentration changes
+cfg = [];
+cfg.target = {'O2Hb', 'HHb'};
+cfg.channel = 'nirs'; % e.g. one channel incl. wildcards, you can also use ?all? to select all nirs channels
+nirs_preprocessed = ft_nirs_transform_ODs(cfg, nirs_lpf);
+nirs_preprocessed.sampleinfo = nirs_lpf.sampleinfo;
+nirs_preprocessed.hdr = nirs_lpf.hdr;
+%nirs_preprocessed.trialinfo = nirs_lpf.trialinfo;
+%nirs_trans.time = nirs_lpf.time;
+
+cd(nirspre_path);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_preprocessed.mat'],'nirs_preprocessed'); 
+
+% Visualize
+databrowser_nirs(nirs_preprocessed)
+
+% % Plot hemoglobin concentration over time averaged over all channels for the epoch around the first deviant
+% idx = find(nirs_trans.trialinfo==2, 1, 'first'); % check trials
+% cfg          = [];
+% cfg.channel  = 'Rx*';
+% cfg.trials   = idx;
+% cfg.baseline = 'yes';
+% ft_singleplotER(cfg, nirs_trans)
+
 %% NIRS: Extract task data (epoch)
 % Because of the resampling of the data we can't use the current events for 
 % epoching so first need to convert them
@@ -330,8 +407,13 @@ clear pre post offset trl sel smp
 
 cd(nirspre_path);
 % Extract the data
+<<<<<<< Updated upstream
 [nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_lpf, nirs_events, marker_table, sub, rec_nirs);
 % save(['sub-',sub,'_rec-',rec_nirs,'_nirs_epoch.mat'], 'nirs_epoch');
+=======
+[nirs_epoch] = extractTaskData_NIRS(nirs_raw, nirs_preprocessed, nirs_events, marker_table, sub, rec_nirs);
+save(['sub-',sub,'_rec-',rec_nirs,'_nirs_epoch.mat'], 'nirs_epoch');
+>>>>>>> Stashed changes
 
 % % Plot epoched optical density data around the first deviant stimulus
 % idx = find(nirs_epoch.trialinfo==2, 1, 'first'); % check trials
@@ -344,6 +426,7 @@ cd(nirspre_path);
 % Visualize
 % databrowser_nirs(nirs_epoch);
 
+<<<<<<< Updated upstream
 %% NIRS: Remove bad channels - Inspect the raw data visually
 % Show channels with low SCI
 addpath(fullfile(ftpath, 'external', 'artinis')); % add artinis functions
@@ -409,6 +492,8 @@ databrowser_nirs(nirs_reject)
 % end
 % figure; plot(F(:,1), P); xlabel('Frequency (Hz)'); ylabel('Power');
 
+=======
+>>>>>>> Stashed changes
 % %% NIRS: Short channel regression: Concatenate trials and time data 
 % % This step is necessary for the short channel regression to work
 % % properly. If not using short channel regression (when
@@ -535,6 +620,7 @@ databrowser_nirs(nirs_reject)
 % % cfg.trials   = idx;
 % % cfg.baseline = 'yes';
 % % ft_singleplotER(cfg, nirs_lpf)
+<<<<<<< Updated upstream
 
 %% NIRS: Transform optical densities to concentration changes
 cfg = [];
@@ -560,3 +646,5 @@ cd(nirspre_path);
 % cfg.baseline = 'yes';
 % ft_singleplotER(cfg, nirs_preprocessed)
 
+=======
+>>>>>>> Stashed changes

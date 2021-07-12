@@ -39,7 +39,7 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         addpath(eeglab_path);
         
         % add fieldtrip
-        addpath('C:\Program Files\Matlab\R2020b\toolbox\fieldtrip-20210614');
+        addpath('C:\Program Files\Matlab\R2020b\toolbox\fieldtrip-20210711');
         
         % set paths for the input and output data
         mainpath_in='C:\Users\catar\OneDrive - Universidade do Porto\Internship\Experiment\Data\Exp';
