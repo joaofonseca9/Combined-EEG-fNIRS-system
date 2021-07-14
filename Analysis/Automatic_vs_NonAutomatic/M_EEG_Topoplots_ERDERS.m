@@ -9,7 +9,7 @@ eeglab;
 ft_defaults;
 results_path = 'C:\Users\maria\OneDrive\Ambiente de Trabalho\Automaticity Results\Topoplots';
 
-subrec = ["28" "04"; "02" "02"; "76" "2"];
+subrec = ["28" "04"; "02" "02"; "76" "01"];
 
 % List of the 30 channels present in the cap.
 list_channels = ["Fp1"; "Fpz"; "Fp2"; "F7"; "F3"; "AFFz"; "F4"; "F8";...
@@ -310,7 +310,7 @@ for subject = 1:size(subrec, 1)
     nonautocued_ERD_ERS_theta_allSubjects(:, subject) = ERD_ERS_theta;
     nonautocued_ERD_ERS_alpha_allSubjects(:, subject) = ERD_ERS_alpha;
     nonautocued_ERD_ERS_beta_allSubjects(:, subject) = ERD_ERS_beta;
-    nonautocued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_beta;
+    nonautocued_ERD_ERS_gamma_allSubjects(:, subject) = ERD_ERS_gamma;
     
     % Save the values onto a subject struct.
     s.nonautocued_ERD_ERS_theta = ERD_ERS_theta;
