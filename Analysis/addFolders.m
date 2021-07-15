@@ -14,7 +14,7 @@ function [mainpath_in, mainpath_out, eeglab_path]=addFolders(laptop)
         
         % add fieldtrip
         addpath('C:\Users\joaop\Downloads\fieldtrip-20210212\fieldtrip-20210212');
-        
+        addpath('C:\Users\joaop\Downloads\fieldtrip-20210212\fieldtrip-20210212\external\artinis');
         % set paths for the input and output data
         mainpath_in='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp';
         mainpath_out='C:\Users\joaop\OneDrive - Universidade do Porto\Erasmus\Internship\Experiment\Data\Exp\pre-processed\';

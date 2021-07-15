@@ -61,17 +61,17 @@ for iSub = 1:size(subjects_comb,2)
         'NonAutoDualNoCue','NonAutoSingleNoCue'};
     %% 2. Load pre-processed data
     
-    load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat']));
-%     load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_lpf.mat']));
-%     nirs_preprocessed.trialinfo=nirs_lpf.trialinfo;
+%     load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat']));
+    load(fullfile(mainpath_in_preprocessed,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_epoch.mat']));
+%     nirs_preprocessed.trialinfo=nirs_epoch.trialinfo;
     %% 3. Timelock analysis + baselinecorrection
     % these steps are necessary for the multisubject_averaging script!
     % a) timelock
     
     for task=1:8 %There are 8 tasks
         cfg               = [];
-        cfg.trials        = find(nirs_preprocessed.trialinfo(:,1)==task); % Average the data for given task
-        data_TL{task}     = ft_timelockanalysis(cfg, nirs_preprocessed);
+        cfg.trials        = find(nirs_epoch.trialinfo(:,1)==task); % Average the data for given task
+        data_TL{task}     = ft_timelockanalysis(cfg, nirs_epoch);
     end
     if ~isfolder(fullfile(mainpath_in_processed,['sub-',sub],'nirs','data_TL.mat'))
         mkdir(fullfile(mainpath_in_processed,['sub-',sub],'nirs'));
@@ -173,7 +173,7 @@ end
 capname={'NIRS', 'COMBINED'};
 cfg          = [];
 
-cfg.marker   = 'labels';
+cfg.marker   = 'off';
 cfg.ylim     = [-0.2 0.2];
 cfg.xlim     = [5 10];
 cfg.zlim     = cfg.ylim/2;
@@ -182,7 +182,7 @@ for cap=1:2
     figure;
     cfg.title=capname{cap};
     if cap==1,  cfg.layout            = layout_nirs_only;
-    else,       cfg.layout            = layout_nirs_only; 
+    else,       cfg.layout            = layout_combined; 
     end
     ft_topoplotER(cfg, data_TL_O2Hb{cap});
     saveas(gcf,fullfile(fig_dir,['topoplot_',capname{cap},'.jpg']))
@@ -275,7 +275,7 @@ for ii=1:length(min_idx)
 %     lgd=legend('NIRS - HbO2', 'NIRS - HHb', 'Combined - HbO2', 'Combined -HHb','Orientation','horizontal','Position',[0.25 .8 0.05 0.1]);
 %     lgd.NumColumns = 2;
     xlabel('Time (s)')
-    ylabel('Hemoglobin Concetration')
+    ylabel('Hemoglobin Concetration (\mu M)')
     hold off
     saveas(gcf, ['Fig_Validation_NIRS/Combined_',comb_channel{1},'NIRS_', nirs_only_channel{1},'.jpg']);
     

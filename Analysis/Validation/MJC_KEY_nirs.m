@@ -46,7 +46,8 @@ for iSub = 1:size(subjects,2)
         'NonAutoDualNoCue','NonAutoSingleNoCue'};
     %% 2. Load pre-processed data
     
-    load(fullfile(mainpath_in,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat']));
+%     load(fullfile(mainpath_in,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_preprocessed.mat']));
+    load(fullfile(mainpath_in,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_epoch.mat']));
 
 %     load(fullfile(mainpath_in,['sub-',sub],'nirs',['sub-',sub,'_rec-',rec,'_nirs_lpf.mat']));
 %     nirs_preprocessed.trialinfo=nirs_lpf.trialinfo;
@@ -61,12 +62,34 @@ for iSub = 1:size(subjects,2)
     
     for task=1:8 %There are 8 tasks
         cfg               = [];
-        cfg.trials        = find(nirs_preprocessed.trialinfo(:,1)==task); % Average the data for given task
+        cfg.trials        = find(nirs_epoch.trialinfo(:,1)==task); % Average the data for given task
         cfg.nanmean='yes';
-        data_TL{task}     = ft_timelockanalysis(cfg, nirs_preprocessed);
+        data_TL{task}     = ft_timelockanalysis(cfg, nirs_epoch);
     end
     %save(fullfile(sub_dir,'nirs','data_TL.mat'), 'data_TL');
-
+ %% Add removed channels
+labels = {'Rx2-Tx4 [O2Hb]'; 'Rx2-Tx4 [HHb]';...
+    'Rx2-Tx3 [O2Hb]'; 'Rx2-Tx3 [HHb]';...
+    'Rx1-Tx3 [O2Hb]'; 'Rx1-Tx3 [HHb]';...
+    'Rx1-Tx2 [O2Hb]'; 'Rx1-Tx2 [HHb]';...
+    'Rx4-Tx4 [O2Hb]'; 'Rx4-Tx4 [HHb]';...
+    'Rx4-Tx5 [O2Hb]'; 'Rx4-Tx5 [HHb]';...
+    'Rx3-Tx3 [O2Hb]'; 'Rx3-Tx3 [HHb]';...
+    'Rx3-Tx2 [O2Hb]'; 'Rx3-Tx2 [HHb]';...
+    'Rx3-Tx5 [O2Hb]'; 'Rx3-Tx5 [HHb]';...
+    'Rx6-Tx9 [O2Hb]'; 'Rx6-Tx9 [HHb]';...
+    'Rx5-Tx8 [O2Hb]'; 'Rx5-Tx8 [HHb]';...
+    'Rx5-Tx7 [O2Hb]'; 'Rx5-Tx7 [HHb]';...
+    'Rx8-Tx9 [O2Hb]'; 'Rx8-Tx9 [HHb]';...
+    'Rx8-Tx10 [O2Hb]'; 'Rx8-Tx10 [HHb]';...
+    'Rx7-Tx8 [O2Hb]'; 'Rx7-Tx8 [HHb]';...
+    'Rx7-Tx7 [O2Hb]'; 'Rx7-Tx7 [HHb]';...
+    'Rx9-Tx12 [O2Hb]'; 'Rx9-Tx12 [HHb]';...
+    'Rx9-Tx13 [O2Hb]'; 'Rx9-Tx13 [HHb]';...
+    'Rx11-Tx12 [O2Hb]'; 'Rx11-Tx12 [HHb]';...
+    'Rx11-Tx13 [O2Hb]'; 'Rx11-Tx13 [HHb]';...
+    'Rx10-Tx14 [O2Hb]'; 'Rx10-Tx14 [HHb]';...
+    'Rx12-Tx14 [O2Hb]'; 'Rx12-Tx14 [HHb]'};
     % b) apply a baseline correction
     for task=1:8
         cfg                 = [];
@@ -83,7 +106,7 @@ for iSub = 1:size(subjects,2)
 %         cfg=[];
 %         cfg.channel='*[O2Hb]';
 %         data_O2Hb{task}=ft_selectdata(cfg, data_TL_blc{task});
-%         data_O2Hb{task}.label=data_labels(contains(data_TL_blc{task}.label, '[O2Hb]'));
+%         data_O2Hb{task}.label=data_labels(tasktains(data_TL_blc{task}.label, '[O2Hb]'));
 %         for ii=1:length(data_O2Hb{task}.label)
 %             label=data_O2Hb{task}.label{ii};
 %             label=label(1:end-7);
@@ -115,6 +138,7 @@ for task=1:8
     cfg=[];
     cfg.nanmean='yes';
     grandavg{task}= ft_timelockgrandaverage(cfg, data_all{task}{:});
+%     grandavg{task}.dimord='chan_time';
 end
 
 %% 5. Plot the data
@@ -153,7 +177,7 @@ cfg.ylim     = [-0.2 0.2]; cfg.xlim     = [5 10];
 for task=1:8
     cfg.title=task_label{task}; 
     ft_topoplotER(cfg,data_TL_O2Hb{task});
-    saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_',task_label{task},'.jpg']))
+    saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',['topoplot_',task_label{task},'.jpg']))
 end
 
 %% f) Topoplots for total avg
@@ -172,7 +196,7 @@ figure;
 cfg.title='Grand Average - HbO2 ';
 ft_topoplotER(cfg, grand_avg_HbO2);
 
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['topoplot_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',['topoplot_alltask_.jpg']))
 
 
 
@@ -196,7 +220,7 @@ cfg.interactive       = 'yes'; % this allows to select a subplot and interact wi
 cfg.linecolor        = 'rb'; % O2Hb is showed in red (finger) and magenta (foot), HHb in blue (finger) and cyan (foot)
 %cfg.ylim = [-0.440 0.540];
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',['hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',['hemoglobin_alltask_.jpg']))
 
 %%
 % stdplot(grand_avg_HbO2,grand_avg_HHb, cfg.title)
@@ -211,41 +235,41 @@ cfg.linecolor        = 'rb'; % O2Hb is showed in red (finger) and magenta (foot)
 
 cfg.title             = 'Left dlPFC';
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'Right dlPFC';
 cfg.channel = {'Rx9-Tx12', 'Rx9-Tx13', 'Rx11-Tx12', 'Rx11-Tx13'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'Left PPC';
 cfg.channel = {'Rx6-Tx9', 'Rx8-Tx9', 'Rx8-Tx10'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 % 
 cfg.title             = 'Right PPC';
 cfg.channel = {'Rx10-Tx14', 'Rx12-Tx14'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'SMA_M1';
 cfg.channel = {'Rx4-Tx4', 'Rx4-Tx5', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2'...
     , 'Rx3-Tx3', 'Rx3-Tx5', 'Rx2-Tx4', 'Rx2-Tx3'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 
 cfg.title             = 'SMA';
 cfg.channel = {'Rx4-Tx4', 'Rx3-Tx5'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 cfg.title             = 'M1';
 cfg.channel = {'Rx4-Tx5', 'Rx1-Tx2', 'Rx1-Tx3', 'Rx3-Tx2'...
     , 'Rx3-Tx3', 'Rx2-Tx4', 'Rx2-Tx3'};
 ft_singleplotER(cfg, grand_avg_HbO2, grand_avg_HHb);
-saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_cond/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
+saveas(gcf,fullfile(pwd,'Fig_NIRS_topo_all_taskd/',[cfg.title ,'_hemoglobin_alltask_.jpg']))
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
